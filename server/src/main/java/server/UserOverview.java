@@ -9,7 +9,7 @@ public class UserOverview {
     private String name;
     private String email;
     private List<String> events;
-    private UserOverview(String name, String email){
+    public UserOverview(String name, String email){
         this.name = name;
         this.email = email;
         this.events = new ArrayList<>(); //add all events here
@@ -27,7 +27,17 @@ public class UserOverview {
         return events;
     }
 
+    public String createEvent(String info){
+        //construct new event
+        String event = "event";
+        events.add(event);
+        return event;
+    }
+
     public boolean changeTitleEvent(String event, String title){
+        if(event == null || title == null) return false;
+        if(!events.contains(event)) return false;
+
         // return event.setTitle(title);
         return true;
     }

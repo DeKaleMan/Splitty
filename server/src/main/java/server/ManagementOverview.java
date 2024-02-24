@@ -8,30 +8,45 @@ public class ManagementOverview {
     private String eventRepo;
     private String serverRepo;
 
-    private ManagementOverview(String eventRepo, String serverRepo){
+    public ManagementOverview(String eventRepo, String serverRepo){
         // link to db later
         this.eventRepo = eventRepo;
         this.serverRepo = serverRepo;
     }
 
 
-    private List<String> getEvents(){
+    public List<String> getEvents(){
         return new ArrayList<>();
     }
 
-    private List<String> getServerInstances() {
+    public List<String> getServerInstances() {
         return new ArrayList<>();
     }
 
-    private String deleteEvent(String event){
+    public String deleteEvent(String event){
         //eventrepo query to delete the event;
+
         return event;
     }
 
 
-    private String downloadJSON(String event){
+    public String downloadJSON(String event){
         // query to get a JSON dump
         return "JSON dump";
+    }
+
+    //orderings:
+    public List<String> orderByTitle(){
+        // return a list order by title using a query on the database
+        return new ArrayList<>();
+    }
+    public List<String> orderByDate(){
+        // return a list order by title using a query on the database
+        return new ArrayList<>();
+    }
+    public List<String> orderByLastActivity(){
+        // return a list order by title using a query on the database
+        return new ArrayList<>();
     }
 
 }
