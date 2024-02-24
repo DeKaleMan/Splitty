@@ -1,19 +1,20 @@
 package commons;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Event {
     private String name;
     private String date;
-    private ArrayList<String> participantList;
+    private List<String> participantList;
     private String owner;
-    private ArrayList<String> expenseList;
+    private List<String> expenseList;
     private String description;
 
     public Event(String name, String date,
-                 ArrayList<String> participantList,
-                 String owner, ArrayList<String> expenseList,
+                 List<String> participantList,
+                 String owner, List<String> expenseList,
                  String description) {
         this.name = name; // name of the event
         this.date = date; // date of when the event occured/was created
@@ -31,7 +32,7 @@ public class Event {
         return date;
     }
 
-    public ArrayList<String> getParticipantList() {
+    public List<String> getParticipantList() {
         return participantList;
     }
 
@@ -39,7 +40,7 @@ public class Event {
         return owner;
     }
 
-    public ArrayList<String> getExpenseList() {
+    public List<String> getExpenseList() {
         return expenseList;
     }
 
@@ -82,5 +83,37 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(name, date, participantList, owner, expenseList, description);
+    }
+
+    @Override
+    public String toString() {
+
+
+        String part = "";
+        for(int i = 0; i < participantList.size()-1; i++){
+            part = part + participantList.get(i) + ", ";
+        }
+        part = part + participantList.get(participantList.size()-1);
+
+        String exp = "";
+        for(int i = 0; i < expenseList.size()-1; i++){
+            exp = exp + expenseList.get(i) + ", ";
+        }
+        exp = exp + expenseList.get(expenseList.size()-1);
+        String res = "This is the "
+                + this.name
+                + " event. That is summarized as: "
+                + description
+                + ". It was created on "
+                + this.date
+                + ". The participants are: "
+                + part
+                + ". "
+                + owner
+                + " is the person that created the event. The expenses in the list are: "
+                + exp
+                + "." ;
+
+        return res;
     }
 }
