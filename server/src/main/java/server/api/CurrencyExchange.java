@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -83,7 +86,16 @@ public class CurrencyExchange {
         System.out.println(response);
     }
 
-    public void writeToFile(double exchangeOne, double exchangeTwo, String baseCurrency) {
-        File ratesFile = new File("rates/" + baseCurrency + ".txt");
+    public static void writeToFile(double exchangeOne, double exchangeTwo, String baseCurrency) {
+        try {
+            File ratesFile = new File("src/main/resources/rates/" + baseCurrency.toUpperCase() + ";" + LocalDate.now() + ".txt");
+            ratesFile.createNewFile();
+            FileWriter fileWriter = new FileWriter(ratesFile);
+            fileWriter.write(exchangeOne + ";" + exchangeTwo);
+            fileWriter.close();
+            System.out.println("Wrote to file: " + ratesFile.getName());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
