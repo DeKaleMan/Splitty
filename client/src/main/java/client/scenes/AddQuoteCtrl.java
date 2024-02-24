@@ -35,6 +35,7 @@ public class AddQuoteCtrl {
     @FXML
     private TextField firstName;
 
+
     @FXML
     private TextField lastName;
 
