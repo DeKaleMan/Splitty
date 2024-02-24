@@ -40,4 +40,9 @@ public class Transaction {
         Transaction that = (Transaction) o;
         return that.getParticipant().equals(this.participant) && that.getBalance() == this.balance;
     }
+    @Override
+    public String toString() {
+        return participant + ", " + balance;
+    }
+
 }
