@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Expense {
     private String description;
-    private List<Transaction> transactions; // all associated participants of the expense and how much they owe or are owed
+    private List<Transaction> transactions;
+    // all associated participants of the expense and how much they owe or are owed
 
     private Type type; // type of expense (i.e. food, drinks, travel)
     private Currency currency;
@@ -13,7 +14,8 @@ public class Expense {
     private double totalExpense; // the amount of money of the expense
     private String payer; // the participant who paid
 
-    public Expense(String description, List<Transaction> transactions, Type type, Currency currency, String date, double totalExpense, String payer) {
+    public Expense(String description, List<Transaction> transactions,
+                   Type type, Currency currency, String date, double totalExpense, String payer) {
         this.description = description;
         this.transactions = transactions;
         this.type = type;
