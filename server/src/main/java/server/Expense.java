@@ -1,7 +1,6 @@
 package server;
 
-import java.util.Currency;
-import java.util.Date;
+import server.Currency;
 import java.util.List;
 
 public class Expense {
@@ -10,11 +9,11 @@ public class Expense {
 
     private Type type; // type of expense (i.e. food, drinks, travel)
     private Currency currency;
-    private Date date; // date of expense
+    private String date; // date of expense
     private double totalExpense; // the amount of money of the expense
     private String payer; // the participant who paid
 
-    public Expense(String description, List<Transaction> transactions, Type type, Currency currency, Date date, double totalExpense, String payer) {
+    public Expense(String description, List<Transaction> transactions, Type type, Currency currency, String date, double totalExpense, String payer) {
         this.description = description;
         this.transactions = transactions;
         this.type = type;
@@ -48,11 +47,11 @@ public class Expense {
     }
 
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -74,13 +73,13 @@ public class Expense {
 
     @Override
     public String toString() {
-        String res = "This expense is for" + description + "\nThe expense type is: " + this.type
+        String res = "This is an expense:\n" + description + "\nThe expense type is: " + this.type
                 + ".\nThe total amount spent is: " + totalExpense + ".\nThis is how much everyone owes:\n";
 
         for (Transaction t : transactions) {
             res += "\t" + t.getParticipant() + ": " + t.getBalance() + ".\n";
         }
-        res += "The person who paid was: " + payer + ", on " + date.toString() + " and was paid in " + currency + ".";
+        res += "The person who paid was: " + payer + ", on " + date + " and paid in " + currency + ".";
         return res;
     }
 
