@@ -102,15 +102,15 @@ public class Event {
         exp = exp + expenseList.get(expenseList.size()-1);
         String res = "This is the "
                 + this.name
-                + " event. That is summarized as: "
+                + " event.\n That is summarized as: "
                 + description
-                + ". It was created on "
+                + ".\n It was created on "
                 + this.date
-                + ". The participants are: "
+                + ".\n The participants are: "
                 + part
-                + ". "
+                + ".\n "
                 + owner
-                + " is the person that created the event. The expenses in the list are: "
+                + " is the person that created the event.\n The expenses in the list are: "
                 + exp
                 + "." ;
 

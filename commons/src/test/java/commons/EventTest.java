@@ -21,7 +21,7 @@ public class EventTest {
 
     @Test
     public void toStringTest(){
-        String res = "This is the Take-away event. That is summarized as: We ordered food from the local BurgerKing. It was created on 06/07/2004. The participants are: Yavor, Stijn. Lauren is the person that created the event. The expenses in the list are: fries, cola, burger.";
+        String res = "This is the Take-away event.\n That is summarized as: We ordered food from the local BurgerKing.\n It was created on 06/07/2004.\n The participants are: Yavor, Stijn.\n Lauren is the person that created the event.\n The expenses in the list are: fries, cola, burger.";
         assertEquals(res, e1.toString());
     }
 
