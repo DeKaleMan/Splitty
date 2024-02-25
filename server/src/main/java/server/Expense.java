@@ -2,6 +2,7 @@ package server;
 
 import server.Currency;
 import java.util.List;
+import java.util.Objects;
 
 public class Expense {
     private String description;
@@ -71,6 +72,25 @@ public class Expense {
 
     public void setPayer(String payer) {
         this.payer = payer;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Expense expense = (Expense) o;
+        return Double.compare(totalExpense, expense.totalExpense) == 0
+                && Objects.equals(description, expense.description)
+                && Objects.equals(transactions, expense.transactions)
+                && type == expense.type && currency == expense.currency
+                && Objects.equals(date, expense.date)
+                && Objects.equals(payer, expense.payer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, transactions, type, currency, date, totalExpense, payer);
     }
 
     @Override
