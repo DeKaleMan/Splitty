@@ -30,5 +30,7 @@ public class MyModule implements Module {
         binder.bind(InvitationCtrl.class).in(Scopes.SINGLETON);
         binder.bind(SplittyOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
     }
 }

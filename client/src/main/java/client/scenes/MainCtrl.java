@@ -40,10 +40,18 @@ public class MainCtrl {
     private Scene startScreen;
     private StartScreenCtrl startScreenCtrl;
 
+    private Scene addExpense;
+    private AddExpenseCtrl addExpenseCtrl ;
+
+    private Scene contactDetails;
+    private ContactDetailsCtrl contactDetailsCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
-                           Pair<StartScreenCtrl, Parent> startScreen){
+                           Pair<StartScreenCtrl, Parent> startScreen,
+                           Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<ContactDetailsCtrl, Parent> contactDetails){
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -59,6 +67,12 @@ public class MainCtrl {
 
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
+
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpense = new Scene(addExpense.getValue());
+
+        this.contactDetailsCtrl = contactDetails.getKey();
+        this.contactDetails = new Scene(contactDetails.getValue());
 
         showStartScreen();
         primaryStage.show();
