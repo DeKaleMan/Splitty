@@ -17,8 +17,18 @@ public class EventTest {
 
     List<String> expensesList = List.of(exp1,exp2,exp3);
 
-    Event e1 = new Event("Take-away", "06/07/2004", participantList, "Lauren", expensesList, "We ordered food from the local BurgerKing");
-    Event e2 = new Event("Take-away", "06/07/2004", participantList, "Lauren", expensesList, "We ordered food from the local BurgerKing");
+    Event e1 = new Event("Take-away",
+            "06/07/2004",
+            participantList,
+            "Lauren",
+            expensesList,
+            "We ordered food from the local BurgerKing");
+    Event e2 = new Event("Take-away",
+            "06/07/2004",
+            participantList,
+            "Lauren",
+            expensesList,
+            "We ordered food from the local BurgerKing");
 
     @Test
     public void toStringTest(){
