@@ -36,11 +36,15 @@ public class MainCtrl {
     private Scene invitation;
     private InvitationCtrl invitationCtrl;
 
+    private Scene splittyOverview;
+    private SplittyOverviewCtrl splittyOvervewCtrl;
+
 
 
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation){
+                           Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
+                           Pair<SplittyOverviewCtrl, Parent> splittyOverview){
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -51,7 +55,10 @@ public class MainCtrl {
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
 
-        showInvitation();
+        this.splittyOvervewCtrl = splittyOverview.getKey();
+        this.splittyOverview = new Scene(splittyOverview.getValue());
+
+        showSplittyOverview();
         primaryStage.show();
     }
 
@@ -65,6 +72,11 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showSplittyOverview(){
+        primaryStage.setTitle("Event overview");
+        primaryStage.setScene(splittyOverview);
     }
 
     public void showInvitation(){

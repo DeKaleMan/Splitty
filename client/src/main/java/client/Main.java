@@ -41,8 +41,9 @@ public class Main extends Application {
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+        var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "Overview.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, invitation);
+        mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview);
     }
 }
