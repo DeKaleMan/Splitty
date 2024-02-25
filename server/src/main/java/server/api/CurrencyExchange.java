@@ -7,10 +7,7 @@ import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.util.ConversionResponse;
 
 import java.io.File;
@@ -31,9 +28,9 @@ public class CurrencyExchange {
     private static final String CURRENCY_SERVER = "https://openexchangerates.org";
 
     // Conversion can have 6 values: eurusd, eurchf, usdeur, usdchf, chfeur, chfusd
-    @GetMapping("/{conversion}/{amount}")
+    @GetMapping("/{conversion}")
     public ResponseEntity<ConversionResponse> getConvertedAmount(@PathVariable("conversion") String conversion,
-                                       @PathVariable("amount") String stringAmount) {
+                                       @RequestParam("amount") String stringAmount) {
         // Check if the provided amount is a valid double
         double doubleAmount;
         try {
