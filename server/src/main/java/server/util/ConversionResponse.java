@@ -2,27 +2,27 @@ package server.util;
 
 public class ConversionResponse {
 
-    private double responseAmount;
-    private String responseMessage;
+    private double amount;
+    private String message;
 
-    public ConversionResponse(double responseAmount, String responseMessage) {
-        this.responseAmount = responseAmount;
-        this.responseMessage = responseMessage;
+    public ConversionResponse(double amount, String message) {
+        this.amount = amount;
+        this.message = message;
     }
 
-    public double getResponseAmount() {
-        return responseAmount;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setResponseAmount(double responseAmount) {
-        this.responseAmount = responseAmount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public String getResponseMessage() {
-        return responseMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

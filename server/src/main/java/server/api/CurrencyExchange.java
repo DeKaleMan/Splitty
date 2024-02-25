@@ -66,7 +66,7 @@ public class CurrencyExchange {
     public double getExchangeRates(String conversion) {
         String baseCurrency = conversion.substring(0, 3).toUpperCase();
         String conversionCurrency = conversion.substring(3, 6).toUpperCase();
-        File file = new File("src/main/resources/rates/" + baseCurrency.toUpperCase() + ";" + LocalDate.now() + ".txt");
+        File file = new File(getFileName(baseCurrency));
 
         // If a file (from today) is not cached it will update the conversion rates
         if (!file.exists()) {
@@ -147,8 +147,7 @@ public class CurrencyExchange {
     public void writeToFile(double exchangeOne, double exchangeTwo,
                             String exchangeOneName, String exchangeTwoName ,String baseCurrency) {
         try {
-            File ratesFile = new File("src/main/resources/rates/" +
-                    baseCurrency.toUpperCase() + ";" + LocalDate.now() + ".txt");
+            File ratesFile = new File(getFileName(baseCurrency));
             ratesFile.createNewFile();
             FileWriter fileWriter = new FileWriter(ratesFile);
             fileWriter.write(exchangeOneName + ";" + exchangeOne + ";" + exchangeTwoName + ";" + exchangeTwo);
@@ -157,5 +156,17 @@ public class CurrencyExchange {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Util method to get the file name we use for caching based on the date and base currency
+     *
+     * @param baseCurrency The base currency
+     * @return The file name
+     */
+    public String getFileName(String baseCurrency) {
+        // Method makes sure that the file name will always be the right name
+        // (removes the need for copying and pasting the file name)
+        return "src/main/resources/rates/" + baseCurrency + ";" + LocalDate.now() + ".txt";
     }
 }
