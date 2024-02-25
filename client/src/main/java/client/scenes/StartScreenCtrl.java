@@ -29,7 +29,7 @@ public class StartScreenCtrl {
 
     public void joinEvent(){
         System.out.println("Joined event: " + joinEventTextField.getText());
-        mainCtrl.showSplittyOverview(createEventTextField.getText());
+        mainCtrl.showSplittyOverview(joinEventTextField.getText());
         //TO DO
     }
 }
