@@ -1,8 +1,10 @@
+package commons;
+
 import org.junit.jupiter.api.Test;
-import server.Currency;
-import server.Expense;
-import server.Transaction;
-import server.Type;
+import commons.Currency;
+import commons.Expense;
+import commons.Transaction;
+import commons.Type;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

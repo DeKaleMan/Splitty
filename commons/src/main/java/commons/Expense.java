@@ -1,12 +1,11 @@
-package server;
+package commons;
 
-import server.Currency;
 import java.util.List;
 import java.util.Objects;
 
 public class Expense {
     private String description;
-    private List<Transaction> transactions;
+    private final List<Transaction> transactions;
     // all associated participants of the expense and how much they owe or are owed
 
     private Type type; // type of expense (i.e. food, drinks, travel)

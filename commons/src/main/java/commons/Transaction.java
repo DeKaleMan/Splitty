@@ -1,4 +1,4 @@
-package server;
+package commons;
 
 /**
  * This Transaction object will store a balance CHANGE for a participant.
