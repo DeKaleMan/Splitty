@@ -23,10 +23,17 @@ public class SplittyOverviewCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Shows the invitation scene (sends it the title to retain it)
+     */
     public void sendInvitesOnClick(){
         mainCtrl.showInvitation(titleLabel.getText());
     }
 
+    /**
+     * Sets the title of the event
+     * @param title event's title
+     */
     public void setTitle(String title){
         titleLabel.setText(title);
     }

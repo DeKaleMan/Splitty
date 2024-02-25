@@ -29,16 +29,25 @@ public class InvitationCtrl {
         inviteCode = "testInviteCode";
     }
 
+    /**
+     * Displays the invite code in the associated label
+     */
     public void showInviteCode() {
         inviteCodeLabel.setText(inviteCode);
     }
 
+    /**
+     * Sends invitations to specified emails and goes back to event's overview
+     */
     public void sendInvitesOnClick() {
         System.out.println("Button clicked!!");
         readAndSendEmails();
         mainCtrl.showSplittyOverview(eventTitle);
     }
 
+    /**
+     * Reads emails from the associated TextArea
+     */
     private void readAndSendEmails() {
         Scanner scanner = new Scanner(emailArea.getText());
         while(scanner.hasNextLine()){
@@ -46,11 +55,20 @@ public class InvitationCtrl {
         }
     }
 
+    /**
+     * Sends an invitation to the specified email
+     * TO DO - the actual sending functionality
+     * @param email String email to send the invitation to
+     */
     private void sendEmailInvitation(String email){
         System.out.println("Invitation sent to: " + email);
         /* TO DO */
     }
 
+    /**
+     * Just retains the event's title
+     * @param eventTitle title of the event
+     */
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
     }
