@@ -1,21 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Person;
-import commons.Quote;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.Modality;
-
 import javax.inject.Inject;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class InvitationCtrl {
@@ -23,6 +11,7 @@ public class InvitationCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private String inviteCode;
+    private String eventTitle;
 
     @FXML
     private Label inviteCodeLabel;
@@ -47,7 +36,7 @@ public class InvitationCtrl {
     public void sendInvitesOnClick() {
         System.out.println("Button clicked!!");
         readAndSendEmails();
-        mainCtrl.showSplittyOverview();
+        mainCtrl.showSplittyOverview(eventTitle);
     }
 
     private void readAndSendEmails() {
@@ -60,5 +49,9 @@ public class InvitationCtrl {
     private void sendEmailInvitation(String email){
         System.out.println("Invitation sent to: " + email);
         /* TO DO */
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 }

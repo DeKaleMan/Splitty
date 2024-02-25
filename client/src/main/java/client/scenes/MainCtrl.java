@@ -15,13 +15,11 @@
  */
 package client.scenes;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.io.IOException;
 
 public class MainCtrl {
 
@@ -39,12 +37,13 @@ public class MainCtrl {
     private Scene splittyOverview;
     private SplittyOverviewCtrl splittyOvervewCtrl;
 
-
-
+    private Scene startScreen;
+    private StartScreenCtrl startScreenCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
-                           Pair<SplittyOverviewCtrl, Parent> splittyOverview){
+                           Pair<SplittyOverviewCtrl, Parent> splittyOverview,
+                           Pair<StartScreenCtrl, Parent> startScreen){
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -58,7 +57,10 @@ public class MainCtrl {
         this.splittyOvervewCtrl = splittyOverview.getKey();
         this.splittyOverview = new Scene(splittyOverview.getValue());
 
-        showSplittyOverview();
+        this.startScreenCtrl = startScreen.getKey();
+        this.startScreen = new Scene(startScreen.getValue());
+
+        showStartScreen();
         primaryStage.show();
     }
 
@@ -74,14 +76,21 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    public void showSplittyOverview(){
+    public void showSplittyOverview(String title){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
+        splittyOvervewCtrl.setTitle(title);
     }
 
-    public void showInvitation(){
+    public void showInvitation(String title){
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
         invitationCtrl.showInviteCode();
+        invitationCtrl.setEventTitle(title);
+    }
+
+    public void showStartScreen(){
+        primaryStage.setTitle("Splitty");
+        primaryStage.setScene(startScreen);
     }
 }
