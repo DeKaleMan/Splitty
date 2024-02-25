@@ -77,7 +77,12 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return Objects.equals(name, event.name) && Objects.equals(date, event.date) && Objects.equals(participantList, event.participantList) && Objects.equals(owner, event.owner) && Objects.equals(expenseList, event.expenseList) && Objects.equals(description, event.description);
+        return Objects.equals(name, event.name)
+                && Objects.equals(date, event.date)
+                && Objects.equals(participantList, event.participantList)
+                && Objects.equals(owner, event.owner)
+                && Objects.equals(expenseList, event.expenseList)
+                && Objects.equals(description, event.description);
     }
 
     @Override
