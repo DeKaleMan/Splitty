@@ -14,8 +14,8 @@ class UserOverviewTest {
 
     @Test
     void getEmail() {
-            UserOverview userOverview = new UserOverview("name", "email");
-            assertEquals("email", userOverview.getEmail());
+        UserOverview userOverview = new UserOverview("name", "email");
+        assertEquals("email", userOverview.getEmail());
     }
     @Test
     void createEventTest() {
