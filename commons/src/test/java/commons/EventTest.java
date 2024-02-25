@@ -41,4 +41,9 @@ public class EventTest {
         assertEquals("Take-away", e1.getName());
     }
 
+    @Test
+    public void getExpenseListTest(){
+        assertEquals(participantList, e1.getParticipantList());
+    }
+
 }
