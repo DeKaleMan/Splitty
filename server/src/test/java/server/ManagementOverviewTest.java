@@ -1,5 +1,6 @@
 package server;
 
+import commons.Event;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ class ManagementOverviewTest {
     @Test
     void getEventsTest() {
         ManagementOverview mnOverview = new ManagementOverview("events", "servers");
-        assertEquals(new ArrayList<String>(), mnOverview.getEvents());
+        assertEquals(new ArrayList<Event>(), mnOverview.getEvents());
     }
 
     @Test
@@ -22,7 +23,7 @@ class ManagementOverviewTest {
     @Test
     void deleteEventTest(){
         ManagementOverview mnOverview = new ManagementOverview("events", "servers");
-        String event = "";
+        Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
         //add event
         assertEquals(event, mnOverview.deleteEvent(event));
     }
@@ -30,25 +31,29 @@ class ManagementOverviewTest {
     @Test
     void getJSONTest(){
         ManagementOverview mnOverview = new ManagementOverview("events", "servers");
-        String event = "";
-        //add event
+        Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
+
         assertEquals("JSON dump", mnOverview.downloadJSON(event));
     }
 
+    @Test
+    void orderByTitle(){
+        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
+        //Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
+        assertEquals(new ArrayList<>(), mnOverview.orderByTitle());
+    }
+    @Test
+    void oderByDate(){
+        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
+        //Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
+        assertEquals(new ArrayList<>(), mnOverview.orderByDate());
+    }
 
 
-//    //orderings:
-//    public List<String> orderByTitle(){
-//        // return a list order by title using a query on the database
-//        return new ArrayList<>();
-//    }
-//    public List<String> orderByDate(){
-//        // return a list order by title using a query on the database
-//        return new ArrayList<>();
-//    }
-//    public List<String> orderByLastActivity(){
-//        // return a list order by title using a query on the database
-//        return new ArrayList<>();
-//    }
-
+    @Test
+    void orderByLastActivity(){
+        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
+        //Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
+        assertEquals(new ArrayList<>(), mnOverview.orderByLastActivity());
+    }
 }

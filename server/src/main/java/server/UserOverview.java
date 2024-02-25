@@ -1,5 +1,7 @@
 package server;
 
+import commons.Event;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ public class UserOverview {
     //private final EventRepository repo;
     private String name;
     private String email;
-    private List<String> events;
+    private List<Event> events;
     public UserOverview(String name, String email){
         this.name = name;
         this.email = email;
@@ -23,26 +25,27 @@ public class UserOverview {
         return email;
     }
 
-    public List<String> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public String createEvent(String info){
+    public Event createEvent(String name, String date, List<String> participants,
+                             String owner, List<String> expenseList, String description){
         //construct new event
-        String event = "event";
+        Event event = new Event(name, date, participants, owner, expenseList, description);
         events.add(event);
         return event;
     }
 
-    public boolean changeTitleEvent(String event, String title){
+    public boolean changeTitleEvent(Event event, String title){
         if(event == null || title == null) return false;
         if(!events.contains(event)) return false;
-
-        // return event.setTitle(title);
+        event.setName(title);
+        //return event.setTitle(title);
         return true;
     }
-    public List<String> getExpenses(String event){
-        List<String> res = new ArrayList<>(); //event.getExpenses();
+    public List<String> getExpenses(Event event){
+        List<String> res = event.getExpenseList();
         return res;
     }
 }
