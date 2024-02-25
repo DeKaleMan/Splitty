@@ -5,16 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.util.ConversionResponse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -28,10 +32,29 @@ public class CurrencyExchange {
 
     // Conversion can have 6 values: eurusd, eurchf, usdeur, usdchf, chfeur, chfusd
     @GetMapping("/{conversion}/{amount}")
-    public double getConvertedAmount(@PathVariable("conversion") String conversion,
-                                     @PathVariable("amount") double amount) {
+    public ResponseEntity<ConversionResponse> getConvertedAmount(@PathVariable("conversion") String conversion,
+                                       @PathVariable("amount") String stringAmount) {
+        // Check if the provided amount is a valid double
+        double doubleAmount;
+        try {
+            doubleAmount = Double.parseDouble(stringAmount);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ConversionResponse(0,
+                    "You typed in something else than a double. Please provide a valid double"));
+        }
+
+        // Check for an invalid conversion
+        if (!Arrays.asList("eurusd", "eurchf", "usdeur", "usdchf", "chfeur", "chfusd")
+                .contains(conversion)) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ConversionResponse(0,
+                    "You did not provide a supported conversion. " +
+                            "The supported conversions are: eurusd, eurchf, usdeur, usdchf, chfeur, chfusd"));
+        }
+
         double exchangeRate = getExchangeRates(conversion);
-        return exchangeRate * amount;
+        return ResponseEntity.status(HttpStatus.OK).body(new ConversionResponse(exchangeRate * doubleAmount,
+                "The conversion was successful"));
     }
 
     /**
@@ -55,7 +78,8 @@ public class CurrencyExchange {
             Scanner scanner = new Scanner(file);
             scanner.useDelimiter(";");
 
-            // Creates a mapping from currency --> conversion rate (See the files in rates for the file structure)
+            // Creates a mapping from currency --> conversion rate
+            // (See the files in the rates folder for the file structure)
             HashMap<String, Double> conversionMap = new HashMap<>();
             conversionMap.put(scanner.next(), Double.parseDouble(scanner.next()));
             conversionMap.put(scanner.next(), Double.parseDouble(scanner.next()));
