@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -30,8 +31,27 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private Scene invitation;
+    private InvitationCtrl invitationCtrl;
+
+    private Scene splittyOverview;
+    private SplittyOverviewCtrl splittyOverviewCtrl;
+
+    private Scene startScreen;
+    private StartScreenCtrl startScreenCtrl;
+
+    private Scene addExpense;
+    private AddExpenseCtrl addExpenseCtrl ;
+
+    private Scene contactDetails;
+    private ContactDetailsCtrl contactDetailsCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
+                           Pair<SplittyOverviewCtrl, Parent> splittyOverview,
+                           Pair<StartScreenCtrl, Parent> startScreen,
+                           Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<ContactDetailsCtrl, Parent> contactDetails){
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -39,7 +59,22 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.invitationCtrl = invitation.getKey();
+        this.invitation = new Scene(invitation.getValue());
+
+        this.splittyOverviewCtrl = splittyOverview.getKey();
+        this.splittyOverview = new Scene(splittyOverview.getValue());
+
+        this.startScreenCtrl = startScreen.getKey();
+        this.startScreen = new Scene(startScreen.getValue());
+
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpense = new Scene(addExpense.getValue());
+
+        this.contactDetailsCtrl = contactDetails.getKey();
+        this.contactDetails = new Scene(contactDetails.getValue());
+
+        showStartScreen();
         primaryStage.show();
     }
 
@@ -53,5 +88,23 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showSplittyOverview(String title){
+        primaryStage.setTitle("Event overview");
+        primaryStage.setScene(splittyOverview);
+        splittyOverviewCtrl.setTitle(title);
+    }
+
+    public void showInvitation(String title){
+        primaryStage.setTitle("Invitation");
+        primaryStage.setScene(invitation);
+        invitationCtrl.showInviteCode();
+        invitationCtrl.setEventTitle(title);
+    }
+
+    public void showStartScreen(){
+        primaryStage.setTitle("Splitty");
+        primaryStage.setScene(startScreen);
     }
 }
