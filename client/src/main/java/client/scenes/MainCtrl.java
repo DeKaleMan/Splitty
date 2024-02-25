@@ -35,7 +35,7 @@ public class MainCtrl {
     private InvitationCtrl invitationCtrl;
 
     private Scene splittyOverview;
-    private SplittyOverviewCtrl splittyOvervewCtrl;
+    private SplittyOverviewCtrl splittyOverviewCtrl;
 
     private Scene startScreen;
     private StartScreenCtrl startScreenCtrl;
@@ -54,7 +54,7 @@ public class MainCtrl {
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
 
-        this.splittyOvervewCtrl = splittyOverview.getKey();
+        this.splittyOverviewCtrl = splittyOverview.getKey();
         this.splittyOverview = new Scene(splittyOverview.getValue());
 
         this.startScreenCtrl = startScreen.getKey();
@@ -79,7 +79,7 @@ public class MainCtrl {
     public void showSplittyOverview(String title){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
-        splittyOvervewCtrl.setTitle(title);
+        splittyOverviewCtrl.setTitle(title);
     }
 
     public void showInvitation(String title){
