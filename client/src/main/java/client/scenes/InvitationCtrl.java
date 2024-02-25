@@ -16,8 +16,9 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
-public class InvitationCtrl{
+public class InvitationCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -39,8 +40,25 @@ public class InvitationCtrl{
         inviteCode = "testInviteCode";
     }
 
-    public void backToOverview(){
+    public void showInviteCode() {
         inviteCodeLabel.setText(inviteCode);
+    }
+
+    public void sendInvitesOnClick() {
         System.out.println("Button clicked!!");
+        readAndSendEmails();
+        mainCtrl.showSplittyOverview();
+    }
+
+    private void readAndSendEmails() {
+        Scanner scanner = new Scanner(emailArea.getText());
+        while(scanner.hasNextLine()){
+            sendEmailInvitation(scanner.nextLine());
+        }
+    }
+
+    private void sendEmailInvitation(String email){
+        System.out.println("Invitation sent to: " + email);
+        /* TO DO */
     }
 }

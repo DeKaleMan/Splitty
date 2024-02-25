@@ -82,5 +82,6 @@ public class MainCtrl {
     public void showInvitation(){
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
+        invitationCtrl.showInviteCode();
     }
 }

@@ -16,7 +16,7 @@
       <Label layoutX="31.0" layoutY="88.0" text="Invite Code: " />
       <Label layoutX="320.0" layoutY="88.0" text="Send email invites:" />
       <TextArea fx:id="emailArea" layoutX="320.0" layoutY="115.0" prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="sendInvites" layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#backToOverview" text="Send Invites" />
+      <Button fx:id="sendInvites" layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send Invites" />
       <Label layoutX="221.0" layoutY="192.0" text="Or" />
       <Label fx:id="inviteCodeLabel" layoutX="31.0" layoutY="115.0" text="l" />
    </children>
