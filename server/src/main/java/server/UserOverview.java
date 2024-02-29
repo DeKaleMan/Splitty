@@ -44,8 +44,8 @@ public class UserOverview {
         //return event.setTitle(title);
         return true;
     }
-    public List<String> getExpenses(Event event){
-        List<String> res = event.getExpenseList();
-        return res;
-    }
+//    public List<String> getExpenses(Event event){
+//        List<String> res = event.getExpenseList();
+//        return res;
+//    }
 }
