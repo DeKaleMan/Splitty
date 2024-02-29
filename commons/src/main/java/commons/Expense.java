@@ -15,7 +15,9 @@ public class Expense {
     private String description;
     // all associated participants of the expense and how much they owe or are owed
 
+    @Enumerated(EnumType.STRING)
     private Type type; // type of expense (i.e. food, drinks, travel)
+    @Enumerated(EnumType.STRING)
     private Currency currency;
     private String date; // date of expense
     private double totalExpense; // the amount of money of the expense
@@ -97,6 +99,14 @@ public class Expense {
     public int hashCode() {
         return Objects.hash(eventCode, expenseId, description, type, currency, date, totalExpense,
             payerEmail);
+    }
+
+    public int getEventCode() {
+        return eventCode;
+    }
+
+    public int getExpenseId() {
+        return expenseId;
     }
 
     @Override
