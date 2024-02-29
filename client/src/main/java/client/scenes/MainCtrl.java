@@ -96,15 +96,23 @@ public class MainCtrl {
         splittyOverviewCtrl.setTitle(title);
     }
 
+    public void showAddExpense(String title) {
+        primaryStage.setTitle("Add expense");
+        primaryStage.setScene(addExpense);
+        addExpenseCtrl.setTitle(title);
+    }
+
     public void showInvitation(String title){
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
         invitationCtrl.showInviteCode();
-        invitationCtrl.setEventTitle(title);
+        invitationCtrl.setTitle(title);
     }
 
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
         primaryStage.setScene(startScreen);
     }
+
+
 }
