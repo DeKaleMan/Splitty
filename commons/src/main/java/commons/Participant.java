@@ -1,16 +1,40 @@
 package commons;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Participant {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import java.io.Serializable;
+
+@Entity
+public class Participant implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
     private String name;
-    private double balance;
-    private String iBan;
-    private String bIC;
-    private String accountHolder;
-    private String email;
-    private List<String> expenses; // Placeholder for Expense objects
 
+    @Column(nullable = false)
+    private double balance;
+
+    @Column(name = "iban", nullable = false, unique = true, length = 34)
+    private String iBan;
+
+    @Column(name = "bic", nullable = false, length = 11)
+    private String bIC;
+
+    @Column(name = "account_holder", nullable = false, length = 100)
+    private String accountHolder;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+
+    protected Participant() {}
     public Participant(String name, double balance, String iBan, String bIC, String accountHolder, String email) {
         this.name = name;
         this.balance = balance;
@@ -18,10 +42,17 @@ public class Participant {
         this.bIC = bIC;
         this.accountHolder = accountHolder;
         this.email = email;
-        this.expenses = new ArrayList<>();
     }
 
     // Getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -70,40 +101,4 @@ public class Participant {
         this.email = email;
     }
 
-    public List<String> getExpenses() {
-        return expenses;
-    }
-
-    public void addExpense(String expense) {
-        this.expenses.add(expense);
-    }
-    public double calculateTotalExpenses() {
-        // Placeholder implementation
-        double total = 0.0;
-        for (String expense : expenses) {
-            try {
-                total += Double.parseDouble(expense);
-            } catch (NumberFormatException e) {
-                System.err.println("Error parsing expense: " + expense);
-            }
-        }
-        return total;
-    }
-
-    public void updateBalance(double amount) {
-        this.balance += amount;
-    }
-
-    @Override
-    public String toString() {
-        return "Participant{" +
-                "name='" + name + '\'' +
-                ", balance=" + balance +
-                ", IBAN='" + iBan + '\'' +
-                ", BIC='" + bIC + '\'' +
-                ", accountHolder='" + accountHolder + '\'' +
-                ", email='" + email + '\'' +
-                ", expenses=" + expenses +
-                '}';
-    }
 }
