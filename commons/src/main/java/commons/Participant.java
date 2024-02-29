@@ -4,8 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import java.io.Serializable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+//import jakarta.persistence.JoinColumn;
+//import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Participant implements Serializable {
