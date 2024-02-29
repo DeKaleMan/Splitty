@@ -6,6 +6,8 @@ import server.database.EventRepository;
 
 import java.util.Optional;
 
+
+
 @RestController
 @RequestMapping("/api/event")
 public class EventController {
@@ -25,6 +27,14 @@ public class EventController {
         }else{
             return ResponseEntity.badRequest().build();
         }
+    }
+    @PostMapping("/addEvent")
+    public ResponseEntity<Event> addEvent(Event inputEvent){
+        if(inputEvent.getName() == null){
+            return ResponseEntity.badRequest().build();
+        }
+        Event newEvent = eventDB.save(inputEvent);
+        return ResponseEntity.ok(newEvent);
     }
 
 }
