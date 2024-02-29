@@ -2,18 +2,13 @@ package commons;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import java.io.Serializable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Participant implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false, length = 100)
     private String name;
@@ -30,9 +25,13 @@ public class Participant implements Serializable {
     @Column(name = "account_holder", nullable = false, length = 100)
     private String accountHolder;
 
+    @Id
     @Column(nullable = false, unique = true)
     private String email;
 
+//    @ManyToOne
+//    @JoinColumn(name = "????") // This is the foreign key column in the Participant table.
+//    private Event event;
 
     protected Participant() {}
     public Participant(String name, double balance, String iBan, String bIC, String accountHolder, String email) {
@@ -42,16 +41,10 @@ public class Participant implements Serializable {
         this.bIC = bIC;
         this.accountHolder = accountHolder;
         this.email = email;
+//        this.event = event;
     }
 
     // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
