@@ -11,7 +11,9 @@ public class InvitationCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private String inviteCode;
-    private String eventTitle;
+
+    @FXML
+    private Label titleLabel;
 
     @FXML
     private Label inviteCodeLabel;
@@ -42,7 +44,7 @@ public class InvitationCtrl {
     public void sendInvitesOnClick() {
         System.out.println("Button clicked!!");
         readAndSendEmails();
-        mainCtrl.showSplittyOverview(eventTitle);
+        mainCtrl.showSplittyOverview(titleLabel.getText());
     }
 
     /**
@@ -65,11 +67,27 @@ public class InvitationCtrl {
         /* TO DO */
     }
 
-    /**
-     * Just retains the event's title
-     * @param eventTitle title of the event
-     */
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    @FXML
+    private void back() {
+        System.out.println("going back to event overview");
+        mainCtrl.showSplittyOverview(titleLabel.getText());
     }
+
+
+    /**
+     * Sets the title of the event
+     * @param title event's title
+     */
+    public void setTitle(String title){
+        titleLabel.setText(title);
+    }
+
+//    /**
+//     * Just retains the event's title
+//     * @param eventTitle title of the event
+//     */
+//    public void setEventTitle(String eventTitle) {
+//        this.eventTitle = eventTitle;
+//    }
+
 }

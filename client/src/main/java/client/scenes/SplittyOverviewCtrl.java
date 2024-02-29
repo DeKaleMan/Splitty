@@ -38,5 +38,19 @@ public class SplittyOverviewCtrl {
         titleLabel.setText(title);
     }
 
+
+    @FXML
+    public void showAddExpense() {
+        mainCtrl.showAddExpense(titleLabel.getText());
+    }
+
+    /**
+     * go back to Start screen
+     */
+    @FXML
+    private void back() {
+        mainCtrl.showStartScreen();
+    }
+
 }
 
