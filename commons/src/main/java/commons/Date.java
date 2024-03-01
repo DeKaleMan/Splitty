@@ -6,9 +6,9 @@ import java.util.Objects;
  * Date class if any operations on dates were necessary
  */
 public class Date implements Comparable<Date> {
-    int day;
-    int month;
-    int year;
+    private int day;
+    private int month;
+    private int year;
 
     public Date(int day, int month, int year) {
         this.day = day;
