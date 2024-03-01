@@ -10,7 +10,7 @@ public class IOUtilsTest implements IOUtil {
     public File file;
     public String lastWrite;
     public String nextRead = "";
-    public boolean rateCached = false;
+    public boolean rateCached = false; // flag to control if it should run the program as if the rate is cached or not
     public ArrayList<String> ioCalls = new ArrayList<>();
 
     @Override
@@ -29,8 +29,6 @@ public class IOUtilsTest implements IOUtil {
 
     @Override
     public boolean fileExists(File file) {
-        // Using this you can control what this method returns
-        // by either making the file null or just providing an empty file object
         return rateCached;
     }
 

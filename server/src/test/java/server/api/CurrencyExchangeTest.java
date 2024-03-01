@@ -42,9 +42,11 @@ class CurrencyExchangeTest {
 
     @Test
     void getConvertedAmountCachedTest() {
+        // epsilon is the required precision for the assertEquals to pass
         double epsilon = 0.00001d;
         ioTest.rateCached = true;
 
+        // tests if the amounts are calculated correctly if the rate is cached
         ioTest.nextRead = "EUR;0.923288;CHF;0.884445";
         ResponseEntity<ConversionResponse> response = currencyExchange.getConvertedAmount("usdeur", "50");
         assertEquals(((OkConversionResponse) response.getBody()).getAmount(), 46.1644, epsilon);
@@ -63,9 +65,11 @@ class CurrencyExchangeTest {
 
     @Test
     void getConvertedAmountNotCachedTest() {
+        // epsilon is the required precision for the assertEquals to pass
         double epsilon = 0.00001d;
         ioTest.rateCached = false;
 
+        // tests if the amounts are calculated correctly if the rate is not cached
         ioTest.nextRead = "EUR;0.923288;CHF;0.884445";
         ResponseEntity<ConversionResponse> response = currencyExchange.getConvertedAmount("usdeur", "50");
         assertEquals(((OkConversionResponse) response.getBody()).getAmount(), 46.1644, epsilon);
