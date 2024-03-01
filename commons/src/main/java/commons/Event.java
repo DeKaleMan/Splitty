@@ -83,55 +83,6 @@ public class Event {
         return Objects.hash(id, name, date, owner, description);
     }
 
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Event event = (Event) o;
-//        return Objects.equals(name, event.name)
-//                && Objects.equals(date, event.date)
-//                && Objects.equals(participantList, event.participantList)
-//                && Objects.equals(owner, event.owner)
-//                && Objects.equals(expenseList, event.expenseList)
-//                && Objects.equals(description, event.description);
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(name, date, participantList, owner, expenseList, description);
-//    }
-
-//    @Override
-//    public String toString() {
-//
-//
-//        String part = "";
-//        for(int i = 0; i < participantList.size()-1; i++){
-//            part = part + participantList.get(i) + ", ";
-//        }
-//        part = part + participantList.get(participantList.size()-1);
-//
-//        String exp = "";
-//        for(int i = 0; i < expenseList.size()-1; i++){
-//            exp = exp + expenseList.get(i) + ", ";
-//        }
-//        exp = exp + expenseList.get(expenseList.size()-1);
-//        String res = "This is the "
-//                + this.name
-//                + " event.\n That is summarized as: "
-//                + description
-//                + ".\n It was created on "
-//                + this.date
-//                + ".\n The participants are: "
-//                + part
-//                + ".\n "
-//                + owner
-//                + " is the person that created the event.\n The expenses in the list are: "
-//                + exp
-//                + "." ;
-//
-//        return res;
-//    }
 
 
     @Override
