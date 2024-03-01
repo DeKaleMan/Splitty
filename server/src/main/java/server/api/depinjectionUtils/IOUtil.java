@@ -1,11 +1,13 @@
 package server.api.depinjectionUtils;
 
+import java.io.File;
+
 public interface IOUtil {
 
-    void setFile(String filePath);
+    String read(File file);
 
-    String read();
+    void write(String string, File file);
 
-    void write(String string);
+    boolean fileExists(File file);
 
 }

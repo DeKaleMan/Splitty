@@ -2,9 +2,6 @@ package server.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +13,17 @@ import server.util.ConversionResponse;
 import server.util.OkConversionResponse;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
 @RestController
 @RequestMapping("/api/currency")
 public class CurrencyExchange {
 
-    private IOUtil io;
-    private HttpResponse httpResponse;
+    private final IOUtil io;
+    private final HttpResponse httpResponse;
 
     @Autowired
     public CurrencyExchange(IOUtil io, HttpResponse httpResponse) {
@@ -78,26 +70,22 @@ public class CurrencyExchange {
         File file = new File(getFileName(baseCurrency));
 
         // If a file (from today) is not cached it will update the conversion rates
-        if (!file.exists()) {
+        if (!io.fileExists(file)) {
             updateExchangeRates(baseCurrency);
         }
 
         // Read the file and extract the right conversion rate
-        try {
-            Scanner scanner = new Scanner(file);
-            scanner.useDelimiter(";");
+        Scanner scanner = new Scanner(io.read(file));
+        scanner.useDelimiter(";");
 
-            // Creates a mapping from currency --> conversion rate
-            // (See the files in the rates folder for the file structure)
-            HashMap<String, Double> conversionMap = new HashMap<>();
-            conversionMap.put(scanner.next(), Double.parseDouble(scanner.next()));
-            conversionMap.put(scanner.next(), Double.parseDouble(scanner.next()));
-            scanner.close();
+        // Creates a mapping from currency --> conversion rate
+        // (See the files in the rates folder for the file structure)
+        HashMap<String, Double> conversionMap = new HashMap<>();
+        conversionMap.put(scanner.next(), Double.parseDouble(scanner.next()));
+        conversionMap.put(scanner.next(), Double.parseDouble(scanner.next()));
+        scanner.close();
 
-            return conversionMap.get(conversionCurrency);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return conversionMap.get(conversionCurrency);
     }
 
     /**
@@ -107,13 +95,7 @@ public class CurrencyExchange {
      */
     public void updateExchangeRates(String baseCurrency) {
         // Doing the http request
-        String response = ClientBuilder.newClient(new ClientConfig())
-                .target(CURRENCY_SERVER).path("api/latest.json")
-                .queryParam("app_id", "ecc02200bf6d4b95b136ec71eca463d5")
-                .queryParam("base", "USD")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {});
+        String response = httpResponse.getExchangeRateResponse();
 
         // Parsing the json response
         ObjectMapper objectMapper = new ObjectMapper();
@@ -155,16 +137,8 @@ public class CurrencyExchange {
      */
     public void writeToFile(double exchangeOne, double exchangeTwo,
                             String exchangeOneName, String exchangeTwoName ,String baseCurrency) {
-        try {
-            File ratesFile = new File(getFileName(baseCurrency));
-            ratesFile.createNewFile();
-            FileWriter fileWriter = new FileWriter(ratesFile);
-            fileWriter.write(exchangeOneName + ";" + exchangeOne + ";" + exchangeTwoName + ";" + exchangeTwo);
-            fileWriter.close();
-            System.out.println("Wrote to file: " + ratesFile.getName());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        File ratesFile = new File(getFileName(baseCurrency));
+        io.write(exchangeOneName + ";" + exchangeOne + ";" + exchangeTwoName + ";" + exchangeTwo, ratesFile);
     }
 
     /**

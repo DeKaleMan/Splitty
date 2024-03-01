@@ -13,7 +13,7 @@ public class HttpResponseActual implements HttpResponse {
     private static final String CURRENCY_SERVER = "https://openexchangerates.org";
 
     @Override
-    public String getResponse() {
+    public String getExchangeRateResponse() {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(CURRENCY_SERVER).path("api/latest.json")
                 .queryParam("app_id", "ecc02200bf6d4b95b136ec71eca463d5")
