@@ -5,10 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.api.depinjectionUtils.HttpResponse;
+import server.api.depinjectionUtils.IOUtil;
+import server.util.BadConversionResponse;
 import server.util.ConversionResponse;
+import server.util.OkConversionResponse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +30,14 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 @RequestMapping("/api/currency")
 public class CurrencyExchange {
 
-    private static final String CURRENCY_SERVER = "https://openexchangerates.org";
+    private IOUtil io;
+    private HttpResponse httpResponse;
+
+    @Autowired
+    public CurrencyExchange(IOUtil io, HttpResponse httpResponse) {
+        this.io = io;
+        this.httpResponse = httpResponse;
+    }
 
     // Conversion can have 6 values: eurusd, eurchf, usdeur, usdchf, chfeur, chfusd
     @GetMapping("/{conversion}")
@@ -36,7 +48,7 @@ public class CurrencyExchange {
         try {
             doubleAmount = Double.parseDouble(stringAmount);
         } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ConversionResponse(0,
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadConversionResponse(
                     "You typed in something else than a double. Please provide a valid double"));
         }
 
@@ -44,13 +56,13 @@ public class CurrencyExchange {
         if (!Arrays.asList("eurusd", "eurchf", "usdeur", "usdchf", "chfeur", "chfusd")
                 .contains(conversion)) {
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ConversionResponse(0,
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadConversionResponse(
                     "You did not provide a supported conversion. " +
                             "The supported conversions are: eurusd, eurchf, usdeur, usdchf, chfeur, chfusd"));
         }
 
         double exchangeRate = getExchangeRates(conversion);
-        return ResponseEntity.status(HttpStatus.OK).body(new ConversionResponse(exchangeRate * doubleAmount,
+        return ResponseEntity.status(HttpStatus.OK).body(new OkConversionResponse(exchangeRate * doubleAmount,
                 "The conversion was successful"));
     }
 
