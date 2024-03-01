@@ -4,14 +4,14 @@ import server.api.depinjectionUtils.IOUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class IOUtilsTest implements IOUtil {
 
     public File file;
     public String lastWrite;
     public String nextRead = "";
-    public List<String> ioCalls = new ArrayList<>();
+    public boolean rateCached = false;
+    public ArrayList<String> ioCalls = new ArrayList<>();
 
     @Override
     public String read(File file) {
@@ -31,6 +31,12 @@ public class IOUtilsTest implements IOUtil {
     public boolean fileExists(File file) {
         // Using this you can control what this method returns
         // by either making the file null or just providing an empty file object
-        return file != null;
+        return rateCached;
+    }
+
+    public ArrayList<String> clearCallList() {
+        ArrayList<String> result = new ArrayList<>(ioCalls);
+        ioCalls.clear();
+        return result;
     }
 }
