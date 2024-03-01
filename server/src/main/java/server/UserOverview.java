@@ -32,7 +32,7 @@ public class UserOverview {
     public Event createEvent(String name, String date, List<String> participants,
                              String owner, List<String> expenseList, String description){
         //construct new event
-        Event event = new Event(name, date, participants, owner, expenseList, description);
+        Event event = new Event(name, date, owner, description);
         events.add(event);
         return event;
     }

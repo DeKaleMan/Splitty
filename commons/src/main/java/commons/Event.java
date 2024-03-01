@@ -20,8 +20,7 @@ public class Event {
     private String description;
 
     public Event(String name, String date,
-                 List<String> participantList,
-                 String owner, List<String> expenseList,
+                 String owner,
                  String description) {
         this.name = name; // name of the event
         this.date = date; // date of when the event occured/was created

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
-
 import java.util.Optional;
 
 
@@ -38,5 +37,23 @@ public class EventController {
         Event newEvent = eventDB.save(inputEvent);
         return ResponseEntity.ok(newEvent);
     }
+
+    @DeleteMapping("/deleteEvent/{id}")
+    public ResponseEntity<Event> removeEntity(@PathVariable("id") Integer id){
+        Optional<Event> eventToDelete = eventDB.findById(id);
+        if(eventToDelete.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            eventDB.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+//    @GetMapping("/getNameByName/{name}")
+//    public ResponseEntity<Event> getEventByName(@RequestParam("name") String name){
+//        ResponseEntity<Event> e = eventDB.getEventByName(name);
+//        return e;
+//    }
+
 
 }
