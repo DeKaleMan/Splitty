@@ -44,6 +44,20 @@ public class SplittyOverviewCtrl {
         mainCtrl.showAddExpense(titleLabel.getText());
     }
 
+    @FXML
+    public void viewParticipantManager(){
+        mainCtrl.showParticipantManager(titleLabel.getText());
+    }
+
+
+    @FXML
+    public void showStatistics(){
+        mainCtrl.showStatistics(titleLabel.getText());
+    }
+    @FXML
+    public void showDebts(){
+
+    }
     /**
      * go back to Start screen
      */
@@ -51,6 +65,9 @@ public class SplittyOverviewCtrl {
     private void back() {
         mainCtrl.showStartScreen();
     }
-
+    @FXML
+    private void viewDebts(){
+        mainCtrl.viewDeptsPerEvent();
+    }
 }
 

@@ -2,7 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
 
@@ -30,5 +33,19 @@ public class AddExpenseCtrl {
      */
     public void setTitle(String title){
         titleLabel.setText(title);
+    }
+
+
+    @FXML
+    private TextField whatFor;
+    @FXML
+    private ComboBox person;
+
+    @FXML
+    private DatePicker dateSelect;
+
+    @FXML
+    public void addExpense(){
+        //collect information
     }
 }

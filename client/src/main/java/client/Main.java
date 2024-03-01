@@ -41,13 +41,20 @@ public class Main extends Application {
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
-        var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "Overview.fxml");
+        var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
-        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
+
+        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+        var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
+        var debts = FXML.load(DebtCtrl.class, "client", "scenes", "Debts.fxml");
+        // group these in the EventPropGrouper
+        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts);
+
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen,addExpense,contactDetails);
+            startScreen,contactDetails, eventPropGrouper);
     }
 }
