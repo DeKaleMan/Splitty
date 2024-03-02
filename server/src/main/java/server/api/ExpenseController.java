@@ -1,7 +1,6 @@
 package server.api;
 
 import commons.Expense;
-import commons.ExpenseId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.ExpenseRepository;
@@ -17,14 +16,14 @@ public class ExpenseController {
         this.repo = repo;
     }
 
-    @GetMapping("/{eventCode}")
-    public List<Expense> findByEventCode(@PathVariable("eventCode") int eventCode) {
+    @GetMapping(path={"","/"})
+    public List<Expense> findByEventCode(@RequestParam int eventCode) {
         return repo.findByEventCode(eventCode);
     }
 
-    @GetMapping("/{eventCode}/{payerEmail}")
-    public List<Expense> findByEventCodeAndPayerEmail(@PathVariable("eventCode") int eventCode,
-                                                      @PathVariable("payerEmail") String email) {
+    @GetMapping(path={"","/"})
+    public List<Expense> findByEventCodeAndPayerEmail(@RequestParam int eventCode,
+                                                      @RequestParam String email) {
         return repo.findByEventCodeAndPayerEmail(eventCode, email);
     }
 

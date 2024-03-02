@@ -26,7 +26,7 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public List<Expense> findByEventCodeAndPayerEmail(int eventCode, String payerEmail) {
-        methods.add("findByPayerEmail");
+        methods.add("findByEventCodeAndPayerEmail");
         return expenses
             .stream()
             .filter(x -> x.getEventCode() == eventCode && x.getPayerEmail().equals(payerEmail))

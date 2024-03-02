@@ -17,13 +17,13 @@ public class ExpenseTest {
     Transaction t6 = new Transaction("Jakub", -25.0);
     List<Transaction> transactions = List.of(t1, t2, t3, t4, t5, t6);
     List<Transaction> transactionsMinusOne = List.of(t1, t2, t3, t4, t5);
-    Expense expense = new Expense("This is a test expense", Type.Food,
-        Currency.EUR, "24-02-2024", 100.50, "John");
+    Expense expense = new Expense(1,"This is a test expense", Type.Food,
+        Currency.EUR, "24-02-2024", 100.50, "email1");
 
-    Expense expenseCopy = new Expense("This is a test expense", Type.Food,
-        Currency.EUR, "24-02-2024", 100.50, "John");
-    Expense expense2 = new Expense("This is a test expense", Type.Drinks,
-        Currency.EUR, "24-02-2024", 120.50, "Edgar");
+    Expense expenseCopy = new Expense(1,"This is a test expense", Type.Food,
+        Currency.EUR, "24-02-2024", 100.50, "email1");
+    Expense expense2 = new Expense(2,"This is a test expense", Type.Drinks,
+        Currency.EUR, "24-02-2024", 120.50, "email2");
 
     @Test
     public void stringTest() {
@@ -31,14 +31,7 @@ public class ExpenseTest {
             "This is a test expense\n" +
             "The expense type is: Food.\n" +
             "The total amount spent is: 100.5.\n" +
-//                "This is how much everyone owes:\n" +
-//                "\tJohn: 100.5.\n" +
-//                "\tCyndia: -20.5.\n" +
-//                "\tNikolay: -10.0.\n" +
-//                "\tRobin: -40.0.\n" +
-//                "\tMarshall: -5.0.\n" +
-//                "\tJakub: -25.0.\n" +
-            "The person who paid was: John, on 24-02-2024 and paid in EUR.";
+            "The person who paid was: email1, on 24-02-2024 and paid in EUR.";
         assertEquals(s, expense.toString());
     }
 
@@ -76,5 +69,46 @@ public class ExpenseTest {
     @Test
     public void equalsOtherClass() {
         assertNotEquals(expense, t1);
+    }
+
+    @Test
+    void testHashCode(){
+        assertEquals(expense.hashCode(), expenseCopy.hashCode());
+    }
+
+
+    @Test
+    void getType() {
+        assertEquals(Type.Food, expense.getType());
+    }
+
+    @Test
+    void getCurrency() {
+        assertEquals(Currency.EUR, expense.getCurrency());
+    }
+
+    @Test
+    void getDate() {
+        assertEquals("24-02-2024",expense.getDate());
+    }
+
+    @Test
+    void getTotalExpense() {
+        assertEquals(100.50,expense.getTotalExpense(),0.001);
+    }
+
+    @Test
+    void getPayerEmail() {
+        assertEquals("email1",expense.getPayerEmail());
+    }
+
+    @Test
+    void getEventCode() {
+        assertEquals(1,expense.getEventCode());
+    }
+
+    @Test
+    void getDescription(){
+        assertEquals("This is a test expense",expense.getDescription());
     }
 }

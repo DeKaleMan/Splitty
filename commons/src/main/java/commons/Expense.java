@@ -23,8 +23,9 @@ public class Expense {
     private double totalExpense; // the amount of money of the expense
     private String payerEmail; // the participant who paid
 
-    public Expense(String description, Type type, Currency currency,
+    public Expense(int eventCode, String description, Type type, Currency currency,
                    String date, double totalExpense, String payerEmail) {
+        this.eventCode = eventCode;
         this.description = description;
         this.type = type;
         this.currency = currency;
