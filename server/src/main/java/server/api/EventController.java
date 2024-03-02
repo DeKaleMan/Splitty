@@ -18,9 +18,8 @@ public class EventController {
         this.eventDB = eventDB;
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<Event> getEventById(@PathVariable("id") int id){
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<Event> getEventById(@RequestParam int id){
         Optional<Event> event = eventDB.findById(id);
         if(event.isPresent()){
             return ResponseEntity.ok(event.get());
@@ -29,8 +28,9 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PostMapping("/addEvent")
-    public ResponseEntity<Event> addEvent(Event inputEvent){
+
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<Event> addEvent(@RequestBody Event inputEvent){
         if(inputEvent.getName() == null){
             return ResponseEntity.badRequest().build();
         }
@@ -38,8 +38,8 @@ public class EventController {
         return ResponseEntity.ok(newEvent);
     }
 
-    @DeleteMapping("/deleteEvent/{id}")
-    public ResponseEntity<Event> removeEntity(@PathVariable("id") Integer id){
+    @DeleteMapping(path = {"","/"})
+    public ResponseEntity<Event> removeEntity(@RequestParam Integer id){
         Optional<Event> eventToDelete = eventDB.findById(id);
         if(eventToDelete.isEmpty()){
             return ResponseEntity.notFound().build();
