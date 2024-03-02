@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<Expense, ExpenseId> {
     List<Expense> findByEventCode(int eventCode);
+    List<Expense> findByEventCodeAndPayerEmail(int eventCode, String payerEmail);
 }

@@ -17,15 +17,26 @@ public class ExpenseController {
         this.repo = repo;
     }
 
-    @GetMapping(path={"","/"})
-    public List<Expense> getExpensesOfEvent(@RequestParam int eventCode){
+    @GetMapping("/{eventCode}")
+    public List<Expense> findByEventCode(@PathVariable("eventCode") int eventCode) {
         return repo.findByEventCode(eventCode);
     }
 
-    @PostMapping(path={"","/"})
-    public ResponseEntity<Expense> postExpense(@RequestBody Expense expense){
-        if(expense == null) return ResponseEntity.badRequest().build();
+    @GetMapping("/{eventCode}/{payerEmail}")
+    public List<Expense> findByEventCodeAndPayerEmail(@PathVariable("eventCode") int eventCode,
+                                                      @PathVariable("payerEmail") String email) {
+        return repo.findByEventCodeAndPayerEmail(eventCode, email);
+    }
+
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<Expense> saveExpense(@RequestBody Expense expense) {
+        if (expense == null || isNullOrEmpty(expense.getDate()) || isNullOrEmpty(
+            expense.getPayerEmail()) || expense.getTotalExpense() < 0.0)
+            return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(repo.save(expense));
     }
 
+    private boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
 }
