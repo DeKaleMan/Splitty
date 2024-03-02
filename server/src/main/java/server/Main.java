@@ -15,9 +15,13 @@
  */
 package server;
 
+import commons.Event;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import server.database.EventRepository;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "commons", "server" })
@@ -26,4 +30,20 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
+
+    @Bean
+    public CommandLineRunner run(EventRepository eventDB){
+        return (args -> {
+            insertEvent(eventDB);
+            System.out.println(eventDB.findAll());
+        });
+    }
+
+    private void insertEvent(EventRepository eventDB){
+        eventDB.save(new Event("stijn"
+                , "16 Maart"
+                , "group 31"
+                , "this is a test is the database works"));
+    }
+
 }

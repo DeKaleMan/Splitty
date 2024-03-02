@@ -1,59 +1,90 @@
 package commons;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EventTest {
-    String participant1 = "Stijn";
-    String participant2 = "Yavor";
-    String exp1 = "fries";
-    String exp2 = "cola";
-    String exp3 = "burger";
 
-    List<String> participantList = List.of(participant2, participant1);
-
-    List<String> expensesList = List.of(exp1,exp2,exp3);
-
-    Event e1 = new Event("Take-away",
-            "06/07/2004",
-            participantList,
-            "Lauren",
-            expensesList,
-            "We ordered food from the local BurgerKing");
-    Event e2 = new Event("Take-away",
-            "06/07/2004",
-            participantList,
-            "Lauren",
-            expensesList,
-            "We ordered food from the local BurgerKing");
-
-    @Test
-    public void toStringTest(){
-        String res = "This is the Take-away event.\n" +
-                " That is summarized as: We ordered food from the local BurgerKing.\n" +
-                " It was created on 06/07/2004.\n" +
-                " The participants are: Yavor, Stijn.\n" +
-                " Lauren is the person that created the event.\n" +
-                " The expenses in the list are: fries, cola, burger.";
-        assertEquals(res, e1.toString());
-    }
-
-    @Test
-    public void equalsTest(){
-        assertTrue(e1.equals(e2));
+    private Event e;
+    private Event e2;
+    @BeforeEach
+    void setUp() {
+        e = new Event("name"
+                , "16 maart"
+                , "owner"
+                , "food");
+        e2 = new Event("name"
+                , "16 maart"
+                , "owner"
+                , "food");
     }
 
     @Test
     public void getNameTest(){
-        assertEquals("Take-away", e1.getName());
+        assertEquals("name", e.getName());
     }
 
     @Test
-    public void getExpenseListTest(){
-        assertEquals(participantList, e1.getParticipantList());
+    public void getDateTest(){
+        assertEquals("16 maart", e.getDate());
     }
+
+    @Test
+    public void getOwnerTest(){
+        assertEquals("owner", e.getOwner());
+    }
+
+    @Test
+    public void getDescriptionTest(){
+        assertEquals("food", e.getDescription());
+    }
+
+    @Test
+    public void setDateTest(){
+        Event eventT = new Event();
+        String date = "20 Maart";
+        eventT.setDate(date);
+        String dateCheck = eventT.getDate();
+        assertEquals(date, dateCheck);
+    }
+
+    @Test
+    public void setOwnerTest(){
+        Event eventT = new Event();
+        String owner = "stijn";
+        eventT.setOwner(owner);
+        String ownerCheck = eventT.getOwner();
+        assertEquals(owner, ownerCheck);
+    }
+
+    @Test
+    public void setDescriptionTest(){
+        Event eventT = new Event();
+        String desc = "for cinema";
+        eventT.setDescription(desc);
+        String descCheck = eventT.getDescription();
+        assertEquals(desc, descCheck);
+    }
+
+    @Test
+    public void equalsTest(){
+        assertEquals(e,e2);
+    }
+
+    @Test
+    public void hashcodeTest(){
+        assertEquals(e.hashCode(), e2.hashCode());
+    }
+
+    @Test
+    public void toStringTest(){
+        String s = "This is event with name:" +
+                " name that is created on 16 maart" +
+                " the person that created is: owner " +
+                "the description is: food";
+        assertEquals(e.toString(), s);
+    }
+
 
 }
