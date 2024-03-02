@@ -25,7 +25,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Expense;
-import org.checkerframework.checker.units.qual.C;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -64,25 +63,28 @@ public class ServerUtils {
             .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
-    public List<Expense> getExpense(int eventCode){
+    public List<Expense> getExpense(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/expenses")
-            .queryParam("eventCode",eventCode)
+            .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Expense>>(){});
+            .get(new GenericType<List<Expense>>() {
+            });
     }
 
-    public List<Expense> getExpenseByEmail(int eventCode, String email){
+    public List<Expense> getExpenseByEmail(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/expenses")
-            .queryParam("eventCode",eventCode)
-            .queryParam("payerEmail",email)
+            .queryParam("eventCode", eventCode)
+            .queryParam("payerEmail", email)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Expense>>(){});
+            .get(new GenericType<List<Expense>>() {
+            });
     }
-    public Expense addExpense(Expense expense){
+
+    public Expense addExpense(Expense expense) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/expenses")
             .request(APPLICATION_JSON)
