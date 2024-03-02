@@ -1,78 +1,48 @@
 package commons;
 
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import commons.Participant;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ParticipantTest {
-    private Participant participant;
+class ParticipantTest {
 
-//    @BeforeEach
-//    public void setUp() {
-//        participant = new Participant("Yavor Pachedjiev",
-//                200.0,
-//                "BG18RZBB91550123456789",
-//                "ABCDGB2LXXX",
-//                "Yavor Pachedjiev",
-//                "yavor@delf.nl");
-//    }
-//
-//    @Test
-//    public void addingValidExpenseUpdatesExpenseList() {
-//        participant.addExpense("100.25");
-//        assertEquals(1, participant.getExpenses().size(),
-//                "Expense list size did not update correctly after adding a valid expense.");
-//        assertTrue(participant.getExpenses().contains("100.25"),
-//                "Expense list does not contain the added expense.");
-//    }
-//
-//    @Test
-//    public void calculatingTotalExpensesWithValidInputs() {
-//        participant.addExpense("50.50");
-//        participant.addExpense("149.50");
-//        assertEquals(200.0, participant.calculateTotalExpenses(),
-//                "Total expenses calculation is incorrect with valid inputs.");
-//    }
-//
-//    @Test
-//    public void updatingBalanceReflectsCorrectly() {
-//        participant.updateBalance(-75.75);
-//        assertEquals(124.25, participant.getBalance(),
-//                "Balance did not update correctly after deduction.");
-//        participant.updateBalance(100.00);
-//        assertEquals(224.25, participant.getBalance(),
-//                "Balance did not update correctly after addition.");
-//    }
-//
-//    @Test
-//    public void testEmailUpdateAndValidation() {
-//        // Assuming validation logic is added or exists
-//        String newEmail = "yavor.new@delf.nl";
-//        participant.setEmail(newEmail);
-//        assertEquals(newEmail, participant.getEmail(),
-//                "Email update failed or validation error occurred.");
-//    }
-//
-//    @Test
-//    public void addingMultipleExpensesUpdatesTotalCorrectly() {
-//        participant.addExpense("10.00");
-//        participant.addExpense("20.00");
-//        participant.addExpense("30.00");
-//        assertEquals(60.00, participant.calculateTotalExpenses(),
-//                "Total expenses are not calculated correctly after adding multiple expenses.");
-//    }
-//
-//    @Test
-//    public void updatingBalanceForMultipleTransactions() {
-//        // Simulating multiple transactions
-//        participant.updateBalance(-50); // Expense
-//        participant.updateBalance(75); // Receiving money
-//        participant.updateBalance(-25); // Another expense
-//        assertEquals(200, participant.getBalance(),
-//                "Balance incorrect after multiple updates.");
-//    }
+    @Test
+    void testParticipantConstructorAndEquals() {
+        String name = "Yavor";
+        double balance = 12345.67;
+        String iBan = "DE44500105175407324288"; // Example IBAN
+        String bIC = "DEUTDEFFXXX"; // Example BIC
+        String accountHolder = "Yavor";
+        String email = "yavor@tudelft.nl";
 
+        Participant participant = new Participant(name, balance, iBan, bIC, accountHolder, email);
+
+        assertAll("Constructor assigns and retrieves values correctly",
+                () -> assertEquals(name, participant.getName(), "Name mismatch"),
+                () -> assertEquals(balance, participant.getBalance(), "Balance mismatch"),
+                () -> assertEquals(iBan, participant.getIBan(), "IBAN mismatch"),
+                () -> assertEquals(bIC, participant.getBIC(), "BIC mismatch"),
+                () -> assertEquals(accountHolder, participant.getAccountHolder(), "Account holder mismatch"),
+                () -> assertEquals(email, participant.getEmail(), "Email mismatch")
+        );
+    }
+
+    @Test
+    void testEquals() {
+        Participant participant1 = new Participant("Yavor", 9876.54, "GB29NWBK60161331926819", "NWBKGB22XXX", "Yavor", "yavor@tudelft.nl");
+        Participant participant2 = new Participant("Yavor", 9876.54, "GB29NWBK60161331926819", "NWBKGB22XXX", "Yavor", "yavor@tudelft.nl");
+        Participant participant3 = new Participant("Jesse", 8765.43, "FR1420041010050500013M02606", "PSSTFRPPXXX", "Jesse", "jesse@tudelft.nl");
+
+        assertAll("Testing equals",
+                () -> assertEquals(participant1, participant2, "Participants with same email should be equal"),
+                () -> assertNotEquals(participant1, participant3, "Participants with different emails should not be equal")
+        );
+    }
+
+    @Test
+    void testHashCode() {
+        String email = "yavor@tudelft.nl";
+        Participant participant = new Participant("Yavor", 9876.54, "GB29NWBK60161331926819", "NWBKGB22XXX", "Yavor", "yavor@tudelft.nl");
+
+        assertEquals(email.hashCode(), participant.hashCode(), "Hash code should be based on email");
+    }
 }
