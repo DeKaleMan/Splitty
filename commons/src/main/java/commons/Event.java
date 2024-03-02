@@ -84,12 +84,14 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", date='" + date + '\'' +
-                ", owner='" + owner + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        String res = "This is event with name: "
+                + name
+                + " that is created on "
+                + date
+                + " the person that created is: "
+                + owner
+                + " the description is: "
+                + description;
+        return res;
     }
 }
