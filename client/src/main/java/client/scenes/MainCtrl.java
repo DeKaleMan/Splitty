@@ -76,7 +76,6 @@ public class MainCtrl {
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
                            EventPropGrouper eventPropGrouper,
-                           Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<UserEventListCtrl, Parent> userEventList,
                            Pair<CreateEventCtrl, Parent> createEvent) {
 
