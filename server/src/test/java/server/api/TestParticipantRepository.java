@@ -180,7 +180,9 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     @Override
-    public <S extends Participant, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Participant, R> R findBy(Example<S> example,
+                                               Function<FluentQuery.FetchableFluentQuery<S>,
+                                                       R> queryFunction) {
         return null;
     }
 

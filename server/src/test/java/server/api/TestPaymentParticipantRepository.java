@@ -188,7 +188,8 @@ public class TestPaymentParticipantRepository implements PaymentParticipantRepos
     }
 
     @Override
-    public <S extends PaymentParticipant, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends PaymentParticipant, R> R findBy(Example<S> example,
+                                                      Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
