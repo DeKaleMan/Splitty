@@ -30,6 +30,8 @@ public class AdminLoginCtrl {
     public void adminSignIn(ActionEvent actionEvent) {
         String serverUrl = urlField.getText();
         String password = passwordField.getText();
+        // Check password
+        // Go to next scene if password is correct
     }
 
     @FXML
