@@ -49,7 +49,7 @@ public class AddExpenseCtrl implements Initializable {
 
 
     @FXML
-    private TextField whatFor;
+    private TextArea whatFor;
 
     @FXML
     private DatePicker dateSelect;

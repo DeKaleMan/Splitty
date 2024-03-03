@@ -29,7 +29,7 @@
       <DatePicker fx:id="dateSelect" layoutX="156.0" layoutY="137.0" prefHeight="25.0" prefWidth="150.0" promptText="xx-xx-xxxx" />
       <ComboBox fx:id="category" accessibleRole="CHECK_MENU_ITEM" layoutX="436.0" layoutY="196.0" prefWidth="150.0" promptText="Select category" />
       <TextField fx:id="amount" layoutX="156.0" layoutY="109.0" prefHeight="25.0" prefWidth="150.0" />
-      <TextArea layoutX="351.0" layoutY="108.0" prefHeight="82.0" prefWidth="200.0" />
+      <TextArea fx:id="whatFor" layoutX="351.0" layoutY="108.0" prefHeight="82.0" prefWidth="200.0" />
       <ListView fx:id="splitList" layoutX="170.0" layoutY="200.0" prefHeight="131.0" prefWidth="122.0" />
       <Button layoutX="170.0" layoutY="169.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="122.0" text="Select all" />
 
