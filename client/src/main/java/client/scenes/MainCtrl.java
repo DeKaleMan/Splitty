@@ -46,12 +46,16 @@ public class MainCtrl {
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
 
+    private Scene userEventList;
+    private UserEventListCtrl userEventListCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<AddExpenseCtrl, Parent> addExpense,
-                           Pair<ContactDetailsCtrl, Parent> contactDetails){
+                           Pair<ContactDetailsCtrl, Parent> contactDetails,
+                           Pair<UserEventListCtrl, Parent> userEventList) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -74,7 +78,11 @@ public class MainCtrl {
         this.contactDetailsCtrl = contactDetails.getKey();
         this.contactDetails = new Scene(contactDetails.getValue());
 
+        this.userEventListCtrl = userEventList.getKey();
+        this.userEventList = new Scene(userEventList.getValue());
+
         showStartScreen();
+        showUserEventList();
         primaryStage.show();
     }
 
@@ -112,6 +120,10 @@ public class MainCtrl {
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
         primaryStage.setScene(startScreen);
+    }
+
+    public void showUserEventList() {
+        primaryStage.setScene(userEventList);
     }
 
 
