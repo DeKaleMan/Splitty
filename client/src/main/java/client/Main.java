@@ -48,7 +48,8 @@ public class Main extends Application {
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
 
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
-        var adminWindows = new AdminWindows(adminLogin);
+        var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
+        var adminWindows = new AdminWindows(adminLogin, adminOverview);
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,

@@ -50,6 +50,9 @@ public class MainCtrl {
     private Scene adminLogin;
     private AdminLoginCtrl adminLoginCtrl;
 
+    private Scene adminOverview;
+    private AdminOverviewCtrl adminOverviewCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
@@ -81,6 +84,9 @@ public class MainCtrl {
 
         this.adminLoginCtrl = adminWindows.adminLogin().getKey();
         this.adminLogin = new Scene(adminWindows.adminLogin().getValue());
+
+        this.adminOverviewCtrl = adminWindows.adminOverview().getKey();
+        this.adminOverview = new Scene(adminWindows.adminOverview().getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -120,6 +126,11 @@ public class MainCtrl {
     public void showAdminLogin() {
         primaryStage.setTitle("Server management login");
         primaryStage.setScene(adminLogin);
+    }
+
+    public void showAdminOverview() {
+        primaryStage.setTitle("Admin management overview");
+        primaryStage.setScene(adminOverview);
     }
 
     public void showStartScreen(){

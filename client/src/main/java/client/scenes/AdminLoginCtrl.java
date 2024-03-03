@@ -32,6 +32,7 @@ public class AdminLoginCtrl {
         String password = passwordField.getText();
         // Check password
         // Go to next scene if password is correct
+        mainCtrl.showAdminOverview();
     }
 
     @FXML
