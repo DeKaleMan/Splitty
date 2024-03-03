@@ -39,6 +39,17 @@ public class DebtCtrl implements Initializable {
 
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        List<Transaction> list = new ArrayList<>();
+        list.add(new Transaction("John", 10.55));
+        list.add(new Transaction("Linda", 5.55));
+
+        this.listView.getItems().addAll(list);
+
+        undo.setVisible(false);
+    }
+
     @FXML
     public void back(){
         mainCtrl.showSplittyOverview(titlelabel.getText());
@@ -67,16 +78,7 @@ public class DebtCtrl implements Initializable {
         titlelabel.setText((title));
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        List<Transaction> list = new ArrayList<>();
-        list.add(new Transaction("John", 10.55));
-        list.add(new Transaction("Linda", 5.55));
 
-        this.listView.getItems().addAll(list);
-
-        undo.setVisible(false);
-    }
 
     /**
      * removes a debt from the list and the database

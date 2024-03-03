@@ -170,6 +170,9 @@ public class MainCtrl {
         statisticsCtrl.setPieChart();
     }
 
+    /**
+     * this shows the statistics window
+     */
     public void viewDeptsPerEvent(){
         primaryStage.setTitle("Debts per event");
         primaryStage.setScene(debts);
