@@ -26,12 +26,13 @@ public class AdminLoginCtrl {
     @FXML
     private Label passwordInstructionsText;
 
+    @FXML
     public void adminSignIn(ActionEvent actionEvent) {
         String serverUrl = urlField.getText();
         String password = passwordField.getText();
-
     }
 
+    @FXML
     public void showPasswordInstructions(MouseEvent mouseEvent) {
         passwordInstructionsText.setVisible(true);
     }
