@@ -39,7 +39,8 @@ public class CreateEventCtrl {
     @FXML
     private TextField accountHolderField;
 
-    // this list will store all added participants until the create event button is clicked, then it will be added to the database
+    // this list will store all added participants until
+    // the create event button is clicked, then it will be added to the database
     private List<Participant> participants;
 
 

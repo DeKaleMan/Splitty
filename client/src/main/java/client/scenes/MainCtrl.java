@@ -53,6 +53,9 @@ public class MainCtrl {
     private Scene createEvent;
     private CreateEventCtrl createEventCtrl;
 
+
+
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
