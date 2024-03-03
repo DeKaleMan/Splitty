@@ -16,12 +16,12 @@ public class ExpenseController {
         this.repo = repo;
     }
 
-    @GetMapping(path={"","/"})
+    @GetMapping(path={"","/code"})
     public List<Expense> findByEventCode(@RequestParam int eventCode) {
         return repo.findByEventCode(eventCode);
     }
 
-    @GetMapping(path={"","/"})
+    @GetMapping(path={"","/codeandemail"})
     public List<Expense> findByEventCodeAndPayerEmail(@RequestParam int eventCode,
                                                       @RequestParam String email) {
         return repo.findByEventCodeAndPayerEmail(eventCode, email);
