@@ -21,9 +21,9 @@ public class ExpenseController {
         return repo.findByEventCode(eventCode);
     }
 
-    @GetMapping(path={"","/"})
+    @GetMapping("{payerEmail}")
     public List<Expense> findByEventCodeAndPayerEmail(@RequestParam int eventCode,
-                                                      @RequestParam String email) {
+                                                      @PathVariable("payerEmail") String email) {
         return repo.findByEventCodeAndPayerEmail(eventCode, email);
     }
 

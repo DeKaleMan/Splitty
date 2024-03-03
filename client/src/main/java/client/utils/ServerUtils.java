@@ -75,9 +75,9 @@ public class ServerUtils {
 
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses")
+            .target(SERVER).path("api/expenses/{payerEmail}")
+            .resolveTemplate("payerEmail",email)
             .queryParam("eventCode", eventCode)
-            .queryParam("payerEmail", email)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get(new GenericType<List<Expense>>() {
