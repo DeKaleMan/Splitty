@@ -26,9 +26,13 @@ public class StartScreenCtrl {
      * TO DO - actually create an event
      */
     public void createEvent(){
-        System.out.println("Created event: " + createEventTextField.getText());
-        mainCtrl.showSplittyOverview(createEventTextField.getText());
-        //TO DO
+        String name = createEventTextField.getText();
+        if (name == null || name.isEmpty()) {
+            name = "New event";
+        }
+        System.out.println("Created event: " + name);
+        mainCtrl.showSplittyOverview(name);
+        //TO DO: add event to database, fill in more information about the event.
     }
 
     /**

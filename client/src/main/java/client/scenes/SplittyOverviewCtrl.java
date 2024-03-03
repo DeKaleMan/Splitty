@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,13 @@ public class SplittyOverviewCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+//these are for the css:
+    @FXML
+    private AnchorPane background;
+    @FXML
+    private Label expenses;
+    @FXML
+    private Label participants;
 
     @FXML
     private Button sendInvites;
@@ -38,5 +46,40 @@ public class SplittyOverviewCtrl {
         titleLabel.setText(title);
     }
 
+
+    @FXML
+    public void showAddExpense() {
+        mainCtrl.showAddExpense(titleLabel.getText());
+    }
+
+    @FXML
+    public void viewParticipantManager(){
+        mainCtrl.showParticipantManager(titleLabel.getText());
+    }
+
+
+    @FXML
+    public void showStatistics(){
+        mainCtrl.showStatistics(titleLabel.getText());
+    }
+    @FXML
+    public void showDebts(){
+
+    }
+    /**
+     * go back to Start screen
+     */
+    @FXML
+    private void back() {
+        mainCtrl.showStartScreen();
+    }
+    @FXML
+    private void viewDebts(){
+        mainCtrl.viewDeptsPerEvent();
+    }
+
+    public void addExpense(){
+
+    }
 }
 
