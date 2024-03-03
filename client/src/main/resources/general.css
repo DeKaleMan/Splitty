@@ -1,0 +1,25 @@
+/*blue:  #2E1C8A*/
+
+
+#background{
+    -fx-background-color: #6318BD;
+}
+Pane{
+    -fx-background-color: #5117A9;
+    -fx-text-fill: white;
+}
+Button{
+    -fx-background-color: #DFA80F;
+}
+
+#titleLabel{
+    -fx-text-fill: white;
+}
+ /*this one for some reason doesn't work */
+LabeL{
+    -fx-text-fill: white;
+}
+
+ListView{
+    -fx-background-color: #2E1C8A;
+}
