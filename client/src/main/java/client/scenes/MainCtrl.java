@@ -126,11 +126,13 @@ public class MainCtrl {
 
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
+        startScreenCtrl.initialize();
         primaryStage.setScene(startScreen);
     }
 
     public void showStartScreen(String eventTitle){
         primaryStage.setTitle("Splitty");
+        startScreenCtrl.initialize();
         primaryStage.setScene(startScreen);
         startScreenCtrl.setTitle(eventTitle);
     }

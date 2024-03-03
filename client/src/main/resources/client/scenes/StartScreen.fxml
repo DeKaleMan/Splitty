@@ -34,17 +34,17 @@
         </Label>
         <VBox layoutX="359.0" layoutY="66.0" prefHeight="255.0" prefWidth="207.0" style="-fx-fill-width: true;" styleClass="VBox" stylesheets="@../../CSS/StartScreen.css">
             <children>
-                <Button mnemonicParsing="false" prefHeight="85" prefWidth="Infinity" styleClass="EventButton" text="Event 1">
+                <Button fx:id="eventButton1" mnemonicParsing="false" prefHeight="85" prefWidth="Infinity" styleClass="EventButton" text="Event 1">
                     <graphic>
-                        <Label prefHeight="72.0" prefWidth="140.0" text="Event Description" />
+                        <Label fx:id="eventLabel1" prefHeight="72.0" prefWidth="140.0" text="Event Description" />
                     </graphic></Button>
-                <Button mnemonicParsing="false" prefHeight="85" prefWidth="Infinity" styleClass="EventButton" text="Event 2">
+                <Button fx:id="eventButton2" mnemonicParsing="false" prefHeight="85" prefWidth="Infinity" styleClass="EventButton" text="Event 2">
                     <graphic>
-                        <Label prefHeight="72.0" prefWidth="140.0" text="Event Description" />
+                        <Label fx:id="eventLabel2" prefHeight="72.0" prefWidth="140.0" text="Event Description" />
                     </graphic></Button>
-                <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="Infinity" styleClass="EventButton" text="Event 3">
+                <Button fx:id="eventButton3" mnemonicParsing="false" prefHeight="85.0" prefWidth="Infinity" styleClass="EventButton" text="Event 3">
                     <graphic>
-                        <Label prefHeight="72.0" prefWidth="140.0" text="Event Description" />
+                        <Label fx:id="eventLabel3" prefHeight="72.0" prefWidth="140.0" text="Event Description" />
                     </graphic></Button>
             </children>
         </VBox>
