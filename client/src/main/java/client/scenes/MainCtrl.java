@@ -57,12 +57,28 @@ public class MainCtrl {
     private Scene debts;
     private DebtCtrl debtCtrl;
 
+
+    private Scene userEventList;
+    private UserEventListCtrl userEventListCtrl;
+
+    private Scene createEvent;
+    private CreateEventCtrl createEventCtrl;
+
+
+
+
+    //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
+    //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
-                           EventPropGrouper eventPropGrouper){
+                           EventPropGrouper eventPropGrouper,
+                           Pair<UserEventListCtrl, Parent> userEventList,
+                           Pair<CreateEventCtrl, Parent> createEvent) {
+
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -94,12 +110,11 @@ public class MainCtrl {
         this.debtCtrl = eventPropGrouper.debts().getKey();
         this.debts = new Scene(eventPropGrouper.debts().getValue());
 
+        this.userEventListCtrl = userEventList.getKey();
+        this.userEventList = new Scene(userEventList.getValue());
 
-
-
-
-
-
+        this.createEventCtrl = createEvent.getKey();
+        this.createEvent = new Scene(createEvent.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -138,9 +153,36 @@ public class MainCtrl {
         invitationCtrl.setTitle(title);
     }
 
+    /**
+     * show start screen normal
+     */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
+        startScreenCtrl.initialize();
         primaryStage.setScene(startScreen);
+    }
+
+    /**
+     * show start screen but with the event title which was being created
+     * @param eventTitle the title of the event someone was creating
+     */
+    public void showStartScreen(String eventTitle){
+        primaryStage.setTitle("Splitty");
+        startScreenCtrl.initialize();
+        primaryStage.setScene(startScreen);
+        startScreenCtrl.setTitle(eventTitle);
+    }
+
+    public void showUserEventList() {
+        primaryStage.setScene(userEventList);
+        primaryStage.setTitle("Event List");
+    }
+
+    public void showCreateEvent (String name) {
+        primaryStage.setTitle("Create Event");
+        primaryStage.setScene(createEvent);
+        createEventCtrl.initialize();
+        createEventCtrl.setTitle(name);
     }
 
     /**
@@ -173,6 +215,7 @@ public class MainCtrl {
     public void viewDeptsPerEvent(){
         primaryStage.setTitle("Debts per event");
         primaryStage.setScene(debts);
+
     }
 
 

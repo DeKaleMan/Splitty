@@ -15,17 +15,17 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
+import client.scenes.*;
+import client.utils.EventPropGrouper;
+import com.google.inject.Injector;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.*;
-import client.utils.EventPropGrouper;
-import com.google.inject.Injector;
+import static com.google.inject.Guice.createInjector;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 public class Main extends Application {
 
@@ -45,6 +45,8 @@ public class Main extends Application {
         var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
+        var userEventList = FXML.load(UserEventListCtrl.class, "client", "scenes", "UserEventList.fxml");
+        var createEvent = FXML.load(CreateEventCtrl.class, "client", "scenes", "createEvent.fxml");
 
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
@@ -56,6 +58,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen,contactDetails, eventPropGrouper);
+            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent);
+
     }
 }
