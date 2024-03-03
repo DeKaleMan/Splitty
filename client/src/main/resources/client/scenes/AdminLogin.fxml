@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminLoginCtrl">
+   <children>
+      <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="218.0" prefHeight="40.0" prefWidth="200.0" promptText="Password" />
+      <TextField fx:id="urlField" layoutX="199.0" layoutY="161.0" prefHeight="40.0" prefWidth="202.0" promptText="Server Url e.g. localhost:8080" AnchorPane.leftAnchor="199.0" AnchorPane.rightAnchor="199.0" AnchorPane.topAnchor="161.0" />
+      <Button fx:id="signInButton" layoutX="234.0" layoutY="283.0" mnemonicParsing="false" onAction="#adminSignIn" prefHeight="25.0" prefWidth="130.0" text="Sign in" />
+      <Text layoutX="200.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign in">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Text>
+      <Text layoutX="200.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log into your server instance">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <Text fx:id="passwordInstructionLink" fill="#0000ee" layoutX="213.0" layoutY="270.0" onMouseClicked="#showPasswordInstructions" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't know how to get a password?">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

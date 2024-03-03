@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.AdminWindows;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -51,7 +52,8 @@ public class MainCtrl {
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<AddExpenseCtrl, Parent> addExpense,
-                           Pair<ContactDetailsCtrl, Parent> contactDetails){
+                           Pair<ContactDetailsCtrl, Parent> contactDetails,
+                           AdminWindows adminWindows){
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
