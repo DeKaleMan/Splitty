@@ -24,5 +24,6 @@
             <Font size="11.0" />
          </font>
       </Text>
+      <Label fx:id="passwordInstructionsText" alignment="TOP_LEFT" layoutX="427.0" layoutY="43.0" prefHeight="324.0" prefWidth="147.0" text="Here we can display instructions on how to get your password: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean massa urna, pharetra et turpis fringilla, sodales tempor sapien. Suspendisse potenti. Proin euismod ipsum id enim volutpat condimentum. Curabitur elementum massa eu massa sagittis facilisis. Donec varius, erat tempor tincidunt posuere, ante magna commodo arcu, sed eleifend odio metus quis dui." visible="false" wrapText="true" />
    </children>
 </AnchorPane>

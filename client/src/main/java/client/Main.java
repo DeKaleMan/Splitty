@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.utils.AdminWindows;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -46,8 +47,11 @@ public class Main extends Application {
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
 
+        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
+        var adminWindows = new AdminWindows(adminLogin);
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen,addExpense,contactDetails);
+            startScreen,addExpense,contactDetails, adminWindows);
     }
 }
