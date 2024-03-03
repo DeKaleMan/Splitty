@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.EventPropGrouper;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -23,15 +24,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-
 import static com.google.inject.Guice.createInjector;
-
-import client.scenes.*;
-import client.utils.EventPropGrouper;
-import com.google.inject.Injector;
-
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 
 public class Main extends Application {
@@ -65,7 +58,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
+            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent);
 
     }
 }
