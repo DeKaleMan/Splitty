@@ -69,5 +69,9 @@ public class SplittyOverviewCtrl {
     private void viewDebts(){
         mainCtrl.viewDeptsPerEvent();
     }
+
+    public void addExpense(){
+
+    }
 }
 

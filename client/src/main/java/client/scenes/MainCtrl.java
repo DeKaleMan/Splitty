@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.EventPropGrouper;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

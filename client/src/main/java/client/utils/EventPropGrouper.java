@@ -1,5 +1,9 @@
-package client.scenes;
+package client.utils;
 
+import client.scenes.AddExpenseCtrl;
+import client.scenes.DebtCtrl;
+import client.scenes.ManageParticipantsCtrl;
+import client.scenes.StatisticsCtrl;
 import javafx.scene.Parent;
 import javafx.util.Pair;
 
