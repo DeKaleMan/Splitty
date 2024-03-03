@@ -49,13 +49,18 @@ public class MainCtrl {
     private Scene userEventList;
     private UserEventListCtrl userEventListCtrl;
 
+
+    private Scene createEvent;
+    private CreateEventCtrl createEventCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
-                           Pair<UserEventListCtrl, Parent> userEventList) {
+                           Pair<UserEventListCtrl, Parent> userEventList,
+                           Pair<CreateEventCtrl, Parent> createEvent) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -81,8 +86,10 @@ public class MainCtrl {
         this.userEventListCtrl = userEventList.getKey();
         this.userEventList = new Scene(userEventList.getValue());
 
+        this.createEventCtrl = createEvent.getKey();
+        this.createEvent = new Scene(createEvent.getValue());
+
         showStartScreen();
-        showUserEventList();
         primaryStage.show();
     }
 
@@ -122,8 +129,21 @@ public class MainCtrl {
         primaryStage.setScene(startScreen);
     }
 
+    public void showStartScreen(String eventTitle){
+        primaryStage.setTitle("Splitty");
+        primaryStage.setScene(startScreen);
+        startScreenCtrl.setTitle(eventTitle);
+    }
+
     public void showUserEventList() {
         primaryStage.setScene(userEventList);
+        primaryStage.setTitle("Event List");
+    }
+
+    public void showCreateEvent (String name) {
+        primaryStage.setTitle("Create Event");
+        primaryStage.setScene(createEvent);
+        createEventCtrl.setTitle(name);
     }
 
 

@@ -31,8 +31,9 @@ public class StartScreenCtrl {
             name = "New event";
         }
         System.out.println("Created event: " + name);
-        mainCtrl.showSplittyOverview(name);
+        mainCtrl.showCreateEvent(name);
         //TO DO: add event to database, fill in more information about the event.
+        //This will happen in the CreateEventCtrl class!
     }
 
     /**
@@ -42,6 +43,15 @@ public class StartScreenCtrl {
     public void joinEvent(){
         System.out.println("Joined event: " + joinEventTextField.getText());
         mainCtrl.showSplittyOverview(joinEventTextField.getText());
-        //TO DO
+        //TO DO, this will happen here in this method
+    }
+
+    @FXML
+    public void showAllEvents() {
+        mainCtrl.showUserEventList();
+    }
+
+    public void setTitle(String eventTitle) {
+        createEventTextField.setText(eventTitle);
     }
 }
