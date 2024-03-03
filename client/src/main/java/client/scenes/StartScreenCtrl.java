@@ -42,7 +42,7 @@ public class StartScreenCtrl {
     // list the 3 most recent events on the start page
     public void initialize() {
         // retrieve from database based on recency (now null to have something)
-        // the commented below is for testing, the buttons still need to be given functionality
+        // the commented below is for testing
 
 //        Event event1 = new Event("test1", "03-03-2024", null,
 //                "not important", null, "This is a test event");
@@ -60,6 +60,7 @@ public class StartScreenCtrl {
     }
 
     private void setup(Event event, Button button, Label label) {
+
         if (event == null) {
             button.setVisible(false);
             label.setVisible(false);
@@ -67,6 +68,10 @@ public class StartScreenCtrl {
         }
         button.setVisible(true);
         label.setVisible(true);
+
+        button.setOnAction(something -> {
+            mainCtrl.showSplittyOverview("");
+        });
 
         button.setText(event.getName());
         label.setText( event.getDate() + ": " + event.getDescription());
