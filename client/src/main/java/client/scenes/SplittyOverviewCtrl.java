@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,13 @@ public class SplittyOverviewCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+//these are for the css:
+    @FXML
+    private AnchorPane background;
+    @FXML
+    private Label expenses;
+    @FXML
+    private Label participants;
 
     @FXML
     private Button sendInvites;

@@ -80,8 +80,9 @@ public class AddExpenseCtrl implements Initializable {
             amount.setText("NO VALID AMOUNT");
         }
         String payer = personComboBox.getPromptText();
+        String description = whatFor.getText();
+        //add to database
         splittyCtrl.addExpense();
-
         back();
     }
 
