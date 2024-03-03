@@ -49,11 +49,24 @@ public class CreateEventCtrl {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         participants = new ArrayList<>();
+
     }
 
 
+    public void initialize() {
+        dateField.textProperty().addListener((observable -> {
+            if (dateField.getText() == null || dateField.getText().isEmpty()) {
+                dateExampleLabel.setVisible(true);
+            } else {
+                dateExampleLabel.setVisible(false);
+            }
+        }));
+    }
+
     public void setTitle(String title){
         titleField.setText(title);
+
+
     }
 
     @FXML
@@ -89,6 +102,14 @@ public class CreateEventCtrl {
 
     @FXML
     public void createEvent() {
-
+        String name = titleField.getText();
+        String date = dateField.getText();
+        String description = eventDescriptionArea.getText();
+        if (name == null || name.isEmpty() || date == null || date.isEmpty()) {
+            // give warning *date and name field must be filled in*
+            return;
+        }
+        mainCtrl.showSplittyOverview(name);
+        // create new event and add to database, go to that event overview and add participants via database.
     }
 }
