@@ -1,0 +1,11 @@
+
+.VBox {
+    -fx-alignment: center;
+    -fx-fill-height: true;
+    -fx-background-color: #000918;
+}
+
+.EventButton {
+    -fx-background-color: #c1c1f1;
+    -fx-pref-width: infinity;
+}

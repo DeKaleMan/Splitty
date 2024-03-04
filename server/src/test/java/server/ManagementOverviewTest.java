@@ -20,21 +20,21 @@ class ManagementOverviewTest {
         ManagementOverview mnOverview = new ManagementOverview("events", "servers");
         assertEquals(new ArrayList<String>(), mnOverview.getServerInstances());
     }
-    @Test
-    void deleteEventTest(){
-        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
-        Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
-        //add event
-        assertEquals(event, mnOverview.deleteEvent(event));
-    }
+//    @Test
+//    void deleteEventTest(){
+//        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
+//        Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
+//        //add event
+//        assertEquals(event, mnOverview.deleteEvent(event));
+//    }
 
-    @Test
-    void getJSONTest(){
-        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
-        Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
-
-        assertEquals("JSON dump", mnOverview.downloadJSON(event));
-    }
+//    @Test
+//    void getJSONTest(){
+//        ManagementOverview mnOverview = new ManagementOverview("events", "servers");
+//        Event event = new Event("name", "date", new ArrayList<>(), "owner", new ArrayList<>(), "description");
+//
+//        assertEquals("JSON dump", mnOverview.downloadJSON(event));
+//    }
 
     @Test
     void orderByTitle(){

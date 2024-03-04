@@ -32,7 +32,7 @@ public class UserOverview {
     public Event createEvent(String name, String date, List<String> participants,
                              String owner, List<String> expenseList, String description){
         //construct new event
-        Event event = new Event(name, date, participants, owner, expenseList, description);
+        Event event = new Event(name, date, owner, description);
         events.add(event);
         return event;
     }
@@ -44,8 +44,8 @@ public class UserOverview {
         //return event.setTitle(title);
         return true;
     }
-    public List<String> getExpenses(Event event){
-        List<String> res = event.getExpenseList();
-        return res;
-    }
+//    public List<String> getExpenses(Event event){
+//        List<String> res = event.getExpenseList();
+//        return res;
+//    }
 }
