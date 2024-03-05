@@ -49,6 +49,7 @@ public class DebtCtrl implements Initializable {
     }
     public void setDebtList(){
         //search for a query
+        debtList = new ArrayList<>();
     }
 
     @FXML
