@@ -15,7 +15,11 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
+import client.scenes.*;
+import client.utils.EventPropGrouper;
+import com.google.inject.Injector;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,9 +27,8 @@ import java.net.URISyntaxException;
 import client.scenes.*;
 import client.utils.AdminWindows;
 import com.google.inject.Injector;
+import static com.google.inject.Guice.createInjector;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 public class Main extends Application {
 
@@ -42,10 +45,19 @@ public class Main extends Application {
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
-        var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "Overview.fxml");
+        var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
-        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
+        var userEventList = FXML.load(UserEventListCtrl.class, "client", "scenes", "UserEventList.fxml");
+        var createEvent = FXML.load(CreateEventCtrl.class, "client", "scenes", "createEvent.fxml");
+
+        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+        var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
+        var debts = FXML.load(DebtCtrl.class, "client", "scenes", "Debts.fxml");
+        // group these in the EventPropGrouper
+        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts);
+
 
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
         var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
@@ -53,6 +65,6 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen,addExpense,contactDetails, adminWindows);
+            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows);
     }
 }
