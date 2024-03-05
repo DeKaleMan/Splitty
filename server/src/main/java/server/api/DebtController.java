@@ -3,18 +3,18 @@ package server.api;
 import commons.Debt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import server.database.TransactionRepository;
+import server.database.DebtRepository;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/Transaction")
-public class TransactionController {
+public class DebtController {
 
-    private final TransactionRepository transactionDB;
+    private final DebtRepository transactionDB;
 
     @Autowired
-    public TransactionController(TransactionRepository transactionDB){
+    public DebtController(DebtRepository transactionDB){
         this.transactionDB = transactionDB;
     }
 
