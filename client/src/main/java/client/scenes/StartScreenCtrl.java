@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -86,7 +87,6 @@ public class StartScreenCtrl {
         if (name == null || name.isEmpty()) {
             name = "New event";
         }
-        System.out.println("Created event: " + name);
         mainCtrl.showCreateEvent(name);
         //TO DO: add event to database, fill in more information about the event.
         //This will happen in the CreateEventCtrl class!
@@ -112,4 +112,7 @@ public class StartScreenCtrl {
     }
 
 
+    public void showAdminLogin(ActionEvent actionEvent) {
+        mainCtrl.showAdminLogin();
+    }
 }

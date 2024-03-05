@@ -1,14 +1,19 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Date;
 import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class CreateEventCtrl {
@@ -19,7 +24,7 @@ public class CreateEventCtrl {
     @FXML
     private TextField titleField;
     @FXML
-    private TextField dateField;
+    private DatePicker datePicker;
     @FXML
     private Label dateExampleLabel;
     @FXML
@@ -43,8 +48,6 @@ public class CreateEventCtrl {
     // the create event button is clicked, then it will be added to the database
     private List<Participant> participants;
 
-
-
     @Inject
     public CreateEventCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
         this.serverUtils = serverUtils;
@@ -53,21 +56,12 @@ public class CreateEventCtrl {
 
     }
 
-
     public void initialize() {
-        dateField.textProperty().addListener((observable -> {
-            if (dateField.getText() == null || dateField.getText().isEmpty()) {
-                dateExampleLabel.setVisible(true);
-            } else {
-                dateExampleLabel.setVisible(false);
-            }
-        }));
+
     }
 
     public void setTitle(String title){
         titleField.setText(title);
-
-
     }
 
     @FXML
@@ -104,13 +98,24 @@ public class CreateEventCtrl {
     @FXML
     public void createEvent() {
         String name = titleField.getText();
-        String date = dateField.getText();
+        String dateString = datePicker.getEditor().getText();
         String description = eventDescriptionArea.getText();
-        if (name == null || name.isEmpty() || date == null || date.isEmpty()) {
-            // give warning *date and name field must be filled in*
+        Date date;
+        boolean error = false;
+        try {
+            date = new Date(dateString);
+        } catch (Exception e) {
+            error = true;
+            // error message invalid date, use eu format dd/mm/yyyy
+        }
+        if (name == null || name.isEmpty() || error){
+            if (name == null || name.isEmpty()) {
+                // error message
+            }
             return;
         }
         mainCtrl.showSplittyOverview(name);
+        System.out.println("Created new event: " + name);
         // create new event and add to database, go to that event overview and add participants via database.
     }
 }
