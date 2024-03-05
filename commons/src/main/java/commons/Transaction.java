@@ -18,8 +18,14 @@ public class Transaction {
     @Column(nullable = false)
     private double balance; // The balance change (can be negative)
 
-    @ManyToMany(mappedBy = "")
+    @ManyToOne()
+    @JoinColumn(name = "expense_id")
     private Expense ExpAddEvent; //is the expense that is added to the event
+
+    @ManyToOne()
+    @JoinColumn(name = "participant_email ")
+    private Participant ower;
+
 
     public Transaction(){
 
@@ -28,6 +34,7 @@ public class Transaction {
     public Transaction(Expense expAddEvent, double balance){
         this.ExpAddEvent = expAddEvent;
         this.balance = balance;
+        this.ower = ower;
     }
 
 

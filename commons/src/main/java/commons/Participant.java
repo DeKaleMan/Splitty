@@ -1,9 +1,9 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 //import jakarta.persistence.JoinColumn;
 //import jakarta.persistence.ManyToOne;
@@ -34,6 +34,10 @@ public class Participant implements Serializable {
 //    @JoinColumn(name = "????") // This is the foreign key column in the Participant table.
 //    private Event event;
 
+    @OneToMany(mappedBy = "participant")
+    private List<Participant> ower; // the person that participated in the event, but didn't pay for the event so he needs to pay them back
+
+
     protected Participant() {}
     public Participant(String name, double balance, String iBan, String bIC, String accountHolder, String email) {
         this.name = name;
@@ -42,6 +46,7 @@ public class Participant implements Serializable {
         this.bIC = bIC;
         this.accountHolder = accountHolder;
         this.email = email;
+        this.ower = ower;
 //        this.event = event;
     }
 
