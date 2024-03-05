@@ -11,6 +11,8 @@ import javafx.scene.control.ListView;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
@@ -29,12 +31,24 @@ public class DebtCtrl implements Initializable {
 
     private Debt undone;
 
+    private List<Debt> debtList;
+
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
 
+    }
 
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.listView.getItems().addAll(debtList);
+        undo.setVisible(false);
+    }
+    public void setDebtList(){
+        //search for a query
     }
 
     @FXML
@@ -65,16 +79,8 @@ public class DebtCtrl implements Initializable {
         titlelabel.setText((title));
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        List<Transaction> list = new ArrayList<>();
-//        list.add(new Transaction("John", 10.55));
-//        list.add(new Transaction("Linda", 5.55));
-//
-//        this.listView.getItems().addAll(list);
-//
-//        undo.setVisible(false);
-    }
+
+
 
     /**
      * removes a debt from the list and the database
