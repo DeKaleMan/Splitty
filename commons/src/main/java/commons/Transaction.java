@@ -31,7 +31,7 @@ public class Transaction {
 
     }
 
-    public Transaction(Expense expAddEvent, double balance){
+    public Transaction(Expense expAddEvent, double balance, Participant ower){
         this.ExpAddEvent = expAddEvent;
         this.balance = balance;
         this.ower = ower;

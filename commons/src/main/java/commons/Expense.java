@@ -110,10 +110,6 @@ public class Expense {
         return eventCode;
     }
 
-    public int getExpenseId() {
-        return expenseId;
-    }
-
     @Override
     public String toString() {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
