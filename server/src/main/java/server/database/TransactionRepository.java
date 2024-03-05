@@ -1,7 +1,7 @@
 package server.database;
 
-import commons.Transaction;
+import commons.Debt;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
+public interface TransactionRepository extends JpaRepository<Debt, Integer> {
 }

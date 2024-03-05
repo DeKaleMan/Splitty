@@ -1,6 +1,6 @@
 package server.api;
 
-import commons.Transaction;
+import commons.Debt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import server.database.TransactionRepository;
@@ -27,7 +27,7 @@ public class TransactionController {
 //    }
 
     @GetMapping({"", "/"})
-    public List<Transaction> getAllTransaction(){
+    public List<Debt> getAllTransaction(){
         return transactionDB.findAll();
     }
 

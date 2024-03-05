@@ -1,7 +1,7 @@
 package client.scenes;
 import client.utils.ServerUtils;
 
-import commons.Transaction;
+import commons.Debt;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +27,7 @@ public class DebtCtrl implements Initializable {
     @FXML
     private Button undo;
 
-    private Transaction undone;
+    private Debt undone;
 
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
@@ -53,8 +53,8 @@ public class DebtCtrl implements Initializable {
                 return;
             }
             System.out.println("remove" + selected);
-            undone = (Transaction) selected.getFirst();
-            removeFromDebts((Transaction) selected.getFirst());
+            undone = (Debt) selected.getFirst();
+            removeFromDebts((Debt) selected.getFirst());
             undo.setVisible(true);
         }
 
@@ -80,7 +80,7 @@ public class DebtCtrl implements Initializable {
      * removes a debt from the list and the database
      * @param t
      */
-    public void removeFromDebts(Transaction t){
+    public void removeFromDebts(Debt t){
         //DO SOME DATABASE STUFF
 
         this.listView.getItems().remove(t);

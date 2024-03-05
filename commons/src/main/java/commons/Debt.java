@@ -10,7 +10,7 @@ import java.util.Objects;
  * gained or lost what balance.
  */
 @Entity
-public class Transaction {
+public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -18,23 +18,20 @@ public class Transaction {
     @Column(nullable = false)
     private double balance; // The balance change (can be negative)
 
-    @ManyToOne()
-    @JoinColumn(name = "expense_id")
-    private Expense expAddEvent; //is the expense that is added to the event
+    @ManyToOne
+    private Expense expense; //is the expense that is added to the event
 
-    @ManyToOne()
-    @JoinColumn(name = "participant_email ")
-    private Participant ower;
+    @ManyToOne
+    private Participant participant;
 
-
-    public Transaction(){
+    public Debt(){
 
     }
 
-    public Transaction(Expense expAddEvent, double balance, Participant ower){
-        this.expAddEvent = expAddEvent;
+    public Debt(Expense expense, double balance, Participant participant){
+        this.expense = expense;
         this.balance = balance;
-        this.ower = ower;
+        this.participant = participant;
     }
 
 
@@ -46,8 +43,8 @@ public class Transaction {
         return balance;
     }
 
-    public Expense getExpAddEvent(){
-        return expAddEvent;
+    public Expense getExpense(){
+        return expense;
     }
 
     public void setBalance(double balance) {
@@ -58,13 +55,13 @@ public class Transaction {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
+        Debt that = (Debt) o;
         return id == that.id && Double.compare(balance, that.balance) == 0
-                && Objects.equals(expAddEvent, that.expAddEvent);
+                && Objects.equals(expense, that.expense);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, balance, expAddEvent);
+        return Objects.hash(id, balance, expense);
     }
 }
