@@ -27,12 +27,14 @@
                 <TextField fx:id="joinEventTextField" layoutX="26.0" layoutY="54.0" />
             </children>
         </AnchorPane>
-        <Label layoutX="97.0" layoutY="14.0" text="Splitty">
+
+        <Button layoutX="508.0" layoutY="24.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login">
             <font>
-                <Font size="36.0" />
+                <Font size="10.0" />
             </font>
-        </Label>
-        <VBox layoutX="359.0" layoutY="66.0" prefHeight="255.0" prefWidth="207.0" style="-fx-fill-width: true;" styleClass="VBox" stylesheets="@../../CSS/StartScreen.css">
+        </Button>
+
+        <VBox layoutX="359.0" layoutY="66.0" prefHeight="255.0" prefWidth="207.0" style="-fx-fill-width: true;" styleClass="VBox">
             <children>
                 <Button fx:id="eventButton1" mnemonicParsing="false" prefHeight="85" prefWidth="Infinity" styleClass="EventButton" text="Event 1">
                     <graphic>
@@ -49,6 +51,17 @@
             </children>
         </VBox>
         <Button layoutX="466.0" layoutY="334.0" mnemonicParsing="false" onAction="#showAllEvents" text="Show All Events" />
+        <Label layoutX="97.0" layoutY="14.0" text="Splitty">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+      <Label fx:id="noEventLabel" layoutX="381.0" layoutY="313.0" opacity="0.47" text="You do not have any events to list still">
+         <font>
+            <Font name="System Italic" size="10.0" />
+         </font>
+      </Label>
+
 
     </children>
 
