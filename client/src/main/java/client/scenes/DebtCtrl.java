@@ -69,13 +69,13 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Transaction> list = new ArrayList<>();
-        list.add(new Transaction("John", 10.55));
-        list.add(new Transaction("Linda", 5.55));
-
-        this.listView.getItems().addAll(list);
-
-        undo.setVisible(false);
+//        List<Transaction> list = new ArrayList<>();
+//        list.add(new Transaction("John", 10.55));
+//        list.add(new Transaction("Linda", 5.55));
+//
+//        this.listView.getItems().addAll(list);
+//
+//        undo.setVisible(false);
     }
 
     /**
