@@ -107,13 +107,7 @@ public class CreateEventCtrl {
         String date = dateField.getText();
         String description = eventDescriptionArea.getText();
         if (name == null || name.isEmpty() || date == null || date.isEmpty()) {
-            if (name == null || name.isEmpty()) {
-                titleField.setText("Please provide a name");
-            }
-            if (date == null || date.isEmpty()) {
-                dateField.setText("please provide a date");
-            }
-
+            // give warning *date and name field must be filled in*
             return;
         }
         mainCtrl.showSplittyOverview(name);
