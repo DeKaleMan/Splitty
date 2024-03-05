@@ -19,6 +19,7 @@ public class StartScreenCtrl {
     @FXML
     private TextField joinEventTextField;
 
+    // the events
     @FXML
     private Button eventButton1;
     @FXML
@@ -34,6 +35,9 @@ public class StartScreenCtrl {
     @FXML
     private Label eventLabel3;
 
+    @FXML
+    private Label noEventLabel;
+
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
         this.serverUtils = serverUtils;
@@ -44,24 +48,20 @@ public class StartScreenCtrl {
     public void initialize() {
         // retrieve from database based on recency (now null to have something)
         // the commented below is for testing
-
-//        Event event1 = new Event("test1", "03-03-2024", null,
-//                "not important", null, "This is a test event");
-//        Event event2 = new Event("test1", "03-03-2024", null,
-//                "not important", null, "This is a test event");
-//        Event event3 = new Event("test1", "03-03-2024", null,
-//                "not important", null, "This is a test event");
-        Event event1 = null;
+        noEventLabel.setVisible(false);
+        Event event1 = new Event("test event", "02-10-2005", "Admin", "This is just for testing");
         Event event2 = null;
         Event event3 = null;
-
         setup(event1, eventButton1, eventLabel1);
         setup(event2, eventButton2, eventLabel2);
         setup(event3, eventButton3, eventLabel3);
+        // this will be querified
+        if (event1 == null && event2 == null && event3 == null) {
+            noEventLabel.setVisible(true);
+        }
     }
 
     private void setup(Event event, Button button, Label label) {
-
         if (event == null) {
             button.setVisible(false);
             label.setVisible(false);
@@ -71,11 +71,11 @@ public class StartScreenCtrl {
         label.setVisible(true);
 
         button.setOnAction(something -> {
-            mainCtrl.showSplittyOverview("");
+            mainCtrl.showSplittyOverview(event.getName());
         });
 
         button.setText(event.getName());
-        label.setText( event.getDate() + ": " + event.getDescription());
+        label.setText(event.getDate() + ": " + event.getDescription());
     }
 
     /**

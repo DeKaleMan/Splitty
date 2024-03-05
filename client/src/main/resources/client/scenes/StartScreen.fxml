@@ -27,15 +27,10 @@
                 <TextField fx:id="joinEventTextField" layoutX="26.0" layoutY="54.0" />
             </children>
         </AnchorPane>
-        <Label layoutX="97.0" layoutY="14.0" text="Splitty">
-            <font>
-                <Font size="36.0" />
-            </font>
-        </Label>
 
         <Button layoutX="508.0" layoutY="24.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login">
             <font>
-                <Font size="8.0" />
+                <Font size="10.0" />
             </font>
         </Button>
 
@@ -56,6 +51,16 @@
             </children>
         </VBox>
         <Button layoutX="466.0" layoutY="334.0" mnemonicParsing="false" onAction="#showAllEvents" text="Show All Events" />
+        <Label layoutX="97.0" layoutY="14.0" text="Splitty">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+      <Label fx:id="noEventLabel" layoutX="381.0" layoutY="313.0" opacity="0.47" text="You do not have any events to list still">
+         <font>
+            <Font name="System Italic" size="10.0" />
+         </font>
+      </Label>
 
 
     </children>
