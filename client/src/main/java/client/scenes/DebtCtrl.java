@@ -1,7 +1,7 @@
 package client.scenes;
 import client.utils.ServerUtils;
 
-import commons.Transaction;
+import commons.Debt;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,8 +11,6 @@ import javafx.scene.control.ListView;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
@@ -29,7 +27,7 @@ public class DebtCtrl implements Initializable {
     @FXML
     private Button undo;
 
-    private Transaction undone;
+    private Debt undone;
 
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
@@ -55,8 +53,8 @@ public class DebtCtrl implements Initializable {
                 return;
             }
             System.out.println("remove" + selected);
-            undone = (Transaction) selected.getFirst();
-            removeFromDebts((Transaction) selected.getFirst());
+            undone = (Debt) selected.getFirst();
+            removeFromDebts((Debt) selected.getFirst());
             undo.setVisible(true);
         }
 
@@ -69,20 +67,20 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Transaction> list = new ArrayList<>();
-        list.add(new Transaction("John", 10.55));
-        list.add(new Transaction("Linda", 5.55));
-
-        this.listView.getItems().addAll(list);
-
-        undo.setVisible(false);
+//        List<Transaction> list = new ArrayList<>();
+//        list.add(new Transaction("John", 10.55));
+//        list.add(new Transaction("Linda", 5.55));
+//
+//        this.listView.getItems().addAll(list);
+//
+//        undo.setVisible(false);
     }
 
     /**
      * removes a debt from the list and the database
      * @param t
      */
-    public void removeFromDebts(Transaction t){
+    public void removeFromDebts(Debt t){
         //DO SOME DATABASE STUFF
 
         this.listView.getItems().remove(t);

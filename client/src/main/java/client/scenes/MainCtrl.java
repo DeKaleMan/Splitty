@@ -15,7 +15,9 @@
  */
 package client.scenes;
 
+import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -48,6 +50,12 @@ public class MainCtrl {
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
 
+    private Scene adminLogin;
+    private AdminLoginCtrl adminLoginCtrl;
+
+    private Scene adminOverview;
+    private AdminOverviewCtrl adminOverviewCtrl;
+
     private Scene manageParticipants;
     private ManageParticipantsCtrl manageParticipantsCtrl;
 
@@ -64,9 +72,6 @@ public class MainCtrl {
     private Scene createEvent;
     private CreateEventCtrl createEventCtrl;
 
-
-
-
     //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
     //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
 
@@ -77,7 +82,8 @@ public class MainCtrl {
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
                            EventPropGrouper eventPropGrouper,
                            Pair<UserEventListCtrl, Parent> userEventList,
-                           Pair<CreateEventCtrl, Parent> createEvent) {
+                           Pair<CreateEventCtrl, Parent> createEvent,
+                           AdminWindows adminWindows) {
 
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -97,6 +103,12 @@ public class MainCtrl {
 
         this.contactDetailsCtrl = contactDetails.getKey();
         this.contactDetails = new Scene(contactDetails.getValue());
+
+        this.adminLoginCtrl = adminWindows.adminLogin().getKey();
+        this.adminLogin = new Scene(adminWindows.adminLogin().getValue());
+
+        this.adminOverviewCtrl = adminWindows.adminOverview().getKey();
+        this.adminOverview = new Scene(adminWindows.adminOverview().getValue());
 
         this.addExpenseCtrl = eventPropGrouper.addExpense().getKey();
         this.addExpense = new Scene(eventPropGrouper.addExpense().getValue());
@@ -151,6 +163,16 @@ public class MainCtrl {
         primaryStage.setScene(invitation);
         invitationCtrl.showInviteCode();
         invitationCtrl.setTitle(title);
+    }
+
+    public void showAdminLogin() {
+        primaryStage.setTitle("Server management login");
+        primaryStage.setScene(adminLogin);
+    }
+
+    public void showAdminOverview() {
+        primaryStage.setTitle("Admin management overview");
+        primaryStage.setScene(adminOverview);
     }
 
     /**
