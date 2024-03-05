@@ -20,7 +20,7 @@ public class Transaction {
 
     @ManyToOne()
     @JoinColumn(name = "expense_id")
-    private Expense ExpAddEvent; //is the expense that is added to the event
+    private Expense expAddEvent; //is the expense that is added to the event
 
     @ManyToOne()
     @JoinColumn(name = "participant_email ")
@@ -32,7 +32,7 @@ public class Transaction {
     }
 
     public Transaction(Expense expAddEvent, double balance, Participant ower){
-        this.ExpAddEvent = expAddEvent;
+        this.expAddEvent = expAddEvent;
         this.balance = balance;
         this.ower = ower;
     }
@@ -47,7 +47,7 @@ public class Transaction {
     }
 
     public Expense getExpAddEvent(){
-        return ExpAddEvent;
+        return expAddEvent;
     }
 
     public void setBalance(double balance) {
@@ -59,11 +59,12 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return id == that.id && Double.compare(balance, that.balance) == 0 && Objects.equals(ExpAddEvent, that.ExpAddEvent);
+        return id == that.id && Double.compare(balance, that.balance) == 0
+                && Objects.equals(expAddEvent, that.expAddEvent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, balance, ExpAddEvent);
+        return Objects.hash(id, balance, expAddEvent);
     }
 }

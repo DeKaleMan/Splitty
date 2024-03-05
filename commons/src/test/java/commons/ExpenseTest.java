@@ -3,13 +3,23 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpenseTest {
-    Expense e1 = new Expense(100, "food1", Type.Food, Currency.EUR, "16 March", 150.00, "test@student.lentiz.nl");
-    Expense e2 = new Expense(100, "food1", Type.Food, Currency.EUR, "16 March", 150.00, "test@student.lentiz.nl");
+    Expense e1 = new Expense(100
+            , "food1"
+            , Type.Food
+            , Currency.EUR
+            , "16 March"
+            , 150.00
+            , "test@student.lentiz.nl");
+    Expense e2 = new Expense(100
+            , "food1"
+            , Type.Food
+            , Currency.EUR
+            , "16 March"
+            , 150.00
+            , "test@student.lentiz.nl");
 
     @Test
     public void equalsTest(){

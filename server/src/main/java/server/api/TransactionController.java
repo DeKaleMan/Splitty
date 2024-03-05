@@ -1,15 +1,11 @@
 package server.api;
 
-import commons.Participant;
 import commons.Transaction;
-import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.TransactionRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/Transaction")
