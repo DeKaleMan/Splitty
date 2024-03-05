@@ -24,6 +24,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import client.scenes.*;
+import client.utils.AdminWindows;
+import com.google.inject.Injector;
 import static com.google.inject.Guice.createInjector;
 
 
@@ -56,9 +59,12 @@ public class Main extends Application {
         var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts);
 
 
+        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
+        var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
+        var adminWindows = new AdminWindows(adminLogin, adminOverview);
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent);
-
+            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows);
     }
 }
