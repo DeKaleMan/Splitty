@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
+   <children>
+      <Text layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Text>
+      <ListView fx:id="eventList" layoutX="170.0" layoutY="106.0" prefHeight="270.0" prefWidth="260.0" />
+      <Button fx:id="importEventButton" layoutX="69.0" layoutY="106.0" mnemonicParsing="false" onAction="#showImportFields" prefHeight="25.0" prefWidth="90.0" text="Import event" />
+      <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" prefHeight="25.0" prefWidth="90.0" text="Export event" />
+      <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="90.0" text="Delete event" />
+      <Text fx:id="serverTag" layoutX="20.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server: Localhost:8080" wrappingWidth="150.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Button fx:id="viewEventButton" layoutX="441.0" layoutY="106.0" mnemonicParsing="false" onAction="#viewEvent" prefHeight="25.0" prefWidth="90.0" text="View Event" />
+      <TextArea fx:id="jsonImportTextArea" layoutX="125.0" layoutY="13.0" prefHeight="350.0" prefWidth="350.0" promptText="Paste your exported JSON dump here" visible="false" />
+      <Button fx:id="jsonImportButton" layoutX="385.0" layoutY="369.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="25.0" prefWidth="90.0" text="Import" visible="false" />
+      <Text fx:id="sortByText" layoutX="263.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort by:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="sortComboBox" layoutX="314.0" layoutY="70.0" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
+      <Button layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+   </children>
+</AnchorPane>

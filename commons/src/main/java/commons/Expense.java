@@ -1,28 +1,40 @@
 package commons;
 
-import java.util.List;
+import jakarta.persistence.*;
 import java.util.Objects;
 
+@Entity
+@IdClass(ExpenseId.class)
 public class Expense {
+    @Id
+    private int eventCode;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int expenseId;
     private String description;
-    private final List<Transaction> transactions;
     // all associated participants of the expense and how much they owe or are owed
 
+    @Enumerated(EnumType.STRING)
     private Type type; // type of expense (i.e. food, drinks, travel)
+    @Enumerated(EnumType.STRING)
     private Currency currency;
     private String date; // date of expense
     private double totalExpense; // the amount of money of the expense
-    private String payer; // the participant who paid
+    private String payerEmail; // the participant who paid
 
-    public Expense(String description, List<Transaction> transactions,
-                   Type type, Currency currency, String date, double totalExpense, String payer) {
+    public Expense(int eventCode, String description, Type type, Currency currency,
+                   String date, double totalExpense, String payerEmail) {
+        this.eventCode = eventCode;
         this.description = description;
-        this.transactions = transactions;
         this.type = type;
         this.currency = currency;
         this.date = date;
         this.totalExpense = totalExpense;
-        this.payer = payer;
+        this.payerEmail = payerEmail;
+    }
+
+    public Expense() {
+
     }
 
     public String getDescription() {
@@ -33,13 +45,11 @@ public class Expense {
         this.description = description;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
 
     public Type getType() {
         return type;
     }
+
     public void setType(Type type) {
         this.type = type;
     }
@@ -65,43 +75,45 @@ public class Expense {
         this.totalExpense = totalExpense;
     }
 
-    public String getPayer() {
-        return payer;
+    public String getPayerEmail() {
+        return payerEmail;
     }
 
-    public void setPayer(String payer) {
-        this.payer = payer;
+    public void setPayerEmail(String payer) {
+        this.payerEmail = payer;
     }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Double.compare(totalExpense, expense.totalExpense) == 0
-                && Objects.equals(description, expense.description)
-                && Objects.equals(transactions, expense.transactions)
-                && type == expense.type && currency == expense.currency
-                && Objects.equals(date, expense.date)
-                && Objects.equals(payer, expense.payer);
+        return eventCode == expense.eventCode && expenseId == expense.expenseId &&
+            Double.compare(totalExpense, expense.totalExpense) == 0 &&
+            Objects.equals(description, expense.description) && type == expense.type &&
+            currency == expense.currency && Objects.equals(date, expense.date) &&
+            Objects.equals(payerEmail, expense.payerEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, transactions, type, currency, date, totalExpense, payer);
+        return Objects.hash(eventCode, expenseId, description, type, currency, date, totalExpense,
+            payerEmail);
+    }
+
+    public int getEventCode() {
+        return eventCode;
     }
 
     @Override
     public String toString() {
-        String res = "This is an expense:\n" + description + "\nThe expense type is: " + this.type
-                + ".\nThe total amount spent is: " + totalExpense + ".\nThis is how much everyone owes:\n";
+        return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
+            + ".\nThe total amount spent is: "
+            + totalExpense + "."
+            + "\nThe person who paid was: " + payerEmail + ", on " + date + " and paid in "
+            + currency
+            + ".";
 
-        for (Transaction t : transactions) {
-            res += "\t" + t.getParticipant() + ": " + t.getBalance() + ".\n";
-        }
-        res += "The person who paid was: " + payer + ", on " + date + " and paid in " + currency + ".";
-        return res;
     }
 
 }

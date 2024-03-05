@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserEventListCtrl">
+   <children>
+      <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+
+      <ListView layoutX="46.0" layoutY="136.0" prefHeight="200.0" prefWidth="207.0" />
+      <ScrollBar layoutX="253.0" layoutY="136.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="11.0" />
+      <TextField layoutX="46.0" layoutY="99.0" prefHeight="25.0" prefWidth="207.0" />
+
+      <ChoiceBox layoutX="369.0" layoutY="93.0" prefHeight="25.0" prefWidth="207.0" />
+      <CheckBox layoutX="369.0" layoutY="140.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="207.0" text="Show positive balances" />
+      <CheckBox layoutX="369.0" layoutY="232.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="207.0" text="Show negative balances" />
+      <CheckBox layoutX="369.0" layoutY="202.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="207.0" text="Show ongoing events" />
+      <CheckBox layoutX="369.0" layoutY="173.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="207.0" text="Show ended events" />
+      <Label layoutX="369.0" layoutY="68.0" text="Sort by:">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="46.0" layoutY="68.0" text="Search by name:">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+
+   </children>
+</AnchorPane>
