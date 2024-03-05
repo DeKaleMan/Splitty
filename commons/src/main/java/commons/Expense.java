@@ -1,7 +1,6 @@
 package commons;
 
 import jakarta.persistence.*;
-
 import java.util.Objects;
 
 @Entity
@@ -104,10 +103,6 @@ public class Expense {
 
     public int getEventCode() {
         return eventCode;
-    }
-
-    public int getExpenseId() {
-        return expenseId;
     }
 
     @Override

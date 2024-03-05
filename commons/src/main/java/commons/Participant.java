@@ -1,12 +1,9 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Objects;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Participant implements Serializable {
@@ -35,7 +32,9 @@ public class Participant implements Serializable {
 //    private Event event;
 
     protected Participant() {}
-    public Participant(String name, double balance, String iBan, String bIC, String accountHolder, String email) {
+    public Participant(String name, double balance
+            , String iBan, String bIC
+            , String accountHolder, String email) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
