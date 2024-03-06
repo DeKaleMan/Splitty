@@ -15,16 +15,16 @@ class ExpenseControllerTest {
     private TestExpenseRepository expenseRepository;
     private TestEventRepository eventRepository;
 
-    Event event1 = new Event("test","date","owner","desc");
-    Event event2 = new Event("test1","date1","owner1","desc1");
+    Event event1 = new Event("test", "date", "owner", "desc");
+    Event event2 = new Event("test1", "date1", "owner1", "desc1");
 
     @BeforeEach
     void setup() {
         eventRepository = new TestEventRepository();
         expenseRepository = new TestExpenseRepository();
-        sut = new ExpenseController(expenseRepository,eventRepository);
-        event1.id=1;
-        event2.id=2;
+        sut = new ExpenseController(expenseRepository, eventRepository);
+        event1.id = 1;
+        event2.id = 2;
         eventRepository.events.add(event1);
         eventRepository.events.add(event2);
     }
@@ -38,7 +38,7 @@ class ExpenseControllerTest {
     @Test
     void nullSaveDate() {
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks, Currency.EUR,
+            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
                 null, 0.0, "email"));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
@@ -46,14 +46,14 @@ class ExpenseControllerTest {
     @Test
     void nullSaveEmail() {
         var actual = sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-            Currency.EUR, new Date(), 0.0, null));
+            new Date(), 0.0, null));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
     @Test
     void nullSaveNegative() {
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks, Currency.EUR,
+            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
                 new Date(), -1.0, "email"));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
@@ -61,7 +61,7 @@ class ExpenseControllerTest {
     @Test
     void emptyEmail() {
         var actual = sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-            Currency.EUR, new Date(), 0.0, ""));
+            new Date(), 0.0, ""));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
@@ -69,9 +69,9 @@ class ExpenseControllerTest {
     void testSave() {
         Date date = new Date();
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks, Currency.EUR,
+            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
                 date, 0.0, "email"));
-        assertEquals(new Expense(event1, "", Type.Drinks, Currency.EUR,
+        assertEquals(new Expense(event1, "", Type.Drinks,
                 date, 0.0, "email"),
             actual.getBody());
         assertEquals("save", expenseRepository.methods.getLast());
@@ -80,11 +80,11 @@ class ExpenseControllerTest {
     @Test
     void testGetByEventCode() {
         Date date = new Date();
-        var e1 = new Expense(event1, "", Type.Drinks, Currency.EUR,
+        var e1 = new Expense(event1, "", Type.Drinks,
             date, 0.0, "email");
-        var e2 = new Expense(event1, "", Type.Drinks, Currency.EUR,
+        var e2 = new Expense(event1, "", Type.Drinks,
             date, 0.0, "testEmail");
-        var e3 = new Expense(event2, "", Type.Drinks, Currency.EUR,
+        var e3 = new Expense(event2, "", Type.Drinks,
             date, 0.0, "email");
         List<Expense> expected = List.of(e1, e2);
         expenseRepository.expenses.add(e1);
@@ -98,11 +98,11 @@ class ExpenseControllerTest {
     @Test
     void testGetByEventCodeAndPayerEmail() {
         Date date = new Date();
-        var e1 = new Expense(event1, "", Type.Drinks, Currency.EUR,
+        var e1 = new Expense(event1, "", Type.Drinks,
             date, 0.0, "email");
-        var e2 = new Expense(event1, "", Type.Drinks, Currency.EUR,
+        var e2 = new Expense(event1, "", Type.Drinks,
             date, 0.0, "testEmail");
-        var e3 = new Expense(event2, "", Type.Drinks, Currency.EUR,
+        var e3 = new Expense(event2, "", Type.Drinks,
             date, 0.0, "email");
         List<Expense> expected = List.of(e1);
         expenseRepository.expenses.add(e1);

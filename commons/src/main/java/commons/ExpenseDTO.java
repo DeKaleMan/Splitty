@@ -14,7 +14,6 @@ public class ExpenseDTO {
 
     private Type type; // type of expense (i.e. food, drinks, travel)
 
-    private Currency currency;
 
     private Date date; // date of expense
 
@@ -28,12 +27,11 @@ public class ExpenseDTO {
 
     }
 
-    public ExpenseDTO(int eventId, String description, Type type, Currency currency, Date date,
+    public ExpenseDTO(int eventId, String description, Type type, Date date,
                    double totalExpense, String payerEmail) {
         this.eventId = eventId;
         this.description = description;
         this.type = type;
-        this.currency = currency;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payerEmail = payerEmail;
@@ -56,9 +54,6 @@ public class ExpenseDTO {
         this.type = type;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
 
 
     public Date getDate() {
@@ -97,13 +92,13 @@ public class ExpenseDTO {
         return eventId == that.eventId &&
             Double.compare(totalExpense, that.totalExpense) == 0 &&
             Objects.equals(description, that.description) && type == that.type &&
-            currency == that.currency && Objects.equals(date, that.date) &&
+            Objects.equals(date, that.date) &&
             Objects.equals(payerEmail, that.payerEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, description, type, currency, date, totalExpense, payerEmail);
+        return Objects.hash(eventId, description, type, date, totalExpense, payerEmail);
     }
 
     @Override
@@ -111,8 +106,7 @@ public class ExpenseDTO {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
             + ".\nThe total amount spent is: "
             + totalExpense + "."
-            + "\nThe person who paid was: " + payerEmail + ", on " + date + " and paid in "
-            + currency
+            + "\nThe person who paid was: " + payerEmail + ", on " + date
             + ".";
 
     }

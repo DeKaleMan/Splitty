@@ -22,9 +22,7 @@ public class Expense {
 
     @Enumerated(EnumType.STRING)
     private Type type; // type of expense (i.e. food, drinks, travel)
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Currency currency;
+
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date; // date of expense
@@ -39,12 +37,11 @@ public class Expense {
 
     }
 
-    public Expense(Event event, String description, Type type, Currency currency, Date date,
+    public Expense(Event event, String description, Type type, Date date,
                    double totalExpense, String payerEmail) {
         this.event = event;
         this.description = description;
         this.type = type;
-        this.currency = currency;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payerEmail = payerEmail;
@@ -67,9 +64,6 @@ public class Expense {
         this.type = type;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
 
 
     public Date getDate() {
@@ -113,14 +107,13 @@ public class Expense {
             Double.compare(totalExpense, expense.totalExpense) == 0 &&
             Objects.equals(event, expense.event) &&
             Objects.equals(description, expense.description) && type == expense.type &&
-            currency == expense.currency && Objects.equals(date, expense.date) &&
+            Objects.equals(date, expense.date) &&
             Objects.equals(payerEmail, expense.payerEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(event, expenseId, description, type, currency, date, totalExpense,
-            payerEmail);
+        return Objects.hash(event, expenseId, description, type, date, totalExpense, payerEmail);
     }
 
     @Override
@@ -128,8 +121,7 @@ public class Expense {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
             + ".\nThe total amount spent is: "
             + totalExpense + "."
-            + "\nThe person who paid was: " + payerEmail + ", on " + date + " and paid in "
-            + currency
+            + "\nThe person who paid was: " + payerEmail + ", on " + date
             + ".";
 
     }

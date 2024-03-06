@@ -53,7 +53,7 @@ public class ExpenseController {
         }
         Expense expense =
             new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
-                expenseDTO.getCurrency(), expenseDTO.getDate(), expenseDTO.getTotalExpense(),
+                expenseDTO.getDate(), expenseDTO.getTotalExpense(),
                 expenseDTO.getPayerEmail());
         return ResponseEntity.ok(expenseRepo.save(expense));
     }

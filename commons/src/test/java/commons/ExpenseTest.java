@@ -14,14 +14,12 @@ public class ExpenseTest {
     Expense e1 = new Expense(event
             , "food1"
             , Type.Food
-            , Currency.EUR
             , date
             , 150.00
             , "test@student.lentiz.nl");
     Expense e2 = new Expense(event
             , "food1"
             , Type.Food
-            , Currency.EUR
             , date
             , 150.00
             , "test@student.lentiz.nl");
@@ -61,10 +59,6 @@ public class ExpenseTest {
         assertEquals(Type.Food, e1.getType());
     }
 
-    @Test
-    void getCurrency() {
-        assertEquals(Currency.EUR, e1.getCurrency());
-    }
 
     @Test
     void getDate() {
