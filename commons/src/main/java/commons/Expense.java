@@ -22,8 +22,10 @@ public class Expense {
 
     @Enumerated(EnumType.STRING)
     private Type type; // type of expense (i.e. food, drinks, travel)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Currency currency;
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date; // date of expense
     @Column(nullable = false)

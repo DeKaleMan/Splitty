@@ -1,25 +1,35 @@
 package commons;
 
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpenseTest {
-    Expense e1 = new Expense(100
+    Event event = new Event("test","date","owner","desc");
+    Date date = new Date(1,1,1);
+    Expense e1 = new Expense(event
             , "food1"
             , Type.Food
             , Currency.EUR
-            , "16 March"
+            , date
             , 150.00
             , "test@student.lentiz.nl");
-    Expense e2 = new Expense(100
+    Expense e2 = new Expense(event
             , "food1"
             , Type.Food
             , Currency.EUR
-            , "16 March"
+            , date
             , 150.00
             , "test@student.lentiz.nl");
+
+    @BeforeEach
+    void setup(){
+        event.id = 1;
+    }
 
     @Test
     public void equalsTest(){
@@ -33,7 +43,7 @@ public class ExpenseTest {
 
     @Test
     public void getEventcodeTest() {
-        assertEquals(100, e1.getEventCode());
+        assertEquals(event,e1.getEvent());
     }
 
     @Test
@@ -58,7 +68,7 @@ public class ExpenseTest {
 
     @Test
     void getDate() {
-        assertEquals("16 March",e1.getDate());
+        assertEquals(date,e1.getDate());
     }
 
     @Test
