@@ -104,11 +104,11 @@ public class Participant implements Serializable {
 
         Participant that = (Participant) o;
 
-        return Objects.equals(email, that.email);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return email != null ? email.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 }

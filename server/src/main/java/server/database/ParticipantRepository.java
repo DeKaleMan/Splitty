@@ -1,6 +1,7 @@
 package server.database;
 
 import commons.Participant;
+import commons.ParticipantId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +16,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findByName(String name);
 
     // Find a single participant by email, assuming emails are unique
-    Participant findByEmail(String email);
+    Participant findById(ParticipantId id);
 
     // Find participants by account holder name using a custom query
     @Query("SELECT p FROM Participant p WHERE p.accountHolder = :accountHolder")
