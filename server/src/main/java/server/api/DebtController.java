@@ -4,31 +4,35 @@ import commons.Debt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import server.database.DebtRepository;
+import server.database.ExpenseRepository;
+import server.database.ParticipantRepository;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Transaction")
+@RequestMapping("/api/debts")
 public class DebtController {
 
-    private final DebtRepository transactionDB;
+    private final DebtRepository debtRepo;
+    private final ExpenseRepository expenseRepo;
+    private final ParticipantRepository participantRepo;
 
     @Autowired
-    public DebtController(DebtRepository transactionDB){
-        this.transactionDB = transactionDB;
+    public DebtController(DebtRepository debtRepo, ExpenseRepository expenseRepo,
+                          ParticipantRepository participantRepo) {
+        this.debtRepo = debtRepo;
+        this.expenseRepo = expenseRepo;
+        this.participantRepo = participantRepo;
     }
 
-//    @GetMapping(path = {"","/"})
-//    public ResponseEntity<Transaction> getAllTransactionByOwer(@RequestBody Participant ower){
-//        if(ower == null){
-//            return ResponseEntity.badRequest().build();
-//        }
-//        Optional<Participant> = transactionDB.findAll(ower);
-//    }
+    @GetMapping("/{eventId}")
+    public List<Debt> getAllDebtsOfEvent(@PathVariable("eventId") int eventId) {
+        return debtRepo.findByEvent(eventId);
+    }
 
     @GetMapping({"", "/"})
-    public List<Debt> getAllTransaction(){
-        return transactionDB.findAll();
+    public List<Debt> getAllTransaction() {
+        return debtRepo.findAll();
     }
 
 
