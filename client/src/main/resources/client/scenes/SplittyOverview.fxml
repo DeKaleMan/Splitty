@@ -47,5 +47,6 @@
                </children>
             </AnchorPane>
          </children></Pane>
+      <Button layoutX="269.0" layoutY="222.0" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
    </children>
 </AnchorPane>

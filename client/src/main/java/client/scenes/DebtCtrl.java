@@ -31,7 +31,7 @@ public class DebtCtrl implements Initializable {
 
     private Debt undone;
 
-    private List<Debt> debtList;
+    private List<Debt> debtList = new ArrayList<>();
 
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
@@ -49,7 +49,7 @@ public class DebtCtrl implements Initializable {
     }
     public void setDebtList(){
         //search for a query
-        debtList = new ArrayList<>();
+
     }
 
     @FXML
