@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
 import commons.ExpenseId;
 import org.springframework.data.domain.Example;
@@ -18,20 +19,25 @@ public class TestExpenseRepository implements ExpenseRepository {
     public List<Expense> expenses = new ArrayList<>();
     public List<String> methods = new ArrayList<>();
 
+
     @Override
-    public List<Expense> findByEventCode(int eventCode) {
-        methods.add("findByEventCode");
-        return expenses.stream().filter(x -> x.getEventCode() == eventCode).toList();
+    public List<Expense> findByEvent(Event event) {
+        methods.add("findByEvent");
+        return expenses
+            .stream()
+            .filter(x -> x.getEvent().equals(event))
+            .toList();
     }
 
     @Override
-    public List<Expense> findByEventCodeAndPayerEmail(int eventCode, String payerEmail) {
-        methods.add("findByEventCodeAndPayerEmail");
+    public List<Expense> findByEventAndPayerEmail(Event event, String payerEmail) {
+        methods.add("findByEventAndPayerEmail");
         return expenses
             .stream()
-            .filter(x -> x.getEventCode() == eventCode && x.getPayerEmail().equals(payerEmail))
+            .filter(x -> x.getEvent().equals(event) && x.getPayerEmail().equals(payerEmail))
             .toList();
     }
+
 
     @Override
     public <S extends Expense> S save(S entity) {
@@ -186,4 +192,6 @@ public class TestExpenseRepository implements ExpenseRepository {
     public Page<Expense> findAll(Pageable pageable) {
         return null;
     }
+
+
 }

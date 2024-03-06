@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Date;
+import java.util.Date;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
