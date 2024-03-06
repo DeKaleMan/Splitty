@@ -13,7 +13,7 @@ Around 45 min
 | Time: | 15:45                |
 | Location: | Drebbelweg PC-hall 1 |
 | Chair | Stijn de Lange       |
-| Minute Taker | TBD                  |
+| Minute Taker | Yavor Pachedzhiev   |
 | Attendees: | all                  |
 
 # Opening by chair (3 min)
