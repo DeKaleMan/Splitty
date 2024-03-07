@@ -32,7 +32,7 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     private Button sendInvites;
 
-    List<Participant> list;
+    private List<Participant> list;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //for now this is hardcoded but this should eventually be passed on
@@ -52,7 +52,7 @@ public class ManageParticipantsCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-
+    @FXML
     public void backEventOverview(){
         mainCtrl.showSplittyOverview(titleLabel.getText());
     }
@@ -65,8 +65,6 @@ public class ManageParticipantsCtrl implements Initializable {
         if(participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
         else{
             ObservableList selected = participantsList.getSelectionModel().getSelectedItems();
-
-
             if(selected.isEmpty()) {
                 System.out.println("none selected");
                 return;

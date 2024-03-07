@@ -18,9 +18,11 @@ public class Debt {
     @Column(nullable = false)
     private double balance; // The balance change (can be negative)
 
+    @PrimaryKeyJoinColumn
     @ManyToOne
     private Expense expense; //is the expense that is added to the event
 
+    @PrimaryKeyJoinColumn
     @ManyToOne
     private Participant participant;
 
