@@ -12,6 +12,7 @@ public class SplittyOverviewCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+
 //these are for the css:
     @FXML
     private AnchorPane background;
@@ -22,7 +23,6 @@ public class SplittyOverviewCtrl {
 
     @FXML
     private Button sendInvites;
-
     @FXML
     private Label titleLabel;
     @Inject
@@ -34,6 +34,7 @@ public class SplittyOverviewCtrl {
     /**
      * Shows the invitation scene (sends it the title to retain it)
      */
+    @FXML
     public void sendInvitesOnClick(){
         mainCtrl.showInvitation(titleLabel.getText());
     }
@@ -62,11 +63,8 @@ public class SplittyOverviewCtrl {
     public void showStatistics(){
         mainCtrl.showStatistics(titleLabel.getText());
     }
-    @FXML
-    public void showDebts(){
 
-    }
-    /**
+     /**
      * go back to Start screen
      */
     @FXML
