@@ -17,11 +17,4 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     // Find a single participant by email, assuming emails are unique
     Participant findById(ParticipantId id);
-
-    // Find participants by account holder name using a custom query
-    @Query("SELECT p FROM Participant p WHERE p.accountHolder = :accountHolder")
-    List<Participant> findByAccountHolder(@Param("accountHolder") String accountHolder);
-
-    // Delete a participant by email
-    void deleteByEmail(String email);
 }
