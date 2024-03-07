@@ -136,7 +136,7 @@ public class CurrencyExchange {
      * @param baseCurrency The base currency
      */
     public void writeToFile(double exchangeOne, double exchangeTwo,
-                            String exchangeOneName, String exchangeTwoName ,String baseCurrency) {
+                            String exchangeOneName, String exchangeTwoName, String baseCurrency) {
         File ratesFile = new File(getFileName(baseCurrency));
         io.write(exchangeOneName + ";" + exchangeOne + ";" + exchangeTwoName + ";" + exchangeTwo, ratesFile);
     }

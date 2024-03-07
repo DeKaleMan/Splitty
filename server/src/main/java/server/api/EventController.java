@@ -31,9 +31,11 @@ public class EventController {
 
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Event> addEvent(@RequestBody Event inputEvent){
-        if(inputEvent.getName() == null){
+        // an event needs to have a date and name
+        if (inputEvent.getName() == null || inputEvent.getDate() == null || inputEvent.getOwner() == null) {
             return ResponseEntity.badRequest().build();
         }
+        // Or an automatic current date is added to the event if date == null
         Event newEvent = eventDB.save(inputEvent);
         return ResponseEntity.ok(newEvent);
     }
@@ -43,7 +45,7 @@ public class EventController {
         Optional<Event> eventToDelete = eventDB.findById(id);
         if(eventToDelete.isEmpty()){
             return ResponseEntity.notFound().build();
-        }else{
+        } else {
             eventDB.deleteById(id);
             return ResponseEntity.noContent().build();
         }

@@ -1,15 +1,15 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import java.util.Date;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CreateEventCtrl {
@@ -22,12 +22,10 @@ public class CreateEventCtrl {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private Label dateExampleLabel;
-    @FXML
     private TextArea eventDescriptionArea;
 
 
-    // participant text field
+    // participant text fields
 
     @FXML
     private TextField nameField;
@@ -42,6 +40,7 @@ public class CreateEventCtrl {
 
     // this list will store all added participants until
     // the create event button is clicked, then it will be added to the database
+    // via foreign keys
     private List<Participant> participants;
 
     @Inject
@@ -52,11 +51,8 @@ public class CreateEventCtrl {
 
     }
 
-    public void initialize() {
 
-    }
-
-    public void setTitle(String title){
+    public void setTitle(String title) {
         titleField.setText(title);
     }
 
@@ -106,7 +102,7 @@ public class CreateEventCtrl {
         }
         if (name == null || name.isEmpty() || error){
             if (name == null || name.isEmpty()) {
-                // error message
+                // error message *fill in name*
             }
             return;
         }
