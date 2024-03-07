@@ -24,7 +24,9 @@ public class PaymentController {
     private EventRepository eventRepository;
 
     @Autowired
-    public PaymentController(PaymentRepository paymentRepository, ParticipantRepository participantRepository, EventRepository eventRepository){
+    public PaymentController(PaymentRepository paymentRepository,
+                             ParticipantRepository participantRepository,
+                             EventRepository eventRepository){
         this.paymentRepository = paymentRepository;
         this.participantRepository = participantRepository;
         this.eventRepository = eventRepository;

@@ -4,7 +4,7 @@ import commons.Event;
 import commons.Participant;
 import commons.ParticipantId;
 import commons.dto.ParticipantDTO;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import server.database.EventRepository;
 import server.database.ParticipantRepository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/participants")

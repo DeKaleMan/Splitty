@@ -34,6 +34,6 @@ public class PaymentDTO {
     }
 
     public int getEventCode() {
-            return eventCode;
-        }
+        return eventCode;
+    }
 }
