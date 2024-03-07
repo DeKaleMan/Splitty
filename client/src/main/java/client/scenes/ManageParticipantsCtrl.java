@@ -37,8 +37,10 @@ public class ManageParticipantsCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //for now this is hardcoded but this should eventually be passed on
         this.list = new ArrayList<>();
-        list.add(new Participant("John", 30.65, "IDK some iban", "Not sure what this is", "Me?", "email@email.nl"));
-        list.add(new Participant("Linda", 30.65, "IDK some iban", "Not sure what this is", "Me?", "email@email.nl"));
+//        list.add(new Participant("John", 30.65, "IDK some iban",
+//        "Not sure what this is", "Me?", "email@email.nl"));
+//        list.add(new Participant("Linda", 30.65, "IDK some iban",
+//        "Not sure what this is", "Me?", "email@email.nl"));
         for(Participant p : list){
             this.participantsList.getItems().add(p.getName());
         }
