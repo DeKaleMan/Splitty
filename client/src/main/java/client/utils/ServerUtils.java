@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Expense;
-import commons.ExpenseDTO;
+import commons.dto.ExpenseDTO;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;

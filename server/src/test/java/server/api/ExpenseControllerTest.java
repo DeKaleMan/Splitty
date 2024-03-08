@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.*;
+import commons.dto.ExpenseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

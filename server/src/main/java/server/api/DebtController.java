@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.*;
+import commons.dto.DebtDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,6 @@ import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +42,36 @@ public class DebtController {
         return ResponseEntity.ok(debtRepo.findByEvent(event));
     }
 
+    @GetMapping("/{eventId}/expense/{expenseId}")
+    public ResponseEntity<List<Debt>> getAllDebtsOfExpense(@PathVariable("eventId") int eventId, @PathVariable("expenseId") int expenseId){
+        Optional<Event> eventOptional = eventRepo.findById(eventId);
+        if(eventOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventOptional.get();
+        Optional<Expense> expenseOptional =
+            expenseRepo.findById(new ExpenseId(event, expenseId));
+        if (expenseOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Expense expense = expenseOptional.get();
+        return ResponseEntity.ok(debtRepo.findByExpense(expense));
+    }
+
+    @GetMapping("/{eventId}/participant/{email}")
+    public ResponseEntity<List<Debt>> getAllDebtsOfParticipant(@PathVariable("eventId") int eventId, @PathVariable("email") String email){
+        Optional<Event> eventOptional = eventRepo.findById(eventId);
+        if(eventOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventOptional.get();
+        Participant participant = participantRepo.findById(new ParticipantId(email,event));
+        if(participant == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(debtRepo.findByParticipant(participant));
+    }
+
     @GetMapping({"", "/"})
     public List<Debt> getALlDebts() {
         return debtRepo.findAll();
@@ -60,12 +90,11 @@ public class DebtController {
             return ResponseEntity.notFound().build();
         }
         Expense expense = expenseOptional.get();
-        Optional<Participant> participantOptional = participantRepo.findById(
-            Long.parseLong("1"));//To change when Participant class is restructured
-        if (participantOptional.isEmpty()) {
+        Participant participant = participantRepo.findById(
+            new ParticipantId(debtDTO.getParticipantEmail(), event));//To change when Participant class is restructured
+        if (participant == null) {
             return ResponseEntity.notFound().build();
         }
-        Participant participant = participantOptional.get();
         return ResponseEntity.ok(
             debtRepo.save(new Debt(expense, debtDTO.getBalance(), participant)));
     }

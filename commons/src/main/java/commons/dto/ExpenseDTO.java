@@ -1,6 +1,7 @@
-package commons;
+package commons.dto;
 
-import jakarta.persistence.*;
+import commons.Type;
+
 import java.util.Date;
 
 import java.util.Objects;

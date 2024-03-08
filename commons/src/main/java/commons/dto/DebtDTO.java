@@ -1,6 +1,4 @@
-package commons;
-
-import jakarta.persistence.*;
+package commons.dto;
 
 import java.util.Objects;
 
