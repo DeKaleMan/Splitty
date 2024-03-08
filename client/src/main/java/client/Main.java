@@ -24,9 +24,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.*;
 import client.utils.AdminWindows;
-import com.google.inject.Injector;
 import static com.google.inject.Guice.createInjector;
 
 

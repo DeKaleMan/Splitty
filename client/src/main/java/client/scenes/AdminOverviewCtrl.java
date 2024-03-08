@@ -1,6 +1,5 @@
 package client.scenes;
 
-import com.google.inject.Inject;
 import commons.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+
+import javax.inject.Inject;
 
 public class AdminOverviewCtrl {
 
