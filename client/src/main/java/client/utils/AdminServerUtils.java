@@ -8,12 +8,12 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class AdminServerUtils {
 
-    private static String SERVER = "";
+    private static String server = "";
 
     public Response validatePassword(String password, String serverUrl) {
-        SERVER = "http://" + serverUrl + "/";
+        server = "http://" + serverUrl + "/";
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("/api/admin/validate_password")
+                .target(server).path("/api/admin/validate_password")
                 .queryParam("password", password)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
