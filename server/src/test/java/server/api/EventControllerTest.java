@@ -1,22 +1,62 @@
 package server.api;
-
-import commons.Event;
+import commons.EventDTO;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EventControllerTest {
 
-    EventController sut;
+    EventController ctrl;
     TestEventRepository eventRepository;
-    Event event1 = new Event("test", "date", "owner", "desc");
-    Event event2 = new Event("test1", "date1", "owner1", "desc1");
+    EventDTO event1 = new EventDTO("test", "date", "owner", "desc");
+    EventDTO event2 = new EventDTO("test1", "date1", "owner1", "desc1");
 
     @BeforeEach
     void setup() {
         eventRepository = new TestEventRepository();
-        sut = new EventController(eventRepository);
-        event1.id = 1;
-        event2.id = 2;
-        eventRepository.events.add(event1);
-        eventRepository.events.add(event2);
+        ctrl = new EventController(eventRepository);
+    }
+
+    // testing whether it works if one entry is null
+    @Test
+    void nullSave() {
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(null).getStatusCode());
+    }
+    @Test
+    void nullSaveName() {
+        event1.setName(null);
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+    }
+    @Test
+    void nullSaveDate() {
+        event1.setDate(null);
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+    }
+    @Test
+    void nullSaveDescription() {
+        event1.setDescription(null);
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+    }
+    @Test
+    void nullSaveOwner() {
+        event1.setOwner(null);
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+    }
+    @Test
+    void EmptyOwner() {
+        event1.setOwner("");
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+    }
+    @Test
+    void EmptyDate() {
+        event1.setDate("");
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+    }
+    @Test
+    void EmptyName() {
+        event1.setName("");
+        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
     }
 }
