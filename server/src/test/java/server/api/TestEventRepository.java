@@ -17,6 +17,27 @@ public class TestEventRepository implements EventRepository {
 
     public List<Event> events = new ArrayList<>();
     public List<String> methods = new ArrayList<>();
+
+    @Override
+    public <S extends Event> S save(S entity) {
+        events.add(entity);
+        methods.add("save");
+        return entity;
+    }
+
+    @Override
+    public Optional<Event> findById(Integer integer) {
+        methods.add("findById");
+        return events.stream().filter(x -> x.id == integer).findFirst();
+    }
+
+    @Override
+    public List<Event> findAll() {
+        methods.add("findAll");
+        return events;
+    }
+
+
     @Override
     public void flush() {
         
@@ -36,7 +57,11 @@ public class TestEventRepository implements EventRepository {
     public void deleteAllInBatch(Iterable<Event> entities) {
 
     }
-
+    @Override
+    public <S extends Event, R> R findBy(Example<S> example,
+                                         Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+        return null;
+    }
     @Override
     public void deleteAllByIdInBatch(Iterable<Integer> integers) {
 
@@ -92,18 +117,6 @@ public class TestEventRepository implements EventRepository {
         return false;
     }
 
-    @Override
-    public <S extends Event, R> R findBy(Example<S> example,
-                                         Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-        return null;
-    }
-
-    @Override
-    public <S extends Event> S save(S entity) {
-        events.add(entity);
-        methods.add("save");
-        return entity;
-    }
 
     @Override
     public <S extends Event> List<S> saveAll(Iterable<S> entities) {
@@ -111,21 +124,10 @@ public class TestEventRepository implements EventRepository {
     }
 
     @Override
-    public Optional<Event> findById(Integer integer) {
-        methods.add("findById");
-        return events.stream().filter(x -> x.id == integer).findFirst();
-    }
-
-    @Override
     public boolean existsById(Integer integer) {
         return false;
     }
 
-    @Override
-    public List<Event> findAll() {
-        methods.add("findAll");
-        return events;
-    }
 
     @Override
     public List<Event> findAllById(Iterable<Integer> integers) {

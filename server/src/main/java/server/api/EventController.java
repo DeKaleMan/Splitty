@@ -36,7 +36,9 @@ public class EventController {
                 || isNullOrEmpty(inputEvent.getOwner()) || inputEvent.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }
-        Event newEvent = new Event(inputEvent.getName(), inputEvent.getDate(), inputEvent.getOwner(), inputEvent.getDescription());
+        Event newEvent = new Event(inputEvent.getName(), inputEvent.getDate(),
+                inputEvent.getOwner(), inputEvent.getDescription());
+        eventDB.save(newEvent);
         return ResponseEntity.ok(newEvent);
     }
 
@@ -57,7 +59,6 @@ public class EventController {
 //        return e;
 //    }
     private boolean isNullOrEmpty(String s) {
-    return s == null || s.isEmpty();
-}
-
+        return s == null || s.isEmpty();
+    }
 }

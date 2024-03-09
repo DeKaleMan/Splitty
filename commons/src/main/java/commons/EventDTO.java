@@ -58,7 +58,10 @@ public class EventDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EventDTO eventDTO = (EventDTO) o;
-        return id == eventDTO.id && Objects.equals(name, eventDTO.name) && Objects.equals(date, eventDTO.date) && Objects.equals(owner, eventDTO.owner) && Objects.equals(description, eventDTO.description);
+        return id == eventDTO.id && Objects.equals(name, eventDTO.name)
+                && Objects.equals(date, eventDTO.date)
+                && Objects.equals(owner, eventDTO.owner)
+                && Objects.equals(description, eventDTO.description);
     }
 
     @Override
