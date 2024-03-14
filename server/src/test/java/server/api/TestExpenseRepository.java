@@ -38,7 +38,6 @@ public class TestExpenseRepository implements ExpenseRepository {
             .toList();
     }
 
-
     @Override
     public <S extends Expense> S save(S entity) {
         methods.add("save");
