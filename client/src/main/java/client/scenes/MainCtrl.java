@@ -196,6 +196,7 @@ public class MainCtrl {
     }
 
     public void showUserEventList() {
+        userEventListCtrl.initialize();
         primaryStage.setScene(userEventList);
         primaryStage.setTitle("Event List");
     }
