@@ -31,6 +31,15 @@ public class AddExpenseCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.splittyCtrl = splittyCtrl;
     }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Person person1 = new Person("John", "Doe");
+        Person person2 = new Person("Paula", "Green");
+        ObservableList<String> list = FXCollections.observableArrayList(person1.firstName, person2.firstName);
+        personComboBox.setItems(list);
+        createSplitList(list);
+        this.category.setItems(FXCollections.observableArrayList("Food", "Drink", "Transport", "Other"));
+    }
 
 
 
@@ -48,6 +57,8 @@ public class AddExpenseCtrl implements Initializable {
     }
 
 
+
+    //all the things needed for the addExpense
     @FXML
     private TextArea whatFor;
 
@@ -67,6 +78,11 @@ public class AddExpenseCtrl implements Initializable {
 
     private List<Participant> participant;
 
+
+    /**
+     *     this collects all data and asks the splittycontroller to add the
+     *     expense to the list but that might not be necessary when the database works
+     */
     @FXML
     public void addExpense(){
         //collect information
@@ -86,16 +102,6 @@ public class AddExpenseCtrl implements Initializable {
         back();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Person person1 = new Person("John", "Doe");
-        Person person2 = new Person("Paula", "Green");
-        ObservableList<String> list = FXCollections.observableArrayList(person1.firstName, person2.firstName);
-        personComboBox.setItems(list);
-        createSplitList(list);
-        this.category.setItems(FXCollections.observableArrayList("Food", "Drink", "Transport", "Other"));
-    }
-
     public void setParticipant(List<Participant> participant) {
         this.participant = participant;
     }
@@ -109,7 +115,10 @@ public class AddExpenseCtrl implements Initializable {
     }
 
 
-
+    /**
+     *
+     * @return a list with all the selected participants who should contribute to this expense
+     */
     public List<String> getSelected() {
         List<String> res = new ArrayList<>();
         for(Object b : splitList.getItems()){
@@ -119,6 +128,11 @@ public class AddExpenseCtrl implements Initializable {
         }
         return res;
     }
+
+
+    /**
+     * select all buttons to split between
+     */
     @FXML
     public void selectAll(){
         for(Object button: splitList.getItems()){

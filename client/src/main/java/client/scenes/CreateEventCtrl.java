@@ -77,8 +77,8 @@ public class CreateEventCtrl {
             // give warning *every field must be filled in*
             return;
         }
-        Participant participant = new Participant(name, 0.0, iBan, bIC, accountHolder, email);
-        participants.add(participant);
+//        Participant participant = new Participant(name, 0.0, iBan, bIC, accountHolder, email);
+//        participants.add(participant);
 
         nameField.setText("");
         emailField.setText("");

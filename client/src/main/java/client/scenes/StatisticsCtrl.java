@@ -18,6 +18,7 @@ public class StatisticsCtrl {
     private int drinks = 1;
     private int transport = 1;
     private int other = 1;
+
     @FXML
     private Label titleLabel;
 
@@ -46,7 +47,8 @@ public class StatisticsCtrl {
 
         pieChart.setData(data);
     }
-
+    //these all set the things for the diagram, theoretically they could all
+    // be done in one method but I wasn't sure how we were going to implement this
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
