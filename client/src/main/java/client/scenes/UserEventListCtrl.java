@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.ChoiceBox;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class UserEventListCtrl {
     private ObservableList<String> filters = FXCollections.observableArrayList( "Last activity", "Title", "Creation date");
 
     @FXML
-    private ComboBox<String> choiceBox;
+    private ChoiceBox<String> choiceBox;
     @FXML
     private Button cookie;
 
