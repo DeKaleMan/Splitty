@@ -14,7 +14,8 @@ public class UserEventListCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
-    private ObservableList<String> filters = FXCollections.observableArrayList( "Last activity", "Title", "Creation date");
+    private ObservableList<String> filters = FXCollections.observableArrayList(
+            "Last activity", "Title", "Creation date");
 
     @FXML
     private ChoiceBox<String> choiceBox;
