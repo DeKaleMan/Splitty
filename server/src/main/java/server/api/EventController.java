@@ -57,7 +57,7 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }else{
             eventDB.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(eventToDelete.get());
         }
     }
 

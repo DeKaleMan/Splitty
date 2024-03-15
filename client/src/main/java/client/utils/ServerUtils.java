@@ -103,13 +103,47 @@ public class ServerUtils {
                 .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            List<Event> events = response.readEntity(new GenericType<List<Event>>() {});
+            List<Event> events = response.readEntity(new GenericType<List<Event>>(){});
             response.close();
             return events;
         } else {
             // Handle error response
             response.close();
             throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event getEventById(int id) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event?=" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<Event>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to retrieve event. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event deleteEventById(int id) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event?=" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<Event>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to delete event. Status code: " + response.getStatus());
         }
     }
 }
