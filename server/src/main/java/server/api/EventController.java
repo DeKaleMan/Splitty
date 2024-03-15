@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
+
+import java.util.List;
 import java.util.Optional;
 
 
@@ -25,6 +27,16 @@ public class EventController {
             return ResponseEntity.ok(event.get());
 
         }else{
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<Event>> getAllEvents(){
+        List<Event> allEvents = eventDB.findAll();
+        if(!allEvents.isEmpty()) {
+            return ResponseEntity.ok(allEvents);
+        } else {
             return ResponseEntity.badRequest().build();
         }
     }

@@ -24,8 +24,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import commons.Event;
 import commons.Expense;
 import commons.ExpenseDTO;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -91,5 +93,23 @@ public class ServerUtils {
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+    }
+
+    public List<Event> getAllEvents() {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event/all")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Event> events = response.readEntity(new GenericType<List<Event>>() {});
+            response.close();
+            return events;
+        } else {
+            // Handle error response
+            response.close();
+            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+        }
     }
 }
