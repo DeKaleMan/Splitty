@@ -49,8 +49,6 @@ public class SplittyOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         fetchExpenses();
         fetchParticipants();
-
-
     }
 
     /**

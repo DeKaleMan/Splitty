@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Participant;
 import commons.Person;
 import commons.Type;
@@ -21,6 +22,7 @@ import java.util.ResourceBundle;
 
 public class AddExpenseCtrl implements Initializable {
     private final ServerUtils serverUtils;
+    private final int eventCode = 1;
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
 
@@ -28,7 +30,24 @@ public class AddExpenseCtrl implements Initializable {
     public Label titleLabel;
 
     @FXML
-    private ComboBox<ParticipantDTO> personComboBox;
+    private ComboBox<Participant> personComboBox;
+
+    //all the things needed for the addExpense
+    @FXML
+    private TextArea whatFor;
+
+    @FXML
+    private DatePicker dateSelect;
+
+    @FXML
+    private ListView splitList;
+
+    @FXML
+    private TextField amount;
+
+    @FXML
+    private ComboBox category;
+    private List<Participant> participant;
     @Inject
     public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl) {
         this.serverUtils = serverUtils;
@@ -37,14 +56,24 @@ public class AddExpenseCtrl implements Initializable {
     }
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        ParticipantDTO person1 = new ParticipantDTO("name", 1000.00, "iBAN", "bIC", "holder", "email", 1);
-        Person person2 = new Person("Paula", "Green");
-        ObservableList<ParticipantDTO> list = FXCollections.observableArrayList(person1);
+        Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "email", new Event());
+//        Person person2 = new Person("Paula", "Green");
+        ObservableList<Participant> list = FXCollections.observableArrayList();
+        List<Participant> allparticipants;
+        try{
+            allparticipants = serverUtils.getParticipants(eventCode);
+        }
+        catch (Exception e){
+            allparticipants = new ArrayList<>();
+        }
+
+        list.addAll(allparticipants);
+        list.add(person1);
         personComboBox.setItems(list);
 
-        personComboBox.setCellFactory(param -> new ListCell<ParticipantDTO>() {
+        personComboBox.setCellFactory(param -> new ListCell<Participant>() {
             @Override
-            protected void updateItem(ParticipantDTO item, boolean empty) {
+            protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (empty || item == null) {
@@ -54,9 +83,9 @@ public class AddExpenseCtrl implements Initializable {
                 }
             }
         });
-        personComboBox.setButtonCell(new ListCell<ParticipantDTO>() {
+        personComboBox.setButtonCell(new ListCell<Participant>() {
             @Override
-            protected void updateItem(ParticipantDTO item, boolean empty) {
+            protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (empty || item == null) {
@@ -69,7 +98,21 @@ public class AddExpenseCtrl implements Initializable {
 
 
         createSplitList(list);
-        this.category.setItems(FXCollections.observableArrayList("Food", "Drink", "Transport", "Other"));
+        category.setCellFactory(param -> new ListCell<Type>(){
+            @Override
+            protected void updateItem(Type item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+            }
+        });
+        this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
+
+        //this.category.setItems(FXCollections.observableArrayList("Food", "Drink", "Transport", "Other"));
 
 
     }
@@ -91,25 +134,6 @@ public class AddExpenseCtrl implements Initializable {
 
 
 
-    //all the things needed for the addExpense
-    @FXML
-    private TextArea whatFor;
-
-    @FXML
-    private DatePicker dateSelect;
-
-    @FXML
-    private ListView splitList;
-
-    @FXML
-    private TextField amount;
-
-    @FXML
-    private ComboBox category;
-
-
-
-    private List<Participant> participant;
 
 
     /**
@@ -124,14 +148,14 @@ public class AddExpenseCtrl implements Initializable {
         //link these to participants and then add the expense
         LocalDate localDate = dateSelect.getValue();
         Date date = java.sql.Date.valueOf(localDate);
-        //Type type = Type.valueOf(category.getSelectionModel().getSelectedItem().toString());
+        Type type = (Type) category.getValue();
         double amountDouble = 0;
         try{
             amountDouble = Double.parseDouble(amount.getText());
         }catch (Exception e){
             amount.setText("NO VALID AMOUNT");
         }
-        ParticipantDTO payer = personComboBox.getValue();
+        Participant payer = personComboBox.getValue();
         String description = whatFor.getText();
         //add to database
         splittyCtrl.addExpense(description, Type.Drinks, date, amountDouble, payer.getEmail());
@@ -142,8 +166,8 @@ public class AddExpenseCtrl implements Initializable {
         this.participant = participant;
     }
 
-    public void createSplitList(ObservableList<ParticipantDTO> people){
-        for(ParticipantDTO p : people){
+    public void createSplitList(ObservableList<Participant> people){
+        for(Participant p : people){
             RadioButton button = new RadioButton();
             button.setText(p.toString());
             splitList.getItems().add(button);
