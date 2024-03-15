@@ -3,6 +3,7 @@ package server.api;
 import commons.Event;
 import commons.Expense;
 import commons.ExpenseDTO;
+import commons.ExpenseId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
@@ -56,6 +57,18 @@ public class ExpenseController {
                 expenseDTO.getDate(), expenseDTO.getTotalExpense(),
                 expenseDTO.getPayerEmail());
         return ResponseEntity.ok(expenseRepo.save(expense));
+    }
+
+
+    @DeleteMapping("/{expense}")
+    public ResponseEntity<Expense> deleteExpense(@PathVariable Expense expense){
+        if(findByEventCodeAndPayerEmail(expense.getEvent().id, expense.getPayerEmail()) == null){
+            return ResponseEntity.badRequest().build();
+        }
+        Expense res = expense;
+        expenseRepo.deleteById(new ExpenseId(expense.getEvent(), expense.getExpenseId()));
+//        expenseRepo.delete(expense);
+        return ResponseEntity.ok(res);
     }
 
     private boolean isNullOrEmpty(String s) {

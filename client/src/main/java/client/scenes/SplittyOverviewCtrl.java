@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,6 +53,10 @@ public class SplittyOverviewCtrl implements Initializable {
         fetchExpenses();
         fetchParticipants();
     }
+
+//    public void setEventCode(int eventCode){
+//        this.eventCode = eventCode;
+//    }
 
     /**
      * Shows the invitation scene (sends it the title to retain it)
@@ -103,6 +110,19 @@ public class SplittyOverviewCtrl implements Initializable {
             System.out.println(e);
         }
     }
+    @FXML
+    public Expense deleteExpense() {
+
+        Expense toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+        try{
+            serverUtils.deleteExpense(toDelete);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        System.out.println("OK");
+        return toDelete;
+
+    }
 
 
 
@@ -111,15 +131,29 @@ public class SplittyOverviewCtrl implements Initializable {
      */
     public void fetchExpenses(){
         expenseList = new ListView<>();
-        List<Expense> expenses = serverUtils.getExpense(eventCode);
+        List<Expense> expenses = new ArrayList<>();
+        try{
+            expenses = serverUtils.getExpense(eventCode);
+        }catch (BadRequestException e){
+            System.out.println(e);
+        }
+
         expenseList.getItems().addAll(expenses);
         allExpenses.setContent(expenseList);
     }
     public void fetchParticipants(){
-        expenseList = new ListView<>();
-        List<Expense> expenses = serverUtils.getExpense(eventCode);
-        expenseList.getItems().addAll(expenses);
-        allExpenses.setContent(expenseList);
+        ListView<Participant> participantsList = new ListView<>();
+        List<Participant> participants = new ArrayList<>();
+        try{
+            participants = serverUtils.getParticipants(eventCode);
+        }catch (BadRequestException e){
+            System.out.println(e);
+        }
+        catch (NotFoundException e){
+            System.out.println(e);
+        }
+        participantsList.getItems().addAll(participants);
+        //.setContent(expenseList);
     }
 
 
