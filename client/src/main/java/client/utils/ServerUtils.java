@@ -86,7 +86,8 @@ public class ServerUtils {
             });
     }
     //So this doesn't work it returns a HTTP 500 due to EVENT_CODE = NULL. This could be because of:
-    //  A. I just made the eventcode 1... BUT it should check if such an event exists and I believe Stijn made such an event
+    //  A. I just made the eventcode 1...
+    //      BUT it should check if such an event exists and I believe Stijn made such an event
     //  B. Maybe it has something to do with the Event thing in the expense thing but ExpenseId being different.
     //      but I don't understand this yet. However,
     //      through debugging everything works up to the last line of the saveExpense in the expenseController.
