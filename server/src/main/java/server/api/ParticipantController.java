@@ -6,11 +6,13 @@ import commons.ParticipantId;
 import commons.dto.ParticipantDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ParticipantRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -83,6 +85,24 @@ public class ParticipantController {
 
         Participant updatedParticipant = participantRepository.save(existingParticipant);
         return ResponseEntity.ok(updatedParticipant);
+    }
+
+
+    @GetMapping("/{eventID}")
+    public ResponseEntity<Participant> getByEvent(@PathVariable int eventID){
+        //now doesn't do anything since I haven't figured out how yet
+
+        // maybee like this:
+        // very ugly though
+        List<Participant> res = new ArrayList<>();
+        List<Participant> x = participantRepository.findAll();
+        for(Participant p : x){
+            if(eventID == p.getEvent().id){
+                res.add(p);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

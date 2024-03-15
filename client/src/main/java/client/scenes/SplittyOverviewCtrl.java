@@ -1,19 +1,28 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
-import javax.inject.Inject;
 
-public class SplittyOverviewCtrl {
+import javax.inject.Inject;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class SplittyOverviewCtrl implements Initializable {
+
+    //We need to store the eventCode right here
+    private final int eventCode = 1; //replace with the actual eventCode
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
-//these are for the css:
+    //these are for the css:
     @FXML
     private AnchorPane background;
     @FXML
@@ -25,10 +34,23 @@ public class SplittyOverviewCtrl {
     private Button sendInvites;
     @FXML
     private Label titleLabel;
+
+    @FXML
+    public Tab allExpenses;
+    private ListView expenseList;
+    private TabPane tabPane;
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    @FXML
+    public void initialize(URL location, ResourceBundle resources) {
+        fetchExpenses();
+        fetchParticipants();
+
+
     }
 
     /**
@@ -64,7 +86,7 @@ public class SplittyOverviewCtrl {
         mainCtrl.showStatistics(titleLabel.getText());
     }
 
-     /**
+    /**
      * go back to Start screen
      */
     @FXML
@@ -76,8 +98,32 @@ public class SplittyOverviewCtrl {
         mainCtrl.viewDeptsPerEvent();
     }
 
-    public void addExpense(){
-
+    public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
+        try{
+            serverUtils.addExpense(new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail));
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
+
+
+
+    /**
+     * fetches all expenses of this event and shows them in the assigned box
+     */
+    public void fetchExpenses(){
+        expenseList = new ListView<>();
+        List<Expense> expenses = serverUtils.getExpense(eventCode);
+        expenseList.getItems().addAll(expenses);
+        allExpenses.setContent(expenseList);
+    }
+    public void fetchParticipants(){
+        expenseList = new ListView<>();
+        List<Expense> expenses = serverUtils.getExpense(eventCode);
+        expenseList.getItems().addAll(expenses);
+        allExpenses.setContent(expenseList);
+    }
+
+
 }
 

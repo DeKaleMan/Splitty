@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.Expense;
 import commons.ExpenseDTO;
+import commons.Participant;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -84,12 +85,27 @@ public class ServerUtils {
             .get(new GenericType<List<Expense>>() {
             });
     }
-
+    //So this doesn't work it returns a HTTP 500 due to EVENT_CODE = NULL. This could be because of:
+    //  A. I just made the eventcode 1... BUT it should check if such an event exists and I believe Stijn made such an event
+    //  B. Maybe it has something to do with the Event thing in the expense thing but ExpenseId being different.
+    //      but I don't understand this yet. However,
+    //      through debugging everything works up to the last line of the saveExpense in the expenseController.
+    // If someone could either explain to me what might be going on or help me fix it that would be amazing
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/expenses")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+    }
+
+    public List<Participant> getParticipants(int eventCode) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participant")
+                .queryParam("eventCode", eventCode)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Participant>>() {
+                });
     }
 }
