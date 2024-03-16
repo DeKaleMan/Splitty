@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import javax.inject.Inject;
+import java.util.Comparator;
 
 public class AdminOverviewCtrl {
 
@@ -109,36 +110,40 @@ public class AdminOverviewCtrl {
     @FXML
     public void deleteEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
-        // TODO: Delete event from database
-        System.out.println("Delete: " + event);
+
+        serverUtils.deleteEventById(event.getId());
     }
 
     @FXML
     public void viewEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
-        // TODO: Go to the event page of event
-        System.out.println("View: " + event);
+        mainCtrl.showSplittyOverview(event.getName());
     }
 
     @FXML
     public void updateEventSorting() {
         String selectedOption = sortComboBox.getValue();
+        ObservableList<Event> newEventList = FXCollections.observableArrayList();
         // Update the event sorting based on the new selected option
         switch(selectedOption) {
             case "Title":
                 System.out.println("Title sorting selected");
-                // TODO: Sort event list based on title
+                ObservableList<Event> currentEventList = eventList.getItems();
+                currentEventList.stream().sorted(Comparator.comparing(Event::getName))
+                        .forEach(newEventList::add);
                 break;
             case "Creation date":
                 System.out.println("Creation date sorting selected");
                 // TODO: Sort event list based on creation date
+                newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
                 break;
             case "Last activity":
                 System.out.println("Last activity sorting selected");
                 // TODO: Sort event list based on last activity
+                newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
                 break;
         }
-        // TODO: Update list items
+        eventList.setItems(newEventList);
     }
 
     @FXML

@@ -34,11 +34,7 @@ public class EventController {
     @GetMapping(path = "/all")
     public ResponseEntity<List<Event>> getAllEvents(){
         List<Event> allEvents = eventDB.findAll();
-        if(!allEvents.isEmpty()) {
-            return ResponseEntity.ok(allEvents);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(allEvents);
     }
 
     @PostMapping(path = {"", "/"})
@@ -52,6 +48,7 @@ public class EventController {
 
     @DeleteMapping(path = {"","/"})
     public ResponseEntity<Event> removeEntity(@RequestParam Integer id){
+        System.out.println(id);
         Optional<Event> eventToDelete = eventDB.findById(id);
         if(eventToDelete.isEmpty()){
             return ResponseEntity.notFound().build();

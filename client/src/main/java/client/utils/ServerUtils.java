@@ -115,7 +115,7 @@ public class ServerUtils {
 
     public Event getEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event?=" + id)
+                .target(SERVER).path("api/event?id=" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get();
@@ -132,7 +132,8 @@ public class ServerUtils {
 
     public Event deleteEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event?=" + id)
+                .target(SERVER).path("api/event")
+                .queryParam("id", id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
