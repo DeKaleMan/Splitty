@@ -107,7 +107,7 @@ public class ServerUtils {
 
     public List<Debt> getDebtByParticipant(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts/{eventId}/expense/{email}")
+                .target(SERVER).path("api/debts/{eventId}/participant/{email}")
                 .resolveTemplate("eventId", eventCode)
                 .resolveTemplate("email", email)
                 .request(APPLICATION_JSON)

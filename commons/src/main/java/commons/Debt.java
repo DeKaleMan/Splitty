@@ -38,9 +38,10 @@ public class Debt {
     }
 
 
-    public boolean isPositive() {
-        return balance > 0;
-    }
+//
+//    public boolean isPositive() {
+//        return balance > 0;
+//    }
 
     public double getBalance() {
         return balance;
