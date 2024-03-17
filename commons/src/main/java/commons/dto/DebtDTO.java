@@ -1,6 +1,4 @@
-package commons;
-
-import jakarta.persistence.*;
+package commons.dto;
 
 import java.util.Objects;
 
@@ -13,7 +11,6 @@ import java.util.Objects;
 public class DebtDTO {
 
 
-
     private double balance; // The balance change (can be negative)
 
     private int eventId;
@@ -23,7 +20,7 @@ public class DebtDTO {
 
     private String participantEmail;
 
-    public DebtDTO(){
+    public DebtDTO() {
 
     }
 
@@ -56,8 +53,8 @@ public class DebtDTO {
         if (o == null || getClass() != o.getClass()) return false;
         DebtDTO debtDTO = (DebtDTO) o;
         return Double.compare(balance, debtDTO.balance) == 0 && eventId == debtDTO.eventId &&
-            expenseId == debtDTO.expenseId &&
-            Objects.equals(participantEmail, debtDTO.participantEmail);
+                expenseId == debtDTO.expenseId &&
+                Objects.equals(participantEmail, debtDTO.participantEmail);
     }
 
     @Override

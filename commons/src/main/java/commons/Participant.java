@@ -26,7 +26,9 @@ public class Participant implements Serializable {
     @EmbeddedId
     private ParticipantId id;
 
-    protected Participant() {}
+    protected Participant() {
+        id = new ParticipantId();
+    }
     public Participant(String name, double balance
             , String iBan, String bIC
             , String accountHolder, String email,

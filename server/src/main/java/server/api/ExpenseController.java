@@ -2,7 +2,7 @@ package server.api;
 
 import commons.Event;
 import commons.Expense;
-import commons.ExpenseDTO;
+import commons.dto.ExpenseDTO;
 import commons.ExpenseId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

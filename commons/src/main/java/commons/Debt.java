@@ -15,6 +15,7 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+
     @Column(nullable = false)
     private double balance; // The balance change (can be negative)
 
@@ -37,10 +38,6 @@ public class Debt {
     }
 
 
-    public boolean isPositive() {
-        return balance > 0;
-    }
-
     public double getBalance() {
         return balance;
     }
@@ -51,6 +48,14 @@ public class Debt {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Participant getParticipant() {
+        return participant;
     }
 
     @Override

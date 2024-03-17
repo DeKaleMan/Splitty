@@ -24,8 +24,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import commons.*;
 
+import commons.*;
+import commons.dto.DebtDTO;
+import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -50,47 +52,87 @@ public class ServerUtils {
 
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(SERVER).path("api/quotes") //
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .get(new GenericType<>() {
-            });
+                .target(SERVER).path("api/quotes") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Quote>>() {
+                });
     }
 
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(SERVER).path("api/quotes") //
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+                .target(SERVER).path("api/quotes") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
     public List<Expense> getExpense(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses")
-            .queryParam("eventCode", eventCode)
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .get(new GenericType<>() {
-            });
+                .target(SERVER).path("api/expenses")
+                .queryParam("eventCode", eventCode)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Expense>>() {
+                });
     }
 
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses/{payerEmail}")
-            .resolveTemplate("payerEmail",email)
-            .queryParam("eventCode", eventCode)
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .get(new GenericType<>() {
-            });
+                .target(SERVER).path("api/expenses/{payerEmail}")
+                .resolveTemplate("payerEmail", email)
+                .queryParam("eventCode", eventCode)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Expense>>() {
+                });
     }
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses")
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+                .target(SERVER).path("api/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+    }
+
+    public List<Debt> getDebtByEventCode(int eventCode) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/debts/{eventId}")
+                .resolveTemplate("eventId", eventCode)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Debt>>() {
+                });
+    }
+
+    public List<Debt> getDebtByParticipant(int eventCode, String email) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/debts/{eventId}/participant/{email}")
+                .resolveTemplate("eventId", eventCode)
+                .resolveTemplate("email", email)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Debt>>() {
+                });
+    }
+
+    public List<Debt> getDebtByExpense(int eventCode, int expenseId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/debts/{eventId}/expense/{expenseId}")
+                .resolveTemplate("eventId", eventCode)
+                .resolveTemplate("expenseId", expenseId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Debt>>() {
+                });
+    }
+
+    public Debt saveDebt(DebtDTO debtDTO) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/debts")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
     }
 
 
