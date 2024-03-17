@@ -20,6 +20,7 @@
       <Label layoutX="340.0" layoutY="84.0" text="Description" />
       <Label layoutX="34.0" layoutY="113.0" text="How much?" />
       <Label layoutX="34.0" layoutY="141.0" text="When?" />
+      <Label fx:id="error" />
       <Label layoutX="36.0" layoutY="173.0" text="How to Split?" />
       <Label layoutX="340.0" layoutY="200.0" text="Expense Type" />
       <Button layoutX="376.0" layoutY="310.0" mnemonicParsing="false" onAction="#back" text="Abort" />

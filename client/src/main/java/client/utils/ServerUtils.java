@@ -24,13 +24,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import commons.Event;
-import commons.Expense;
-import commons.ExpenseDTO;
+import commons.*;
+
 import jakarta.ws.rs.core.Response;
+
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -86,7 +85,6 @@ public class ServerUtils {
             .get(new GenericType<>() {
             });
     }
-
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/expenses")
@@ -95,6 +93,30 @@ public class ServerUtils {
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
 
+
+    public void deleteExpense(Expense expense) {
+        ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
+
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER)
+                .path("api/expenses/{eventID}/{expenseID}")
+                .resolveTemplate("eventID", expense.getEvent().id)
+                .resolveTemplate("expenseID", expense.getExpenseId())
+                .request(APPLICATION_JSON)
+                .delete();
+    }
+
+
+
+    public List<Participant> getParticipants(int eventCode) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participant")
+                .queryParam("eventCode", eventCode)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Participant>>() {
+                });
+    }
     public List<Event> getAllEvents() {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/event/all")
@@ -163,5 +185,6 @@ public class ServerUtils {
             response.close();
             throw new RuntimeException("Failed to add event. Status code: " + response.getStatus());
         }
+
     }
 }

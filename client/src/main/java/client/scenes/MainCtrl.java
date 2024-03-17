@@ -145,11 +145,13 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
     public void showSplittyOverview(String title){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
         splittyOverview.getStylesheets().add(css);
         splittyOverviewCtrl.setTitle(title);
+        //splittyOverviewCtrl.setEventCode(1);
     }
 
     public void showAddExpense(String title) {
