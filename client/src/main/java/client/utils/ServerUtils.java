@@ -134,4 +134,74 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
     }
+
+    public List<Event> getAllEvents() {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event/all")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Event> events = response.readEntity(new GenericType<>(){});
+            response.close();
+            return events;
+        } else {
+            // Handle error response
+            response.close();
+            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event getEventById(int id) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event?id=" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to retrieve event. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event deleteEventById(int id) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event")
+                .queryParam("id", id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to delete event. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event addEvent(Event newEvent) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(newEvent, APPLICATION_JSON));
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to add event. Status code: " + response.getStatus());
+        }
+    }
 }
