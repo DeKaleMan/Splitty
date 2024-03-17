@@ -25,6 +25,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.*;
+
+import jakarta.ws.rs.core.Response;
+
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -50,7 +53,7 @@ public class ServerUtils {
             .target(SERVER).path("api/quotes") //
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
-            .get(new GenericType<List<Quote>>() {
+            .get(new GenericType<>() {
             });
     }
 
@@ -68,7 +71,7 @@ public class ServerUtils {
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Expense>>() {
+            .get(new GenericType<>() {
             });
     }
 
@@ -79,7 +82,7 @@ public class ServerUtils {
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Expense>>() {
+            .get(new GenericType<>() {
             });
     }
     public Expense addExpense(ExpenseDTO expenseDTO) {
@@ -89,6 +92,7 @@ public class ServerUtils {
             .accept(APPLICATION_JSON)
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
+
 
     public void deleteExpense(Expense expense) {
         ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
@@ -112,5 +116,75 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Participant>>() {
                 });
+    }
+    public List<Event> getAllEvents() {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event/all")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Event> events = response.readEntity(new GenericType<>(){});
+            response.close();
+            return events;
+        } else {
+            // Handle error response
+            response.close();
+            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event getEventById(int id) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event?id=" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to retrieve event. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event deleteEventById(int id) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event")
+                .queryParam("id", id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to delete event. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event addEvent(Event newEvent) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(newEvent, APPLICATION_JSON));
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to add event. Status code: " + response.getStatus());
+        }
+
     }
 }

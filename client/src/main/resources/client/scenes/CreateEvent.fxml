@@ -21,14 +21,14 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-        <DatePicker fx:id="datePicker" layoutX="40.0" layoutY="153.0" prefHeight="26.0" prefWidth="248.0" />
+        <DatePicker fx:id="datePicker" layoutX="40.0" layoutY="153.0" prefHeight="26.0" prefWidth="248.0" promptText="mm-dd-yyyy" />
 
         <Label layoutX="40.0" layoutY="200.0" text="Event Description">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Label>
-      <TextArea fx:id="eventDescriptionArea" layoutX="40.0" layoutY="227.0" prefHeight="118.0" prefWidth="248.0" />
+      <TextArea fx:id="eventDescriptionArea" layoutX="40.0" layoutY="227.0" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." />
 
 
 

@@ -1,11 +1,13 @@
 package server.api;
 import commons.Event;
+import commons.EventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
-import java.util.Optional;
 
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -24,28 +26,39 @@ public class EventController {
         if(event.isPresent()){
             return ResponseEntity.ok(event.get());
 
-        }else{
+        } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<Event>> getAllEvents(){
+        List<Event> allEvents = eventDB.findAll();
+        return ResponseEntity.ok(allEvents);
+    }
+
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Event> addEvent(@RequestBody Event inputEvent){
-        if(inputEvent.getName() == null){
+    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO inputEvent){
+        // an event needs to have a date and name and owner
+        if (inputEvent == null || isNullOrEmpty(inputEvent.getName()) || isNullOrEmpty(inputEvent.getDate())
+                || isNullOrEmpty(inputEvent.getOwner()) || inputEvent.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }
-        Event newEvent = eventDB.save(inputEvent);
+        Event newEvent = new Event(inputEvent.getName(), inputEvent.getDate(),
+                inputEvent.getOwner(), inputEvent.getDescription());
+        eventDB.save(newEvent);
         return ResponseEntity.ok(newEvent);
     }
 
     @DeleteMapping(path = {"","/"})
-    public ResponseEntity<Event> removeEntity(@RequestParam Integer id){
+    public ResponseEntity<Event> removeEvent(@RequestParam Integer id){
+        System.out.println(id);
         Optional<Event> eventToDelete = eventDB.findById(id);
-        if(eventToDelete.isEmpty()){
+        if (eventToDelete.isEmpty()) {
             return ResponseEntity.notFound().build();
-        }else{
+        } else {
             eventDB.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(eventToDelete.get());
         }
     }
 
@@ -54,6 +67,7 @@ public class EventController {
 //        ResponseEntity<Event> e = eventDB.getEventByName(name);
 //        return e;
 //    }
-
-
+    private boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
 }

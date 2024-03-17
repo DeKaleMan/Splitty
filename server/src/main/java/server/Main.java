@@ -23,12 +23,18 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import server.database.EventRepository;
 
+import java.util.UUID;
+
 @SpringBootApplication
 @EntityScan(basePackages = { "commons", "server" })
 public class Main {
 
+    public static String password;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
+        password = generatePassword(10);
+        System.out.println("The new password for the admin panel is: " + password);
     }
 
     @Bean
@@ -40,10 +46,15 @@ public class Main {
     }
 
     private void insertEvent(EventRepository eventDB){
-        eventDB.save(new Event("stijn"
+        eventDB.save(new Event("jesse"
                 , "16 Maart"
                 , "group 31"
                 , "this is a test is the database works"));
+    }
+
+    private static String generatePassword(int passwordSize) {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-", "").substring(0, passwordSize);
     }
 
 }

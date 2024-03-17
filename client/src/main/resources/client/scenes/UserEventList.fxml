@@ -12,7 +12,7 @@
       <ScrollBar layoutX="253.0" layoutY="136.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="11.0" />
       <TextField layoutX="46.0" layoutY="99.0" prefHeight="25.0" prefWidth="207.0" />
 
-      <ChoiceBox layoutX="369.0" layoutY="93.0" prefHeight="25.0" prefWidth="207.0" />
+      <ChoiceBox fx:id="choiceBox" layoutX="369.0" layoutY="93.0" prefHeight="25.0" prefWidth="207.0" />
       <CheckBox layoutX="369.0" layoutY="140.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="207.0" text="Show positive balances" />
       <CheckBox layoutX="369.0" layoutY="232.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="207.0" text="Show negative balances" />
       <CheckBox layoutX="369.0" layoutY="202.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="207.0" text="Show ongoing events" />
