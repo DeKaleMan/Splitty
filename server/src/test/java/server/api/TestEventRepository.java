@@ -176,6 +176,6 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public Event findEventById(int eventId) {
-        return null;
+        return events.stream().filter(x -> x.id == eventId).findFirst().orElse(null);
     }
 }

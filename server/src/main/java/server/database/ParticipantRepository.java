@@ -13,6 +13,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     // Find participants by name
     List<Participant> findByName(String name);
 
-    // Find a single participant by email, assuming emails are unique
+    // Find a single participant by id
     Participant findById(ParticipantId id);
 }

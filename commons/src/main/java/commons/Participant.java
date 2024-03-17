@@ -14,7 +14,7 @@ public class Participant implements Serializable {
     @Column(nullable = false)
     private double balance;
 
-    @Column(name = "iban", nullable = false, unique = true, length = 34)
+    @Column(name = "iban", nullable = false, length = 34)
     private String iBan;
 
     @Column(name = "bic", nullable = false, length = 11)
@@ -97,6 +97,10 @@ public class Participant implements Serializable {
 
     public Event getEvent(){
         return id.getEvent();
+    }
+
+    public ParticipantId getId() {
+        return id;
     }
 
     @Override
