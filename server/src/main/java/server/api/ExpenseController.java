@@ -46,29 +46,30 @@ public class ExpenseController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Expense> saveExpense(@RequestBody ExpenseDTO expenseDTO) {
         if (expenseDTO == null || isNullOrEmpty(expenseDTO.getPayerEmail()) ||
-            expenseDTO.getTotalExpense() < 0.0 || expenseDTO.getDate() == null)
+                expenseDTO.getTotalExpense() < 0.0 || expenseDTO.getDate() == null)
             return ResponseEntity.badRequest().build();
         Optional<Event> event = eventRepo.findById(expenseDTO.getEventId());
         if (event.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
         Expense expense =
-            new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
-                expenseDTO.getDate(), expenseDTO.getTotalExpense(),
-                expenseDTO.getPayerEmail());
+                new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
+                        expenseDTO.getDate(), expenseDTO.getTotalExpense(),
+                        expenseDTO.getPayerEmail());
         return ResponseEntity.ok(expenseRepo.save(expense));
     }
 
 
     @DeleteMapping("/{eventID}/{expenseID}")
-    public ResponseEntity<Expense> deleteExpenseByEvent_IdAndExpenseId(@PathVariable int eventID, @PathVariable  int expenseID){
+    public ResponseEntity<Expense> deleteExpenseByEventIdAndExpenseId(@PathVariable int eventID,
+                                                                      @PathVariable int expenseID) {
         Optional<Event> event = eventRepo.findById(eventID);
-        if(event.isEmpty()) return ResponseEntity.badRequest().build();
-        ExpenseId expenseId= new ExpenseId(event.get(), expenseID);
+        if (event.isEmpty()) return ResponseEntity.badRequest().build();
+        ExpenseId expenseId = new ExpenseId(event.get(), expenseID);
 
         Optional<Expense> expense = expenseRepo.findById(expenseId);
 
-        if(expense.isEmpty()){
+        if (expense.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 

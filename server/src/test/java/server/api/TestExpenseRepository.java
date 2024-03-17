@@ -39,7 +39,7 @@ public class TestExpenseRepository implements ExpenseRepository {
     }
 
     @Override
-    public List<Expense> deleteExpenseByEvent_IdAndExpenseId(int eventID, int expenseID) {
+    public List<Expense> deleteExpenseByEventIdAndExpenseId(int eventID, int expenseID) {
         methods.add("deleteExpense");
         expenses
                 .stream()

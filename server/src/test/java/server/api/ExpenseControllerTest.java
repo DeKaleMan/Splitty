@@ -3,12 +3,9 @@ package server.api;
 import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -118,12 +115,12 @@ class ExpenseControllerTest {
 
     @Test
     void testIncorrectDelete(){
-        var actual = sut.deleteExpenseByEvent_IdAndExpenseId(0, 0);
+        var actual = sut.deleteExpenseByEventIdAndExpenseId(0, 0);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
         Date date = new Date();
         ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
                 date, 0.0, "email");
-        var actual2 = sut.deleteExpenseByEvent_IdAndExpenseId(event1.id, -33);
+        var actual2 = sut.deleteExpenseByEventIdAndExpenseId(event1.id, -33);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
         // TODO the one where you check whether the eventCode is incorrect and the expenseID is correct,
         // I just haven't figured out how to get the expenseID
