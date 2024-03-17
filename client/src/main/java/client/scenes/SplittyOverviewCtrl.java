@@ -12,10 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
 
@@ -114,6 +111,10 @@ public class SplittyOverviewCtrl implements Initializable {
     public Expense deleteExpense() {
 
         Expense toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+
+        if(toDelete == null){
+            throw new NoSuchElementException("No element selected");
+        }
         try{
             serverUtils.deleteExpense(toDelete);
         }catch (Exception e){

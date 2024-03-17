@@ -24,12 +24,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import commons.Expense;
-import commons.ExpenseDTO;
-import commons.Participant;
+import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -94,10 +91,13 @@ public class ServerUtils {
     }
 
     public void deleteExpense(Expense expense) {
+        ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
+
         ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER)
-                .path("api/expenses/{expense}")
-                .resolveTemplate("expense", expense)
+                .path("api/expenses/{eventID}/{expenseID}")
+                .resolveTemplate("eventID", expense.getEvent().id)
+                .resolveTemplate("expenseID", expense.getExpenseId())
                 .request(APPLICATION_JSON)
                 .delete();
     }

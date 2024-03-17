@@ -60,14 +60,22 @@ public class ExpenseController {
     }
 
 
-    @DeleteMapping("/{expense}")
-    public ResponseEntity<Expense> deleteExpense(@PathVariable Expense expense){
-        if(findByEventCodeAndPayerEmail(expense.getEvent().id, expense.getPayerEmail()) == null){
+    @DeleteMapping("/{eventID}/{expenseID}")
+    public ResponseEntity<Expense> deleteExpenseByEvent_IdAndExpenseId(@PathVariable int eventID, @PathVariable  int expenseID){
+        Optional<Event> event = eventRepo.findById(eventID);
+        if(event.isEmpty()) return ResponseEntity.badRequest().build();
+        ExpenseId expenseId= new ExpenseId(event.get(), expenseID);
+
+        Optional<Expense> expense = expenseRepo.findById(expenseId);
+
+        if(expense.isEmpty()){
             return ResponseEntity.badRequest().build();
         }
-        Expense res = expense;
-        expenseRepo.deleteById(new ExpenseId(expense.getEvent(), expense.getExpenseId()));
-//        expenseRepo.delete(expense);
+
+        Expense res = expense.get();
+        expenseRepo.deleteById(expenseId);
+
+        System.out.println("Deleted" + res);
         return ResponseEntity.ok(res);
     }
 

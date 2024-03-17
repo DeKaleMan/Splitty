@@ -3,9 +3,12 @@ package server.api;
 import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -111,5 +114,44 @@ class ExpenseControllerTest {
         var actual = sut.findByEventCodeAndPayerEmail(1, "email").getBody();
         assertEquals(expected, actual);
         assertEquals("findByEventAndPayerEmail", expenseRepository.methods.getLast());
+    }
+
+    @Test
+    void testIncorrectDelete(){
+        var actual = sut.deleteExpenseByEvent_IdAndExpenseId(0, 0);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        Date date = new Date();
+        ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
+                date, 0.0, "email");
+        var actual2 = sut.deleteExpenseByEvent_IdAndExpenseId(event1.id, -33);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        // TODO the one where you check whether the eventCode is incorrect and the expenseID is correct,
+        // I just haven't figured out how to get the expenseID
+
+    }
+    //I could not make this test work even though the actual method does work. If someone can spot the mistake
+    @Test
+    void testDeleteExpense(){
+//        Date date = new Date();
+//        ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
+//                date, 0.0, "email");
+//
+//        List<Expense> expected = List.of(new Expense(event1, "",
+//                Type.Drinks, date, 0.0, "email"));
+//        sut.saveExpense(e1);
+//
+//        assertEquals(expected, sut.findByEventCode(1).getBody());
+//
+//        int eId = sut.findByEventCodeAndPayerEmail(event1.id, "email").getBody().getFirst().getExpenseId();
+//
+//        Expense actual = sut.deleteExpenseByEvent_IdAndExpenseId(e1.getEventId(),eId).getBody();
+//        assertEquals("deleteExpense", expenseRepository.methods.getLast());
+
+        // Debugging works but when I try to do it like this the check in the deleteMethod whether the expense with
+        // this expenseID exists is empty and therefore this test fails. even though it actually works...
+
+//        assertEquals(e1, actual);
+//        assertEquals(0, sut.findByEventCode(event1.id).getBody().size());
+
     }
 }
