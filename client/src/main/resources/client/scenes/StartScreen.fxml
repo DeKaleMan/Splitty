@@ -13,7 +13,7 @@
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
-                <TextField fx:id="createEventTextField" layoutX="35.0" layoutY="49.0" />
+                <TextField fx:id="createEventTextField" layoutX="35.0" layoutY="49.0" promptText="Event name" />
             </children>
         </AnchorPane>
 
@@ -24,7 +24,7 @@
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
-                <TextField fx:id="joinEventTextField" layoutX="26.0" layoutY="54.0" />
+                <TextField fx:id="joinEventTextField" layoutX="26.0" layoutY="54.0" promptText="Invite code" />
             </children>
         </AnchorPane>
 
