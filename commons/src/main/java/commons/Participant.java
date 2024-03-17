@@ -97,6 +97,10 @@ public class Participant implements Serializable {
         return id.getEvent();
     }
 
+    public ParticipantId getId() {
+        return id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
