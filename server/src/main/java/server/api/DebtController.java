@@ -43,7 +43,8 @@ public class DebtController {
     }
 
     @GetMapping("/{eventId}/expense/{expenseId}")
-    public ResponseEntity<List<Debt>> getAllDebtsOfExpense(@PathVariable("eventId") int eventId, @PathVariable("expenseId") int expenseId){
+    public ResponseEntity<List<Debt>> getAllDebtsOfExpense(@PathVariable("eventId") int eventId,
+                                                           @PathVariable("expenseId") int expenseId){
         Optional<Event> eventOptional = eventRepo.findById(eventId);
         if(eventOptional.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -59,7 +60,8 @@ public class DebtController {
     }
 
     @GetMapping("/{eventId}/participant/{email}")
-    public ResponseEntity<List<Debt>> getAllDebtsOfParticipant(@PathVariable("eventId") int eventId, @PathVariable("email") String email){
+    public ResponseEntity<List<Debt>> getAllDebtsOfParticipant(@PathVariable("eventId") int eventId,
+                                                               @PathVariable("email") String email){
         Optional<Event> eventOptional = eventRepo.findById(eventId);
         if(eventOptional.isEmpty()){
             return ResponseEntity.notFound().build();
