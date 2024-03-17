@@ -110,8 +110,10 @@ public class AdminOverviewCtrl {
     @FXML
     public void deleteEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
-
         serverUtils.deleteEventById(event.getId());
+        ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
+        eventList.setItems(events);
+        updateEventSorting();
     }
 
     @FXML
