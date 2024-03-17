@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    // Find all payments made by a specific payer using their email
+    // Find all payments made by a specific payer
     List<Payment> findByPayerId(ParticipantId payerId);
 
-    // Find all payments received by a specific payee using their email
+    // Find all payments received by a specific payee
     List<Payment> findByPayeeId(ParticipantId payeeId);
 
 }
