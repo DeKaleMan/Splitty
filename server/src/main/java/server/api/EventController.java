@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
+
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,6 +31,12 @@ public class EventController {
         }
     }
 
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<Event>> getAllEvents(){
+        List<Event> allEvents = eventDB.findAll();
+        return ResponseEntity.ok(allEvents);
+    }
+
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Event> saveEvent(@RequestBody EventDTO inputEvent){
         // an event needs to have a date and name and owner
@@ -43,13 +51,14 @@ public class EventController {
     }
 
     @DeleteMapping(path = {"","/"})
-    public ResponseEntity<Event> removeEntity(@RequestParam Integer id){
+    public ResponseEntity<Event> removeEvent(@RequestParam Integer id){
+        System.out.println(id);
         Optional<Event> eventToDelete = eventDB.findById(id);
         if (eventToDelete.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
             eventDB.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(eventToDelete.get());
         }
     }
 

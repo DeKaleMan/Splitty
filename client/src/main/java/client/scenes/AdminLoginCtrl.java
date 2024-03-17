@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.utils.AdminServerUtils;
 import com.google.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,10 +13,12 @@ import javafx.scene.input.MouseEvent;
 public class AdminLoginCtrl {
 
     private MainCtrl mainCtrl;
+    private AdminServerUtils adminServerUtils;
 
     @Inject
-    public AdminLoginCtrl(MainCtrl mainCtrl) {
+    public AdminLoginCtrl(MainCtrl mainCtrl, AdminServerUtils adminServerUtils) {
         this.mainCtrl = mainCtrl;
+        this.adminServerUtils = adminServerUtils;
     }
 
     @FXML
@@ -30,9 +34,16 @@ public class AdminLoginCtrl {
     public void adminSignIn(ActionEvent actionEvent) {
         String serverUrl = urlField.getText();
         String password = passwordField.getText();
-        // Check password
-        // Go to next scene if password is correct
-        mainCtrl.showAdminOverview();
+
+        Response response = adminServerUtils.validatePassword(password, serverUrl);
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            mainCtrl.showAdminOverview();
+        } else {
+            System.out.println("incorrect password: " + password);
+        }
+
+
     }
 
     @FXML
