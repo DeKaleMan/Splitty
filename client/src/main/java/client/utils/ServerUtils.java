@@ -25,9 +25,11 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.Debt;
+import commons.Event;
 import commons.Expense;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
