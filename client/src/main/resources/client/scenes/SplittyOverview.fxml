@@ -14,7 +14,7 @@
       <Button fx:id="sendInvites" layoutX="506.0" layoutY="26.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send invites" />
       <Button layoutX="260.0" layoutY="188.0" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" />
       <Button layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="Back" />
-        <Pane layoutX="347.0" layoutY="84.0" prefHeight="275.0" prefWidth="239.0">
+        <Pane layoutX="347.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
          <children>
             <ListView layoutX="46.0" layoutY="51.0" prefHeight="200.0" prefWidth="148.0" />
             <Label fx:id="participants" layoutX="46.0" layoutY="18.0" text="Participants">
@@ -24,10 +24,11 @@
             </Label>
             <Button fx:id="editParticipant" layoutX="194.0" layoutY="23.0" mnemonicParsing="false" onAction="#viewParticipantManager" text="Edit" />
          </children></Pane>
-      <Pane layoutX="14.0" layoutY="84.0" prefHeight="275.0" prefWidth="239.0">
+      <Pane layoutX="14.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
          <children>
             <AnchorPane layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0">
                <children>
+                  <Button layoutX="115.0" layoutY="5.0" mnemonicParsing="false" onAction="#showAddExpense" text="Add Expense" />
                   <Label fx:id="expenses" text="expenses">
                      <font>
                         <Font size="24.0" />
@@ -35,7 +36,7 @@
                   </Label>
                   <TabPane layoutY="35.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                      <Tab text="All" />
+                      <Tab fx:id="allExpenses" text="All" />
                       <Tab text="Untitled Tab 2">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
@@ -43,9 +44,9 @@
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <Button layoutX="115.0" layoutY="5.0" mnemonicParsing="false" onAction="#showAddExpense" text="Add Expense" />
                </children>
             </AnchorPane>
+            <Button layoutX="71.0" layoutY="270.0" mnemonicParsing="false" onAction="#deleteExpense" text="Delete expense" />
          </children></Pane>
       <Button layoutX="269.0" layoutY="222.0" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
    </children>

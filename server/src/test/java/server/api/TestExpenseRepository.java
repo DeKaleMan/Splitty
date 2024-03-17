@@ -38,6 +38,19 @@ public class TestExpenseRepository implements ExpenseRepository {
             .toList();
     }
 
+
+    @Override
+    public List<Expense> deleteExpenseByEventIdAndExpenseId(int eventID, int expenseID) {
+        methods.add("deleteExpense");
+        expenses
+                .stream()
+                .filter(x -> x.getExpenseId() == expenseID && x.getEvent().id == eventID)
+                .forEach(x -> expenses.remove(x));
+
+        return expenses;
+    }
+
+
     @Override
     public <S extends Expense> S save(S entity) {
         methods.add("save");
