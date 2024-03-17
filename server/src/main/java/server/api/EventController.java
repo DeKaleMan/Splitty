@@ -47,7 +47,7 @@ public class EventController {
     }
 
     @DeleteMapping(path = {"","/"})
-    public ResponseEntity<Event> removeEntity(@RequestParam Integer id){
+    public ResponseEntity<Event> removeEvent(@RequestParam Integer id){
         System.out.println(id);
         Optional<Event> eventToDelete = eventDB.findById(id);
         if(eventToDelete.isEmpty()){

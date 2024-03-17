@@ -92,7 +92,7 @@ public class AdminOverviewCtrl {
         String jsonDump = jsonImportTextArea.getText();
         jsonImportTextArea.clear();
 
-        // TODO: Add event, participants etc. to the database based on jsonDump
+        // TODO: Add event, participants etc. to the database based on jsonDump (DB not fully done so can't do it yet)
 
         jsonImportTextArea.setVisible(false);
         jsonImportButton.setVisible(false);
@@ -103,7 +103,7 @@ public class AdminOverviewCtrl {
     @FXML
     public void exportEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
-        // TODO: Convert event to json and display somehow
+        // TODO: Convert event to json and display somehow (DB not fully done so can't do it yet)
         System.out.println("Export: " + event);
     }
 
@@ -135,11 +135,13 @@ public class AdminOverviewCtrl {
             case "Creation date":
                 System.out.println("Creation date sorting selected");
                 // TODO: Sort event list based on creation date
+                //  (can't do it yet because I need to discuss something with you guys)
                 newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
                 break;
             case "Last activity":
                 System.out.println("Last activity sorting selected");
                 // TODO: Sort event list based on last activity
+                //  (can't do it yet because I need to discuss something with you guys)
                 newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
                 break;
         }

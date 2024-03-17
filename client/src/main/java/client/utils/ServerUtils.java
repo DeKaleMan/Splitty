@@ -54,7 +54,7 @@ public class ServerUtils {
             .target(SERVER).path("api/quotes") //
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
-            .get(new GenericType<List<Quote>>() {
+            .get(new GenericType<>() {
             });
     }
 
@@ -72,7 +72,7 @@ public class ServerUtils {
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Expense>>() {
+            .get(new GenericType<>() {
             });
     }
 
@@ -83,7 +83,7 @@ public class ServerUtils {
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Expense>>() {
+            .get(new GenericType<>() {
             });
     }
 
@@ -103,7 +103,7 @@ public class ServerUtils {
                 .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            List<Event> events = response.readEntity(new GenericType<List<Event>>(){});
+            List<Event> events = response.readEntity(new GenericType<>(){});
             response.close();
             return events;
         } else {
@@ -121,7 +121,7 @@ public class ServerUtils {
                 .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<Event>(){});
+            Event event = response.readEntity(new GenericType<>(){});
             response.close();
             return event;
         } else {
@@ -139,12 +139,29 @@ public class ServerUtils {
                 .delete();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<Event>(){});
+            Event event = response.readEntity(new GenericType<>(){});
             response.close();
             return event;
         } else {
             response.close();
             throw new RuntimeException("Failed to delete event. Status code: " + response.getStatus());
+        }
+    }
+
+    public Event addEvent(Event newEvent) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/event")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(newEvent, APPLICATION_JSON));
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event event = response.readEntity(new GenericType<>(){});
+            response.close();
+            return event;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to add event. Status code: " + response.getStatus());
         }
     }
 }
