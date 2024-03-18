@@ -141,9 +141,9 @@ public class ServerUtils {
 
         ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER)
-                .path("api/expenses/{eventID}/{expenseID}")
-                .resolveTemplate("eventID", expense.getEvent().id)
-                .resolveTemplate("expenseID", expense.getExpenseId())
+                .path("api/expenses")
+                .queryParam("eventID", expense.getEvent().id)
+                .queryParam("expenseID", expense.getExpenseId())
                 .request(APPLICATION_JSON)
                 .delete();
     }

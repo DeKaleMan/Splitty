@@ -67,9 +67,9 @@ public class ExpenseController {
     }
 
 
-    @DeleteMapping("/{eventID}/{expenseID}")
-    public ResponseEntity<Expense> deleteExpenseByEventIdAndExpenseId(@PathVariable int eventID,
-                                                                      @PathVariable int expenseID) {
+    @DeleteMapping(path = {"", "/"})
+    public ResponseEntity<Expense> deleteExpenseByEventIdAndExpenseId(@RequestParam int eventID,
+                                                                      @RequestParam int expenseID) {
         Optional<Event> event = eventRepo.findById(eventID);
         if (event.isEmpty()) return ResponseEntity.notFound().build();
         ExpenseId expenseId = new ExpenseId(event.get(), expenseID);
@@ -83,7 +83,7 @@ public class ExpenseController {
         Expense res = expense.get();
         expenseRepo.deleteById(expenseId);
 
-        System.out.println("Deleted" + res);
+        System.out.println("Deleted\n" + res);
         return ResponseEntity.ok(res);
     }
 
