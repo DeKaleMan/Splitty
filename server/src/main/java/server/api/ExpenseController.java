@@ -1,38 +1,83 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
+import commons.dto.ExpenseDTO;
+import commons.ExpenseId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.database.EventRepository;
 import server.database.ExpenseRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
-    private final ExpenseRepository repo;
+    private final ExpenseRepository expenseRepo;
+    private final EventRepository eventRepo;
 
-    public ExpenseController(ExpenseRepository repo) {
-        this.repo = repo;
+    public ExpenseController(ExpenseRepository expenseRepo, EventRepository eventRepo) {
+        this.expenseRepo = expenseRepo;
+        this.eventRepo = eventRepo;
     }
 
-    @GetMapping(path={"","/"})
-    public List<Expense> findByEventCode(@RequestParam int eventCode) {
-        return repo.findByEventCode(eventCode);
+    @GetMapping(path = {"", "/"})
+    public ResponseEntity<List<Expense>> findByEventCode(@RequestParam int eventCode) {
+        Optional<Event> event = eventRepo.findById(eventCode);
+        if (event.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(expenseRepo.findByEvent(event.get()));
     }
 
     @GetMapping("{payerEmail}")
-    public List<Expense> findByEventCodeAndPayerEmail(@RequestParam int eventCode,
-                                                      @PathVariable("payerEmail") String email) {
-        return repo.findByEventCodeAndPayerEmail(eventCode, email);
+    public ResponseEntity<List<Expense>> findByEventCodeAndPayerEmail(@RequestParam int eventCode,
+                                                                      @PathVariable("payerEmail")
+                                                                      String email) {
+        Optional<Event> event = eventRepo.findById(eventCode);
+        if (event.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(expenseRepo.findByEventAndPayerEmail(event.get(), email));
     }
 
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Expense> saveExpense(@RequestBody Expense expense) {
-        if (expense == null || isNullOrEmpty(expense.getDate()) || isNullOrEmpty(
-            expense.getPayerEmail()) || expense.getTotalExpense() < 0.0)
+    public ResponseEntity<Expense> saveExpense(@RequestBody ExpenseDTO expenseDTO) {
+        if (expenseDTO == null || isNullOrEmpty(expenseDTO.getPayerEmail()) ||
+                expenseDTO.getTotalExpense() < 0.0 || expenseDTO.getDate() == null)
             return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(repo.save(expense));
+        Optional<Event> event = eventRepo.findById(expenseDTO.getEventId());
+        if (event.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        Expense expense =
+                new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
+                        expenseDTO.getDate(), expenseDTO.getTotalExpense(),
+                        expenseDTO.getPayerEmail());
+        return ResponseEntity.ok(expenseRepo.save(expense));
+    }
+
+
+    @DeleteMapping("/{eventID}/{expenseID}")
+    public ResponseEntity<Expense> deleteExpenseByEventIdAndExpenseId(@PathVariable int eventID,
+                                                                      @PathVariable int expenseID) {
+        Optional<Event> event = eventRepo.findById(eventID);
+        if (event.isEmpty()) return ResponseEntity.badRequest().build();
+        ExpenseId expenseId = new ExpenseId(event.get(), expenseID);
+
+        Optional<Expense> expense = expenseRepo.findById(expenseId);
+
+        if (expense.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Expense res = expense.get();
+        expenseRepo.deleteById(expenseId);
+
+        System.out.println("Deleted" + res);
+        return ResponseEntity.ok(res);
     }
 
     private boolean isNullOrEmpty(String s) {

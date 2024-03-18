@@ -1,18 +1,29 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.*;
+import commons.dto.ExpenseDTO;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
-import javax.inject.Inject;
 
-public class SplittyOverviewCtrl {
+import javax.inject.Inject;
+import java.net.URL;
+import java.util.*;
+
+public class SplittyOverviewCtrl implements Initializable {
+
+    //We need to store the eventCode right here
+    private final int eventCode = 1; //replace with the actual eventCode
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-//these are for the css:
+
+    //these are for the css:
     @FXML
     private AnchorPane background;
     @FXML
@@ -22,18 +33,33 @@ public class SplittyOverviewCtrl {
 
     @FXML
     private Button sendInvites;
-
     @FXML
     private Label titleLabel;
+
+    @FXML
+    public Tab allExpenses;
+    private ListView expenseList;
+    private TabPane tabPane;
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
     }
 
+    @FXML
+    public void initialize(URL location, ResourceBundle resources) {
+        fetchExpenses();
+        fetchParticipants();
+    }
+
+//    public void setEventCode(int eventCode){
+//        this.eventCode = eventCode;
+//    }
+
     /**
      * Shows the invitation scene (sends it the title to retain it)
      */
+    @FXML
     public void sendInvitesOnClick(){
         mainCtrl.showInvitation(titleLabel.getText());
     }
@@ -62,10 +88,7 @@ public class SplittyOverviewCtrl {
     public void showStatistics(){
         mainCtrl.showStatistics(titleLabel.getText());
     }
-    @FXML
-    public void showDebts(){
 
-    }
     /**
      * go back to Start screen
      */
@@ -78,8 +101,63 @@ public class SplittyOverviewCtrl {
         mainCtrl.viewDeptsPerEvent();
     }
 
-    public void addExpense(){
+    public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
+        try{
+            serverUtils.addExpense(new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail));
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+    @FXML
+    public Expense deleteExpense() {
+
+        Expense toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+
+        if(toDelete == null){
+            throw new NoSuchElementException("No element selected");
+        }
+        try{
+            serverUtils.deleteExpense(toDelete);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        System.out.println("OK");
+        return toDelete;
 
     }
+
+
+
+    /**
+     * fetches all expenses of this event and shows them in the assigned box
+     */
+    public void fetchExpenses(){
+        expenseList = new ListView<>();
+        List<Expense> expenses = new ArrayList<>();
+        try{
+            expenses = serverUtils.getExpense(eventCode);
+        }catch (BadRequestException e){
+            System.out.println(e);
+        }
+
+        expenseList.getItems().addAll(expenses);
+        allExpenses.setContent(expenseList);
+    }
+    public void fetchParticipants(){
+        ListView<Participant> participantsList = new ListView<>();
+        List<Participant> participants = new ArrayList<>();
+        try{
+            participants = serverUtils.getParticipants(eventCode);
+        }catch (BadRequestException e){
+            System.out.println(e);
+        }
+        catch (NotFoundException e){
+            System.out.println(e);
+        }
+        participantsList.getItems().addAll(participants);
+        //.setContent(expenseList);
+    }
+
+
 }
 

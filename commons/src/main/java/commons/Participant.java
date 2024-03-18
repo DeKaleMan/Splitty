@@ -14,7 +14,7 @@ public class Participant implements Serializable {
     @Column(nullable = false)
     private double balance;
 
-    @Column(name = "iban", nullable = false, unique = true, length = 34)
+    @Column(name = "iban", nullable = false, length = 34)
     private String iBan;
 
     @Column(name = "bic", nullable = false, length = 11)
@@ -23,25 +23,22 @@ public class Participant implements Serializable {
     @Column(name = "account_holder", nullable = false, length = 100)
     private String accountHolder;
 
-    @Id
-    @Column(nullable = false, unique = true)
-    private String email;
+    @EmbeddedId
+    private ParticipantId id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "????") // This is the foreign key column in the Participant table.
-//    private Event event;
-
-    protected Participant() {}
+    protected Participant() {
+        id = new ParticipantId();
+    }
     public Participant(String name, double balance
             , String iBan, String bIC
-            , String accountHolder, String email) {
+            , String accountHolder, String email,
+                       Event event) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
         this.bIC = bIC;
         this.accountHolder = accountHolder;
-        this.email = email;
-//        this.event = event;
+        this.id = new ParticipantId(email, event);
     }
 
     // Getters and setters
@@ -87,11 +84,23 @@ public class Participant implements Serializable {
     }
 
     public String getEmail() {
-        return email;
+        return id.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        id.setEmail(email);
+    }
+
+    public void setEvent(Event event){
+        id.setEvent(event);
+    }
+
+    public Event getEvent(){
+        return id.getEvent();
+    }
+
+    public ParticipantId getId() {
+        return id;
     }
 
     @Override
@@ -101,11 +110,11 @@ public class Participant implements Serializable {
 
         Participant that = (Participant) o;
 
-        return Objects.equals(email, that.email);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return email != null ? email.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 }

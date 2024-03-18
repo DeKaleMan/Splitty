@@ -1,45 +1,36 @@
-package commons;
+package commons.dto;
 
-import jakarta.persistence.*;
+import commons.Type;
+
 import java.util.Date;
 
 import java.util.Objects;
 
-@Entity
-@IdClass(ExpenseId.class)
-public class Expense {
-    @Id
-    @PrimaryKeyJoinColumn
-    @ManyToOne
-    private Event event;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int expenseId;
-    @Column(nullable = false)
+public class ExpenseDTO {
+
+    private int eventId;
+
     private String description;
-    // all associated participants of the expense and how much they owe or are owed
 
-    @Enumerated(EnumType.STRING)
     private Type type; // type of expense (i.e. food, drinks, travel)
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+
     private Date date; // date of expense
-    @Column(nullable = false)
+
     private double totalExpense; // the amount of money of the expense
-    @Column(nullable = false)
+
     private String payerEmail; // the participant who paid
 
 
 
-    public Expense() {
+    public ExpenseDTO() {
 
     }
 
-    public Expense(Event event, String description, Type type, Date date,
+    public ExpenseDTO(int eventId, String description, Type type, Date date,
                    double totalExpense, String payerEmail) {
-        this.event = event;
+        this.eventId = eventId;
         this.description = description;
         this.type = type;
         this.date = date;
@@ -90,30 +81,25 @@ public class Expense {
         this.payerEmail = payer;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public int getExpenseId() {
-        return expenseId;
+    public int getEventId() {
+        return eventId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Expense expense = (Expense) o;
-        return expenseId == expense.expenseId &&
-            Double.compare(totalExpense, expense.totalExpense) == 0 &&
-            Objects.equals(event, expense.event) &&
-            Objects.equals(description, expense.description) && type == expense.type &&
-            Objects.equals(date, expense.date) &&
-            Objects.equals(payerEmail, expense.payerEmail);
+        ExpenseDTO that = (ExpenseDTO) o;
+        return eventId == that.eventId &&
+            Double.compare(totalExpense, that.totalExpense) == 0 &&
+            Objects.equals(description, that.description) && type == that.type &&
+            Objects.equals(date, that.date) &&
+            Objects.equals(payerEmail, that.payerEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(event, expenseId, description, type, date, totalExpense, payerEmail);
+        return Objects.hash(eventId, description, type, date, totalExpense, payerEmail);
     }
 
     @Override
@@ -127,3 +113,4 @@ public class Expense {
     }
 
 }
+

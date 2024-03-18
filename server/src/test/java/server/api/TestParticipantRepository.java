@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.ParticipantId;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,95 +14,20 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TestParticipantRepository implements ParticipantRepository {
+    private final List<Participant> participants = new ArrayList<>();
+    private final List<String> methods = new ArrayList<>();
 
-    private final Map<String, Participant> participants = new HashMap<>();
-
-    @Override
-    public <S extends Participant> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends Participant> List<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public Optional<Participant> findById(Long aLong) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(Long aLong) {
-        return false;
-    }
-
-    @Override
-    public List<Participant> findAll() {
-        return new ArrayList<>(participants.values());
-    }
-
-    @Override
-    public List<Participant> findAllById(Iterable<Long> longs) {
-        return null;
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
-
-    @Override
-    public void delete(Participant entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<? extends Participant> entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
-    @Override
-    public Participant findByEmail(String email) {
-        return participants.get(email);
-    }
 
     @Override
     public List<Participant> findByName(String name) {
-        return participants.values().stream()
-                .filter(participant -> participant.getName().equals(name))
-                .collect(Collectors.toList());
+        methods.add("findByName");
+        return participants.stream().filter(x -> x.getName().equals(name)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Participant> findByAccountHolder(String accountHolder) {
-        return participants.values().stream()
-                .filter(participant -> participant.getAccountHolder().equals(accountHolder))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void deleteByEmail(String email) {
-        participants.remove(email);
-    }
-
-    public void addParticipant(Participant participant) {
-        participants.put(participant.getEmail(), participant);
+    public Participant findById(ParticipantId id) {
+        methods.add("findById");
+        return participants.stream().filter(x -> x.getId().equals(id)).findFirst().orElse(null);
     }
 
     @Override
@@ -181,9 +107,70 @@ public class TestParticipantRepository implements ParticipantRepository {
 
     @Override
     public <S extends Participant, R> R findBy(Example<S> example,
-                                               Function<FluentQuery.FetchableFluentQuery<S>,
-                                                       R> queryFunction) {
+                                               Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
+    }
+
+    @Override
+    public <S extends Participant> S save(S entity) {
+        participants.add(entity);
+        methods.add("save");
+        return entity;
+    }
+
+    @Override
+    public <S extends Participant> List<S> saveAll(Iterable<S> entities) {
+        return null;
+    }
+
+    @Override
+    public Optional<Participant> findById(Long aLong) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean existsById(Long aLong) {
+        return false;
+    }
+
+    @Override
+    public List<Participant> findAll() {
+        return participants;
+    }
+
+    @Override
+    public List<Participant> findAllById(Iterable<Long> longs) {
+        return null;
+    }
+
+    @Override
+    public long count() {
+        return 0;
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+
+    }
+
+    @Override
+    public void delete(Participant entity) {
+
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends Long> longs) {
+
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends Participant> entities) {
+
+    }
+
+    @Override
+    public void deleteAll() {
+
     }
 
     @Override

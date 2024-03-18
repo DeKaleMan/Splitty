@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-public class PaymentParticipant {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +32,10 @@ public class PaymentParticipant {
     private Date transactionDate; // The date and time when the transaction occurred
 
     // Constructors
-    public PaymentParticipant() {
+    public Payment() {
     }
 
-    public PaymentParticipant(Participant payer, Participant payee, double amount, Date transactionDate) {
+    public Payment(Participant payer, Participant payee, double amount, Date transactionDate) {
         this.payer = payer;
         this.payee = payee;
         this.amount = amount;
@@ -88,7 +88,7 @@ public class PaymentParticipant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PaymentParticipant that = (PaymentParticipant) o;
+        Payment that = (Payment) o;
 
         return Objects.equals(id, that.id);
     }

@@ -145,11 +145,13 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
     public void showSplittyOverview(String title){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
         splittyOverview.getStylesheets().add(css);
         splittyOverviewCtrl.setTitle(title);
+        //splittyOverviewCtrl.setEventCode(1);
     }
 
     public void showAddExpense(String title) {
@@ -196,6 +198,7 @@ public class MainCtrl {
     }
 
     public void showUserEventList() {
+        userEventListCtrl.initialize();
         primaryStage.setScene(userEventList);
         primaryStage.setTitle("Event List");
     }
@@ -203,7 +206,6 @@ public class MainCtrl {
     public void showCreateEvent (String name) {
         primaryStage.setTitle("Create Event");
         primaryStage.setScene(createEvent);
-        createEventCtrl.initialize();
         createEventCtrl.setTitle(name);
     }
 
@@ -234,6 +236,9 @@ public class MainCtrl {
         statisticsCtrl.setPieChart();
     }
 
+    /**
+     * this shows the statistics window
+     */
     public void viewDeptsPerEvent(){
         primaryStage.setTitle("Debts per event");
         primaryStage.setScene(debts);
