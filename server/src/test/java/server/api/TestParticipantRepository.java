@@ -14,8 +14,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TestParticipantRepository implements ParticipantRepository {
-    private final List<Participant> participants = new ArrayList<>();
-    private final List<String> methods = new ArrayList<>();
+    public final List<Participant> participants = new ArrayList<>();
+    public final List<String> methods = new ArrayList<>();
 
 
     @Override
