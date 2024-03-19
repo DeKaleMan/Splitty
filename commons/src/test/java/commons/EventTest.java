@@ -30,7 +30,7 @@ public class EventTest {
 
     @Test
     public void getDateTest(){
-        assertEquals(new Date(10, 10, 2005), e.getDate());
+        assertEquals(new Date(2005, 10, 10), e.getDate());
     }
 
     @Test
