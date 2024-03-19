@@ -3,6 +3,7 @@ package server;
 import commons.Event;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UserOverview {
@@ -29,7 +30,7 @@ public class UserOverview {
         return events;
     }
 
-    public Event createEvent(String name, String date, List<String> participants,
+    public Event createEvent(String name, Date date, List<String> participants,
                              String owner, List<String> expenseList, String description){
         //construct new event
         Event event = new Event(name, date, owner, description);

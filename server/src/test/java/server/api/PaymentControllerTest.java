@@ -27,7 +27,7 @@ public class PaymentControllerTest {
         testParticipantRepository = new TestParticipantRepository();
         testEventRepository = new TestEventRepository();
 
-        Event event = new Event("Event1", "2021-01-01", "Yavor", "Description1");
+        Event event = new Event("Event1", new Date(10, 10, 2005), "Yavor", "Description1");
         participant1 = new Participant("Yavor", 100.0, "IBAN1",
                 "BIC1", "Yavor", "yavor@tudelft.nl", event);
         participant2 = new Participant("Jesse", 200.0, "IBAN2",

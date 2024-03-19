@@ -12,9 +12,9 @@ public class EventControllerTest {
 
     EventController ctrl;
     TestEventRepository eventRepository;
-    EventDTO event1 = new EventDTO("test1", "date1", "owner1", "desc1");
-    EventDTO event2 = new EventDTO("test2", "date2", "owner2", "desc2");
-    EventDTO event3 = new EventDTO("test3", "date3", "owner3", "desc3");
+    EventDTO event1 = new EventDTO("test1", new Date(10, 10, 2005), "owner1", "desc1");
+    EventDTO event2 = new EventDTO("test2", new Date(10, 10, 2005), "owner2", "desc2");
+    EventDTO event3 = new EventDTO("test3", new Date(10, 10, 2005), "owner3", "desc3");
 
     @BeforeEach
     void setup() {
@@ -55,11 +55,7 @@ public class EventControllerTest {
         event1.setOwner("");
         assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
     }
-    @Test
-    void emptyDate() {
-        event1.setDate("");
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
-    }
+
     @Test
     void emptyName() {
         event1.setName("");

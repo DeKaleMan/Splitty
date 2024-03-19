@@ -16,8 +16,8 @@ class ExpenseControllerTest {
     private TestExpenseRepository expenseRepository;
     private TestEventRepository eventRepository;
 
-    Event event1 = new Event("test", "date", "owner", "desc");
-    Event event2 = new Event("test1", "date1", "owner1", "desc1");
+    Event event1 = new Event("test", new Date(10, 10, 2005), "owner", "desc");
+    Event event2 = new Event("test1", new Date(10, 10, 2005), "owner1", "desc1");
 
     @BeforeEach
     void setup() {
