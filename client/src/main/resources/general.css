@@ -1,25 +1,48 @@
 /*blue:  #2E1C8A*/
 
 
+
 #background{
-    -fx-background-color: #6318BD;
+    /*-fx-background-color: #6318BD;*/
+    -fx-background-color: #f0f0f0; /* Light Gray */
 }
+
 Pane{
-    -fx-background-color: #5117A9;
-    -fx-text-fill: white;
+    /*-fx-background-color: #5117A9;*/
+    /*-fx-text-fill: white;*/
+    fx-background-color: #ffffff; /* White */
+    -fx-border-color: #ccc; /* Light Gray */
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
 }
 Button{
-    -fx-background-color: #DFA80F;
+    /*-fx-background-color: #DFA80F;*/
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    /*-fx-pref-width: 120px;*/
+    /*-fx-pref-height: 40px;*/
+    -fx-alignment: center;
 }
 
 #titleLabel{
-    -fx-text-fill: white;
+    /*-fx-text-fill: white;*/
+    -fx-font-size: 24px; /* Bigger font size */
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-padding: 5px;
+    -fx-background-color: #f0f0f0; /* Light Gray */
 }
  /*this one for some reason doesn't work */
 LabeL{
-    -fx-text-fill: white;
+    /*-fx-text-fill: white;*/
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
 }
 
 ListView{
-    -fx-background-color: #2E1C8A;
+    /*-fx-background-color: #2E1C8A;*/
+    -fx-background-color: #ffffff; /* White */
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
 }

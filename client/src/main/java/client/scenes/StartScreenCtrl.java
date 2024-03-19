@@ -14,9 +14,13 @@ import java.util.Date;
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-
+    @FXML
+    private Label createEventText;
     @FXML
     private TextField createEventTextField;
+
+    @FXML
+    private Label joinEventText;
     @FXML
     private TextField joinEventTextField;
 
@@ -115,5 +119,13 @@ public class StartScreenCtrl {
 
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
+    }
+
+    public void setCreateEventText(String text) {
+        createEventText.setText(text);
+    }
+
+    public void setJoinEventText(String text) {
+        joinEventText.setText(text);
     }
 }

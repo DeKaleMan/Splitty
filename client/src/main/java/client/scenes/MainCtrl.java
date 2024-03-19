@@ -18,15 +18,20 @@ package client.scenes;
 import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
 
+import client.utils.Language;
+import client.utils.SetLanguage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.IOException;
+import java.util.Set;
+
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
-
+    private Language language = Language.ENGLISH;
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -130,6 +135,11 @@ public class MainCtrl {
 
         showStartScreen();
         primaryStage.show();
+        SetLanguage setLanguage = new SetLanguage(startScreenCtrl);
+        setLanguage.setMainScreen();
+
+        //SetLanguage.translate("Hello world", "en", "nl");
+
 
     }
 
