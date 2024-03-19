@@ -91,7 +91,7 @@ public class TestDebtRepository implements DebtRepository {
 
     @Override
     public <S extends Debt> List<S> findAll(Example<S> example) {
-        return null;
+        return (List<S>) debts;
     }
 
     @Override
