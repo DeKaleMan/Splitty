@@ -25,6 +25,8 @@ public class DebtTest {
 
     Debt d2 = new Debt(expense2,1.0,p2);
 
+    Debt emptyDebt = new Debt();
+
     @Test
     void getBalance() {
         assertEquals(10.0,d1.getBalance());
@@ -46,6 +48,12 @@ public class DebtTest {
     @Test
     void getParticipant() {
         assertEquals(p1,d1.getParticipant());
+    }
+
+    @Test
+    void getId(){
+        d1.id = 1;
+        assertEquals(1,d1.getId());
     }
 
     @Test

@@ -15,7 +15,7 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int expenseId;
+    public int expenseId;
     @Column(nullable = false)
     private String description;
     // all associated participants of the expense and how much they owe or are owed
