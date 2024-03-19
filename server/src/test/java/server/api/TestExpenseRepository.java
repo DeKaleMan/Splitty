@@ -3,6 +3,7 @@ package server.api;
 import commons.Event;
 import commons.Expense;
 import commons.ExpenseId;
+import commons.Participant;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,11 +31,11 @@ public class TestExpenseRepository implements ExpenseRepository {
     }
 
     @Override
-    public List<Expense> findByEventAndPayerEmail(Event event, String payerEmail) {
+    public List<Expense> findByEventAndPayer(Event event, Participant payer) {
         methods.add("findByEventAndPayerEmail");
         return expenses
             .stream()
-            .filter(x -> x.getEvent().equals(event) && x.getPayerEmail().equals(payerEmail))
+            .filter(x -> x.getEvent().equals(event) && x.getPayer().equals(payer))
             .toList();
     }
 

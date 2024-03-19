@@ -10,19 +10,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpenseTest {
     Event event = new Event("test",new Date(10, 10, 2005),"owner","desc");
+    Participant participant = new Participant("test", 10.0,"IBAN","BIC","accountHolder","email",event);
     Date date = new Date(1,1,1);
     Expense e1 = new Expense(event
             , "food1"
             , Type.Food
             , date
             , 150.00
-            , "test@student.lentiz.nl");
+            , participant);
     Expense e2 = new Expense(event
             , "food1"
             , Type.Food
             , date
             , 150.00
-            , "test@student.lentiz.nl");
+            , participant);
 
     @BeforeEach
     void setup(){
@@ -40,13 +41,13 @@ public class ExpenseTest {
     }
 
     @Test
-    public void getEventcodeTest() {
+    public void getEventTest() {
         assertEquals(event,e1.getEvent());
     }
 
     @Test
-    public void getPayerEmailTest() {
-        assertEquals("test@student.lentiz.nl", e1.getPayerEmail());
+    public void getPayerTest() {
+        assertEquals(participant, e1.getPayer());
     }
 
     @Test

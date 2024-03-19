@@ -28,8 +28,9 @@ public class Expense {
     private Date date; // date of expense
     @Column(nullable = false)
     private double totalExpense; // the amount of money of the expense
-    @Column(nullable = false)
-    private String payerEmail; // the participant who paid
+    @PrimaryKeyJoinColumn
+    @ManyToOne
+    private Participant payer; // the participant who paid
 
 
 
@@ -38,13 +39,13 @@ public class Expense {
     }
 
     public Expense(Event event, String description, Type type, Date date,
-                   double totalExpense, String payerEmail) {
+                   double totalExpense, Participant payer) {
         this.event = event;
         this.description = description;
         this.type = type;
         this.date = date;
         this.totalExpense = totalExpense;
-        this.payerEmail = payerEmail;
+        this.payer = payer;
     }
 
     public String getDescription() {
@@ -82,12 +83,12 @@ public class Expense {
         this.totalExpense = totalExpense;
     }
 
-    public String getPayerEmail() {
-        return payerEmail;
+    public Participant getPayer() {
+        return payer;
     }
 
-    public void setPayerEmail(String payer) {
-        this.payerEmail = payer;
+    public void setPayer(Participant payer) {
+        this.payer = payer;
     }
 
     public Event getEvent() {
@@ -108,12 +109,12 @@ public class Expense {
             Objects.equals(event, expense.event) &&
             Objects.equals(description, expense.description) && type == expense.type &&
             Objects.equals(date, expense.date) &&
-            Objects.equals(payerEmail, expense.payerEmail);
+            Objects.equals(payer, expense.payer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(event, expenseId, description, type, date, totalExpense, payerEmail);
+        return Objects.hash(event, expenseId, description, type, date, totalExpense, payer);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class Expense {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
             + ".\nThe total amount spent is: "
             + totalExpense + "."
-            + "\nThe person who paid was: " + payerEmail + ", on " + date
+            + "\nThe person who paid was: " + payer.getEmail() + ", on " + date
             + ".";
 
     }

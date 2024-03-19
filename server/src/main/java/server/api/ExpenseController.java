@@ -1,13 +1,12 @@
 package server.api;
 
-import commons.Event;
-import commons.Expense;
+import commons.*;
 import commons.dto.ExpenseDTO;
-import commons.ExpenseId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
+import server.database.ParticipantRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,16 +17,20 @@ public class ExpenseController {
     private final ExpenseRepository expenseRepo;
     private final EventRepository eventRepo;
 
-    public ExpenseController(ExpenseRepository expenseRepo, EventRepository eventRepo) {
+    private final ParticipantRepository participantRepo;
+
+    public ExpenseController(ExpenseRepository expenseRepo, EventRepository eventRepo,
+                             ParticipantRepository participantRepo) {
         this.expenseRepo = expenseRepo;
         this.eventRepo = eventRepo;
+        this.participantRepo = participantRepo;
     }
 
     @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Expense>> findByEventCode(@RequestParam int eventCode) {
         Optional<Event> event = eventRepo.findById(eventCode);
         if (event.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(expenseRepo.findByEvent(event.get()));
     }
@@ -40,7 +43,9 @@ public class ExpenseController {
         if (event.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(expenseRepo.findByEventAndPayerEmail(event.get(), email));
+        Participant payer = participantRepo.findById(new ParticipantId(email,event.get()));
+        if(payer == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(expenseRepo.findByEventAndPayer(event.get(), payer));
     }
 
     @PostMapping(path = {"", "/"})
@@ -50,12 +55,14 @@ public class ExpenseController {
             return ResponseEntity.badRequest().build();
         Optional<Event> event = eventRepo.findById(expenseDTO.getEventId());
         if (event.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
+        Participant payer = participantRepo.findById(new ParticipantId(expenseDTO.getPayerEmail(),event.get()));
+        if(payer == null) return ResponseEntity.notFound().build();
         Expense expense =
                 new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
                         expenseDTO.getDate(), expenseDTO.getTotalExpense(),
-                        expenseDTO.getPayerEmail());
+                        payer);
         return ResponseEntity.ok(expenseRepo.save(expense));
     }
 
@@ -64,13 +71,13 @@ public class ExpenseController {
     public ResponseEntity<Expense> deleteExpenseByEventIdAndExpenseId(@PathVariable int eventID,
                                                                       @PathVariable int expenseID) {
         Optional<Event> event = eventRepo.findById(eventID);
-        if (event.isEmpty()) return ResponseEntity.badRequest().build();
+        if (event.isEmpty()) return ResponseEntity.notFound().build();
         ExpenseId expenseId = new ExpenseId(event.get(), expenseID);
 
         Optional<Expense> expense = expenseRepo.findById(expenseId);
 
         if (expense.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
 
         Expense res = expense.get();
