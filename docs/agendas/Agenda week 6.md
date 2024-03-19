@@ -45,3 +45,17 @@
 ## Feedback for the meeting (5 min)
 ## Any questions? + Closure (5 min)
 # Minute taker notes
+- HCI assignment needs to be done
+- we divided the tasks for everyone. We decided that we won't work together that much, unless we need help.
+- the work is devided as follows
+  1. Maciej: settle debt, debt testing
+  2. Jesse: event overview and related stufff for frontend, finish admin window
+  3. Yavor: participant frontend connecting, and changing the add participant so you need Iban ect.
+  4. Joris: language
+  5. Stijn: websocket
+  6. Julian: config file client side
+- we use websockets atleast once, but look at places to maybe add it
+- for the presentation we can run it on a local server
+- we do not plan any additional meetings for this week
+- if the issue is closed we do not need to change them. However, we need to improve our issues. We need to connect our issues to user-stories.
+- we are planning to do the live language switch for more than 2 languages
