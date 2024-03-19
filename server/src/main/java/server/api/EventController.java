@@ -40,7 +40,7 @@ public class EventController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Event> saveEvent(@RequestBody EventDTO inputEvent){
         // an event needs to have a date and name and owner
-        if (inputEvent == null || isNullOrEmpty(inputEvent.getName()) || isNullOrEmpty(inputEvent.getDate())
+        if (inputEvent == null || isNullOrEmpty(inputEvent.getName()) || inputEvent.getDate() == null
                 || isNullOrEmpty(inputEvent.getOwner()) || inputEvent.getDescription() == null) {
             return ResponseEntity.badRequest().build();
         }

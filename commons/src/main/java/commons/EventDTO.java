@@ -1,14 +1,15 @@
 package commons;
+import java.util.Date;
 import java.util.Objects;
 public class EventDTO {
 
     public int id;
     private String name;
-    private String date;
+    private Date date;
     private String owner;
     private String description;
 
-    public EventDTO(String name, String date,
+    public EventDTO(String name, Date date,
                  String owner,
                  String description) {
         this.name = name; // name of the event
@@ -25,7 +26,7 @@ public class EventDTO {
         return name;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -41,7 +42,7 @@ public class EventDTO {
         this.name = name;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

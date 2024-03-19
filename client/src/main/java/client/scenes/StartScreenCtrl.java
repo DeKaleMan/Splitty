@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import java.util.Date;
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
@@ -49,7 +50,7 @@ public class StartScreenCtrl {
         // retrieve from database based on recency (now null to have something)
         // the commented below is for testing
         noEventLabel.setVisible(false);
-        Event event1 = new Event("test event", "02-10-2005", "Admin", "This is just for testing");
+        Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
         Event event2 = null;
         Event event3 = null;
         setup(event1, eventButton1, eventLabel1);

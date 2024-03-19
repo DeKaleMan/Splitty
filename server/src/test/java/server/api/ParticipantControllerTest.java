@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +25,7 @@ public class ParticipantControllerTest {
         testEventRepository = new TestEventRepository();
         participantController = new ParticipantController(testParticipantRepository, testEventRepository);
 
-        event = new Event("Event1", "2021-06-01", "Yavor", "cool event");
+        event = new Event("Event1", new Date(10, 10, 2005), "Yavor", "cool event");
         event.setId(1);
         testEventRepository.save(event);
 
