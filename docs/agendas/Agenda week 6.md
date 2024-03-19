@@ -2,7 +2,7 @@
 
 ---
 
-~TBD minutes
+~55 minutes
 
 ---
 | Key | Value |
@@ -25,7 +25,7 @@
 ## Announcements by the TA (3 min)
 ## Presentation of current app to TA (5 min)
 - Highlight of the integration points between frontend and backend accomplished so far.
-## Talking points for this week (20 min)
+## Talking points for this week (35 min)
 - Any questions we have for the Duuk?
 - Exactly how far along are we? (60-70% done??)
 - What's done and what's still on the list?
