@@ -14,11 +14,11 @@ public class EventTest {
     @BeforeEach
     void setUp() {
         e = new Event("name"
-                , new Date(10, 10, 2005)
+                , new Date(2005, 10, 10)
                 , "owner"
                 , "food");
         e2 = new Event("name"
-                , new Date(10, 10, 2005)
+                , new Date(2005, 10, 10)
                 , "owner"
                 , "food");
     }
@@ -46,9 +46,9 @@ public class EventTest {
     @Test
     public void setDateTest(){
         Event eventT = new Event();
-        Date date = new Date(10, 10, 2005);
+        Date date = new Date(2005, 10, 10);
         eventT.setDate(date);
-        Date dateCheck = new Date(10, 10, 2005);
+        Date dateCheck = new Date(2005, 10, 10);
         assertEquals(date, dateCheck);
     }
 
@@ -83,7 +83,7 @@ public class EventTest {
     @Test
     public void toStringTest(){
         String s = "This is event with name:" +
-                " name that is created on Thu Apr 27 00:00:00 CET 1916" +
+                " name that is created on Fri Nov 10 00:00:00 CET 3905" +
                 " the person that created is: owner " +
                 "the description is: food";
         assertEquals(e.toString(), s);
