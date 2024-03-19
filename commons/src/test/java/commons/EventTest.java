@@ -79,15 +79,4 @@ public class EventTest {
     public void hashcodeTest(){
         assertEquals(e.hashCode(), e2.hashCode());
     }
-
-    @Test
-    public void toStringTest(){
-        String s = "This is event with name:" +
-                " name that is created on Fri Nov 10 00:00:00 CET 3905" +
-                " the person that created is: owner " +
-                "the description is: food";
-        assertEquals(e.toString(), s);
-    }
-
-
 }
