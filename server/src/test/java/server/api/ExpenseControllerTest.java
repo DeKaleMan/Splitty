@@ -10,24 +10,34 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 class ExpenseControllerTest {
     private ExpenseController sut;
     private TestExpenseRepository expenseRepository;
     private TestEventRepository eventRepository;
+    private TestParticipantRepository participantRepository;
 
-    Event event1 = new Event("test", "date", "owner", "desc");
-    Event event2 = new Event("test1", "date1", "owner1", "desc1");
+    Event event1 = new Event("test", new Date(10, 10, 2005), "owner", "desc");
+    Event event2 = new Event("test1", new Date(10, 10, 2005), "owner1", "desc1");
+
+    Participant p1 = new Participant("test", 10.0,"IBAN","BIC","accountHolder","email",event1);
+
+    Participant p2 = new Participant("test", 10.0,"IBAN","BIC","accountHolder","email2",event1);
+
+    Participant p3 = new Participant("test", 10.0,"IBAN","BIC","accountHolder","email3",event2);
 
     @BeforeEach
     void setup() {
         eventRepository = new TestEventRepository();
         expenseRepository = new TestExpenseRepository();
-        sut = new ExpenseController(expenseRepository, eventRepository);
+        participantRepository = new TestParticipantRepository();
+        sut = new ExpenseController(expenseRepository, eventRepository, participantRepository);
         event1.id = 1;
         event2.id = 2;
         eventRepository.events.add(event1);
         eventRepository.events.add(event2);
+        participantRepository.participants.add(p1);
     }
 
     @Test
@@ -73,7 +83,7 @@ class ExpenseControllerTest {
             sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
                 date, 0.0, "email"));
         assertEquals(new Expense(event1, "", Type.Drinks,
-                date, 0.0, "email"),
+                date, 0.0, p1),
             actual.getBody());
         assertEquals("save", expenseRepository.methods.getLast());
     }
@@ -82,11 +92,11 @@ class ExpenseControllerTest {
     void testGetByEventCode() {
         Date date = new Date();
         var e1 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, "email");
+            date, 0.0, p1);
         var e2 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, "testEmail");
+            date, 0.0, p1);
         var e3 = new Expense(event2, "", Type.Drinks,
-            date, 0.0, "email");
+            date, 0.0, p1);
         List<Expense> expected = List.of(e1, e2);
         expenseRepository.expenses.add(e1);
         expenseRepository.expenses.add(e2);
@@ -100,11 +110,11 @@ class ExpenseControllerTest {
     void testGetByEventCodeAndPayerEmail() {
         Date date = new Date();
         var e1 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, "email");
+            date, 0.0, p1);
         var e2 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, "testEmail");
+            date, 0.0, p2);
         var e3 = new Expense(event2, "", Type.Drinks,
-            date, 0.0, "email");
+            date, 0.0, p3);
         List<Expense> expected = List.of(e1);
         expenseRepository.expenses.add(e1);
         expenseRepository.expenses.add(e2);
@@ -117,12 +127,12 @@ class ExpenseControllerTest {
     @Test
     void testIncorrectDelete(){
         var actual = sut.deleteExpenseByEventIdAndExpenseId(0, 0);
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        assertEquals(NOT_FOUND, actual.getStatusCode());
         Date date = new Date();
         ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
                 date, 0.0, "email");
         var actual2 = sut.deleteExpenseByEventIdAndExpenseId(event1.id, -33);
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        assertEquals(NOT_FOUND, actual.getStatusCode());
         // TODO the one where you check whether the eventCode is incorrect and the expenseID is correct,
         // I just haven't figured out how to get the expenseID
 

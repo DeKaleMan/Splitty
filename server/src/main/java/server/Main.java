@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import server.database.EventRepository;
 
+import java.util.Date;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -47,7 +48,7 @@ public class Main {
 
     private void insertEvent(EventRepository eventDB){
         eventDB.save(new Event("jesse"
-                , "16 Maart"
+                , new Date(10, 10, 2005)
                 , "group 31"
                 , "this is a test is the database works"));
     }

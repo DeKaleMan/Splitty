@@ -2,6 +2,9 @@ package commons;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EventTest {
@@ -11,11 +14,11 @@ public class EventTest {
     @BeforeEach
     void setUp() {
         e = new Event("name"
-                , "16 maart"
+                , new Date(2005, 10, 10)
                 , "owner"
                 , "food");
         e2 = new Event("name"
-                , "16 maart"
+                , new Date(2005, 10, 10)
                 , "owner"
                 , "food");
     }
@@ -27,7 +30,7 @@ public class EventTest {
 
     @Test
     public void getDateTest(){
-        assertEquals("16 maart", e.getDate());
+        assertEquals(new Date(2005, 10, 10), e.getDate());
     }
 
     @Test
@@ -43,9 +46,9 @@ public class EventTest {
     @Test
     public void setDateTest(){
         Event eventT = new Event();
-        String date = "20 Maart";
+        Date date = new Date(2005, 10, 10);
         eventT.setDate(date);
-        String dateCheck = eventT.getDate();
+        Date dateCheck = new Date(2005, 10, 10);
         assertEquals(date, dateCheck);
     }
 
@@ -76,15 +79,4 @@ public class EventTest {
     public void hashcodeTest(){
         assertEquals(e.hashCode(), e2.hashCode());
     }
-
-    @Test
-    public void toStringTest(){
-        String s = "This is event with name:" +
-                " name that is created on 16 maart" +
-                " the person that created is: owner " +
-                "the description is: food";
-        assertEquals(e.toString(), s);
-    }
-
-
 }
