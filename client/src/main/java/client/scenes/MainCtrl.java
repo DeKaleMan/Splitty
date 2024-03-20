@@ -133,7 +133,7 @@ public class MainCtrl {
 
         showStartScreen();
         primaryStage.show();
-        SetLanguage setLanguage = new SetLanguage(startScreenCtrl);
+        SetLanguage setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl);
         setLanguage.changeTo(Language.nl.toString());
     }
 

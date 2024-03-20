@@ -1,12 +1,12 @@
 package client.utils;
 
 import client.scenes.MainCtrl;
+import client.scenes.SplittyOverviewCtrl;
 import client.scenes.StartScreenCtrl;
 
 import jakarta.ws.rs.client.ClientBuilder;
 
 import jakarta.ws.rs.core.Response;
-import org.apache.http.HttpStatus;
 
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -16,9 +16,11 @@ public class SetLanguage {
     private MainCtrl mainCtrl;
     private Language language;
     private StartScreenCtrl startScreenCtrl;
-    public SetLanguage(StartScreenCtrl startScreenCtrl){
+    private SplittyOverviewCtrl splittyOverviewCtrl;
+    public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
+        this.splittyOverviewCtrl = splittyOverviewCtrl;
         this.language = Language.en;
     }
 
@@ -27,8 +29,10 @@ public class SetLanguage {
             return;
         }
         setMainScreen(lang);
+        setSpittyoverview(lang);
     }
 
+    //TODO probably read the values from a file but this way it is already possible to do it in every language
 
     public void setMainScreen(String lang){
         startScreenCtrl.setCreateEventText(translate("Create event", "en", lang));
@@ -38,6 +42,19 @@ public class SetLanguage {
         startScreenCtrl.setJoinButtonText(translate("Join", "en", lang));
         startScreenCtrl.setCreateButtonText(translate("Create", "en", lang));
         startScreenCtrl.setNoEventLabel(translate("You do not have any events to list still", "en", lang));
+    }
+    public void setSpittyoverview(String lang){
+        splittyOverviewCtrl.setExpensesText(translate("Expenses", "en", lang));
+        splittyOverviewCtrl.setParticipants(translate("Participants", "en", lang));
+        splittyOverviewCtrl.setBackButton(translate("back", "en", lang));
+        splittyOverviewCtrl.setSettleDebtsButton(translate("Settle debts", "en", lang));
+        splittyOverviewCtrl.setStatisticsButton(translate("Statistics", "en", lang));
+        splittyOverviewCtrl.setAddExpenseButton(translate("Add expense", "en", lang));
+        splittyOverviewCtrl.setEditParticipant(translate("Edit", "en", lang));
+        splittyOverviewCtrl.setTab2(translate("Untitled Tab 2", "en", lang));
+        splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
+        splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
+        splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
     }
 
 
