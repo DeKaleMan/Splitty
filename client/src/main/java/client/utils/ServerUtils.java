@@ -355,7 +355,7 @@ public class ServerUtils {
         throw new IllegalStateException();
     }
 
-    /**
+    /** This is the method to register for updates
      * the StompFrameHandler() needs two methods. the getPayloadType
      * which type is the message we receive (in this case an expense)
      * The handleFrame you can cast Object payload to an expense since
@@ -376,5 +376,10 @@ public class ServerUtils {
             }
         });
     }
+
+    public void send(String destination, Object o){
+        session.send(destination, o);
+    }
+
 
 }
