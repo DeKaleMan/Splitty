@@ -25,10 +25,14 @@ public class StartScreenCtrl {
     private TextField joinEventTextField;
 
     @FXML
-    private Button AdminLogin;
-
+    private Button adminLogin;
     @FXML
-    private Button ShowAllEvents;
+    private Button showAllEventsButton;
+    @FXML
+    private Button join;
+    @FXML
+    private Button create;
+
 
     // the events
     @FXML
@@ -133,5 +137,21 @@ public class StartScreenCtrl {
 
     public void setJoinEventText(String text) {
         joinEventText.setText(text);
+    }
+
+    public void setAdminLogin(String text) {
+        adminLogin.setText(text);
+    }
+    public void setShowAllEvents(String text) {
+        showAllEventsButton.setText(text);
+    }
+    public void setJoinButtonText(String text) {
+        join.setText(text);
+    }
+    public void setCreateButtonText(String text) {
+        create.setText(text);
+    }
+    public void setNoEventLabel(String text){
+        noEventLabel.setText(text);
     }
 }

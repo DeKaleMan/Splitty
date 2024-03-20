@@ -10,6 +10,6 @@ class LanguageControllerTest {
 
     @Test
     public void testCheckFile(){
-        System.out.println(l.translate("Admin overview", "en", "nl").getBody());
+        System.out.println(l.translate("Admin overview", "en", "it").getBody());
     }
 }

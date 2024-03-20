@@ -3,21 +3,11 @@ package client.utils;
 import client.scenes.MainCtrl;
 import client.scenes.StartScreenCtrl;
 
-import commons.Quote;
-import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.core.GenericType;
+
 import jakarta.ws.rs.core.Response;
+import org.apache.http.HttpStatus;
 
-import org.glassfish.jersey.client.ClientConfig;
-import org.json.JSONObject;
-
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -29,15 +19,25 @@ public class SetLanguage {
     public SetLanguage(StartScreenCtrl startScreenCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
-        this.language = Language.ENGLISH;
+        this.language = Language.en;
+    }
+
+    public void changeTo(String lang){
+        if (lang.equals("en")){
+            return;
+        }
+        setMainScreen(lang);
     }
 
 
-    public void setMainScreen(){
-        startScreenCtrl.setCreateEventText(translate("Create event", "en", "nl"));
-        startScreenCtrl.setJoinEventText(translate("Join event", "en", "nl"));
-        startScreenCtrl.setAdminLoginText(translate("Admin login", "en", "nl"));
-        startScreenCtrl.set
+    public void setMainScreen(String lang){
+        startScreenCtrl.setCreateEventText(translate("Create event", "en", lang));
+        startScreenCtrl.setJoinEventText(translate("Join event", "en", lang));
+        startScreenCtrl.setAdminLogin(translate("Admin login", "en", lang));
+        startScreenCtrl.setShowAllEvents(translate("Show all events", "en", lang));
+        startScreenCtrl.setJoinButtonText(translate("Join", "en", lang));
+        startScreenCtrl.setCreateButtonText(translate("Create", "en", lang));
+        startScreenCtrl.setNoEventLabel(translate("You do not have any events to list still", "en", lang));
     }
 
 
@@ -53,7 +53,13 @@ public class SetLanguage {
                 .queryParam("targetLang", targetLang)
                 .request(APPLICATION_JSON)
                 .get();
-        return response.readEntity(String.class);
+        if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+            response.close();
+            throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
+        }
+        String res = response.readEntity(String.class);
+
+        return res;
 
     }
 

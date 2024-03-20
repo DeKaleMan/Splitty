@@ -1,7 +1,6 @@
 package server.api;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.ws.rs.client.Client;
@@ -26,21 +25,41 @@ public class LanguageController {
 
     private final IOUtil io;
     private final String filepath;
+    private final String basepath;
 
     @Autowired
     public LanguageController(IOUtil ioUtil) {
         this.io = ioUtil;
-        this.filepath = getClass().getClassLoader().getResource("LanguageDutch.json").getFile();
-
+        this.filepath = getClass().getClassLoader().getResource("Languages/nl.json").getFile();
+        this.basepath = getClass().getClassLoader().getResource("Languages/").getFile();
     }
 
     @GetMapping(path = {"/", ""})
     public ResponseEntity<String> translate(@RequestParam String query,
                                             @RequestParam String sourceLang, @RequestParam String targetLang) {
+        File newfile = new File(basepath + targetLang + ".json");
+        //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
+
+        if(!newfile.exists()){
+            try {
+                if(newfile.createNewFile()) {
+                    try (FileWriter fileWriter = new FileWriter(newfile)) {
+                        // Write an empty JSON object to the file
+                        fileWriter.write("{}");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+               // mynewFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
 
 
         // Read JSON file
-        JsonObject object = readJsonFile();
+        JsonObject object = readJsonFile(newfile);
 
         // Check if translation exists in JSON
         String translation = getTranslationFromJson(query, object);
@@ -53,13 +72,13 @@ public class LanguageController {
 
         // Write translation to JSON file
         object.addProperty(query, translation);
-        writeJsonFile(object);
+        writeJsonFile(object, newfile);
 
         return ResponseEntity.ok(translation);
     }
 
-    private JsonObject readJsonFile() {
-        try (Reader reader = new FileReader(filepath)) {
+    private JsonObject readJsonFile(File file) {
+        try (Reader reader = new FileReader(file.getPath())) {
             return JsonParser.parseReader(reader).getAsJsonObject();
         } catch (IOException e) {
             throw new RuntimeException("Error reading JSON file", e);
@@ -102,8 +121,8 @@ public class LanguageController {
         }
     }
 
-    private void writeJsonFile(JsonObject object) {
-        try (FileWriter fileWriter = new FileWriter(filepath)) {
+    private void writeJsonFile(JsonObject object, File file) {
+        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
             Gson gson = new Gson();
             gson.toJson(object, fileWriter);
             System.out.println("JSON file updated successfully.");
