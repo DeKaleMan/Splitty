@@ -20,9 +20,12 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 
 import commons.*;
@@ -35,11 +38,27 @@ import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+/**
+ * The type Server utils.
+ */
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
+    /**
+     * Gets quotes the hard way.
+     *
+     * @throws IOException        the io exception
+     * @throws URISyntaxException the uri syntax exception
+     */
     public void getQuotesTheHardWay() throws IOException, URISyntaxException {
         var url = new URI("http://localhost:8080/api/quotes").toURL();
         var is = url.openConnection().getInputStream();
@@ -50,6 +69,11 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Gets quotes.
+     *
+     * @return the quotes
+     */
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
@@ -59,6 +83,12 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Add quote quote.
+     *
+     * @param quote the quote
+     * @return the quote
+     */
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
@@ -67,6 +97,12 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
+    /**
+     * Gets expense.
+     *
+     * @param eventCode the event code
+     * @return the expense
+     */
     public List<Expense> getExpense(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/expenses")
@@ -77,6 +113,13 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Gets expense by email.
+     *
+     * @param eventCode the event code
+     * @param email     the email
+     * @return the expense by email
+     */
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/expenses/{payerEmail}")
@@ -87,6 +130,13 @@ public class ServerUtils {
                 .get(new GenericType<List<Expense>>() {
                 });
     }
+
+    /**
+     * Add expense expense.
+     *
+     * @param expenseDTO the expense dto
+     * @return the expense
+     */
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/expenses")
@@ -95,6 +145,12 @@ public class ServerUtils {
                 .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
 
+    /**
+     * Gets debt by event code.
+     *
+     * @param eventCode the event code
+     * @return the debt by event code
+     */
     public List<Debt> getDebtByEventCode(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/debts/{eventId}")
@@ -105,6 +161,13 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Gets debt by participant.
+     *
+     * @param eventCode the event code
+     * @param email     the email
+     * @return the debt by participant
+     */
     public List<Debt> getDebtByParticipant(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/debts/{eventId}/participant/{email}")
@@ -116,6 +179,13 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Gets debt by expense.
+     *
+     * @param eventCode the event code
+     * @param expenseId the expense id
+     * @return the debt by expense
+     */
     public List<Debt> getDebtByExpense(int eventCode, int expenseId) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/debts/{eventId}/expense/{expenseId}")
@@ -127,6 +197,12 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Save debt debt.
+     *
+     * @param debtDTO the debt dto
+     * @return the debt
+     */
     public Debt saveDebt(DebtDTO debtDTO) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/debts")
@@ -136,6 +212,11 @@ public class ServerUtils {
     }
 
 
+    /**
+     * Delete expense.
+     *
+     * @param expense the expense
+     */
     public void deleteExpense(Expense expense) {
         ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
 
@@ -149,7 +230,12 @@ public class ServerUtils {
     }
 
 
-
+    /**
+     * Gets participants.
+     *
+     * @param eventCode the event code
+     * @return the participants
+     */
     public List<Participant> getParticipants(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/participant")
@@ -159,6 +245,12 @@ public class ServerUtils {
                 .get(new GenericType<List<Participant>>() {
                 });
     }
+
+    /**
+     * Gets all events.
+     *
+     * @return the all events
+     */
     public List<Event> getAllEvents() {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/event/all")
@@ -177,6 +269,12 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Gets event by id.
+     *
+     * @param id the id
+     * @return the event by id
+     */
     public Event getEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/event?id=" + id)
@@ -194,6 +292,12 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Delete event by id event.
+     *
+     * @param id the id
+     * @return the event
+     */
     public Event deleteEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/event")
@@ -229,4 +333,48 @@ public class ServerUtils {
         }
 
     }
+
+    private StompSession session = connect("ws://localhost:8080/websocket"); // stomp session which means you are connected to your websocket
+
+    /**
+     * This method creates the websocket connection
+     * @param url this is the url you want to connect to
+     * @return StompSession
+     */
+    private StompSession connect(String url){
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try{
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e){
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
+     * the StompFrameHandler() needs two methods. the getPayloadType
+     * which type is the message we receive (in this case an expense)
+     * The handleFrame you can cast Object payload to an expense since
+     * you have the MappingJackson2MessageConverter() in the connect method
+     * @param destination this is for example /topic/expense
+     * @param expenses
+     */
+    public void registerForExpenseWS(String destination, Consumer<Expense> expenses){
+        session.subscribe(destination, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Expense.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                expenses.accept((Expense) payload);
+            }
+        });
+    }
+
 }
