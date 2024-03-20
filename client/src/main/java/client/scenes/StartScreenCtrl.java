@@ -24,6 +24,12 @@ public class StartScreenCtrl {
     @FXML
     private TextField joinEventTextField;
 
+    @FXML
+    private Button AdminLogin;
+
+    @FXML
+    private Button ShowAllEvents;
+
     // the events
     @FXML
     private Button eventButton1;

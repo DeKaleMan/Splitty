@@ -3,20 +3,26 @@ package client.utils;
 import client.scenes.MainCtrl;
 import client.scenes.StartScreenCtrl;
 
+import commons.Quote;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 
+import org.glassfish.jersey.client.ClientConfig;
 import org.json.JSONObject;
 
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
-public class SetLanguage {
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-    private String url = "https://api.mymemory.translated.net/get?q={toTranslate}&langpair={language})"; //language like: en|it
+public class SetLanguage {
+    private static final String SERVER = "http://localhost:8080/";
     private MainCtrl mainCtrl;
     private Language language;
     private StartScreenCtrl startScreenCtrl;
@@ -28,44 +34,29 @@ public class SetLanguage {
 
 
     public void setMainScreen(){
-        startScreenCtrl.setCreateEventText("Maak evenement");
-        startScreenCtrl.setJoinEventText("Treed toe tot evenement");
+        startScreenCtrl.setCreateEventText(translate("Create event", "en", "nl"));
+        startScreenCtrl.setJoinEventText(translate("Join event", "en", "nl"));
+        startScreenCtrl.setAdminLoginText(translate("Admin login", "en", "nl"));
+        startScreenCtrl.set
     }
 
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 
+
     public static String translate(String query, String sourceLang, String targetLang) {
-        // Construct the URL with mandatory parameters
-        String encodedQuery = null;
-        try {
-            encodedQuery = URLEncoder.encode(query, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("Error encoding query: " + e.getMessage());
-            return encodedQuery;
-        }
-        String langpair = sourceLang + "%7C" + targetLang;
-        String apiUrl = "https://api.mymemory.translated.net/get";
-        String url = String.format("%s?q=%s&langpair=%s", apiUrl, encodedQuery, langpair);
-
-        // Create a JAX-RS client
-        Client client = ClientBuilder.newClient();
-
-        // Make a GET request to the MyMemory API
-        Response response = client.target(url)
-                .request()
+        Response response = ClientBuilder.newClient()
+                .target(SERVER)
+                .path("api/translate")
+                .queryParam("query", query)
+                .queryParam("sourceLang", sourceLang)
+                .queryParam("targetLang", targetLang)
+                .request(APPLICATION_JSON)
                 .get();
-        // Retrieve and print the response body
-        String responseBody = response.readEntity(String.class);
-            // Parse the JSON response
-        JSONObject jsonResponse1 = new JSONObject(responseBody);
-        var responseData = jsonResponse1.get("responseData");
-        Scanner scanner = new Scanner(responseData.toString());
-        scanner.useDelimiter(",");
-        String translated = scanner.next().substring("{_translatedText_:".length());
-        translated = translated.substring(1, translated.length() -1);
-        return translated;
+        return response.readEntity(String.class);
+
     }
+
 
 
 }
