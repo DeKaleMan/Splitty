@@ -2,9 +2,11 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import commons.Type;
 
+import commons.dto.ExpenseDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +23,8 @@ public class AddExpenseCtrl implements Initializable {
     private final int eventCode = 1;
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
+
+    private ObservableList<Expense> data;
 
     @FXML
     public Label titleLabel;
@@ -48,10 +52,11 @@ public class AddExpenseCtrl implements Initializable {
     private List<Participant> participant;
 
     @Inject
-    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl) {
+    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl, ObservableList<Expense> data) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.splittyCtrl = splittyCtrl;
+        this.data=data;
     }
 
     @FXML
@@ -103,6 +108,14 @@ public class AddExpenseCtrl implements Initializable {
             }
         });
         this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
+
+        try {
+            serverUtils.registerForExpenseWS("/topic/addExpense", q -> {
+                data.add(q);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -124,7 +137,7 @@ public class AddExpenseCtrl implements Initializable {
      * expense to the list but that might not be necessary when the database works
      */
     @FXML
-    public void addExpense() {
+    public void addExpensee() {
         //collect information
         List<String> participants = getSelected();//get all the names of the participants
 
