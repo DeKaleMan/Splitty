@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    public int id;
 
 
     @Column(nullable = false)
