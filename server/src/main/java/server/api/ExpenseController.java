@@ -28,10 +28,10 @@ public class ExpenseController {
         this.participantRepo = participantRepo;
     }
 
-    @MessageMapping("/expenseByEvent") // -> /app/expenseByEvent
-    @SendTo("/topic/expenseByEvent") // when we are done processing it we send it to the path provided
-    public ResponseEntity<List<Expense>> expenseByEventWS(@RequestParam int eventCode){
-        ResponseEntity<List<Expense>> expPerEvent = findByEventCode(eventCode);
+    @MessageMapping("/addExpense") // -> /app/expenseByEvent
+    @SendTo("/topic/addExpense") // when we are done processing it we send it to the path provided
+    public ResponseEntity<Expense> expenseByEventWS(@RequestBody ExpenseDTO expenseDTO){
+        ResponseEntity<Expense> expPerEvent = saveExpense(expenseDTO);
         return expPerEvent;
     }
 
