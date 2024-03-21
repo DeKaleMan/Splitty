@@ -12,7 +12,6 @@ import server.database.EventRepository;
 import server.database.ParticipantRepository;
 import server.database.PaymentRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
