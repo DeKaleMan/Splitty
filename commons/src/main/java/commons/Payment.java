@@ -36,6 +36,7 @@ public class Payment {
 
 
 
+
     public Payment(Participant payer, Participant payee, double amount, boolean paid) {
         this.payer = payer;
         this.payee = payee;
