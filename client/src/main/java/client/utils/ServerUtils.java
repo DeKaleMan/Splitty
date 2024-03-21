@@ -32,6 +32,7 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -436,12 +437,12 @@ public class ServerUtils {
     // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
     public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants/{uuid}/{eventId}")
-                .resolveTemplate("uuid", oldUuid)
-                .resolveTemplate("eventId", participant.getEventId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(Entity.entity(participant, APPLICATION_JSON));
+            .target(SERVER).path("api/participants/{uuid}/{eventId}")
+            .resolveTemplate("uuid", oldUuid)
+            .resolveTemplate("eventId", participant.getEventId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .put(Entity.entity(participant, APPLICATION_JSON));
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Participant updatedParticipant = response.readEntity(new GenericType<>() {
@@ -450,8 +451,44 @@ public class ServerUtils {
             return updatedParticipant;
         } else {
             response.close();
-            throw new RuntimeException("Failed to update participant. Status code: " + response.getStatus());
+            throw new RuntimeException(
+                "Failed to update participant. Status code: " + response.getStatus());
         }
+    }
+
+    public List<Payment> getPaymentsOfEvent(int eventId){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/payments/{id}")
+            .resolveTemplate("id", eventId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Payment>>(){});
+    }
+
+    public Payment savePayment(PaymentDTO paymentDTO){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/payments")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
+    }
+
+    public Payment updatePayment(PaymentDTO paymentDTO, int paymentId){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/payments/{id}")
+            .resolveTemplate("id", paymentId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .put(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
+    }
+
+    public Payment deletePaymentsOfEvent(int eventId){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/payments/{id}")
+            .resolveTemplate("id", eventId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete(Payment.class);
     }
 
 }
