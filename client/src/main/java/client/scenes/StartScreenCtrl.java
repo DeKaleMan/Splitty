@@ -1,15 +1,18 @@
 package client.scenes;
 
+import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
@@ -33,6 +36,8 @@ public class StartScreenCtrl {
     @FXML
     private Button create;
 
+    @FXML
+    private ComboBox languageSelect;
 
     // the events
     @FXML
@@ -153,5 +158,31 @@ public class StartScreenCtrl {
     }
     public void setNoEventLabel(String text){
         noEventLabel.setText(text);
+    }
+
+
+    public void setLanguageSelect(String language){
+
+        ObservableList<String> languages = FXCollections.observableArrayList();
+
+        for(Language l: Language.values()){
+            languages.add(l.toString());
+        }
+        languageSelect.setItems(languages);
+        languageSelect.setValue(language);
+    }
+
+    @FXML
+    public void changeLanguage(){
+        try{
+            if(languageSelect.getSelectionModel().getSelectedItem() != null){
+                String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
+                Language toLang =  Language.valueOf(selected);
+                mainCtrl.changeLanguage(toLang);
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
     }
 }

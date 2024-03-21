@@ -25,9 +25,9 @@ public class SetLanguage {
     }
 
     public void changeTo(String lang){
-        if (lang.equals("en")){
-            return;
-        }
+//        if (lang.equals("en")){
+//            return;
+//        }
         setMainScreen(lang);
         setSpittyoverview(lang);
     }

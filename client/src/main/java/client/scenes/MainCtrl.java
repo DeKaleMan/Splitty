@@ -29,7 +29,9 @@ import javafx.util.Pair;
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
-    private Language language = Language.en;
+    protected Language language = Language.en;
+
+    private SetLanguage setLanguage;
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -133,8 +135,13 @@ public class MainCtrl {
 
         showStartScreen();
         primaryStage.show();
-        SetLanguage setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl);
-        setLanguage.changeTo(Language.nl.toString());
+
+        this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl);
+    }
+
+    public void changeLanguage(Language toLang){
+        this.language = toLang;
+        setLanguage.changeTo(toLang.toString());
     }
 
     public void showOverview() {
@@ -186,8 +193,11 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
+        startScreenCtrl.setLanguageSelect(language.toString());
         startScreenCtrl.initialize();
+
         primaryStage.setScene(startScreen);
+
     }
 
     /**
