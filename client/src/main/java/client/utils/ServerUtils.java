@@ -496,6 +496,7 @@ public class ServerUtils {
     }
 
     public List<Payment> generatePaymentsForEvent(int eventCode) {
+        deletePaymentsOfEvent(eventCode);
         List<Participant> participants = getParticipants(eventCode);
         Stack<Pair<String, Double>> banks = new Stack<>();
         Stack<Pair<String, Double>> rest = new Stack<>();
