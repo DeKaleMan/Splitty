@@ -11,14 +11,17 @@ public class PaymentDTO {
 
     private double amount;
 
+    private boolean paid;
+
     public PaymentDTO() {
     }
 
-    public PaymentDTO(String payerUuid, String payeeUuid, int eventCode, double amount) {
+    public PaymentDTO(String payerUuid, String payeeUuid, int eventCode, double amount, boolean paid) {
         this.payerUuid = payerUuid;
         this.payeeUuid = payeeUuid;
         this.eventCode = eventCode;
         this.amount = amount;
+        this.paid = paid;
     }
 
     public String getPayerUuid() {
@@ -35,5 +38,9 @@ public class PaymentDTO {
 
     public int getEventCode() {
         return eventCode;
+    }
+
+    public boolean isPaid() {
+        return paid;
     }
 }
