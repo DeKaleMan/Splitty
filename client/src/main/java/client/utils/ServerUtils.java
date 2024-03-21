@@ -23,10 +23,9 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-
+import java.util.*;
 
 import commons.*;
 import commons.dto.DebtDTO;
@@ -35,6 +34,7 @@ import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
 
+import javafx.util.Pair;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -78,11 +78,11 @@ public class ServerUtils {
      */
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {
-                });
+            .target(SERVER).path("api/quotes") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<List<Quote>>() {
+            });
     }
 
     /**
@@ -93,10 +93,10 @@ public class ServerUtils {
      */
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+            .target(SERVER).path("api/quotes") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
     /**
@@ -107,12 +107,12 @@ public class ServerUtils {
      */
     public List<Expense> getExpense(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/expenses")
-                .queryParam("eventCode", eventCode)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Expense>>() {
-                });
+            .target(SERVER).path("api/expenses")
+            .queryParam("eventCode", eventCode)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Expense>>() {
+            });
     }
 
     /**
@@ -124,13 +124,13 @@ public class ServerUtils {
      */
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/expenses/{payerEmail}")
-                .resolveTemplate("payerEmail", email)
-                .queryParam("eventCode", eventCode)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Expense>>() {
-                });
+            .target(SERVER).path("api/expenses/{payerEmail}")
+            .resolveTemplate("payerEmail", email)
+            .queryParam("eventCode", eventCode)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Expense>>() {
+            });
     }
 
 
@@ -142,10 +142,10 @@ public class ServerUtils {
      */
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/expenses")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+            .target(SERVER).path("api/expenses")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
 
     /**
@@ -156,12 +156,12 @@ public class ServerUtils {
      */
     public List<Debt> getDebtByEventCode(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts/{eventId}")
-                .resolveTemplate("eventId", eventCode)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Debt>>() {
-                });
+            .target(SERVER).path("api/debts/{eventId}")
+            .resolveTemplate("eventId", eventCode)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Debt>>() {
+            });
     }
 
     /**
@@ -173,13 +173,13 @@ public class ServerUtils {
      */
     public List<Debt> getDebtByParticipant(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts/{eventId}/participant/{email}")
-                .resolveTemplate("eventId", eventCode)
-                .resolveTemplate("email", email)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Debt>>() {
-                });
+            .target(SERVER).path("api/debts/{eventId}/participant/{email}")
+            .resolveTemplate("eventId", eventCode)
+            .resolveTemplate("email", email)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Debt>>() {
+            });
     }
 
     /**
@@ -191,13 +191,13 @@ public class ServerUtils {
      */
     public List<Debt> getDebtByExpense(int eventCode, int expenseId) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts/{eventId}/expense/{expenseId}")
-                .resolveTemplate("eventId", eventCode)
-                .resolveTemplate("expenseId", expenseId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Debt>>() {
-                });
+            .target(SERVER).path("api/debts/{eventId}/expense/{expenseId}")
+            .resolveTemplate("eventId", eventCode)
+            .resolveTemplate("expenseId", expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Debt>>() {
+            });
     }
 
     /**
@@ -208,10 +208,10 @@ public class ServerUtils {
      */
     public Debt saveDebt(DebtDTO debtDTO) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/debts")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
+            .target(SERVER).path("api/debts")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
     }
 
 
@@ -224,12 +224,12 @@ public class ServerUtils {
         ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
 
         ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER)
-                .path("api/expenses")
-                .queryParam("eventID", expense.getEvent().id)
-                .queryParam("expenseID", expense.getExpenseId())
-                .request(APPLICATION_JSON)
-                .delete();
+            .target(SERVER)
+            .path("api/expenses")
+            .queryParam("eventID", expense.getEvent().id)
+            .queryParam("expenseID", expense.getExpenseId())
+            .request(APPLICATION_JSON)
+            .delete();
     }
 
 
@@ -260,10 +260,10 @@ public class ServerUtils {
 
     public List<Event> getAllEvents() {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event/all")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
+            .target(SERVER).path("api/event/all")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             List<Event> events = response.readEntity(new GenericType<>() {
@@ -273,7 +273,8 @@ public class ServerUtils {
         } else {
             // Handle error response
             response.close();
-            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+            throw new RuntimeException(
+                "Failed to retrieve events. Status code: " + response.getStatus());
         }
     }
 
@@ -285,10 +286,10 @@ public class ServerUtils {
      */
     public Event getEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event?id=" + id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
+            .target(SERVER).path("api/event?id=" + id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Event event = response.readEntity(new GenericType<>() {
@@ -297,7 +298,8 @@ public class ServerUtils {
             return event;
         } else {
             response.close();
-            throw new RuntimeException("Failed to retrieve event. Status code: " + response.getStatus());
+            throw new RuntimeException(
+                "Failed to retrieve event. Status code: " + response.getStatus());
         }
     }
 
@@ -309,11 +311,11 @@ public class ServerUtils {
      */
     public Event deleteEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event")
-                .queryParam("id", id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
+            .target(SERVER).path("api/event")
+            .queryParam("id", id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Event event = response.readEntity(new GenericType<>() {
@@ -322,16 +324,17 @@ public class ServerUtils {
             return event;
         } else {
             response.close();
-            throw new RuntimeException("Failed to delete event. Status code: " + response.getStatus());
+            throw new RuntimeException(
+                "Failed to delete event. Status code: " + response.getStatus());
         }
     }
 
     public Event addEvent(Event newEvent) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(newEvent, APPLICATION_JSON));
+            .target(SERVER).path("api/event")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(newEvent, APPLICATION_JSON));
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Event event = response.readEntity(new GenericType<>() {
@@ -462,10 +465,11 @@ public class ServerUtils {
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(new GenericType<List<Payment>>(){});
+            .get(new GenericType<List<Payment>>() {
+            });
     }
 
-    public Payment savePayment(PaymentDTO paymentDTO){
+    public Payment savePayment(PaymentDTO paymentDTO) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/payments")
             .request(APPLICATION_JSON)
@@ -473,7 +477,7 @@ public class ServerUtils {
             .post(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
     }
 
-    public Payment updatePayment(PaymentDTO paymentDTO, int paymentId){
+    public Payment updatePayment(PaymentDTO paymentDTO, int paymentId) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/payments/{id}")
             .resolveTemplate("id", paymentId)
@@ -482,7 +486,7 @@ public class ServerUtils {
             .put(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
     }
 
-    public Payment deletePaymentsOfEvent(int eventId){
+    public Payment deletePaymentsOfEvent(int eventId) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
@@ -490,5 +494,47 @@ public class ServerUtils {
             .accept(APPLICATION_JSON)
             .delete(Payment.class);
     }
+    
+    public List<Payment> generatePaymentsForEvent(int eventCode) {
+        List<Participant> participants = getParticipants(eventCode);
+        Stack<Pair<String, Double>> banks = new Stack<>();
+        Stack<Pair<String, Double>> rest = new Stack<>();
+        List<PaymentDTO> payments = new ArrayList<>();
+        for (Participant p : participants) {
+            if (p.getBalance() > 0) banks.add(new Pair<>(p.getEmail(), p.getBalance()));
+            else if (p.getBalance() < 0) rest.add(new Pair<>(p.getEmail(), p.getBalance()));
+        }
+        while (!rest.isEmpty() && !banks.isEmpty()) {
+            Pair<String, Double> payee = banks.pop();
+            Pair<String, Double> payer = rest.pop();
+            if (compareDouble(payee.getValue(), -payer.getValue(), 0.001) > 0) {
+                banks.push(new Pair<>(payee.getKey(), payee.getValue() + payer.getValue()));
+                payments.add(
+                    new PaymentDTO(payer.getKey(), payee.getKey(), eventCode, -payer.getValue(),
+                        false));
+            } else if (compareDouble(payee.getValue(), -payer.getValue(), 0.001) == 0) {
+                payments.add(
+                    new PaymentDTO(payer.getKey(), payee.getKey(), eventCode, -payer.getValue(),
+                        false));
+            } else {
+                rest.push(new Pair<>(payer.getKey(), payer.getValue() + payee.getValue()));
+                payments.add(
+                    new PaymentDTO(payer.getKey(), payee.getKey(), eventCode, payee.getValue(),
+                        false));
+            }
+        }
+        if (!rest.isEmpty() || !banks.isEmpty())
+            throw new RuntimeException("Balances did not add up to 0");
+        List<Payment> responseList = new ArrayList<>();
+        for (PaymentDTO p : payments) {
+            responseList.add(savePayment(p));
+        }
+        return responseList;
+    }
 
+    private int compareDouble(double d1, double d2, double precision) {
+        if (Math.abs(d1 - d2) < precision) return 0;
+        if (d1 < d2) return -1;
+        return 1;
+    }
 }
