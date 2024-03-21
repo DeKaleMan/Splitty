@@ -137,7 +137,7 @@ public class AddExpenseCtrl implements Initializable {
      * expense to the list but that might not be necessary when the database works
      */
     @FXML
-    public void addExpensee() {
+    public void addExpense() {
         //collect information
         List<String> participants = getSelected();//get all the names of the participants
 
