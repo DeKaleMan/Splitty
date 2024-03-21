@@ -1,5 +1,6 @@
 package client.utils;
 
+import client.scenes.AddExpenseCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.SplittyOverviewCtrl;
 import client.scenes.StartScreenCtrl;
@@ -17,11 +18,14 @@ public class SetLanguage {
     private Language language;
     private StartScreenCtrl startScreenCtrl;
     private SplittyOverviewCtrl splittyOverviewCtrl;
-    public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl){
+
+    private AddExpenseCtrl addExpenseCtrl;
+    public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl, AddExpenseCtrl addExpenseCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
-        this.language = Language.en;
+        this.addExpenseCtrl = addExpenseCtrl;
+        //this.language = Language.en;
     }
 
     public void changeTo(String lang){
@@ -30,6 +34,7 @@ public class SetLanguage {
 //        }
         setMainScreen(lang);
         setSpittyoverview(lang);
+        setAddExpense(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -55,6 +60,22 @@ public class SetLanguage {
         splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
+    }
+
+    public void setAddExpense(String lang){
+        addExpenseCtrl.setAddExpenseText(translate("Add/Edit Expense", "en", lang));
+        addExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
+        addExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
+        addExpenseCtrl.setWhen(translate("When?", "en", lang));
+        addExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
+        addExpenseCtrl.setDescription(translate("Description", "en", lang));
+        addExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
+        addExpenseCtrl.setBack(translate("Back", "en", lang));
+        addExpenseCtrl.setAdd(translate("Add expense", "en", lang));
+        addExpenseCtrl.setAbort(translate("Cancel", "en", lang));
+        addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
+        addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
+        addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
     }
 
 

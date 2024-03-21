@@ -11,28 +11,28 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="376.0" layoutY="31.0" text="Add/Edit Expense">
+      <Label fx:id="addExpenseText" layoutX="376.0" layoutY="31.0" text="Add/Edit Expense">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="34.0" layoutY="84.0" text="Who paid?" />
-      <Label layoutX="340.0" layoutY="84.0" text="Description" />
-      <Label layoutX="34.0" layoutY="113.0" text="How much?" />
-      <Label layoutX="34.0" layoutY="141.0" text="When?" />
+      <Label fx:id="whoPaid" layoutX="34.0" layoutY="84.0" text="Who paid?" />
+      <Label fx:id="description" layoutX="340.0" layoutY="84.0" text="Description" />
+      <Label fx:id="howMuch" layoutX="34.0" layoutY="113.0" text="How much?" />
+      <Label fx:id="when" layoutX="34.0" layoutY="141.0" text="When?" />
       <Label fx:id="error" />
-      <Label layoutX="36.0" layoutY="173.0" text="How to Split?" />
-      <Label layoutX="340.0" layoutY="200.0" text="Expense Type" />
-      <Button layoutX="376.0" layoutY="310.0" mnemonicParsing="false" onAction="#back" text="Abort" />
-      <Button layoutX="451.0" layoutY="310.0" mnemonicParsing="false" onAction="#addExpense" text="Add" />
-      <Button layoutX="30.0" layoutY="336.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Label fx:id="howToSplit" layoutX="36.0" layoutY="173.0" text="How to Split?" />
+      <Label fx:id="expenseTypetext" layoutX="340.0" layoutY="200.0" text="Expense Type" />
+      <Button fx:id="abort" layoutX="376.0" layoutY="310.0" mnemonicParsing="false" onAction="#back" text="Abort" />
+      <Button fx:id="add" layoutX="451.0" layoutY="310.0" mnemonicParsing="false" onAction="#addExpense" text="Add" />
+      <Button fx:id="back" layoutX="30.0" layoutY="336.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <ComboBox fx:id="personComboBox" layoutX="156.0" layoutY="80.0" prefWidth="150.0" promptText="Select who paid" />
       <DatePicker fx:id="dateSelect" layoutX="156.0" layoutY="137.0" prefHeight="25.0" prefWidth="150.0" promptText="xx-xx-xxxx" />
       <ComboBox fx:id="category" accessibleRole="CHECK_MENU_ITEM" layoutX="436.0" layoutY="196.0" prefWidth="150.0" promptText="Select category" />
       <TextField fx:id="amount" layoutX="156.0" layoutY="109.0" prefHeight="25.0" prefWidth="150.0" />
       <TextArea fx:id="whatFor" layoutX="351.0" layoutY="108.0" prefHeight="82.0" prefWidth="200.0" />
       <ListView fx:id="splitList" layoutX="170.0" layoutY="200.0" prefHeight="131.0" prefWidth="122.0" />
-      <Button layoutX="170.0" layoutY="169.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="122.0" text="Select all" />
+      <Button fx:id="selectAll" layoutX="170.0" layoutY="169.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="122.0" text="Select all" />
 
    </children>
 </AnchorPane>

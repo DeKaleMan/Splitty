@@ -20,5 +20,16 @@
   "Untitled Tab 2": "Untitled Tab 2",
   "Delete expense": "Delete expense",
   "Send invites": "Send invites",
-  "All": "All"
+  "All": "All",
+  "Add/Edit Expense": "Add/Edit Expense",
+  "Who paid?": "Who paid?",
+  "How much?": "How much?",
+  "When?": "When?",
+  "How to split?": "How to split?",
+  "Description": "Description",
+  "Expense type?": "Expense type?",
+  "Cancel": "Cancel",
+  "Select all": "Select all",
+  "Select who paid": "Select who paid",
+  "Select category": "Select category"
 }
