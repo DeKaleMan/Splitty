@@ -494,7 +494,7 @@ public class ServerUtils {
             .accept(APPLICATION_JSON)
             .delete(Payment.class);
     }
-    
+
     public List<Payment> generatePaymentsForEvent(int eventCode) {
         List<Participant> participants = getParticipants(eventCode);
         Stack<Pair<String, Double>> banks = new Stack<>();
@@ -504,6 +504,25 @@ public class ServerUtils {
             if (p.getBalance() > 0) banks.add(new Pair<>(p.getEmail(), p.getBalance()));
             else if (p.getBalance() < 0) rest.add(new Pair<>(p.getEmail(), p.getBalance()));
         }
+        generateDTOs(eventCode, rest, banks, payments);
+        if (!rest.isEmpty() || !banks.isEmpty())
+            throw new RuntimeException("Balances did not add up to 0");
+        List<Payment> responseList = new ArrayList<>();
+        for (PaymentDTO p : payments) {
+            responseList.add(savePayment(p));
+        }
+        return responseList;
+    }
+
+    /**
+     * This exists just to overcome checkstyle's cyclomatic complexity warning
+     * @param eventCode
+     * @param rest
+     * @param banks
+     * @param payments
+     */
+    private void generateDTOs(int eventCode, Stack<Pair<String, Double>> rest,
+                           Stack<Pair<String, Double>> banks, List<PaymentDTO> payments) {
         while (!rest.isEmpty() && !banks.isEmpty()) {
             Pair<String, Double> payee = banks.pop();
             Pair<String, Double> payer = rest.pop();
@@ -523,13 +542,6 @@ public class ServerUtils {
                         false));
             }
         }
-        if (!rest.isEmpty() || !banks.isEmpty())
-            throw new RuntimeException("Balances did not add up to 0");
-        List<Payment> responseList = new ArrayList<>();
-        for (PaymentDTO p : payments) {
-            responseList.add(savePayment(p));
-        }
-        return responseList;
     }
 
     private int compareDouble(double d1, double d2, double precision) {
