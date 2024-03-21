@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
    <children>
-      <Text layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
+      <Text fx:id="adminManagementOverviewText" layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
          <font>
             <Font size="35.0" />
          </font>
@@ -29,6 +29,6 @@
          </font>
       </Text>
       <ComboBox fx:id="sortComboBox" layoutX="314.0" layoutY="70.0" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
-      <Button layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+      <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
    </children>
 </AnchorPane>

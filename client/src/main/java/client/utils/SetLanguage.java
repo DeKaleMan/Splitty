@@ -17,13 +17,17 @@ public class SetLanguage {
     private SplittyOverviewCtrl splittyOverviewCtrl;
     private AdminLoginCtrl adminLoginCtrl;
     private AddExpenseCtrl addExpenseCtrl;
+
+    private AdminOverviewCtrl adminOverviewCtrl;
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
-                       AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl){
+                       AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
+                       AdminOverviewCtrl adminOverviewCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
         this.addExpenseCtrl = addExpenseCtrl;
         this.adminLoginCtrl = adminLoginCtrl;
+        this.adminOverviewCtrl = adminOverviewCtrl;
         //this.language = Language.en;
     }
 
@@ -35,6 +39,7 @@ public class SetLanguage {
         setSpittyoverview(lang);
         setAddExpense(lang);
         setAdminLogin(lang);
+        setAdminOverview(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -86,6 +91,18 @@ public class SetLanguage {
         adminLoginCtrl.setUrlField(translate("Server Url e.g. 'localhost:8080'", "en", lang));
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
         adminLoginCtrl.setPasswordInstructionsText(translate("You can find your password in the console of your server instance", "en", lang));
+    }
+
+    public void setAdminOverview(String lang){
+        adminOverviewCtrl.setAdminManagementOverviewText(translate("Admin management overview", "en", lang));
+        adminOverviewCtrl.setImportEventButtonText(translate("Import event", "en", lang));
+        adminOverviewCtrl.setExportEventButtonText(translate("Export event", "en", lang));
+        adminOverviewCtrl.setDeleteEventButtonText(translate("Delete event", "en", lang));
+        adminOverviewCtrl.setServerTagText(translate("Server: Localhost:8080", "en", lang));
+        adminOverviewCtrl.setViewEventButtonText(translate("View Event", "en", lang));
+        adminOverviewCtrl.setJsonImportTextAreaPromptText(translate("Paste your exported JSON dump here", "en", lang));
+        adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
+        adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
     }
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
