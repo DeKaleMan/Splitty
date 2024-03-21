@@ -1,9 +1,6 @@
 package client.utils;
 
-import client.scenes.AddExpenseCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.SplittyOverviewCtrl;
-import client.scenes.StartScreenCtrl;
+import client.scenes.*;
 
 import jakarta.ws.rs.client.ClientBuilder;
 
@@ -18,13 +15,15 @@ public class SetLanguage {
     private Language language;
     private StartScreenCtrl startScreenCtrl;
     private SplittyOverviewCtrl splittyOverviewCtrl;
-
+    private AdminLoginCtrl adminLoginCtrl;
     private AddExpenseCtrl addExpenseCtrl;
-    public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl, AddExpenseCtrl addExpenseCtrl){
+    public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
+                       AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
         this.addExpenseCtrl = addExpenseCtrl;
+        this.adminLoginCtrl = adminLoginCtrl;
         //this.language = Language.en;
     }
 
@@ -35,6 +34,7 @@ public class SetLanguage {
         setMainScreen(lang);
         setSpittyoverview(lang);
         setAddExpense(lang);
+        setAdminLogin(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -78,6 +78,15 @@ public class SetLanguage {
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
     }
 
+    public void setAdminLogin(String lang){
+        adminLoginCtrl.setSignIn(translate("Sign in", "en", lang));
+        adminLoginCtrl.setInstruction(translate("Log into your server instance", "en", lang));
+        adminLoginCtrl.setPasswordInstructionLink(translate("Don't know how to get a password?", "en", lang));
+        adminLoginCtrl.setSignInButton(translate("Sign in", "en", lang));
+        adminLoginCtrl.setUrlField(translate("Server Url e.g. 'localhost:8080'", "en", lang));
+        adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
+        adminLoginCtrl.setPasswordInstructionsText(translate("You can find your password in the console of your server instance", "en", lang));
+    }
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 
