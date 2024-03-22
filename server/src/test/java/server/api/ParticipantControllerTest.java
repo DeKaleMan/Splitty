@@ -61,8 +61,8 @@ public class ParticipantControllerTest {
     @Test
     void testCreateParticipant() {
         Participant participant = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "uuid", event);
-        testParticipantRepository.save(participant);
+                "IBAN1", "BIC1", "yavor@tudelft.nl", "uuid23", event);
+//        testParticipantRepository.save(participant);
         ResponseEntity<Participant> response = participantController.createParticipant(
                 new ParticipantDTO(participant.getName(), participant.getBalance(),
                         participant.getIBan(), participant.getBIC(), participant.getEmail(),
