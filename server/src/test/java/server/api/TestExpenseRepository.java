@@ -44,9 +44,9 @@ public class TestExpenseRepository implements ExpenseRepository {
     public List<Expense> deleteExpenseByEventIdAndExpenseId(int eventID, int expenseID) {
         methods.add("deleteExpense");
         expenses
-                .stream()
-                .filter(x -> x.getExpenseId() == expenseID && x.getEvent().id == eventID)
-                .forEach(x -> expenses.remove(x));
+            .stream()
+            .filter(x -> x.getExpenseId() == expenseID && x.getEvent().id == eventID)
+            .forEach(x -> expenses.remove(x));
 
         return expenses;
     }
@@ -146,9 +146,12 @@ public class TestExpenseRepository implements ExpenseRepository {
         return null;
     }
 
+    //to change
     @Override
     public Optional<Expense> findById(ExpenseId expenseId) {
-        return Optional.empty();
+        methods.add("findById");
+        return expenses.stream().filter(x -> x.getEvent().equals(expenseId.getEvent()) &&
+            x.getExpenseId() == expenseId.getExpenseId()).findFirst();
     }
 
     @Override

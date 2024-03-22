@@ -180,8 +180,7 @@ public class AddExpenseCtrl implements Initializable {
             dateSelect.setPromptText("try again");
             error.setText("Something is incomplete");
         }
-
-
+        splittyCtrl.fetchExpenses();
     }
 
 

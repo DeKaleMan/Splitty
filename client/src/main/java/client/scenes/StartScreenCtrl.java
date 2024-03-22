@@ -58,6 +58,9 @@ public class StartScreenCtrl {
     @FXML
     private Label noEventLabel;
 
+    @FXML
+    private ImageView imageView;
+
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
         this.serverUtils = serverUtils;
@@ -79,6 +82,13 @@ public class StartScreenCtrl {
         if (event1 == null && event2 == null && event3 == null) {
             noEventLabel.setVisible(true);
         }
+
+        // Load the image
+        Image image = new Image("Logo_.png"); // Path relative to your resources folder
+
+        // Set the image to the ImageView
+        imageView.setImage(image);
+
     }
 
     private void setup(Event event, Button button, Label label) {
