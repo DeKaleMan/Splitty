@@ -53,7 +53,8 @@ public class ParticipantController {
         }
 
         // If he already exists?
-        Participant existingParticipant = participantRepository.findById(new ParticipantId(participantDTO.getUuid(), event));
+        Participant existingParticipant = participantRepository.findById(
+                new ParticipantId(participantDTO.getUuid(), event));
         if (existingParticipant != null) {
             return ResponseEntity.badRequest().build();
         }
