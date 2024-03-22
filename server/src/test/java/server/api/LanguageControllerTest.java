@@ -2,11 +2,15 @@ package server.api;
 
 import org.junit.jupiter.api.Test;
 import server.api.depinjectionUtils.IOUtilActual;
+import server.api.depinjectionUtils.LanguageResponse;
+import server.api.testmocks.LanguageResponseTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LanguageControllerTest {
-    LanguageController l = new LanguageController(new IOUtilActual());
+    LanguageResponse response = new LanguageResponseTest();
+    LanguageController l = new LanguageController(new IOUtilActual(), response);
+
 
     @Test
     public void testCheckFile(){

@@ -63,6 +63,7 @@
          </font>
       </Label>
       <ComboBox fx:id="languageSelect" layoutX="269.0" layoutY="12.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="62.0" promptText="en" />
+      <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="99.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
 
 
     </children>
