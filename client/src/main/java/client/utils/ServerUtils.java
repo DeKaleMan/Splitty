@@ -361,18 +361,18 @@ public class ServerUtils {
      * The handleFrame you can cast Object payload to an expense since
      * you have the MappingJackson2MessageConverter() in the connect method
      * @param destination this is for example /topic/expense
-     * @param expenses
+     * @param consumer
      */
-    public void registerForExpenseWS(String destination, Consumer<Expense> expenses){
+    public <T> void registerForExpenseWS(String destination, Class<T> type, Consumer<T> consumer){
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return Expense.class;
+                return type;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                expenses.accept((Expense) payload);
+                consumer.accept((T) payload);
             }
         });
     }

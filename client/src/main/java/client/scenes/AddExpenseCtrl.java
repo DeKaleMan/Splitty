@@ -110,7 +110,7 @@ public class AddExpenseCtrl implements Initializable {
         this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
 
         try {
-            serverUtils.registerForExpenseWS("/topic/addExpense", q -> {
+            serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,q -> {
                 data.add(q);
             });
         } catch (Exception e) {

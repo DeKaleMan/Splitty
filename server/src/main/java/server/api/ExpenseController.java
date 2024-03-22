@@ -28,9 +28,9 @@ public class ExpenseController {
         this.participantRepo = participantRepo;
     }
 
-    @MessageMapping("/addExpense") // -> /app/expenseByEvent
+    @MessageMapping("/addExpense") // -> /app/addExpense
     @SendTo("/topic/addExpense") // when we are done processing it we send it to the path provided
-    public ResponseEntity<Expense> expenseByEventWS(@RequestBody ExpenseDTO expenseDTO){
+    public ResponseEntity<Expense> expenseByEventWS(ExpenseDTO expenseDTO){
         ResponseEntity<Expense> expPerEvent = saveExpense(expenseDTO);
         return expPerEvent;
     }
