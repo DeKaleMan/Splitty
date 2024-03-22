@@ -17,7 +17,8 @@ public class ParticipantDTO {
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(String name, double balance, String iBan, String bIC, String email, int eventId, String uuid) {
+    public ParticipantDTO(String name, double balance, String iBan, String bIC,
+                          String email, int eventId, String uuid) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
