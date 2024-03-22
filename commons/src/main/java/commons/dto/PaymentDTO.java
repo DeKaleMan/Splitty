@@ -3,9 +3,9 @@ package commons.dto;
 
 public class PaymentDTO {
 
-    private String payerEmail;
+    private String payerUuid;
 
-    private String payeeEmail;
+    private String payeeUuid;
 
     private int eventCode;
 
@@ -14,19 +14,19 @@ public class PaymentDTO {
     public PaymentDTO() {
     }
 
-    public PaymentDTO(String payerEmail, String payeeEmail, int eventCode, double amount) {
-        this.payerEmail = payerEmail;
-        this.payeeEmail = payeeEmail;
+    public PaymentDTO(String payerUuid, String payeeUuid, int eventCode, double amount) {
+        this.payerUuid = payerUuid;
+        this.payeeUuid = payeeUuid;
         this.eventCode = eventCode;
         this.amount = amount;
     }
 
-    public String getPayerEmail() {
-        return payerEmail;
+    public String getPayerUuid() {
+        return payerUuid;
     }
 
-    public String getPayeeEmail() {
-        return payeeEmail;
+    public String getPayeeUuid() {
+        return payeeUuid;
     }
 
     public double getAmount() {

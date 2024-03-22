@@ -32,7 +32,7 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public List<Expense> findByEventAndPayer(Event event, Participant payer) {
-        methods.add("findByEventAndPayerEmail");
+        methods.add("findByEventAndPayerUuid");
         return expenses
             .stream()
             .filter(x -> x.getEvent().equals(event) && x.getPayer().equals(payer))

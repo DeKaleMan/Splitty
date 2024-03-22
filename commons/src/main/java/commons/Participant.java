@@ -14,14 +14,13 @@ public class Participant implements Serializable {
     @Column(nullable = false)
     private double balance;
 
-    @Column(name = "iban", nullable = false, length = 34)
+    @Column(name = "iban", length = 34)
     private String iBan;
 
-    @Column(name = "bic", nullable = false, length = 11)
+    @Column(name = "bic", length = 11)
     private String bIC;
 
-    @Column(name = "account_holder", nullable = false, length = 100)
-    private String accountHolder;
+    private String email;
 
     @EmbeddedId
     private ParticipantId id;
@@ -29,16 +28,14 @@ public class Participant implements Serializable {
     protected Participant() {
         id = new ParticipantId();
     }
-    public Participant(String name, double balance
-            , String iBan, String bIC
-            , String accountHolder, String email,
-                       Event event) {
+
+    public Participant(String name, double balance, String iBan, String bIC, String email, String uuid, Event event) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
         this.bIC = bIC;
-        this.accountHolder = accountHolder;
-        this.id = new ParticipantId(email, event);
+        this.email = email;
+        this.id = new ParticipantId(uuid, event);
     }
 
     // Getters and setters
@@ -75,20 +72,12 @@ public class Participant implements Serializable {
         this.bIC = bIC;
     }
 
-    public String getAccountHolder() {
-        return accountHolder;
-    }
-
-    public void setAccountHolder(String accountHolder) {
-        this.accountHolder = accountHolder;
-    }
-
     public String getEmail() {
-        return id.getEmail();
+        return email;
     }
 
     public void setEmail(String email) {
-        id.setEmail(email);
+        this.email = email;
     }
 
     public void setEvent(Event event){
@@ -97,6 +86,14 @@ public class Participant implements Serializable {
 
     public Event getEvent(){
         return id.getEvent();
+    }
+
+    public String getUuid(){
+        return id.getUuid();
+    }
+
+    public void setUuid(String uuid){
+        id.setUuid(uuid);
     }
 
     public ParticipantId getId() {
@@ -116,5 +113,16 @@ public class Participant implements Serializable {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Participant{" +
+                "name='" + name + '\'' +
+                ", balance=" + balance +
+                ", iBan='" + iBan + '\'' +
+                ", bIC='" + bIC + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

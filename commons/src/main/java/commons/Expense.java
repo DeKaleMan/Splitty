@@ -122,7 +122,7 @@ public class Expense {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
             + ".\nThe total amount spent is: "
             + totalExpense + "."
-            + "\nThe person who paid was: " + payer.getEmail() + ", on " + date
+            + "\nThe person who paid was: " + payer.getUuid() + ", on " + date
             + ".";
 
     }

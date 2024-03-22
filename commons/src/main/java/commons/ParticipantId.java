@@ -1,5 +1,6 @@
 package commons;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
@@ -8,26 +9,28 @@ import java.util.Objects;
 @Embeddable
 public class ParticipantId implements Serializable {
 
-    private String email;
+//    @Column(length = 36) - for now to simplify testing length won't be enforced,
+//    in the future that has to change though
+    private String uuid;
 
     @ManyToOne
     private Event event;
 
     public ParticipantId() {}
 
-    public ParticipantId(String email, Event event) {
-        this.email = email;
+    public ParticipantId(String uuid, Event event) {
+        this.uuid = uuid;
         this.event = event;
     }
 
     // Getters and setters
 
-    public String getEmail() {
-        return email;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Event getEvent() {
@@ -43,12 +46,20 @@ public class ParticipantId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof ParticipantId)) return false;
         ParticipantId that = (ParticipantId) o;
-        return Objects.equals(getEmail(), that.getEmail()) &&
+        return Objects.equals(getUuid(), that.getUuid()) &&
                 Objects.equals(getEvent(), that.getEvent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEmail(), getEvent());
+        return Objects.hash(getUuid(), getEvent());
+    }
+
+    @Override
+    public String toString() {
+        return "ParticipantId{" +
+                "uuid='" + uuid + '\'' +
+                ", event=" + event +
+                '}';
     }
 }

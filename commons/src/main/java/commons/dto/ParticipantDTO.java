@@ -9,51 +9,77 @@ public class ParticipantDTO {
 
     private String bIC;
 
-    private String accountHolder;
-
     private String email;
     private int eventId;
 
+    private String uuid;
+
     public ParticipantDTO() {
     }
-    public ParticipantDTO(String name, double balance,
-                          String iBan, String bIC,
-                          String accountHolder, String email,
-                          int eventId) {
+
+    public ParticipantDTO(String name, double balance, String iBan, String bIC, String email, int eventId, String uuid) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
         this.bIC = bIC;
-        this.accountHolder = accountHolder;
         this.email = email;
         this.eventId = eventId;
+        this.uuid = uuid;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getiBan() {
         return iBan;
     }
 
+    public void setiBan(String iBan) {
+        this.iBan = iBan;
+    }
+
     public String getbIC() {
         return bIC;
     }
 
-    public String getAccountHolder() {
-        return accountHolder;
+    public void setbIC(String bIC) {
+        this.bIC = bIC;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getEventId() {
         return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

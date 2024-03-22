@@ -20,7 +20,7 @@ public class ExpenseDTO {
 
     private double totalExpense; // the amount of money of the expense
 
-    private String payerEmail; // the participant who paid
+    private String payerUuid; // the participant who paid
 
 
 
@@ -29,13 +29,13 @@ public class ExpenseDTO {
     }
 
     public ExpenseDTO(int eventId, String description, Type type, Date date,
-                   double totalExpense, String payerEmail) {
+                   double totalExpense, String payerUuid) {
         this.eventId = eventId;
         this.description = description;
         this.type = type;
         this.date = date;
         this.totalExpense = totalExpense;
-        this.payerEmail = payerEmail;
+        this.payerUuid = payerUuid;
     }
 
     public String getDescription() {
@@ -73,12 +73,12 @@ public class ExpenseDTO {
         this.totalExpense = totalExpense;
     }
 
-    public String getPayerEmail() {
-        return payerEmail;
+    public String getPayerUuid() {
+        return payerUuid;
     }
 
-    public void setPayerEmail(String payer) {
-        this.payerEmail = payer;
+    public void setPayerUuid(String payer) {
+        this.payerUuid = payer;
     }
 
     public int getEventId() {
@@ -94,12 +94,12 @@ public class ExpenseDTO {
             Double.compare(totalExpense, that.totalExpense) == 0 &&
             Objects.equals(description, that.description) && type == that.type &&
             Objects.equals(date, that.date) &&
-            Objects.equals(payerEmail, that.payerEmail);
+            Objects.equals(payerUuid, that.payerUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, description, type, date, totalExpense, payerEmail);
+        return Objects.hash(eventId, description, type, date, totalExpense, payerUuid);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ExpenseDTO {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
             + ".\nThe total amount spent is: "
             + totalExpense + "."
-            + "\nThe person who paid was: " + payerEmail + ", on " + date
+            + "\nThe person who paid was: " + payerUuid + ", on " + date
             + ".";
 
     }

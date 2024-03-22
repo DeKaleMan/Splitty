@@ -59,15 +59,15 @@ public class DebtController {
         return ResponseEntity.ok(debtRepo.findByExpense(expense));
     }
 
-    @GetMapping("/{eventId}/participant/{email}")
+    @GetMapping("/{eventId}/participant/{uuid}")
     public ResponseEntity<List<Debt>> getAllDebtsOfParticipant(@PathVariable("eventId") int eventId,
-                                                               @PathVariable("email") String email){
+                                                               @PathVariable("uuid") String uuid){
         Optional<Event> eventOptional = eventRepo.findById(eventId);
         if(eventOptional.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         Event event = eventOptional.get();
-        Participant participant = participantRepo.findById(new ParticipantId(email,event));
+        Participant participant = participantRepo.findById(new ParticipantId(uuid, event));
         if(participant == null){
             return ResponseEntity.notFound().build();
         }
@@ -93,7 +93,7 @@ public class DebtController {
         }
         Expense expense = expenseOptional.get();
         Participant participant = participantRepo.findById(
-            new ParticipantId(debtDTO.getParticipantEmail(), event));//To change when Participant class is restructured
+            new ParticipantId(debtDTO.getParticipantUuid(), event));//To change when Participant class is restructured
         if (participant == null) {
             return ResponseEntity.notFound().build();
         }
