@@ -334,7 +334,8 @@ public class ServerUtils {
 
     }
 
-    private StompSession session = connect("ws://localhost:8080/websocket"); // stomp session which means you are connected to your websocket
+    private StompSession session = connect("ws://localhost:8080/websocket");
+    // stomp session which means you are connected to your websocket
 
     /**
      * This method creates the websocket connection
