@@ -39,7 +39,6 @@ public class Payment {
         this.payee = payee;
         this.amount = amount;
         this.paid = paid;
-        this.paid = false;
     }
 
     // Getters and setters
