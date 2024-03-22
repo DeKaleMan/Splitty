@@ -1,6 +1,8 @@
 package server.api;
 
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 import server.api.depinjectionUtils.IOUtilActual;
 import server.api.depinjectionUtils.LanguageResponse;
 import server.api.testmocks.LanguageResponseTest;
@@ -13,7 +15,19 @@ class LanguageControllerTest {
 
 
     @Test
-    public void testCheckFile(){
-        System.out.println(l.translate("Admin overview", "en", "it").getBody());
+    public void testJSONFile(){
+        String test = "TestString";
+        ResponseEntity<String> result = l.translate(test, "en", "Du");
+
+        assertEquals(ResponseEntity.ok("TestStringResult"), result);
+
+    }
+    @Test
+    public void testWithAPI(){
+        String test = "TestString2";
+        ResponseEntity<String> result = l.translate(test, "en", "Du");
+
+        assertEquals(ResponseEntity.ok("TestStringResult2"), result);
+
     }
 }

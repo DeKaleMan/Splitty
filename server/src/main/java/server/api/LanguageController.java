@@ -58,7 +58,7 @@ public class LanguageController {
         JsonObject object = translator.readJsonFile(newfile);
 
         // Check if translation exists in JSON
-        String translation = translator.getTranslationFromJson(query, object);
+        String translation = getTranslationFromJson(query, object);
         if (translation != null) {
             return ResponseEntity.ok(translation);
         }
@@ -83,12 +83,12 @@ public class LanguageController {
 //        }
 //    }
 //
-//    private String getTranslationFromJson(String query, JsonObject object) {
-//        if (object.has(query)) {
-//            return object.get(query).getAsString();
-//        }
-//        return null;
-//    }
+    private String getTranslationFromJson(String query, JsonObject object) {
+        if (object.has(query)) {
+            return object.get(query).getAsString();
+        }
+        return null;
+    }
 //
 //    private String translateWithAPI(String query, String sourceLang, String targetLang) {
 //        String apiUrl = "https://api.mymemory.translated.net/get";

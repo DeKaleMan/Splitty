@@ -22,13 +22,13 @@ public class LanguageResponseActual implements LanguageResponse {
             throw new RuntimeException("Error reading JSON file", e);
         }
     }
-    @Override
-    public String getTranslationFromJson(String query, JsonObject object) {
-        if (object.has(query)) {
-            return object.get(query).getAsString();
-        }
-        return null;
-    }
+//    @Override
+//    public String getTranslationFromJson(String query, JsonObject object) {
+//        if (object.has(query)) {
+//            return object.get(query).getAsString();
+//        }
+//        return null;
+//    }
     @Override
     public String translateWithAPI(String query, String sourceLang, String targetLang) {
         String apiUrl = "https://api.mymemory.translated.net/get";
