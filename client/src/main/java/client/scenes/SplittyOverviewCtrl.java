@@ -124,8 +124,6 @@ public class SplittyOverviewCtrl implements Initializable {
         System.out.println("OK");
         fetchExpenses();
         return toDelete;
-
-
     }
 
 

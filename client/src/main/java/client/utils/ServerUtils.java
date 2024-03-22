@@ -28,6 +28,7 @@ import java.util.List;
 import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
+import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -87,6 +88,7 @@ public class ServerUtils {
                 .get(new GenericType<List<Expense>>() {
                 });
     }
+
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/expenses")
@@ -149,16 +151,16 @@ public class ServerUtils {
     }
 
 
-
     public List<Participant> getParticipants(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participant")
-                .queryParam("eventCode", eventCode)
+                .target(SERVER).path("api/participants")
+                .queryParam("eventID", eventCode)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Participant>>() {
                 });
     }
+
     public List<Event> getAllEvents() {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/event/all")
@@ -167,7 +169,8 @@ public class ServerUtils {
                 .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            List<Event> events = response.readEntity(new GenericType<>(){});
+            List<Event> events = response.readEntity(new GenericType<>() {
+            });
             response.close();
             return events;
         } else {
@@ -185,7 +188,8 @@ public class ServerUtils {
                 .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<>(){});
+            Event event = response.readEntity(new GenericType<>() {
+            });
             response.close();
             return event;
         } else {
@@ -203,7 +207,8 @@ public class ServerUtils {
                 .delete();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<>(){});
+            Event event = response.readEntity(new GenericType<>() {
+            });
             response.close();
             return event;
         } else {
@@ -220,7 +225,8 @@ public class ServerUtils {
                 .post(Entity.entity(newEvent, APPLICATION_JSON));
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<>(){});
+            Event event = response.readEntity(new GenericType<>() {
+            });
             response.close();
             return event;
         } else {
@@ -228,5 +234,59 @@ public class ServerUtils {
             throw new RuntimeException("Failed to add event. Status code: " + response.getStatus());
         }
 
+    }
+
+    public Participant createParticipant(ParticipantDTO p) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participants")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(p, APPLICATION_JSON));
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Participant participant = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return participant;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to create participant. Status code: " + response.getStatus());
+        }
+    }
+
+    public void deleteParticipant(Participant p) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participants/{uuid}/{eventId}")
+                .resolveTemplate("uuid", p.getUuid())
+                .resolveTemplate("eventId", p.getEvent().getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            response.close();
+            throw new RuntimeException("Failed to delete participant. Status code: " + response.getStatus());
+        }
+    }
+
+
+    // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
+    public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participants/{uuid}/{eventId}")
+                .resolveTemplate("uuid", oldUuid)
+                .resolveTemplate("eventId", participant.getEventId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(participant, APPLICATION_JSON));
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Participant updatedParticipant = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return updatedParticipant;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to update participant. Status code: " + response.getStatus());
+        }
     }
 }

@@ -56,7 +56,7 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "email", new Event());
+        Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "uuid1", new Event());
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
         try {

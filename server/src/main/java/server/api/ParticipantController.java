@@ -32,13 +32,13 @@ public class ParticipantController {
     }
 
 
-    @GetMapping("/{email}/{eventId}")
-    public ResponseEntity<Participant> getParticipantById(@PathVariable String email, @PathVariable int eventId) {
+    @GetMapping("/{uuid}/{eventId}")
+    public ResponseEntity<Participant> getParticipantById(@PathVariable String uuid, @PathVariable int eventId) {
         Event event = eventRepository.findEventById(eventId);
         if (event == null) {
             return ResponseEntity.notFound().build();
         }
-        Participant participant = participantRepository.findById(new ParticipantId(email, event));
+        Participant participant = participantRepository.findById(new ParticipantId(uuid, event));
         if (participant == null) {
             return ResponseEntity.notFound().build();
         }
@@ -52,42 +52,68 @@ public class ParticipantController {
             return ResponseEntity.notFound().build();
         }
 
-        Participant participant = new Participant(participantDTO.getName(),
+        // If he already exists?
+        Participant existingParticipant = participantRepository.findById(
+                new ParticipantId(participantDTO.getUuid(), event));
+        if (existingParticipant != null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Participant participant = new Participant(
+                participantDTO.getName(),
                 participantDTO.getBalance(),
                 participantDTO.getiBan(),
                 participantDTO.getbIC(),
-                participantDTO.getAccountHolder(),
                 participantDTO.getEmail(),
-                event);
+                participantDTO.getUuid(),
+                event
+        );
 
         Participant savedParticipant = participantRepository.save(participant);
         return ResponseEntity.ok(savedParticipant);
     }
 
-    @PutMapping("/{email}")
-    public ResponseEntity<Participant> updateParticipant(@PathVariable String email,
+    @PutMapping("/{uuid}/{eventId}")
+    public ResponseEntity<Participant> updateParticipant(@PathVariable String uuid,
+                                                         @PathVariable int eventId,
                                                          @RequestBody ParticipantDTO participantDTO) {
-        Event event = eventRepository.findEventById(participantDTO.getEventId());
+        Event event = eventRepository.findEventById(eventId);
         if (event == null) {
             return ResponseEntity.notFound().build();
         }
-        Participant existingParticipant = participantRepository.findById(new ParticipantId(email, event));
+        Participant existingParticipant = participantRepository.findById(new ParticipantId(uuid, event));
         if (existingParticipant == null) {
             return ResponseEntity.notFound().build();
         }
+
         existingParticipant.setName(participantDTO.getName());
         existingParticipant.setBalance(participantDTO.getBalance());
         existingParticipant.setIBan(participantDTO.getiBan());
         existingParticipant.setBIC(participantDTO.getbIC());
-        existingParticipant.setAccountHolder(participantDTO.getAccountHolder());
+        existingParticipant.setEmail(participantDTO.getEmail());
+        existingParticipant.setUuid(participantDTO.getUuid());
+
 
         Participant updatedParticipant = participantRepository.save(existingParticipant);
         return ResponseEntity.ok(updatedParticipant);
     }
 
+    @DeleteMapping("/{uuid}/{eventId}")
+    public ResponseEntity<Participant> deleteParticipant(@PathVariable String uuid, @PathVariable int eventId) {
+        Event event = eventRepository.findEventById(eventId);
+        if (event == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Participant participant = participantRepository.findById(new ParticipantId(uuid, event));
+        if (participant == null) {
+            return ResponseEntity.notFound().build();
+        }
+        participantRepository.delete(participant);
+        return ResponseEntity.ok(participant);
+    }
 
-    @GetMapping("/{eventID}")
-    public ResponseEntity<List<Participant>> getByEvent(@PathVariable int eventID){
+    @GetMapping("/")
+    public ResponseEntity<List<Participant>> getByEvent(@RequestParam int eventID){
         List<Participant> p = participantRepository.findByEventId(eventID);
         return ResponseEntity.ok(p);
     }

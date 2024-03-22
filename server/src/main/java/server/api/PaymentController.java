@@ -45,8 +45,8 @@ public class PaymentController {
             return ResponseEntity.notFound().build();
         }
 
-        Participant payee = participantRepository.findById(new ParticipantId(paymentDTO.getPayeeEmail(), event));
-        Participant payer = participantRepository.findById(new ParticipantId(paymentDTO.getPayerEmail(), event));
+        Participant payee = participantRepository.findById(new ParticipantId(paymentDTO.getPayeeUuid(), event));
+        Participant payer = participantRepository.findById(new ParticipantId(paymentDTO.getPayerUuid(), event));
         if (payee == null || payer == null) {
             return ResponseEntity.notFound().build();
         }
