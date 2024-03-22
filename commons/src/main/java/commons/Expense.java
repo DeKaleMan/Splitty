@@ -15,7 +15,7 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int expenseId;
+    public int expenseId;
     @Column(nullable = false)
     private String description;
     // all associated participants of the expense and how much they owe or are owed
@@ -122,7 +122,7 @@ public class Expense {
         return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
             + ".\nThe total amount spent is: "
             + totalExpense + "."
-            + "\nThe person who paid was: " + payer.getEmail() + ", on " + date
+            + "\nThe person who paid was: " + payer.getUuid() + ", on " + date
             + ".";
 
     }

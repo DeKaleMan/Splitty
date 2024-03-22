@@ -18,17 +18,17 @@ public class DebtDTO {
     private int expenseId; //is the expense that is added to the event
 
 
-    private String participantEmail;
+    private String participantUuid;
 
     public DebtDTO() {
 
     }
 
-    public DebtDTO(double balance, int eventId, int expenseId, String participantEmail) {
+    public DebtDTO(double balance, int eventId, int expenseId, String participantUuid) {
         this.balance = balance;
         this.eventId = eventId;
         this.expenseId = expenseId;
-        this.participantEmail = participantEmail;
+        this.participantUuid = participantUuid;
     }
 
     public double getBalance() {
@@ -43,8 +43,8 @@ public class DebtDTO {
         return expenseId;
     }
 
-    public String getParticipantEmail() {
-        return participantEmail;
+    public String getParticipantUuid() {
+        return participantUuid;
     }
 
     @Override
@@ -54,12 +54,12 @@ public class DebtDTO {
         DebtDTO debtDTO = (DebtDTO) o;
         return Double.compare(balance, debtDTO.balance) == 0 && eventId == debtDTO.eventId &&
                 expenseId == debtDTO.expenseId &&
-                Objects.equals(participantEmail, debtDTO.participantEmail);
+                Objects.equals(participantUuid, debtDTO.participantUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(balance, eventId, expenseId, participantEmail);
+        return Objects.hash(balance, eventId, expenseId, participantUuid);
     }
 }
 

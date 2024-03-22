@@ -144,7 +144,8 @@ public class TestDebtRepository implements DebtRepository {
 
     @Override
     public List<Debt> findAll() {
-        return null;
+        methods.add("findAll");
+        return debts;
     }
 
     @Override

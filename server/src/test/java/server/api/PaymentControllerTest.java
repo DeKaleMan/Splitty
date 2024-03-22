@@ -29,9 +29,9 @@ public class PaymentControllerTest {
 
         Event event = new Event("Event1", new Date(10, 10, 2005), "Yavor", "Description1");
         participant1 = new Participant("Yavor", 100.0, "IBAN1",
-                "BIC1", "Yavor", "yavor@tudelft.nl", event);
+                "BIC1", "yavor@tudelft.nl", "uuid", event);
         participant2 = new Participant("Jesse", 200.0, "IBAN2",
-                "BIC2", "Jesse", "Jesse@tudelft.nl", event);
+                "BIC2", "Jesse@tudelft.nl", "uuid1", event);
         event.setId(1);
         testEventRepository.save(event);
         testParticipantRepository.save(participant1);
@@ -54,8 +54,8 @@ public class PaymentControllerTest {
     void testCreatePayment() {
         Payment payment = new Payment(participant1, participant2, 100, new Date(0));
         testPaymentParticipantRepository.payments.add(payment);
-        PaymentDTO paymentDTO = new PaymentDTO("yavor@tudelft.nl",
-                "Jesse@tudelft.nl",
+        PaymentDTO paymentDTO = new PaymentDTO("uuid",
+                "uuid1",
                 1, 100);
         ResponseEntity<Payment> response = paymentController.createPayment(paymentDTO);
         System.out.println(response.getStatusCode());

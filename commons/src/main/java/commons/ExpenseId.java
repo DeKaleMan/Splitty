@@ -16,6 +16,14 @@ public class ExpenseId implements Serializable {
         this.expenseId = expenseId;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public int getExpenseId() {
+        return expenseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

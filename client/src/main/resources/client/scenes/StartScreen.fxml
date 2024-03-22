@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -51,7 +52,7 @@
             </children>
         </VBox>
         <Button layoutX="466.0" layoutY="334.0" mnemonicParsing="false" onAction="#showAllEvents" text="Show All Events" />
-        <Label layoutX="97.0" layoutY="14.0" text="Splitty">
+        <Label layoutX="104.0" layoutY="14.0" text="Splitty">
             <font>
                 <Font size="36.0" />
             </font>
@@ -61,6 +62,11 @@
             <Font name="System Italic" size="10.0" />
          </font>
       </Label>
+      <ImageView fx:id="imageView" fitHeight="72.0" fitWidth="116.0" layoutX="8.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../Logo_.png" />
+         </image>
+      </ImageView>
 
 
     </children>

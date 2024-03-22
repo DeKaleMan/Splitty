@@ -31,6 +31,11 @@ public class TestParticipantRepository implements ParticipantRepository {
     }
 
     @Override
+    public List<Participant> findByEventId(int eventId) {
+        return null;
+    }
+
+    @Override
     public void flush() {
 
     }
