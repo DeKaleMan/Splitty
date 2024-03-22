@@ -24,7 +24,8 @@ public class AddExpenseCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
 
-    private ObservableList<Expense> data;
+    private ObservableList<Expense> expenses = FXCollections.observableArrayList();
+
 
     @FXML
     public Label titleLabel;
@@ -52,11 +53,10 @@ public class AddExpenseCtrl implements Initializable {
     private List<Participant> participant;
 
     @Inject
-    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl, ObservableList<Expense> data) {
+    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.splittyCtrl = splittyCtrl;
-        this.data=data;
     }
 
     @FXML
@@ -64,6 +64,16 @@ public class AddExpenseCtrl implements Initializable {
         Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "email", new Event());
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
+
+        try {
+            serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,q -> {
+
+                expenses.add(q);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
         } catch (Exception e) {
@@ -109,13 +119,7 @@ public class AddExpenseCtrl implements Initializable {
         });
         this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
 
-        try {
-            serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,q -> {
-                data.add(q);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     @FXML
