@@ -11,14 +11,14 @@ import java.util.Scanner;
 
 public class Config {
     private String connection;
-    private String language; // this will be an enum type but has not been merged yet.
+    private Language language;
     private Currency currency;
     private String email;
     private String id;
 
 
     @Inject
-    public Config(String connection, String language, Currency currency, String email, String id) {
+    public Config(String connection, Language language, Currency currency, String email, String id) {
         this.connection = connection;
         this.language = language;
         this.currency = currency;
@@ -59,10 +59,15 @@ public class Config {
         }
     }
 
-    public String switchLanguage(String lang) {
-        return  switch (lang) {     // es, de, zh, ar, is; should still be added but will be done when
-            case "nl": yield "nl";  // the enum is merged
-            default: yield "en";
+    public Language switchLanguage(String lang) {
+        return  switch (lang) {
+            case "nl": yield Language.nl;
+            case "es": yield Language.es;
+            case "de": yield Language.de;
+            case "zh": yield Language.zh;
+            case "ar": yield Language.ar;
+            case "is": yield Language.is;
+            default: yield Language.en;
         };
     }
 
@@ -109,6 +114,14 @@ public class Config {
             return false;
         }
         return true;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getConnection() {
