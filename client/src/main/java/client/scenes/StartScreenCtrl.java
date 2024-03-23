@@ -1,12 +1,13 @@
 package client.scenes;
 
+import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -16,11 +17,27 @@ import java.util.Date;
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-
+    @FXML
+    private Label createEventText;
     @FXML
     private TextField createEventTextField;
+
+    @FXML
+    private Label joinEventText;
     @FXML
     private TextField joinEventTextField;
+
+    @FXML
+    private Button adminLogin;
+    @FXML
+    private Button showAllEventsButton;
+    @FXML
+    private Button join;
+    @FXML
+    private Button create;
+
+    @FXML
+    private ComboBox languageSelect;
 
     // the events
     @FXML
@@ -127,5 +144,55 @@ public class StartScreenCtrl {
 
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
+    }
+
+    public void setCreateEventText(String text) {
+        createEventText.setText(text);
+    }
+
+    public void setJoinEventText(String text) {
+        joinEventText.setText(text);
+    }
+
+    public void setAdminLogin(String text) {
+        adminLogin.setText(text);
+    }
+    public void setShowAllEvents(String text) {
+        showAllEventsButton.setText(text);
+    }
+    public void setJoinButtonText(String text) {
+        join.setText(text);
+    }
+    public void setCreateButtonText(String text) {
+        create.setText(text);
+    }
+    public void setNoEventLabel(String text){
+        noEventLabel.setText(text);
+    }
+
+
+    public void setLanguageSelect(String language){
+
+        ObservableList<String> languages = FXCollections.observableArrayList();
+
+        for(Language l: Language.values()){
+            languages.add(l.toString());
+        }
+        languageSelect.setItems(languages);
+        languageSelect.setValue(language);
+    }
+
+    @FXML
+    public void changeLanguage(){
+        try{
+            if(languageSelect.getSelectionModel().getSelectedItem() != null){
+                String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
+                Language toLang =  Language.valueOf(selected);
+                mainCtrl.changeLanguage(toLang);
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
     }
 }
