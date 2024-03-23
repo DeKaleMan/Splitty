@@ -17,7 +17,6 @@ public class Config {
     private String id;
 
 
-    @Inject
     public Config(String connection, Language language, Currency currency, String email, String id) {
         this.connection = connection;
         this.language = language;

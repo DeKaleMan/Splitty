@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -17,6 +18,7 @@ import java.util.Date;
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final Config config;
     @FXML
     private Label createEventText;
     @FXML
@@ -62,9 +64,10 @@ public class StartScreenCtrl {
     private ImageView imageView;
 
     @Inject
-    public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
+    public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.config = config;
     }
 
     // list the 3 most recent events on the start page
@@ -72,6 +75,7 @@ public class StartScreenCtrl {
         // retrieve from database based on recency (now null to have something)
         // the commented below is for testing
         noEventLabel.setVisible(false);
+        String id = config.getId(); // the start of getting this querified
         Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
         Event event2 = null;
         Event event3 = null;
@@ -88,7 +92,6 @@ public class StartScreenCtrl {
 
         // Set the image to the ImageView
         imageView.setImage(image);
-
     }
 
     private void setup(Event event, Button button, Label label) {

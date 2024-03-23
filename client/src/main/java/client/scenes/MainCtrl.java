@@ -80,9 +80,6 @@ public class MainCtrl {
     private Scene settings;
     private SettingsCtrl settingCtrl;
 
-    //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-    //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
-
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,

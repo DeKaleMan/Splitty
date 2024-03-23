@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.Config;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -32,5 +33,6 @@ public class MyModule implements Module {
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(Config.class).in(Scopes.SINGLETON);
     }
 }

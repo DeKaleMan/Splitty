@@ -10,7 +10,7 @@ import javax.inject.Inject;
 public class SettingsCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-    private final Config config = new Config();
+    private final Config config;
     @FXML
     public TextField serverURLField;
     @FXML
@@ -19,9 +19,10 @@ public class SettingsCtrl {
     public TextField currencyField;
 
     @Inject
-    public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl){
+    public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        this.config = config;
     }
 
     /**

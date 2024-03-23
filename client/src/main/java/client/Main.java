@@ -56,7 +56,6 @@ public class Main extends Application {
         var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts);
 
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
-//        var configClass = FXML.load(Config.class, "client");
 
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
         var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
