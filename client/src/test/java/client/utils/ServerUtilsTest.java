@@ -1,7 +1,6 @@
 package client.utils;
 
 import ch.qos.logback.core.net.server.Client;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.messaging.simp.stomp.StompSession;
