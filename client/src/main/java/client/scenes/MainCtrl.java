@@ -18,15 +18,20 @@ package client.scenes;
 import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
 
+import client.utils.Language;
+import client.utils.SetLanguage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 
+
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
+    protected Language language = Language.en;
 
+    private SetLanguage setLanguage;
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -130,7 +135,18 @@ public class MainCtrl {
 
         showStartScreen();
         primaryStage.show();
+        setLanguage();
+    }
 
+    public void setLanguage(){
+        this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
+                addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
+
+    }
+
+    public void changeLanguage(Language toLang){
+        this.language = toLang;
+        setLanguage.changeTo(toLang.toString());
     }
 
     public void showOverview() {
@@ -182,8 +198,11 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
+        startScreenCtrl.setLanguageSelect(language.toString());
         startScreenCtrl.initialize();
+
         primaryStage.setScene(startScreen);
+
     }
 
     /**

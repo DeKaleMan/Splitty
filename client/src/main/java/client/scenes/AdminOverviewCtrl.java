@@ -45,6 +45,12 @@ public class AdminOverviewCtrl {
 
     @FXML
     private Button jsonImportButton;
+    @FXML
+    private Text adminManagementOverviewText;
+    @FXML
+    private Text serverTag;
+    @FXML
+    private Button logOutButton;
 
     @Inject
     public AdminOverviewCtrl(MainCtrl mainCtrl, ServerUtils serverUtils) {
@@ -150,8 +156,53 @@ public class AdminOverviewCtrl {
         eventList.setItems(newEventList);
     }
 
-    @FXML
+
     public void logOut() {
         mainCtrl.showStartScreen();
     }
+
+    public void setAdminManagementOverviewText(String txt) {
+        adminManagementOverviewText.setText(txt);
+    }
+
+
+    public void setImportEventButtonText(String txt) {
+        importEventButton.setText(txt);
+    }
+
+
+    public void setExportEventButtonText(String txt) {
+        exportEventButton.setText(txt);
+    }
+
+    @FXML
+    public void setDeleteEventButtonText(String txt) {
+        deleteEventButton.setText(txt);
+    }
+
+    @FXML
+    public void setServerTagText(String txt) {
+        serverTag.setText(txt);
+    }
+
+    @FXML
+    public void setViewEventButtonText(String txt) {
+        viewEventButton.setText(txt);
+    }
+
+    @FXML
+    public void setJsonImportTextAreaPromptText(String txt) {
+        jsonImportTextArea.setPromptText(txt);
+    }
+
+    @FXML
+    public void setSortByText(String txt) {
+        sortByText.setText(txt);
+    }
+
+    @FXML
+    public void setLogOutButtonText(String txt) {
+        logOutButton.setText(txt);
+    }
+
 }

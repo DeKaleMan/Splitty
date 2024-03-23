@@ -30,6 +30,23 @@ public class SplittyOverviewCtrl implements Initializable {
     private Label expenses;
     @FXML
     private Label participants;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button settleDebtsButton;
+    @FXML
+    private Button statisticsButton;
+    @FXML
+    private Button addExpenseButton;
+
+    @FXML
+    private Button editParticipant;
+    @FXML
+    private Tab tab2;
+    @FXML
+    private Button deleteExpenseButton;
+
+
 
     @FXML
     private Button sendInvites;
@@ -163,6 +180,53 @@ public class SplittyOverviewCtrl implements Initializable {
         participantsList.getItems().addAll(participants);
         //.setContent(expenseList);
     }
+    // all textSetters
+
+
+    public void setExpensesText(String text) {
+        this.expenses.setText(text);
+    }
+
+    public void setParticipants(String text) {
+        this.participants.setText(text);
+    }
+
+    public void setBackButton(String text) {
+        this.backButton.setText(text);
+    }
+
+    public void setSettleDebtsButton(String text) {
+        this.settleDebtsButton.setText(text);
+    }
+
+    public void setStatisticsButton(String text) {
+        this.statisticsButton.setText(text);
+    }
+
+    public void setAddExpenseButton(String text) {
+        this.addExpenseButton.setText(text);
+    }
+
+    public void setEditParticipant(String text) {
+        this.editParticipant.setText(text);
+    }
+
+    public void setTab2(String text) {
+        this.tab2.setText(text);
+    }
+
+    public void setDeleteExpenseButton(String text) {
+        this.deleteExpenseButton.setText(text);
+    }
+
+    public void setSendInvites(String text) {
+        this.sendInvites.setText(text);
+    }
+
+    public void setAllExpenses(String text) {
+        this.allExpenses.setText(text);
+    }
+
 
 
 }
