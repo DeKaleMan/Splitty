@@ -24,8 +24,6 @@ public class AddExpenseCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
 
-    private ObservableList<Expense> expenses = FXCollections.observableArrayList();
-
 
     @FXML
     public Label titleLabel;
@@ -64,8 +62,8 @@ public class AddExpenseCtrl implements Initializable {
         Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "uuid1", new Event());
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
-        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,q -> {
-            expenses.add(q);
+        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,exp -> {
+            System.out.println("expense added " + exp);
         });
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
