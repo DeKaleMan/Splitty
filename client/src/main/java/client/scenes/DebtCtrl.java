@@ -1,13 +1,19 @@
 package client.scenes;
+
 import client.utils.ServerUtils;
 
 import commons.Debt;
+import commons.Payment;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -19,84 +25,122 @@ public class DebtCtrl implements Initializable {
     private MainCtrl mainCtrl;
 
     @FXML
-    private ListView listView;
+    private ListView paymentInstructionListView;
     @FXML
     private Label titlelabel;
 
     @FXML
     private Button undo;
 
-    private Debt undone;
+    private Payment undone;
 
-    private List<Debt> debtList = new ArrayList<>();
+    private ObservableList<Payment> payments;
 
     @Inject
-    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
+    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
 
     }
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.listView.getItems().addAll(debtList);
+        payments = FXCollections.observableArrayList(serverUtils.getPaymentsOfEvent(1));
+        this.paymentInstructionListView.setItems(payments);
+        paymentInstructionListView.setCellFactory(
+            new Callback<ListView<Payment>, ListCell<Payment>>() {
+                @Override
+                public ListCell call(ListView listView) {
+                    return new ListCell<Payment>() {
+                        @Override
+                        protected void updateItem(Payment payment, boolean b) {
+                            super.updateItem(payment, b);
+
+                            if (payment == null || b) {
+                                setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
+                                setGraphic(null);
+                            } else {
+                                HBox hBox = gethBox(payment);
+                                TitledPane pane = new TitledPane("", new Text("test"));
+                                pane.setGraphic(hBox);
+                                pane.getStyleClass().add("paymentInstruction");
+                                pane.setExpanded(false);
+                                setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
+                                setGraphic(pane);
+                            }
+                        }
+                    };
+                }
+            });
         undo.setVisible(false);
     }
-    public void setDebtList(){
+
+    private HBox gethBox(Payment payment) {
+        String title = payment.getPayer().getName() + " pays " +
+            payment.getPayee().getName() + " " +
+            payment.getAmount();
+        Button received = new Button("Mark received");
+        received.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Payment p = ((ListCell<Payment>) received.getParent().getParent()
+                    .getParent().getParent()).getItem();
+                System.out.println("remove" + p.getId());
+                undone = p;
+                removeFromDebts(p);
+                undo.setVisible(true);
+            }
+        });
+        HBox hBox = new HBox(new Text(title), received);
+        return hBox;
+    }
+
+    public void setDebtList() {
         //search for a query
 
     }
 
     @FXML
-    public void back(){
+    public void back() {
         mainCtrl.showSplittyOverview(titlelabel.getText());
     }
+
     @FXML
-    public void markReceived() throws NoSuchElementException, IndexOutOfBoundsException {
-        if(listView == null || listView.getItems().isEmpty()) System.out.println("empty list");
-        else{
-            ObservableList selected = listView.getSelectionModel().getSelectedItems();
-
-
-            if(selected.isEmpty()) {
-                System.out.println("none selected");
-                return;
-            }
-            System.out.println("remove" + selected);
-            undone = (Debt) selected.getFirst();
-            removeFromDebts((Debt) selected.getFirst());
+    public void markReceived(Button button) throws NoSuchElementException, IndexOutOfBoundsException {
+            Payment p = ((ListCell<Payment>) button.getParent().getParent()
+                .getParent().getParent()).getItem();
+            System.out.println("remove" + p.getId());
+            undone = p;
+            removeFromDebts(p);
             undo.setVisible(true);
-        }
-
     }
 
 
-    public void setTitlelabel(String title){
+    public void setTitlelabel(String title) {
         titlelabel.setText((title));
     }
 
 
-
-
     /**
      * removes a debt from the list and the database
-     * @param t
+     *
+     * @param p
      */
-    public void removeFromDebts(Debt t){
+    public void removeFromDebts(Payment p) {
         //DO SOME DATABASE STUFF
 
-        this.listView.getItems().remove(t);
+        this.paymentInstructionListView.getItems().remove(p);
     }
 
     @FXML
-    public void sendMessage(){
+    public void sendMessage() {
 
     }
+
     @FXML
-    public void undo(){
-        this.listView.getItems().add(undone);
+    public void undo() {
+        this.paymentInstructionListView.getItems().add(undone);
         undo.setVisible(false);
     }
 }

@@ -1,0 +1,21 @@
+.paymentInstruction{
+    -fx-skin: "javafx.scene.control.skin.TitledPaneSkin";
+    -fx-padding: 0;
+    -fx-start-margin: 0;
+    -fx-end-margin: 0;
+    -fx-text-fill: #ffffff;
+}
+
+.paymentInstruction > .title{
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-background-radius: 0;
+}
+
+
+#paymentInstructionListView{
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: #f4f4f4;
+}
