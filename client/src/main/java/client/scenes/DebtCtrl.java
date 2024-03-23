@@ -167,7 +167,7 @@ public class DebtCtrl implements Initializable {
 
 
     /**
-     * removes a debt from the list and the database
+     * removes a Payment from the list and adds it to changed
      *
      * @param p
      */
