@@ -142,20 +142,19 @@ public class AdminOverviewCtrl {
                 break;
             case "Creation date":
                 System.out.println("Creation date sorting selected");
-                // TODO: Sort event list based on creation date
-                //  (can't do it yet because I need to discuss something with you guys)
-                newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
+                currentEventList = eventList.getItems();
+                currentEventList.stream().sorted(Comparator.comparing(Event::getDate))
+                        .forEach(newEventList::add);
                 break;
             case "Last activity":
                 System.out.println("Last activity sorting selected");
-                // TODO: Sort event list based on last activity
-                //  (can't do it yet because I need to discuss something with you guys)
-                newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
+                currentEventList = eventList.getItems();
+                currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
+                        .forEach(newEventList::add);
                 break;
         }
         eventList.setItems(newEventList);
     }
-
 
     public void logOut() {
         mainCtrl.showStartScreen();
