@@ -3,6 +3,8 @@ package server.api;
 import commons.*;
 import commons.dto.ExpenseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
@@ -24,6 +26,13 @@ public class ExpenseController {
         this.expenseRepo = expenseRepo;
         this.eventRepo = eventRepo;
         this.participantRepo = participantRepo;
+    }
+
+    @MessageMapping("/addExpense") // -> /app/addExpense
+    @SendTo("/topic/addExpense") // when we are done processing it we send it to the path provided
+    public ResponseEntity<Expense> expenseByEventWS(ExpenseDTO expenseDTO){
+        ResponseEntity<Expense> expPerEvent = saveExpense(expenseDTO);
+        return expPerEvent;
     }
 
     @GetMapping(path = {"", "/"})

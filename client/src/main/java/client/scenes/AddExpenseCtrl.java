@@ -2,8 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import commons.Type;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +23,7 @@ public class AddExpenseCtrl implements Initializable {
     private final int eventCode = 1;
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
+
 
     @FXML
     public Label titleLabel;
@@ -87,6 +90,9 @@ public class AddExpenseCtrl implements Initializable {
         Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "uuid1", new Event());
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
+        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,exp -> {
+            System.out.println("expense added " + exp);
+        });
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
         } catch (Exception e) {
@@ -117,7 +123,6 @@ public class AddExpenseCtrl implements Initializable {
                 }
             }
         });
-
         createSplitList(list);
         category.setCellFactory(param -> new ListCell<Type>() {
             @Override
@@ -129,8 +134,7 @@ public class AddExpenseCtrl implements Initializable {
                     setText(item.toString());
                 }
             }
-        });
-        this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
+        });this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
     }
 
     @FXML
