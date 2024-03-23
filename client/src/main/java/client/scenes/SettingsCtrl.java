@@ -23,6 +23,10 @@ public class SettingsCtrl {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
     }
+
+    /**
+     * sets all the fields to the values obtained by the config file
+     */
     public void initializeFields() {
         if (config.getConnection() != null) {
             serverURLField.setText(config.getConnection());
@@ -35,7 +39,10 @@ public class SettingsCtrl {
         currencyField.setText(config.getCurrency().toString());
     }
 
-
+    /**
+     * The method correlated to the save settings button. Every field is retrieved and if nothing is
+     * incorrect everything will be saved by writing it to the config file.
+     */
     public void saveSettings() {
         String email = emailField.getText();
         String connection = serverURLField.getText();

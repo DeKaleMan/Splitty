@@ -29,6 +29,12 @@ public class Config {
     public Config() {
     }
 
+    /**
+     * This method is a bit more complicated because of the case where no file exists or a corrupt one.
+     * The format of the text file is this: connection language currency email id
+     * Every field is set to the retrieved string, if there are not exactly 5 fields or the file does not exist
+     * the write method is called which sets every field to default right after the program starts.
+     */
     public void read() {
         try {
             File file = new File("./client/src/main/resources/config");
@@ -79,6 +85,11 @@ public class Config {
         };
     }
 
+    /**
+     * write the fields in the most simple format: connection language currency email id
+     * the fields are only written when saved
+     * @return
+     */
     public boolean write() {
         try {
             FileWriter writer = new FileWriter("./client/src/main/resources/config");
