@@ -20,7 +20,7 @@ class ServerUtilsTest {
     void send() {
         StompSession stompSession = mock(StompSession.class);
 
-        ServerUtils serverUtils = new ServerUtils();
+        serverUtils = new ServerUtils();
         serverUtils.setSession(stompSession);
 
         String destination = "/test/destination";
@@ -34,7 +34,7 @@ class ServerUtilsTest {
     @Test
     void connectTest() {
         String url = "ws://localhost:8080/websocket";
-        mockClient = mock(Client.class);
+        mockClient =  mock(Client.class);
         serverUtils = new ServerUtils();
         StompSession stomp = serverUtils.connect(url);
         assertNotNull(stomp);
