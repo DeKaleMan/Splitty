@@ -104,7 +104,7 @@ public class SplittyOverviewCtrl implements Initializable {
     public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
         try{
             ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
-//            serverUtils.addExpense(exp);
+            serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
         }catch (NotFoundException ep) {
             // Handle 404 Not Found error
