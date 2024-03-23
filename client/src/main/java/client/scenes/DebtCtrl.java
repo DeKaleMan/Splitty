@@ -11,10 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -56,7 +54,8 @@ public class DebtCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO make eventCode not hardcoded
-        payments = FXCollections.observableArrayList(serverUtils.getPaymentsOfEvent(1).stream().filter(x -> !x.isPaid()).toList());
+        payments = FXCollections.observableArrayList(
+            serverUtils.getPaymentsOfEvent(1).stream().filter(x -> !x.isPaid()).toList());
         this.paymentInstructionListView.setItems(payments);
         paymentInstructionListView.setCellFactory(
             new Callback<ListView<Payment>, ListCell<Payment>>() {
@@ -90,8 +89,9 @@ public class DebtCtrl implements Initializable {
     private VBox generateInfo(Payment payment) {
         VBox info = new VBox();
         GridPane emailInfo = new GridPane();
-        if(payment.getPayee().getEmail() == null) emailInfo.add(new Text("No email specified for this participant.\n"),0,0);
-        else{
+        if (payment.getPayee().getEmail() == null)
+            emailInfo.add(new Text("No email specified for this participant.\n"), 0, 0);
+        else {
             Button sendMessage = new Button("Send reminder");
             sendMessage.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
@@ -99,15 +99,15 @@ public class DebtCtrl implements Initializable {
                     sendMessage(payment);
                 }
             });
-            emailInfo.add(new Text("Email available: "), 0,0);
+            emailInfo.add(new Text("Email available: "), 0, 0);
             emailInfo.add(sendMessage, 1, 0);
             emailInfo.setHgap(10.0);
         }
         info.getChildren().add(emailInfo);
-        if(payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null){
+        if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null) {
             info.getChildren().add(new Text("Banking info available\n" +
                 "IBAN: " + payment.getPayee().getIBan() + "\nBIC: " + payment.getPayee().getBIC()));
-        }else{
+        } else {
             info.getChildren().add(new Text("Incomplete or no banking info available"));
         }
         info.setSpacing(2);
@@ -128,8 +128,8 @@ public class DebtCtrl implements Initializable {
         received.getStyleClass().add("receivedButton");
         Text titleNode = new Text(title);
         GridPane grid = new GridPane();
-        grid.add(titleNode,0,0);
-        if(payment.getPayee().getUuid().equals(config.getId())) grid.add(received,1,0);
+        grid.add(titleNode, 0, 0);
+        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 1, 0);
         grid.getStyleClass().add("headerGrid");
         grid.setHgap(10.0);
         return grid;
@@ -146,19 +146,22 @@ public class DebtCtrl implements Initializable {
         mainCtrl.showSplittyOverview(titlelabel.getText());
     }
 
-    public void markReceived(Button button) throws NoSuchElementException, IndexOutOfBoundsException {
-            Payment p = ((ListCell<Payment>) button.getParent().getParent()
-                .getParent().getParent()).getItem();
-            System.out.println("removed " + p.getId());
-            markAsPaid(p);
-            undone = p;
-            undo.setVisible(true);
+    public void markReceived(Button button)
+        throws NoSuchElementException, IndexOutOfBoundsException {
+        Payment p = ((ListCell<Payment>) button.getParent().getParent()
+            .getParent().getParent()).getItem();
+        System.out.println("removed " + p.getId());
+        markAsPaid(p);
+        undone = p;
+        undo.setVisible(true);
     }
 
-    private void persistPayments(List<Payment> payments){
-        for(Payment p : payments){
+    private void persistPayments(List<Payment> payments) {
+        for (Payment p : payments) {
             //TODO make eventCode not hardcoded
-            serverUtils.updatePayment(new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), 1, p.getAmount(), p.isPaid()), p.getId());
+            serverUtils.updatePayment(
+                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), 1, p.getAmount(),
+                    p.isPaid()), p.getId());
         }
     }
 
