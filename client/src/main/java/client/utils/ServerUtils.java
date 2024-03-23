@@ -344,15 +344,21 @@ public class ServerUtils {
 
     }
 
-    private StompSession session = connect("ws://localhost:8080/websocket");
+
+
+    StompSession session = connect("ws://localhost:8080/websocket");
     // stomp session which means you are connected to your websocket
+
+    public void setSession(StompSession session) {
+        this.session = session;
+    }
 
     /**
      * This method creates the websocket connection
      * @param url this is the url you want to connect to
      * @return StompSession
      */
-    private StompSession connect(String url){
+    StompSession connect(String url){
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
