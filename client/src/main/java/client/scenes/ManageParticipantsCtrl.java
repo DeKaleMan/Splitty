@@ -67,7 +67,7 @@ public class ManageParticipantsCtrl implements Initializable {
 
     @FXML
     public void backEventOverview(){
-        mainCtrl.showSplittyOverview(titleLabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
 
     /**

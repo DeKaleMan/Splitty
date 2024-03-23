@@ -18,6 +18,8 @@ package client.scenes;
 import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
 
+import client.utils.ServerUtils;
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -71,6 +73,8 @@ public class MainCtrl {
 
     private Scene createEvent;
     private CreateEventCtrl createEventCtrl;
+
+    private ServerUtils serverUtils;
 
     //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
     //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
@@ -131,6 +135,7 @@ public class MainCtrl {
         showStartScreen();
         primaryStage.show();
 
+        serverUtils = new ServerUtils();
     }
 
     public void showOverview() {
@@ -146,12 +151,15 @@ public class MainCtrl {
     }
 
     // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
-    public void showSplittyOverview(String title){
+    public void showSplittyOverview(int id){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
         splittyOverview.getStylesheets().add(css);
-        splittyOverviewCtrl.setTitle(title);
-        //splittyOverviewCtrl.setEventCode(1);
+        Event event = serverUtils.getEventById(id);
+        splittyOverviewCtrl.setTitle(event.getName());
+        splittyOverviewCtrl.setEventCode(id);
+        splittyOverviewCtrl.fetchExpenses();
+        splittyOverviewCtrl.fetchParticipants();
     }
 
     public void showAddExpense(String title) {

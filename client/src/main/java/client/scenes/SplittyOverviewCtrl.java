@@ -5,6 +5,7 @@ import commons.*;
 import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,7 +19,7 @@ import java.util.*;
 public class SplittyOverviewCtrl implements Initializable {
 
     //We need to store the eventCode right here
-    private final int eventCode = 1; //replace with the actual eventCode
+    private int eventCode = 1; //replace with the actual eventCode
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -38,8 +39,11 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public Tab allExpenses;
-    private ListView expenseList;
+    private ListView<Expense> expenseList;
     private TabPane tabPane;
+
+    @FXML
+    private ListView<Participant> participantListView;
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
@@ -52,9 +56,9 @@ public class SplittyOverviewCtrl implements Initializable {
         fetchParticipants();
     }
 
-//    public void setEventCode(int eventCode){
-//        this.eventCode = eventCode;
-//    }
+    public void setEventCode(int eventCode){
+        this.eventCode = eventCode;
+    }
 
     /**
      * Shows the invitation scene (sends it the title to retain it)
@@ -144,18 +148,13 @@ public class SplittyOverviewCtrl implements Initializable {
         allExpenses.setContent(expenseList);
     }
     public void fetchParticipants(){
-        ListView<Participant> participantsList = new ListView<>();
         List<Participant> participants = new ArrayList<>();
         try{
             participants = serverUtils.getParticipants(eventCode);
-        }catch (BadRequestException e){
+        }catch (BadRequestException | NotFoundException e){
             System.out.println(e);
         }
-        catch (NotFoundException e){
-            System.out.println(e);
-        }
-        participantsList.getItems().addAll(participants);
-        //.setContent(expenseList);
+        participantListView.setItems(FXCollections.observableArrayList(participants));
     }
 
 

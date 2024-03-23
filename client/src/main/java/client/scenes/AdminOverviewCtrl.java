@@ -119,7 +119,7 @@ public class AdminOverviewCtrl {
     @FXML
     public void viewEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
-        mainCtrl.showSplittyOverview(event.getName());
+        mainCtrl.showSplittyOverview(event.getId());
     }
 
     @FXML

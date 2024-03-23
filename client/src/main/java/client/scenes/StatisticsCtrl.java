@@ -22,6 +22,8 @@ public class StatisticsCtrl {
     @FXML
     private Label titleLabel;
 
+    private int eventCode = 1;
+
     MainCtrl mainCtrl;
     @Inject
     public StatisticsCtrl(MainCtrl mainCtrl){
@@ -71,6 +73,6 @@ public class StatisticsCtrl {
 
     @FXML
     public void goBack(){
-        mainCtrl.showSplittyOverview(titleLabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
 }

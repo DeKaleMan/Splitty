@@ -33,6 +33,8 @@ public class DebtCtrl implements Initializable {
 
     private List<Debt> debtList = new ArrayList<>();
 
+    private int eventCode = 1;
+
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
@@ -54,7 +56,7 @@ public class DebtCtrl implements Initializable {
 
     @FXML
     public void back(){
-        mainCtrl.showSplittyOverview(titlelabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
     @FXML
     public void markReceived() throws NoSuchElementException, IndexOutOfBoundsException {
