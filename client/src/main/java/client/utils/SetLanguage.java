@@ -90,7 +90,8 @@ public class SetLanguage {
         adminLoginCtrl.setSignInButton(translate("Sign in", "en", lang));
         adminLoginCtrl.setUrlField(translate("Server Url e.g. 'localhost:8080'", "en", lang));
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
-        adminLoginCtrl.setPasswordInstructionsText(translate("You can find your password in the console of your server instance", "en", lang));
+        adminLoginCtrl.setPasswordInstructionsText(translate(
+                "You can find your password in the console of your server instance", "en", lang));
     }
 
     public void setAdminOverview(String lang){

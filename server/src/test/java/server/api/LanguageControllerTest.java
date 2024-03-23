@@ -1,6 +1,5 @@
 package server.api;
 
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import server.api.depinjectionUtils.IOUtilActual;

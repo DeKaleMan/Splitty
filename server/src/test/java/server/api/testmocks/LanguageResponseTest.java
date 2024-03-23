@@ -1,6 +1,5 @@
 package server.api.testmocks;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import server.api.depinjectionUtils.LanguageResponse;
