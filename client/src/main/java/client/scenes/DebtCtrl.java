@@ -135,11 +135,6 @@ public class DebtCtrl implements Initializable {
         return grid;
     }
 
-    public void setDebtList() {
-        //search for a query
-
-    }
-
     @FXML
     public void back() {
         persistPayments(changed);
@@ -184,7 +179,7 @@ public class DebtCtrl implements Initializable {
 
     @FXML
     public void sendMessage(Payment payment) {
-
+        //TODO actually send a message
     }
 
     @FXML
