@@ -3,7 +3,6 @@ package client.utils;
 import commons.Currency;
 
 import java.util.UUID;
-import javax.inject.Inject;
 import java.io.*;
 import java.util.NoSuchElementException;
 import java.util.Objects;
