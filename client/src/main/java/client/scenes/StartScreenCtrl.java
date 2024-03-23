@@ -145,7 +145,6 @@ public class StartScreenCtrl {
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
     }
-
     public void setCreateEventText(String text) {
         createEventText.setText(text);
     }
@@ -183,16 +182,18 @@ public class StartScreenCtrl {
     }
 
     @FXML
-    public void changeLanguage(){
-        try{
-            if(languageSelect.getSelectionModel().getSelectedItem() != null){
+    public void changeLanguage() {
+        try {
+            if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                Language toLang =  Language.valueOf(selected);
+                Language toLang = Language.valueOf(selected);
                 mainCtrl.changeLanguage(toLang);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-
+    }
+    public void showSettings(){
+        mainCtrl.showSettings();
     }
 }

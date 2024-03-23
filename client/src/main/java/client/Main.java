@@ -48,7 +48,6 @@ public class Main extends Application {
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
         var userEventList = FXML.load(UserEventListCtrl.class, "client", "scenes", "UserEventList.fxml");
         var createEvent = FXML.load(CreateEventCtrl.class, "client", "scenes", "createEvent.fxml");
-
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
@@ -56,6 +55,8 @@ public class Main extends Application {
         // group these in the EventPropGrouper
         var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts);
 
+        var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
+//        var configClass = FXML.load(Config.class, "client");
 
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
         var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
@@ -63,6 +64,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows);
+            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows, settings);
+
     }
 }
