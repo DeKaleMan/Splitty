@@ -77,8 +77,8 @@ public class MainCtrl {
     private Scene createEvent;
     private CreateEventCtrl createEventCtrl;
 
-    //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-    //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
+    private Scene settings;
+    private SettingsCtrl settingCtrl;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
@@ -88,15 +88,13 @@ public class MainCtrl {
                            EventPropGrouper eventPropGrouper,
                            Pair<UserEventListCtrl, Parent> userEventList,
                            Pair<CreateEventCtrl, Parent> createEvent,
-                           AdminWindows adminWindows) {
-
+                           AdminWindows adminWindows,
+                           Pair<SettingsCtrl, Parent> settings ) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
-
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
 
@@ -133,6 +131,10 @@ public class MainCtrl {
         this.createEventCtrl = createEvent.getKey();
         this.createEvent = new Scene(createEvent.getValue());
 
+        this.settingCtrl = settings.getKey();
+        this.settings = new Scene(settings.getValue());
+
+        settingCtrl.initializeConfig();
         showStartScreen();
         primaryStage.show();
         setLanguage();
@@ -200,7 +202,6 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty");
         startScreenCtrl.setLanguageSelect(language.toString());
         startScreenCtrl.initialize();
-
         primaryStage.setScene(startScreen);
 
     }
@@ -262,6 +263,12 @@ public class MainCtrl {
         primaryStage.setTitle("Debts per event");
         primaryStage.setScene(debts);
 
+    }
+
+    public void showSettings() {
+        primaryStage.setScene(settings);
+        primaryStage.setTitle("Settings");
+        settingCtrl.initializeFields();
     }
 
 
