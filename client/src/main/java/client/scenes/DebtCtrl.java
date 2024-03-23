@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
 
 import commons.Payment;
@@ -27,6 +28,8 @@ public class DebtCtrl implements Initializable {
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
 
+    private Config config;
+
     @FXML
     private ListView paymentInstructionListView;
     @FXML
@@ -42,9 +45,10 @@ public class DebtCtrl implements Initializable {
     private ObservableList<Payment> payments;
 
     @Inject
-    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        this.config = config;
         changed = new ArrayList<>();
     }
 
@@ -125,7 +129,7 @@ public class DebtCtrl implements Initializable {
         Text titleNode = new Text(title);
         GridPane grid = new GridPane();
         grid.add(titleNode,0,0);
-        grid.add(received,1,0);
+        if(payment.getPayee().getUuid().equals(config.getId())) grid.add(received,1,0);
         grid.getStyleClass().add("headerGrid");
         grid.setHgap(10.0);
         return grid;
