@@ -2,26 +2,56 @@ package client.utils;
 
 //import jakarta.ws.rs.client.Client;
 
+import jakarta.ws.rs.client.Client;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import server.database.EventRepository;
+
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = ServerUtils.class)
 class ServerUtilsTest {
 
+    @MockBean
+    private Client mockClient;
+
+
     @Mock
+    private EventRepository eventRepository;
 
-
+    @InjectMocks
     private ServerUtils serverUtils;
 
     public void setUp(){
+        mockClient = mock(Client.class);
         serverUtils = new ServerUtils();
     }
 
     @Test
-    void getQuotesTheHardWay() {
+    public void addEvent() {
+//        Date d = new Date(2004, 15, 3);
+//        Event event = Event.builder()
+//                .name("stijn event")
+//                .date(d)
+//                .owner("stinna event")
+//                .description("description event").build();
+//        EventDTO eventDTO = EventDTO.builder()
+//                .name("stijn")
+//                .date(d)
+//                .owner("owner stijn")
+//                .description("this is a test event description").build();
+//
+//        when(eventRepository.save(Mockito.any(Event.class))).then(event);
+//
+//        EventDTO savedEvent = eventRepository.create
+    }
+
+    @Test
+    public void getQuotesTheHardWay() {
     }
 
     @Test
@@ -78,10 +108,6 @@ class ServerUtilsTest {
 
     @Test
     void deleteEventById() {
-    }
-
-    @Test
-    void addEvent() {
     }
 
     @Test

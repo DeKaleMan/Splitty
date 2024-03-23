@@ -1,10 +1,12 @@
 package commons;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Date;
 import java.util.Objects;
 @Entity
+@Builder
 public class Event {
 
     @Id
