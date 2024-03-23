@@ -2,8 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 
-import commons.Debt;
 import commons.Payment;
+import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,19 +34,21 @@ public class DebtCtrl implements Initializable {
 
     private Payment undone;
 
+    private List<Payment> changed;
+
     private ObservableList<Payment> payments;
 
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
-
+        changed = new ArrayList<>();
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        payments = FXCollections.observableArrayList(serverUtils.getPaymentsOfEvent(1));
+        payments = FXCollections.observableArrayList(serverUtils.getPaymentsOfEvent(1).stream().filter(x -> !x.isPaid()).toList());
         this.paymentInstructionListView.setItems(payments);
         paymentInstructionListView.setCellFactory(
             new Callback<ListView<Payment>, ListCell<Payment>>() {
@@ -84,12 +86,7 @@ public class DebtCtrl implements Initializable {
         received.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Payment p = ((ListCell<Payment>) received.getParent().getParent()
-                    .getParent().getParent()).getItem();
-                System.out.println("remove" + p.getId());
-                undone = p;
-                removeFromDebts(p);
-                undo.setVisible(true);
+                markReceived(received);
             }
         });
         HBox hBox = new HBox(new Text(title), received);
@@ -103,17 +100,23 @@ public class DebtCtrl implements Initializable {
 
     @FXML
     public void back() {
+        persistPayments(changed);
         mainCtrl.showSplittyOverview(titlelabel.getText());
     }
 
-    @FXML
     public void markReceived(Button button) throws NoSuchElementException, IndexOutOfBoundsException {
             Payment p = ((ListCell<Payment>) button.getParent().getParent()
                 .getParent().getParent()).getItem();
             System.out.println("remove" + p.getId());
+            markAsPaid(p);
             undone = p;
-            removeFromDebts(p);
             undo.setVisible(true);
+    }
+
+    private void persistPayments(List<Payment> payments){
+        for(Payment p : payments){
+            serverUtils.updatePayment(new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), 1, p.getAmount(), p.isPaid()), p.getId());
+        }
     }
 
 
@@ -127,9 +130,9 @@ public class DebtCtrl implements Initializable {
      *
      * @param p
      */
-    public void removeFromDebts(Payment p) {
-        //DO SOME DATABASE STUFF
-
+    public void markAsPaid(Payment p) {
+        p.setPaid(true);
+        changed.add(p);
         this.paymentInstructionListView.getItems().remove(p);
     }
 
@@ -140,6 +143,8 @@ public class DebtCtrl implements Initializable {
 
     @FXML
     public void undo() {
+        changed.remove(undone);
+        undone.setPaid(false);
         this.paymentInstructionListView.getItems().add(undone);
         undo.setVisible(false);
     }

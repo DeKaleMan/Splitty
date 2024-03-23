@@ -477,7 +477,7 @@ public class ServerUtils {
             .post(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
     }
 
-    public Payment updatePayment(PaymentDTO paymentDTO, int paymentId) {
+    public Payment updatePayment(PaymentDTO paymentDTO, long paymentId) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/payments/{id}")
             .resolveTemplate("id", paymentId)
