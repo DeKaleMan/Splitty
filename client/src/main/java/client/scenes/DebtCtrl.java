@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
@@ -48,6 +49,7 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //TODO make eventCode not hardcoded
         payments = FXCollections.observableArrayList(serverUtils.getPaymentsOfEvent(1).stream().filter(x -> !x.isPaid()).toList());
         this.paymentInstructionListView.setItems(payments);
         paymentInstructionListView.setCellFactory(
@@ -64,7 +66,8 @@ public class DebtCtrl implements Initializable {
                                 setGraphic(null);
                             } else {
                                 HBox hBox = gethBox(payment);
-                                TitledPane pane = new TitledPane("", new Text("test"));
+                                VBox info = generateInfo(payment);
+                                TitledPane pane = new TitledPane("", info);
                                 pane.setGraphic(hBox);
                                 pane.getStyleClass().add("paymentInstruction");
                                 pane.setExpanded(false);
@@ -76,6 +79,30 @@ public class DebtCtrl implements Initializable {
                 }
             });
         undo.setVisible(false);
+    }
+
+    private VBox generateInfo(Payment payment) {
+        VBox info = new VBox();
+        HBox emailInfo = new HBox();
+        if(payment.getPayee().getEmail() == null) emailInfo.getChildren().add(new Text("No email specified for this participant.\n"));
+        else{
+            Button sendMessage = new Button("Send reminder");
+            sendMessage.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    sendMessage(payment);
+                }
+            });
+            emailInfo.getChildren().addAll(new Text("Email available: "), sendMessage);
+        }
+        info.getChildren().add(emailInfo);
+        if(payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null){
+            info.getChildren().add(new Text("Banking info available:\n" +
+                "IBAN: " + payment.getPayee().getIBan() + "\nBIC: " + payment.getPayee().getBIC()));
+        }else{
+            info.getChildren().add(new Text("Incomplete or no banking info available"));
+        }
+        return info;
     }
 
     private HBox gethBox(Payment payment) {
@@ -107,7 +134,7 @@ public class DebtCtrl implements Initializable {
     public void markReceived(Button button) throws NoSuchElementException, IndexOutOfBoundsException {
             Payment p = ((ListCell<Payment>) button.getParent().getParent()
                 .getParent().getParent()).getItem();
-            System.out.println("remove" + p.getId());
+            System.out.println("removed " + p.getId());
             markAsPaid(p);
             undone = p;
             undo.setVisible(true);
@@ -115,6 +142,7 @@ public class DebtCtrl implements Initializable {
 
     private void persistPayments(List<Payment> payments){
         for(Payment p : payments){
+            //TODO make eventCode not hardcoded
             serverUtils.updatePayment(new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), 1, p.getAmount(), p.isPaid()), p.getId());
         }
     }
@@ -137,7 +165,7 @@ public class DebtCtrl implements Initializable {
     }
 
     @FXML
-    public void sendMessage() {
+    public void sendMessage(Payment payment) {
 
     }
 
