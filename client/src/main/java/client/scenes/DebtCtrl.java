@@ -10,7 +10,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -65,10 +67,10 @@ public class DebtCtrl implements Initializable {
                                 setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
                                 setGraphic(null);
                             } else {
-                                HBox hBox = gethBox(payment);
+                                GridPane headerGrid = getGrid(payment);
                                 VBox info = generateInfo(payment);
                                 TitledPane pane = new TitledPane("", info);
-                                pane.setGraphic(hBox);
+                                pane.setGraphic(headerGrid);
                                 pane.getStyleClass().add("paymentInstruction");
                                 pane.setExpanded(false);
                                 setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
@@ -83,8 +85,8 @@ public class DebtCtrl implements Initializable {
 
     private VBox generateInfo(Payment payment) {
         VBox info = new VBox();
-        HBox emailInfo = new HBox();
-        if(payment.getPayee().getEmail() == null) emailInfo.getChildren().add(new Text("No email specified for this participant.\n"));
+        GridPane emailInfo = new GridPane();
+        if(payment.getPayee().getEmail() == null) emailInfo.add(new Text("No email specified for this participant.\n"),0,0);
         else{
             Button sendMessage = new Button("Send reminder");
             sendMessage.setOnAction(new EventHandler<ActionEvent>() {
@@ -93,19 +95,22 @@ public class DebtCtrl implements Initializable {
                     sendMessage(payment);
                 }
             });
-            emailInfo.getChildren().addAll(new Text("Email available: "), sendMessage);
+            emailInfo.add(new Text("Email available: "), 0,0);
+            emailInfo.add(sendMessage, 1, 0);
+            emailInfo.setHgap(10.0);
         }
         info.getChildren().add(emailInfo);
         if(payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null){
-            info.getChildren().add(new Text("Banking info available:\n" +
+            info.getChildren().add(new Text("Banking info available\n" +
                 "IBAN: " + payment.getPayee().getIBan() + "\nBIC: " + payment.getPayee().getBIC()));
         }else{
             info.getChildren().add(new Text("Incomplete or no banking info available"));
         }
+        info.setSpacing(2);
         return info;
     }
 
-    private HBox gethBox(Payment payment) {
+    private GridPane getGrid(Payment payment) {
         String title = payment.getPayer().getName() + " pays " +
             payment.getPayee().getName() + " " +
             payment.getAmount();
@@ -116,8 +121,14 @@ public class DebtCtrl implements Initializable {
                 markReceived(received);
             }
         });
-        HBox hBox = new HBox(new Text(title), received);
-        return hBox;
+        received.getStyleClass().add("receivedButton");
+        Text titleNode = new Text(title);
+        GridPane grid = new GridPane();
+        grid.add(titleNode,0,0);
+        grid.add(received,1,0);
+        grid.getStyleClass().add("headerGrid");
+        grid.setHgap(10.0);
+        return grid;
     }
 
     public void setDebtList() {

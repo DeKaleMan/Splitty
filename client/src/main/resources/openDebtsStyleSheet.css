@@ -19,3 +19,13 @@
     -fx-border-width: 0;
     -fx-background-color: #f4f4f4;
 }
+
+.headerGrid{
+
+}
+
+.receivedButton{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-start-margin: 10px;
+}
