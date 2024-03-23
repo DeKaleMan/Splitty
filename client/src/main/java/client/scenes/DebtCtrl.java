@@ -11,10 +11,7 @@ import javafx.scene.control.ListView;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class DebtCtrl implements Initializable {
 

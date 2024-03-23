@@ -31,6 +31,23 @@ public class SplittyOverviewCtrl implements Initializable {
     private Label expenses;
     @FXML
     private Label participants;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button settleDebtsButton;
+    @FXML
+    private Button statisticsButton;
+    @FXML
+    private Button addExpenseButton;
+
+    @FXML
+    private Button editParticipant;
+    @FXML
+    private Tab tab2;
+    @FXML
+    private Button deleteExpenseButton;
+
+
 
     @FXML
     private Button sendInvites;
@@ -107,9 +124,15 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
         try{
-            serverUtils.addExpense(new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail));
-        }catch (Exception e){
-            System.out.println(e);
+            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
+            serverUtils.addExpense(exp);
+            serverUtils.send("/app/addExpense", exp);
+        }catch (NotFoundException ep) {
+            // Handle 404 Not Found error
+            // Display an error message or log the error
+            System.err.println("Expense creation failed: Resource not found.");
+            ep.printStackTrace();
+            // Optionally, notify the user or perform error recovery actions
         }
     }
     @FXML
@@ -156,6 +179,53 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         participantListView.setItems(FXCollections.observableArrayList(participants));
     }
+    // all textSetters
+
+
+    public void setExpensesText(String text) {
+        this.expenses.setText(text);
+    }
+
+    public void setParticipants(String text) {
+        this.participants.setText(text);
+    }
+
+    public void setBackButton(String text) {
+        this.backButton.setText(text);
+    }
+
+    public void setSettleDebtsButton(String text) {
+        this.settleDebtsButton.setText(text);
+    }
+
+    public void setStatisticsButton(String text) {
+        this.statisticsButton.setText(text);
+    }
+
+    public void setAddExpenseButton(String text) {
+        this.addExpenseButton.setText(text);
+    }
+
+    public void setEditParticipant(String text) {
+        this.editParticipant.setText(text);
+    }
+
+    public void setTab2(String text) {
+        this.tab2.setText(text);
+    }
+
+    public void setDeleteExpenseButton(String text) {
+        this.deleteExpenseButton.setText(text);
+    }
+
+    public void setSendInvites(String text) {
+        this.sendInvites.setText(text);
+    }
+
+    public void setAllExpenses(String text) {
+        this.allExpenses.setText(text);
+    }
+
 
 
 }

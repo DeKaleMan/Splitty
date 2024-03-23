@@ -1,12 +1,14 @@
 package client.scenes;
 
+import client.utils.Config;
+import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -16,11 +18,28 @@ import java.util.Date;
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-
+    private final Config config;
+    @FXML
+    private Label createEventText;
     @FXML
     private TextField createEventTextField;
+
+    @FXML
+    private Label joinEventText;
     @FXML
     private TextField joinEventTextField;
+
+    @FXML
+    private Button adminLogin;
+    @FXML
+    private Button showAllEventsButton;
+    @FXML
+    private Button join;
+    @FXML
+    private Button create;
+
+    @FXML
+    private ComboBox languageSelect;
 
     // the events
     @FXML
@@ -47,9 +66,10 @@ public class StartScreenCtrl {
     private int eventCode = 1;
 
     @Inject
-    public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
+    public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.config = config;
     }
 
     // list the 3 most recent events on the start page
@@ -57,6 +77,7 @@ public class StartScreenCtrl {
         // retrieve from database based on recency (now null to have something)
         // the commented below is for testing
         noEventLabel.setVisible(false);
+        String id = config.getId(); // the start of getting this querified
         Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
         Event event2 = null;
         Event event3 = null;
@@ -73,7 +94,6 @@ public class StartScreenCtrl {
 
         // Set the image to the ImageView
         imageView.setImage(image);
-
     }
 
     private void setup(Event event, Button button, Label label) {
@@ -129,5 +149,56 @@ public class StartScreenCtrl {
 
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
+    }
+    public void setCreateEventText(String text) {
+        createEventText.setText(text);
+    }
+
+    public void setJoinEventText(String text) {
+        joinEventText.setText(text);
+    }
+
+    public void setAdminLogin(String text) {
+        adminLogin.setText(text);
+    }
+    public void setShowAllEvents(String text) {
+        showAllEventsButton.setText(text);
+    }
+    public void setJoinButtonText(String text) {
+        join.setText(text);
+    }
+    public void setCreateButtonText(String text) {
+        create.setText(text);
+    }
+    public void setNoEventLabel(String text){
+        noEventLabel.setText(text);
+    }
+
+
+    public void setLanguageSelect(String language){
+
+        ObservableList<String> languages = FXCollections.observableArrayList();
+
+        for(Language l: Language.values()){
+            languages.add(l.toString());
+        }
+        languageSelect.setItems(languages);
+        languageSelect.setValue(language);
+    }
+
+    @FXML
+    public void changeLanguage() {
+        try {
+            if (languageSelect.getSelectionModel().getSelectedItem() != null) {
+                String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
+                Language toLang = Language.valueOf(selected);
+                mainCtrl.changeLanguage(toLang);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void showSettings(){
+        mainCtrl.showSettings();
     }
 }
