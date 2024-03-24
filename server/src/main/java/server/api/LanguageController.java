@@ -2,6 +2,7 @@ package server.api;
 
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,9 @@ import server.api.depinjectionUtils.IOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/translate")
@@ -33,6 +37,10 @@ public class LanguageController {
     @GetMapping(path = {"/", ""})
     public ResponseEntity<String> translate(@RequestParam String query,
                                             @RequestParam String sourceLang, @RequestParam String targetLang) {
+        List<String> lang = Arrays.asList("en", "de", "nl", "ar", "zh", "is", "es");
+        if(!lang.contains(sourceLang)||!lang.contains(targetLang)|| Objects.equals(sourceLang, targetLang)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
+        }
         File newfile = new File(basepath + targetLang + ".json");
         //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
 
