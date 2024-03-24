@@ -1,7 +1,9 @@
 package server.api;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,9 @@ import server.api.depinjectionUtils.IOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/translate")
@@ -33,6 +38,13 @@ public class LanguageController {
     @GetMapping(path = {"/", ""})
     public ResponseEntity<String> translate(@RequestParam String query,
                                             @RequestParam String sourceLang, @RequestParam String targetLang) {
+        List<String> lang = Arrays.asList("en", "de", "nl", "ar", "zh", "is", "es");
+        if(!lang.contains(sourceLang)||!lang.contains(targetLang)|| Objects.equals(sourceLang, targetLang)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
+        }
+        if(query == null || query.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("empty query");
+        }
         File newfile = new File(basepath + targetLang + ".json");
         //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
 
@@ -68,7 +80,7 @@ public class LanguageController {
 
         // Write translation to JSON file
         object.addProperty(query, translation);
-        translator.writeJsonFile(object, newfile);
+        writeJsonFile(object, newfile);
 
         return ResponseEntity.ok(translation);
 
@@ -89,43 +101,13 @@ public class LanguageController {
         }
         return null;
     }
-//
-//    private String translateWithAPI(String query, String sourceLang, String targetLang) {
-//        String apiUrl = "https://api.mymemory.translated.net/get";
-//        try {
-//            String encodedQuery = URLEncoder.encode(query, "UTF-8");
-//            String langpair = sourceLang + "%7C" + targetLang;
-//            String url = String.format("%s?q=%s&langpair=%s", apiUrl, encodedQuery, langpair);
-//
-//            Client client = ClientBuilder.newClient();
-//            Response response = client
-//                    .target(url)
-//                    .request()
-//                    .get();
-//
-//            //Retrieve and print the response body
-//            String responseBody = response.readEntity(String.class);
-//            // Parse the JSON response
-//            JSONObject jsonResponse1 = new JSONObject(responseBody);
-//            var responseData = jsonResponse1.get("responseData");
-//            Scanner scanner = new Scanner(responseData.toString());
-//            scanner.useDelimiter(",");
-//            String translated = scanner.next().substring("{_translatedText_:".length());
-//            translated = translated.substring(1, translated.length() -1);
-//
-//            return translated;
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error translating with API", e);
-//        }
-//    }
-//
-//    private void writeJsonFile(JsonObject object, File file) {
-//        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
-//            Gson gson = new Gson();
-//            gson.toJson(object, fileWriter);
-//            System.out.println("JSON file updated successfully.");
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error writing JSON object to file", e);
-//        }
-//    }
+public void writeJsonFile(JsonObject object, File file) {
+        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
+            Gson gson = new Gson();
+            gson.toJson(object, fileWriter);
+            System.out.println("JSON file updated successfully.");
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing JSON object to file", e);
+        }
+    }
 }
