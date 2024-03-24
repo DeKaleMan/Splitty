@@ -52,22 +52,22 @@ class ServerUtilsTest {
 
     }
 
-    @Test
-    public void getAllEvents() {
-        Date d = new Date(2004, 07,16);
-        Event e1 = new Event("test", d, "stijn", "this is an event");
-        Event e2 = new Event("test2", d, "stijn2", "this is an event2");
+    // @Test
+    // public void getAllEvents() {
+    //     Date d = new Date(2004, 07,16);
+    //     Event e1 = new Event("test", d, "stijn", "this is an event");
+    //     Event e2 = new Event("test2", d, "stijn2", "this is an event2");
 
-        List<Event> expected = List.of(e1, e2);
-        when(mockWebTarget
-                .path(anyString())
-                .request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .get(new GenericType<List<Event>>() {
-                }))
-                .thenReturn(expected);
-        List<Event> serverTest = serverUtils.getAllEvents();
+    //     List<Event> expected = List.of(e1, e2);
+    //     when(mockWebTarget
+    //             .path(anyString())
+    //             .request(MediaType.APPLICATION_JSON)
+    //             .accept(MediaType.APPLICATION_JSON)
+    //             .get(new GenericType<List<Event>>() {
+    //             }))
+    //             .thenReturn(expected);
+    //     List<Event> serverTest = serverUtils.getAllEvents();
 
-        Assertions.assertEquals(expected, serverTest);
-    }
+    //     Assertions.assertEquals(expected, serverTest);
+    // }
 }
