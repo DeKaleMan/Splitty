@@ -12,9 +12,9 @@ public class DebtTest {
     Event e1 = new Event("test1", new Date(10), "test1","test1");
     Event e2 = new Event("test2", new Date(20), "test2","test2");
 
-    Participant p1 = new Participant("test1", 10.0, "test1", "test1", "test1", "test1", e1);
+    Participant p1 = new Participant("test1", 10.0, "test1", "test1", "test1", "","sss", e1);
 
-    Participant p2 = new Participant("test2", 11.0, "test2", "test2", "test2", "test2", e2);
+    Participant p2 = new Participant("test2", 11.0, "test2", "test2", "test2", "test2", "d",e2);
 
     Expense expense1 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1);
 
