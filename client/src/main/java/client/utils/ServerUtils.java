@@ -55,14 +55,28 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ServerUtils {
 
     private Client client;
+    private StompSession session;
+
+    /**
+     * ONLY USE THIS CONSTRUCTOR FOR TESTING PURPOSES
+     * Because the server will not be running during testing websockets won't work if using this constructor
+     * @param client You're client mock
+     */
     public ServerUtils(Client client) {
         this.client = client;
     }
+
+    /**
+     * Constructor to use for the actual program (so not for testing)
+     */
     public ServerUtils(){
         this.client = ClientBuilder.newClient(new ClientConfig());
+        // This is only called if the serverutils class was constructed from the actual program and not a test
+        session = connect("ws://localhost:8080/websocket");
     }
 
-    private static final String SERVER = "http://localhost:8080/";
+    public static final String SERVER = "http://localhost:8080/";
+
 
     /**
      * Gets quotes the hard way.
@@ -115,8 +129,7 @@ public class ServerUtils {
      * @return the expense
      */
     public List<Expense> getExpense(int eventCode) {
-        return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses")
+        return client.target(SERVER).path("api/expenses")
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -283,16 +296,14 @@ public class ServerUtils {
      * @return the event by id
      */
     public Event getEventById(int id) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event")
+        Response response = client.target(SERVER).path("api/event")
                 .queryParam("id", id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get();
+                .get(new GenericType<Response>(){});
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<>() {
-            });
+            Event event = response.readEntity(new GenericType<Event>() {});
             response.close();
             return event;
         } else {
@@ -347,9 +358,6 @@ public class ServerUtils {
 
     }
 
-
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
     // stomp session which means you are connected to your websocket
 
     public void setSession(StompSession session) {
