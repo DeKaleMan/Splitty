@@ -21,11 +21,11 @@ class ExpenseControllerTest {
     Event event1 = new Event("test", new Date(10, 10, 2005), "owner", "desc");
     Event event2 = new Event("test1", new Date(10, 10, 2005), "owner1", "desc1");
 
-    Participant p1 = new Participant("test", 10.0,"IBAN","BIC","email","uuid",event1);
+    Participant p1 = new Participant("test", 10.0,"IBAN","BIC","email","","uuid",event1);
 
-    Participant p2 = new Participant("test", 10.0,"IBAN","BIC","email1","uuid2",event1);
+    Participant p2 = new Participant("test", 10.0,"IBAN","BIC","email1","","uuid2",event1);
 
-    Participant p3 = new Participant("test", 10.0,"IBAN","BIC","email3","uuid3",event2);
+    Participant p3 = new Participant("test", 10.0,"IBAN","BIC","email3","","uuid3",event2);
 
     @BeforeEach
     void setup() {

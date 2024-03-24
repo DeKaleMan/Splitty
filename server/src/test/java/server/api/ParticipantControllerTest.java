@@ -33,9 +33,9 @@ public class ParticipantControllerTest {
     @Test
     void testGetAllParticipants() {
         Participant participant1 = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "uuid", null);
+                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid", null);
         Participant participant2 = new Participant("Jesse", 200.0,
-                "IBAN2", "BIC2", "jesse@tudelft.nl", "uuid2", null);
+                "IBAN2", "BIC2", "jesse@tudelft.nl", "","uuid2", null);
 
         testParticipantRepository.save(participant1);
         testParticipantRepository.save(participant2);
@@ -61,11 +61,11 @@ public class ParticipantControllerTest {
     @Test
     void testCreateParticipant() {
         Participant participant = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "uuid23", event);
+                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid23", event);
 //        testParticipantRepository.save(participant);
         ResponseEntity<Participant> response = participantController.createParticipant(
                 new ParticipantDTO(participant.getName(), participant.getBalance(),
-                        participant.getIBan(), participant.getBIC(), participant.getEmail(),
+                        participant.getIBan(), participant.getBIC(), participant.getEmail(), "",
                         event.getId(), participant.getUuid()));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -74,7 +74,7 @@ public class ParticipantControllerTest {
     void testCreateParticipantNotFoundInvalidEvent() {
         ResponseEntity<Participant> response = participantController
                 .createParticipant(new ParticipantDTO("Yavor", 100.0,
-                        "IBAN1", "BIC1", "yavor@tudelft.nl", 2, "uuid2"));
+                        "IBAN1", "BIC1", "yavor@tudelft.nl", "",2, "uuid2"));
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -82,7 +82,7 @@ public class ParticipantControllerTest {
     void testGetParticipantById() {
 
         Participant participant1 = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "uuid", event);
+                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid", event);
         testParticipantRepository.save(participant1);
 
         ResponseEntity<Participant> response = participantController
@@ -94,10 +94,10 @@ public class ParticipantControllerTest {
     @Test
     void testUpdateParticipant() {
         Participant participant = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "uuid", event);
+                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid", event);
         testParticipantRepository.save(participant);
         ParticipantDTO pdto = new ParticipantDTO("Ivan", 22,
-                "iban2", "BIC2", "angel@tudelft.nl", event.getId(), "uuid1");
+                "iban2", "BIC2", "angel@tudelft.nl", "",event.getId(), "uuid1");
         ResponseEntity<Participant> response = participantController.updateParticipant("uuid", event.getId(), pdto);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Ivan", response.getBody().getName());

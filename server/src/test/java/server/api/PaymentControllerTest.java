@@ -29,9 +29,9 @@ public class PaymentControllerTest {
 
         Event event = new Event("Event1", new Date(10, 10, 2005), "Yavor", "Description1");
         participant1 = new Participant("Yavor", 100.0, "IBAN1",
-                "BIC1", "yavor@tudelft.nl", "uuid", event);
+                "BIC1", "yavor@tudelft.nl", "","uuid", event);
         participant2 = new Participant("Jesse", 200.0, "IBAN2",
-                "BIC2", "Jesse@tudelft.nl", "uuid1", event);
+                "BIC2", "Jesse@tudelft.nl", "","uuid1", event);
         event.setId(1);
         testEventRepository.save(event);
         testParticipantRepository.save(participant1);

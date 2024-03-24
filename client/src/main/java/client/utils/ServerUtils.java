@@ -429,11 +429,11 @@ public class ServerUtils {
         }
     }
 
-    public void deleteParticipant(Participant p) {
+    public void deleteParticipant(String uuid, int eventId) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/participants/{uuid}/{eventId}")
-                .resolveTemplate("uuid", p.getUuid())
-                .resolveTemplate("eventId", p.getEvent().getId())
+                .resolveTemplate("uuid", uuid)
+                .resolveTemplate("eventId", eventId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete();
@@ -465,6 +465,28 @@ public class ServerUtils {
                 "Failed to update participant. Status code: " + response.getStatus());
         }
     }
+
+    public List<Event> getEventsByParticipant(String id) {
+
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participants/{uuid}/events")
+                .resolveTemplate("uuid", id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Event> events = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return events;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+        }
+
+    }
+
 
     public List<Payment> getPaymentsOfEvent(int eventId){
         return ClientBuilder.newClient(new ClientConfig())

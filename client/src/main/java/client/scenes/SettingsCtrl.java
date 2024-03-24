@@ -91,4 +91,16 @@ public class SettingsCtrl {
     }
 
 
+
+    public String getName() {
+        return config.getName();
+    }
+
+    public String getIban() {
+        return config.getIban();
+    }
+
+    public String getBic() {
+        return config.getBic();
+    }
 }

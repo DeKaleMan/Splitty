@@ -10,6 +10,9 @@ public class ParticipantDTO {
     private String bIC;
 
     private String email;
+
+    private String accountHolder;
+
     private int eventId;
 
     private String uuid;
@@ -18,12 +21,13 @@ public class ParticipantDTO {
     }
 
     public ParticipantDTO(String name, double balance, String iBan, String bIC,
-                          String email, int eventId, String uuid) {
+                          String email, String accountHolder, int eventId, String uuid) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
         this.bIC = bIC;
         this.email = email;
+        this.accountHolder = accountHolder;
         this.eventId = eventId;
         this.uuid = uuid;
     }
@@ -66,6 +70,14 @@ public class ParticipantDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public void setAccountHolder(String accountHolder) {
+        this.accountHolder = accountHolder;
     }
 
     public int getEventId() {

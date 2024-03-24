@@ -6,6 +6,7 @@ import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -19,7 +20,7 @@ import java.util.*;
 public class SplittyOverviewCtrl implements Initializable {
 
     //We need to store the eventCode right here
-    private int eventCode = 1; //replace with the actual eventCode
+    private int eventCode;
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -41,12 +42,9 @@ public class SplittyOverviewCtrl implements Initializable {
     private Button addExpenseButton;
 
     @FXML
-    private Button editParticipant;
-    @FXML
     private Tab tab2;
     @FXML
     private Button deleteExpenseButton;
-
 
 
     @FXML
@@ -69,8 +67,21 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        fetchExpenses();
-        fetchParticipants();
+        participantListView.setCellFactory(param -> new ListCell<Participant>(){
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+//        fetchExpenses();
+//        fetchParticipants();
     }
 
     public void setEventCode(int eventCode){
@@ -172,6 +183,7 @@ public class SplittyOverviewCtrl implements Initializable {
         allExpenses.setContent(expenseList);
     }
     public void fetchParticipants(){
+
         List<Participant> participants = new ArrayList<>();
         try{
             participants = serverUtils.getParticipants(eventCode);
@@ -207,9 +219,6 @@ public class SplittyOverviewCtrl implements Initializable {
         this.addExpenseButton.setText(text);
     }
 
-    public void setEditParticipant(String text) {
-        this.editParticipant.setText(text);
-    }
 
     public void setTab2(String text) {
         this.tab2.setText(text);
@@ -227,7 +236,9 @@ public class SplittyOverviewCtrl implements Initializable {
         this.allExpenses.setText(text);
     }
 
-
-
+    public void leaveEvent(ActionEvent actionEvent) {
+        serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
+        mainCtrl.showStartScreen();
+    }
 }
 

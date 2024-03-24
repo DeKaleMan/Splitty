@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpenseTest {
     Event event = new Event("test",new Date(10, 10, 2005),"owner","desc");
-    Participant participant = new Participant("test", 10.0,"IBAN","BIC","accountHolder","email",event);
+    Participant participant = new Participant("test", 10.0,"IBAN","BIC","accountHolder","","email",event);
     Date date = new Date(1,1,1);
     Expense e1 = new Expense(event
             , "food1"

@@ -15,13 +15,21 @@ public class Config {
     private String email;
     private String id;
 
+    private String name = "Yavor"; // for now hardcoded but need to be changeable in the future
+    private String iban;
+    private String bic;
 
-    public Config(String connection, Language language, Currency currency, String email, String id) {
+
+    public Config(String connection, Language language, Currency currency, String email,
+                  String id, String name, String iban, String bic) {
         this.connection = connection;
         this.language = language;
         this.currency = currency;
         this.email = email;
         this.id = id;
+        this.name = name;
+        this.iban = iban;
+        this.bic = bic;
     }
 
     public Config() {
@@ -177,5 +185,17 @@ public class Config {
     @Override
     public int hashCode() {
         return Objects.hash(connection, language, currency, email);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public String getBic() {
+        return bic;
     }
 }

@@ -26,7 +26,7 @@ public class ParticipantController {
         this.eventRepository = eventRepository;
     }
 
-    @GetMapping
+    @GetMapping(path = {"/all"})
     public List<Participant> getAllParticipants() {
         return participantRepository.findAll();
     }
@@ -65,6 +65,7 @@ public class ParticipantController {
                 participantDTO.getiBan(),
                 participantDTO.getbIC(),
                 participantDTO.getEmail(),
+                participantDTO.getAccountHolder(),
                 participantDTO.getUuid(),
                 event
         );
@@ -91,6 +92,7 @@ public class ParticipantController {
         existingParticipant.setIBan(participantDTO.getiBan());
         existingParticipant.setBIC(participantDTO.getbIC());
         existingParticipant.setEmail(participantDTO.getEmail());
+        existingParticipant.setAccountHolder(participantDTO.getAccountHolder());
         existingParticipant.setUuid(participantDTO.getUuid());
 
 
@@ -112,8 +114,15 @@ public class ParticipantController {
         return ResponseEntity.ok(participant);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<Participant>> getByEvent(@RequestParam int eventID){
+    @GetMapping("{uuid}/events")
+    public ResponseEntity<List<Event>> getEventsByParticipant(@PathVariable String uuid) {
+        List<Event> events = participantRepository.findEventsByParticipant(uuid);
+        return ResponseEntity.ok(events);
+
+    }
+
+    @GetMapping(path = {"", "/"})
+    public ResponseEntity<List<Participant>> getByEvent(@RequestParam(name = "eventID") int eventID){
         List<Participant> p = participantRepository.findByEventId(eventID);
         return ResponseEntity.ok(p);
     }

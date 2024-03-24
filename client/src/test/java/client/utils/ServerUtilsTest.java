@@ -77,7 +77,7 @@ class ServerUtilsTest {
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         Date d = new Date(2004, Calendar.AUGUST,16);
         Event e1 = new Event("test", d, "stijn", "this is an event");
-        Participant p1 = new Participant("testp", 50, "84342521345", "3252345", "kajshd", "uuidtest", e1);
+        Participant p1 = new Participant("testp", 50, "84342521345", "3252345", "kajshd", "","uuidtest", e1);
         List<Expense> mockExpenses = Arrays.asList(
                 new Expense(e1, "Test expense", Type.Food, d, 100, p1),
                 new Expense(e1, "Test expense 2", Type.Drinks, d, 150, p1)
