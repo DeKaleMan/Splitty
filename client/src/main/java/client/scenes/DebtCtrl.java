@@ -142,6 +142,7 @@ public class DebtCtrl implements Initializable {
 
     @FXML
     public void back(){
+        undo.setVisible(false);
         persistPayments(changed);
         mainCtrl.showSplittyOverview(eventCode);
     }
