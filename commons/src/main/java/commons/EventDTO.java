@@ -1,7 +1,5 @@
 package commons;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Objects;
