@@ -5,10 +5,12 @@ import com.google.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 public class AdminLoginCtrl {
 
@@ -20,6 +22,17 @@ public class AdminLoginCtrl {
         this.mainCtrl = mainCtrl;
         this.adminServerUtils = adminServerUtils;
     }
+
+    @FXML
+    private Text signIn;
+    @FXML
+    private Text instruction;
+    @FXML
+    private Text passwordInstructionLink;
+
+    @FXML
+    private Button signInButton;
+
 
     @FXML
     private TextField urlField;
@@ -49,5 +62,33 @@ public class AdminLoginCtrl {
     @FXML
     public void showPasswordInstructions(MouseEvent mouseEvent) {
         passwordInstructionsText.setVisible(true);
+    }
+
+    public void setSignIn(String txt) {
+        this.signIn.setText(txt);
+    }
+
+    public void setInstruction(String txt) {
+        this.instruction.setText(txt);
+    }
+
+    public void setPasswordInstructionLink(String txt) {
+        this.passwordInstructionLink.setText(txt);
+    }
+
+    public void setSignInButton(String txt) {
+        this.signInButton.setText(txt);
+    }
+
+    public void setUrlField(String txt) {
+        this.urlField.setPromptText(txt);
+    }
+
+    public void setPasswordField(String txt) {
+        this.passwordField.setPromptText(txt);
+    }
+
+    public void setPasswordInstructionsText(String txt) {
+        this.passwordInstructionsText.setText(txt);
     }
 }

@@ -1,105 +1,193 @@
 package client.scenes;
+
+import client.utils.Config;
 import client.utils.ServerUtils;
 
-import commons.Debt;
+import commons.Payment;
+import commons.dto.PaymentDTO;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class DebtCtrl implements Initializable {
 
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
 
+    private Config config;
+
     @FXML
-    private ListView listView;
+    private ListView paymentInstructionListView;
     @FXML
     private Label titlelabel;
 
     @FXML
     private Button undo;
 
-    private Debt undone;
+    private Payment undone;
 
-    private List<Debt> debtList = new ArrayList<>();
+    private List<Payment> changed;
+
+    private ObservableList<Payment> payments;
+
+    //TODO make eventCode not hardcoded
+    private int eventCode = 1;
 
     @Inject
-    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl){
+    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
-
+        this.config = config;
+        changed = new ArrayList<>();
     }
-
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.listView.getItems().addAll(debtList);
+        payments = FXCollections.observableArrayList(
+            serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
+        this.paymentInstructionListView.setItems(payments);
+        paymentInstructionListView.setCellFactory(
+            new Callback<ListView<Payment>, ListCell<Payment>>() {
+                @Override
+                public ListCell call(ListView listView) {
+                    return new ListCell<Payment>() {
+                        @Override
+                        protected void updateItem(Payment payment, boolean b) {
+                            super.updateItem(payment, b);
+
+                            if (payment == null || b) {
+                                setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
+                                setGraphic(null);
+                            } else {
+                                GridPane headerGrid = getGrid(payment);
+                                VBox info = generateInfo(payment);
+                                TitledPane pane = new TitledPane("", info);
+                                pane.setGraphic(headerGrid);
+                                pane.getStyleClass().add("paymentInstruction");
+                                pane.setExpanded(false);
+                                setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
+                                setGraphic(pane);
+                            }
+                        }
+                    };
+                }
+            });
         undo.setVisible(false);
     }
-    public void setDebtList(){
-        //search for a query
 
+    private VBox generateInfo(Payment payment) {
+        VBox info = new VBox();
+        GridPane emailInfo = new GridPane();
+        if (payment.getPayee().getEmail() == null)
+            emailInfo.add(new Text("No email specified for this participant.\n"), 0, 0);
+        else {
+            Button sendMessage = new Button("Send reminder");
+            sendMessage.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    sendMessage(payment);
+                }
+            });
+            emailInfo.add(new Text("Email available: "), 0, 0);
+            emailInfo.add(sendMessage, 1, 0);
+            emailInfo.setHgap(10.0);
+        }
+        info.getChildren().add(emailInfo);
+        if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null) {
+            info.getChildren().add(new Text("Banking info available\n" +
+                "IBAN: " + payment.getPayee().getIBan() + "\nBIC: " + payment.getPayee().getBIC()));
+        } else {
+            info.getChildren().add(new Text("Incomplete or no banking info available"));
+        }
+        info.setSpacing(2);
+        return info;
+    }
+
+    private GridPane getGrid(Payment payment) {
+        String title = payment.getPayer().getName() + " pays " +
+            payment.getPayee().getName() + " " +
+            payment.getAmount();
+        Button received = new Button("Mark received");
+        received.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                markReceived(received);
+            }
+        });
+        received.getStyleClass().add("receivedButton");
+        Text titleNode = new Text(title);
+        GridPane grid = new GridPane();
+        grid.add(titleNode, 0, 0);
+        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 1, 0);
+        grid.getStyleClass().add("headerGrid");
+        grid.setHgap(10.0);
+        return grid;
     }
 
     @FXML
     public void back(){
-        mainCtrl.showSplittyOverview(titlelabel.getText());
+        persistPayments(changed);
+        mainCtrl.showSplittyOverview(eventCode);
     }
-    @FXML
-    public void markReceived() throws NoSuchElementException, IndexOutOfBoundsException {
-        if(listView == null || listView.getItems().isEmpty()) System.out.println("empty list");
-        else{
-            ObservableList selected = listView.getSelectionModel().getSelectedItems();
 
+    public void markReceived(Button button)
+        throws NoSuchElementException, IndexOutOfBoundsException {
+        Payment p = ((ListCell<Payment>) button.getParent().getParent()
+            .getParent().getParent()).getItem();
+        System.out.println("removed " + p.getId());
+        markAsPaid(p);
+        undone = p;
+        undo.setVisible(true);
+    }
 
-            if(selected.isEmpty()) {
-                System.out.println("none selected");
-                return;
-            }
-            System.out.println("remove" + selected);
-            undone = (Debt) selected.getFirst();
-            removeFromDebts((Debt) selected.getFirst());
-            undo.setVisible(true);
+    private void persistPayments(List<Payment> payments) {
+        for (Payment p : payments) {
+            serverUtils.updatePayment(
+                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode, p.getAmount(),
+                    p.isPaid()), p.getId());
         }
-
     }
 
 
-    public void setTitlelabel(String title){
+    public void setTitlelabel(String title) {
         titlelabel.setText((title));
     }
 
 
-
-
     /**
-     * removes a debt from the list and the database
-     * @param t
+     * removes a Payment from the list and adds it to changed
+     *
+     * @param p
      */
-    public void removeFromDebts(Debt t){
-        //DO SOME DATABASE STUFF
-
-        this.listView.getItems().remove(t);
+    public void markAsPaid(Payment p) {
+        p.setPaid(true);
+        changed.add(p);
+        this.paymentInstructionListView.getItems().remove(p);
     }
 
     @FXML
-    public void sendMessage(){
-
+    public void sendMessage(Payment payment) {
+        //TODO actually send a message
     }
+
     @FXML
-    public void undo(){
-        this.listView.getItems().add(undone);
+    public void undo() {
+        changed.remove(undone);
+        undone.setPaid(false);
+        this.paymentInstructionListView.getItems().add(undone);
         undo.setVisible(false);
     }
 }

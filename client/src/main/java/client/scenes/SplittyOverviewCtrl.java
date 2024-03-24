@@ -5,6 +5,7 @@ import commons.*;
 import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,7 +19,7 @@ import java.util.*;
 public class SplittyOverviewCtrl implements Initializable {
 
     //We need to store the eventCode right here
-    private final int eventCode = 1; //replace with the actual eventCode
+    private int eventCode = 1; //replace with the actual eventCode
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -30,6 +31,23 @@ public class SplittyOverviewCtrl implements Initializable {
     private Label expenses;
     @FXML
     private Label participants;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button settleDebtsButton;
+    @FXML
+    private Button statisticsButton;
+    @FXML
+    private Button addExpenseButton;
+
+    @FXML
+    private Button editParticipant;
+    @FXML
+    private Tab tab2;
+    @FXML
+    private Button deleteExpenseButton;
+
+
 
     @FXML
     private Button sendInvites;
@@ -38,8 +56,11 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public Tab allExpenses;
-    private ListView expenseList;
+    private ListView<Expense> expenseList;
     private TabPane tabPane;
+
+    @FXML
+    private ListView<Participant> participantListView;
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
@@ -52,9 +73,9 @@ public class SplittyOverviewCtrl implements Initializable {
         fetchParticipants();
     }
 
-//    public void setEventCode(int eventCode){
-//        this.eventCode = eventCode;
-//    }
+    public void setEventCode(int eventCode){
+        this.eventCode = eventCode;
+    }
 
     /**
      * Shows the invitation scene (sends it the title to retain it)
@@ -103,9 +124,16 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
         try{
-            serverUtils.addExpense(new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail));
-        }catch (Exception e){
-            System.out.println(e);
+            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
+            serverUtils.addExpense(exp);
+            serverUtils.send("/app/addExpense", exp);
+            serverUtils.generatePaymentsForEvent(eventCode);
+        }catch (NotFoundException ep) {
+            // Handle 404 Not Found error
+            // Display an error message or log the error
+            System.err.println("Expense creation failed: Resource not found.");
+            ep.printStackTrace();
+            // Optionally, notify the user or perform error recovery actions
         }
     }
     @FXML
@@ -144,19 +172,61 @@ public class SplittyOverviewCtrl implements Initializable {
         allExpenses.setContent(expenseList);
     }
     public void fetchParticipants(){
-        ListView<Participant> participantsList = new ListView<>();
         List<Participant> participants = new ArrayList<>();
         try{
             participants = serverUtils.getParticipants(eventCode);
-        }catch (BadRequestException e){
+        }catch (BadRequestException | NotFoundException e){
             System.out.println(e);
         }
-        catch (NotFoundException e){
-            System.out.println(e);
-        }
-        participantsList.getItems().addAll(participants);
-        //.setContent(expenseList);
+        participantListView.setItems(FXCollections.observableArrayList(participants));
     }
+    // all textSetters
+
+
+    public void setExpensesText(String text) {
+        this.expenses.setText(text);
+    }
+
+    public void setParticipants(String text) {
+        this.participants.setText(text);
+    }
+
+    public void setBackButton(String text) {
+        this.backButton.setText(text);
+    }
+
+    public void setSettleDebtsButton(String text) {
+        this.settleDebtsButton.setText(text);
+    }
+
+    public void setStatisticsButton(String text) {
+        this.statisticsButton.setText(text);
+    }
+
+    public void setAddExpenseButton(String text) {
+        this.addExpenseButton.setText(text);
+    }
+
+    public void setEditParticipant(String text) {
+        this.editParticipant.setText(text);
+    }
+
+    public void setTab2(String text) {
+        this.tab2.setText(text);
+    }
+
+    public void setDeleteExpenseButton(String text) {
+        this.deleteExpenseButton.setText(text);
+    }
+
+    public void setSendInvites(String text) {
+        this.sendInvites.setText(text);
+    }
+
+    public void setAllExpenses(String text) {
+        this.allExpenses.setText(text);
+    }
+
 
 
 }

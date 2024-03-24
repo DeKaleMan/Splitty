@@ -1,3 +1,4 @@
+client/src/main/resources/config
 HELP.md
 .gradle
 build/
@@ -37,6 +38,7 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+
 
 ### VS Code ###
 .vscode/
