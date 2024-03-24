@@ -12,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
@@ -41,12 +43,11 @@ public class StartScreenCtrl {
     @FXML
     private ComboBox languageSelect;
 
-
     @FXML
     private ImageView imageView;
 
     @FXML
-    private ListView<Event> eventListView;
+    private ListView eventListView;
 
     private int eventCode;
 
@@ -59,23 +60,29 @@ public class StartScreenCtrl {
 
     // list the 3 most recent events on the start page
     public void initialize() {
-        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
-            @Override
-            protected void updateItem(Event event, boolean empty) {
-                super.updateItem(event, empty);
-                if (empty || event == null) {
-                    setText(null);
-                } else {
-                    setText(event.getName());
-                }
-            }
-        });
+//        eventListView.getItems().clear();
+//        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
+//            @Override
+//            protected void updateItem(Event event, boolean empty) {
+//                super.updateItem(event, empty);
+//                if (empty || event == null) {
+//                    setText(null);
+//                } else {
+//                    setText(event.getName());
+//                }
+//            }
+//        });
 
-        try{
-            eventListView.setItems(FXCollections.observableArrayList(mainCtrl.getMyEvents()));
-        } catch (Exception e){
-            System.out.println(e.getMessage());
+        List<Event> events = mainCtrl.getMyEvents();
+        if(events!=null){
+            eventListView.setItems(FXCollections.observableArrayList(events));
         }
+
+//        try{
+//            eventListView.getItems().addAll(mainCtrl.getMyEvents());
+//        } catch (Exception e){
+//            System.out.println(e.getMessage());
+//        }
 //        // retrieve from database based on recency (now null to have something)
 //        // the commented below is for testing
 //        noEventLabel.setVisible(false);
@@ -207,5 +214,14 @@ public class StartScreenCtrl {
     }
     public void showSettings(){
         mainCtrl.showSettings();
+    }
+
+    public void handleMouseClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2) {
+            Event event = (Event) eventListView.getSelectionModel().getSelectedItem();
+            if (event != null) {
+                mainCtrl.showSplittyOverview(event.getId());
+            }
+        }
     }
 }

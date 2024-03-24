@@ -167,7 +167,7 @@ public class MainCtrl {
     public void showSplittyOverview(int id){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
-//        splittyOverview.getStylesheets().add(css);
+        splittyOverview.getStylesheets().add(css);
         Event event = serverUtils.getEventById(id);
         splittyOverviewCtrl.setTitle(event.getName());
         splittyOverviewCtrl.setEventCode(id);
@@ -176,8 +176,11 @@ public class MainCtrl {
     }
 
     public List<Event> getMyEvents(){
-        events = serverUtils.getEventsByParticipant(settingCtrl.getId());
-        return events;
+        if(settingCtrl!=null){
+            events = serverUtils.getEventsByParticipant(settingCtrl.getId());
+            return events;
+        }
+        return null;
     }
 
     public Participant joinEvent(int id){ // needs some more error handling
@@ -297,5 +300,8 @@ public class MainCtrl {
         settingCtrl.initializeFields();
     }
 
+    public String getMyUuid(){
+        return settingCtrl.getId();
+    }
 
 }

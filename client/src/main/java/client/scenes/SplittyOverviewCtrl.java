@@ -3,9 +3,11 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.*;
 import commons.dto.ExpenseDTO;
+import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -41,12 +43,9 @@ public class SplittyOverviewCtrl implements Initializable {
     private Button addExpenseButton;
 
     @FXML
-    private Button editParticipant;
-    @FXML
     private Tab tab2;
     @FXML
     private Button deleteExpenseButton;
-
 
 
     @FXML
@@ -220,9 +219,6 @@ public class SplittyOverviewCtrl implements Initializable {
         this.addExpenseButton.setText(text);
     }
 
-    public void setEditParticipant(String text) {
-        this.editParticipant.setText(text);
-    }
 
     public void setTab2(String text) {
         this.tab2.setText(text);
@@ -238,6 +234,11 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setAllExpenses(String text) {
         this.allExpenses.setText(text);
+    }
+
+    public void leaveEvent(ActionEvent actionEvent) {
+        serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
+        mainCtrl.showStartScreen();
     }
 }
 
