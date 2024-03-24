@@ -62,6 +62,7 @@
         <Button layoutX="514.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
 
         <Button fx:id="adminLogin" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login" AnchorPane.leftAnchor="10.0" />
+      <ImageView fx:id="flag" fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
 
 
     </children>

@@ -5,6 +5,7 @@ import client.scenes.*;
 import jakarta.ws.rs.client.ClientBuilder;
 
 import jakarta.ws.rs.core.Response;
+import javafx.scene.image.Image;
 
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -109,7 +110,7 @@ public class SetLanguage {
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 
 
-    public static String translate(String query, String sourceLang, String targetLang) {
+    public String translate(String query, String sourceLang, String targetLang) {
         Response response = ClientBuilder.newClient()
                 .target(SERVER)
                 .path("api/translate")
@@ -126,6 +127,30 @@ public class SetLanguage {
 
         return res;
 
+    }
+
+    public Image getFlag(String lang){
+        //I am not sure if passing a file and converting it to an image works so first test locally
+//        Response response = ClientBuilder.newClient(new ClientConfig())
+//                .target(SERVER)
+//                .path("api/translate/flag")
+//                .queryParam("lang", lang)
+//                .request(APPLICATION_JSON)
+//                .get();
+//        if(Response.Status.OK.getStatusCode() != response.getStatus()){
+//            response.close();
+//            throw new RuntimeException("Failed to retrieve flag. Status code: " + response.getStatus());
+//        }
+////        response.readEntity(Image.class);
+//        byte[] responseBody = response.readEntity(byte[].class);
+//        // Convert byte array to InputStream
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBody);
+//
+//        // Create JavaFX Image from InputStream
+//        Image image = new Image(inputStream);
+//        return image;
+
+        return new Image("enFlag.png");
     }
 
 

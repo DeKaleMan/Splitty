@@ -8,12 +8,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
+
 import java.util.Date;
+
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
@@ -63,6 +66,9 @@ public class StartScreenCtrl {
     @FXML
     private ImageView imageView;
 
+    @FXML
+    private ImageView flag;
+
     private int eventCode = 1;
 
     @Inject
@@ -91,9 +97,9 @@ public class StartScreenCtrl {
 
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
-
         // Set the image to the ImageView
         imageView.setImage(image);
+
     }
 
     private void setup(Event event, Button button, Label label) {
@@ -200,5 +206,10 @@ public class StartScreenCtrl {
     }
     public void showSettings(){
         mainCtrl.showSettings();
+    }
+
+    public void setFlag(Image image){
+        flag.setImage(new Image("enFlag.png"));
+
     }
 }

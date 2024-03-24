@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import server.api.depinjectionUtils.IOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
+import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
@@ -39,18 +40,18 @@ public class LanguageController {
     public ResponseEntity<String> translate(@RequestParam String query,
                                             @RequestParam String sourceLang, @RequestParam String targetLang) {
         List<String> lang = Arrays.asList("en", "de", "nl", "ar", "zh", "is", "es");
-        if(!lang.contains(sourceLang)||!lang.contains(targetLang)|| Objects.equals(sourceLang, targetLang)){
+        if (!lang.contains(sourceLang) || !lang.contains(targetLang) || Objects.equals(sourceLang, targetLang)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
         }
-        if(query == null || query.isEmpty()){
+        if (query == null || query.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("empty query");
         }
         File newfile = new File(basepath + targetLang + ".json");
         //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
 
-        if(!newfile.exists()){
+        if (!newfile.exists()) {
             try {
-                if(newfile.createNewFile()) {
+                if (newfile.createNewFile()) {
                     try (FileWriter fileWriter = new FileWriter(newfile)) {
                         // Write an empty JSON object to the file
                         fileWriter.write("{}");
@@ -58,12 +59,11 @@ public class LanguageController {
                         throw new RuntimeException(e);
                     }
                 }
-               // mynewFile.createNewFile();
+                // mynewFile.createNewFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
 
 
         // Read JSON file
@@ -86,22 +86,14 @@ public class LanguageController {
 
 
     }
-
-//    private JsonObject readJsonFile(File file) {
-//        try (Reader reader = new FileReader(file.getPath())) {
-//            return JsonParser.parseReader(reader).getAsJsonObject();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error reading JSON file", e);
-//        }
-//    }
-//
     private String getTranslationFromJson(String query, JsonObject object) {
         if (object.has(query)) {
             return object.get(query).getAsString();
         }
         return null;
     }
-public void writeJsonFile(JsonObject object, File file) {
+
+    public void writeJsonFile(JsonObject object, File file) {
         try (FileWriter fileWriter = new FileWriter(file.getPath())) {
             Gson gson = new Gson();
             gson.toJson(object, fileWriter);
@@ -109,5 +101,21 @@ public void writeJsonFile(JsonObject object, File file) {
         } catch (IOException e) {
             throw new RuntimeException("Error writing JSON object to file", e);
         }
+    }
+
+    @GetMapping(path = {"/flag", "flag"})
+    public ResponseEntity<File> getFlag(@RequestParam String lang){
+        List<String> flags = Arrays.asList("en", "nl");
+        if (!lang.contains(lang)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        String filepath = basepath + lang + "Flag" + ".png";
+        File image = new File(filepath);
+        if(!image.exists()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+
+        return ResponseEntity.ok(image);
     }
 }

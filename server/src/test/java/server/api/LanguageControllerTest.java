@@ -2,23 +2,17 @@ package server.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.api.depinjectionUtils.IOUtilActual;
 import server.api.depinjectionUtils.LanguageResponse;
-import server.api.testmocks.LanguageResponseTest;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -124,4 +118,13 @@ class LanguageControllerTest {
             fail("Failed to read file: " + e.getMessage());
         }
     }
+    @Test
+    public void getGetFlag(){
+        LanguageResponse responseMock = mock(LanguageResponse.class);
+        LanguageController l = new LanguageController(null, responseMock);
+
+        File imgage = l.getFlag("en").getBody();
+    }
+
+
 }
