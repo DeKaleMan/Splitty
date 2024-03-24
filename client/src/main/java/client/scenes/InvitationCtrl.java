@@ -11,6 +11,7 @@ public class InvitationCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private String inviteCode;
+    private int eventCode = 1;
 
     @FXML
     private Label titleLabel;
@@ -44,7 +45,7 @@ public class InvitationCtrl {
     public void sendInvitesOnClick() {
         System.out.println("Button clicked!!");
         readAndSendEmails();
-        mainCtrl.showSplittyOverview(titleLabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
 
     /**
@@ -70,7 +71,7 @@ public class InvitationCtrl {
     @FXML
     private void back() {
         System.out.println("going back to event overview");
-        mainCtrl.showSplittyOverview(titleLabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
 
 

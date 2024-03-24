@@ -139,7 +139,7 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void back() {
-        mainCtrl.showSplittyOverview(titleLabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
 
     /**

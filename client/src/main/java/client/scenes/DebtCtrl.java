@@ -42,6 +42,9 @@ public class DebtCtrl implements Initializable {
 
     private ObservableList<Payment> payments;
 
+    //TODO make eventCode not hardcoded
+    private int eventCode = 1;
+
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
@@ -53,9 +56,8 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO make eventCode not hardcoded
         payments = FXCollections.observableArrayList(
-            serverUtils.getPaymentsOfEvent(1).stream().filter(x -> !x.isPaid()).toList());
+            serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
         this.paymentInstructionListView.setItems(payments);
         paymentInstructionListView.setCellFactory(
             new Callback<ListView<Payment>, ListCell<Payment>>() {
@@ -136,9 +138,9 @@ public class DebtCtrl implements Initializable {
     }
 
     @FXML
-    public void back() {
+    public void back(){
         persistPayments(changed);
-        mainCtrl.showSplittyOverview(titlelabel.getText());
+        mainCtrl.showSplittyOverview(eventCode);
     }
 
     public void markReceived(Button button)
@@ -153,9 +155,8 @@ public class DebtCtrl implements Initializable {
 
     private void persistPayments(List<Payment> payments) {
         for (Payment p : payments) {
-            //TODO make eventCode not hardcoded
             serverUtils.updatePayment(
-                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), 1, p.getAmount(),
+                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode, p.getAmount(),
                     p.isPaid()), p.getId());
         }
     }
