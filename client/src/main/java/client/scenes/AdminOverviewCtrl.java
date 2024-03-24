@@ -1,7 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
+import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +13,7 @@ import javafx.util.Callback;
 
 import javax.inject.Inject;
 import java.util.Comparator;
+import java.util.List;
 
 public class AdminOverviewCtrl {
 
@@ -108,9 +111,11 @@ public class AdminOverviewCtrl {
 
     @FXML
     public void exportEvent() {
-        Event event = eventList.getSelectionModel().getSelectedItem();
+        Event toExportEvent = eventList.getSelectionModel().getSelectedItem();
+        List<Participant> toExportParticipants = serverUtils.getParticipants(toExportEvent.getId());
         // TODO: Convert event to json and display somehow (DB not fully done so can't do it yet)
-        System.out.println("Export: " + event);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println("Export: " + toExportEvent);
     }
 
     @FXML
@@ -142,20 +147,19 @@ public class AdminOverviewCtrl {
                 break;
             case "Creation date":
                 System.out.println("Creation date sorting selected");
-                // TODO: Sort event list based on creation date
-                //  (can't do it yet because I need to discuss something with you guys)
-                newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
+                currentEventList = eventList.getItems();
+                currentEventList.stream().sorted(Comparator.comparing(Event::getDate))
+                        .forEach(newEventList::add);
                 break;
             case "Last activity":
                 System.out.println("Last activity sorting selected");
-                // TODO: Sort event list based on last activity
-                //  (can't do it yet because I need to discuss something with you guys)
-                newEventList = FXCollections.observableArrayList(serverUtils.getAllEvents());
+                currentEventList = eventList.getItems();
+                currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
+                        .forEach(newEventList::add);
                 break;
         }
         eventList.setItems(newEventList);
     }
-
 
     public void logOut() {
         mainCtrl.showStartScreen();

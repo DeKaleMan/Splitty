@@ -12,6 +12,7 @@ public class EventDTO {
     private Date date;
     private String owner;
     private String description;
+    private Date lastActivity;
 
     public EventDTO(String name, Date date,
                  String owner,
@@ -20,6 +21,7 @@ public class EventDTO {
         this.date = date; // date of when the event occurred/was created
         this.owner = owner; // the person that created the event
         this.description = description; //description of the event
+        lastActivity = new Date();
     }
 
     public EventDTO() {
@@ -56,6 +58,14 @@ public class EventDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getLastActivity() {
+        return lastActivity;
+    }
+
+    public void updateActivityDate() {
+        lastActivity = new Date();
     }
 
     @Override
