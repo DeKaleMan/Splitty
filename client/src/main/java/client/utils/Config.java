@@ -20,7 +20,8 @@ public class Config {
     private String bic;
 
 
-    public Config(String connection, Language language, Currency currency, String email, String id, String name, String iban, String bic) {
+    public Config(String connection, Language language, Currency currency, String email,
+                  String id, String name, String iban, String bic) {
         this.connection = connection;
         this.language = language;
         this.currency = currency;

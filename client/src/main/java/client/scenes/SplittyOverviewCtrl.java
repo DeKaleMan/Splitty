@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.*;
 import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.collections.FXCollections;

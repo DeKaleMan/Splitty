@@ -31,7 +31,8 @@ public class Participant implements Serializable {
         id = new ParticipantId();
     }
 
-    public Participant(String name, double balance, String iBan, String bIC, String email, String accountHolder, String uuid, Event event) {
+    public Participant(String name, double balance, String iBan, String bIC,
+                       String email, String accountHolder, String uuid, Event event) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
