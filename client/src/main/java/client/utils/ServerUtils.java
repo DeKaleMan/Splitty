@@ -499,8 +499,8 @@ public class ServerUtils {
         Stack<Pair<String, Double>> rest = new Stack<>();
         List<PaymentDTO> payments = new ArrayList<>();
         for (Participant p : participants) {
-            if (p.getBalance() > 0) banks.add(new Pair<>(p.getUuid(), p.getBalance()));
-            else if (p.getBalance() < 0) rest.add(new Pair<>(p.getUuid(), p.getBalance()));
+            if (compareDouble(p.getBalance(),0,0.001) > 0) banks.add(new Pair<>(p.getUuid(), p.getBalance()));
+            else if (compareDouble(p.getBalance(),0,0.001) < 0) rest.add(new Pair<>(p.getUuid(), p.getBalance()));
         }
         generateDTOs(eventCode, rest, banks, payments);
         if (!rest.isEmpty() || !banks.isEmpty())
