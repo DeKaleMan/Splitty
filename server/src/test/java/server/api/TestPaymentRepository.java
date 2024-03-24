@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.ParticipantId;
 import commons.Payment;
 import org.springframework.data.domain.Example;
@@ -27,6 +28,12 @@ public class TestPaymentRepository implements PaymentRepository {
     public List<Payment> findByPayeeId(ParticipantId payeeId) {
         methods.add("findByPayeeId");
         return payments.stream().filter(x -> x.getPayee().getId().equals(payeeId)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Payment> findByEvent(Event event) {
+        methods.add("findByEvent");
+        return payments.stream().filter(x -> x.getPayer().getId().getEvent().equals(event)).toList();
     }
 
     @Override

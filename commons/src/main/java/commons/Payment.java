@@ -5,10 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.Column;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -27,19 +24,21 @@ public class Payment {
     @Column(nullable = false)
     private double amount; // The amount of money transferred
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date transactionDate; // The date and time when the transaction occurred
+    private boolean paid;
 
     // Constructors
     public Payment() {
     }
 
-    public Payment(Participant payer, Participant payee, double amount, Date transactionDate) {
+
+
+
+    public Payment(Participant payer, Participant payee, double amount, boolean paid) {
         this.payer = payer;
         this.payee = payee;
         this.amount = amount;
-        this.transactionDate = transactionDate;
+        this.paid = paid;
     }
 
     // Getters and setters
@@ -75,12 +74,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Date getTransactionDate() {
-        return transactionDate;
+    public boolean isPaid() {
+        return paid;
     }
 
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     @Override

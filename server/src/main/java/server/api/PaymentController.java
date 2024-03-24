@@ -12,8 +12,8 @@ import server.database.EventRepository;
 import server.database.ParticipantRepository;
 import server.database.PaymentRepository;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -37,6 +37,17 @@ public class PaymentController {
         return paymentRepository.findAll();
     }
 
+    @GetMapping("/{eventId}")
+    public ResponseEntity<List<Payment>> getPaymentsOfEvent(@PathVariable("eventId") int eventId){
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if(optionalEvent.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = optionalEvent.get();
+        return ResponseEntity.ok(paymentRepository.findByEvent(event));
+    }
+
 
     @PostMapping
     public ResponseEntity<Payment> createPayment(@RequestBody PaymentDTO paymentDTO) {
@@ -50,10 +61,55 @@ public class PaymentController {
         if (payee == null || payer == null) {
             return ResponseEntity.notFound().build();
         }
-        Date now = new Date();
-        Payment payment = new Payment(payer, payee, paymentDTO.getAmount(), now);
+        Payment payment = new Payment(payer, payee, paymentDTO.getAmount(), paymentDTO.isPaid());
         Payment savedPayment = paymentRepository.save(payment);
         return ResponseEntity.ok(savedPayment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Payment> updatePayment(@RequestBody PaymentDTO paymentDTO, @PathVariable("id") long id){
+        Optional<Event> optionalEvent = eventRepository.findById(paymentDTO.getEventCode());
+        if(optionalEvent.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = optionalEvent.get();
+
+        Optional<Payment> optionalPayment = paymentRepository.findById(id);
+        if(optionalPayment.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Payment existingPayment = optionalPayment.get();
+
+        Participant payer = participantRepository.findById(new ParticipantId(paymentDTO.getPayerUuid(), event));
+        Participant payee = participantRepository.findById(new ParticipantId(paymentDTO.getPayeeUuid(), event));
+
+        if(payer == null || payee == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        existingPayment.setPaid(paymentDTO.isPaid());
+        existingPayment.setAmount(paymentDTO.getAmount());
+        existingPayment.setPayee(payee);
+        existingPayment.setPayer(payer);
+
+        return  ResponseEntity.ok(paymentRepository.save(existingPayment));
+    }
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<Payment> deletePaymentsOfEvent(@PathVariable("eventId") int id){
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+        if(optionalEvent.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = optionalEvent.get();
+
+        List<Payment> payments = paymentRepository.findByEvent(event);
+        paymentRepository.deleteAll(payments);
+
+        return ResponseEntity.ok().build();
     }
 
 }

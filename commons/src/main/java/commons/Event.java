@@ -1,10 +1,12 @@
 package commons;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Date;
 import java.util.Objects;
 @Entity
+@Builder
 public class Event {
 
     @Id
@@ -14,6 +16,7 @@ public class Event {
     private Date date;
     private String owner;
     private String description;
+    private Date lastActivity;
 
     public Event(String name, Date date,
                  String owner,
@@ -21,7 +24,8 @@ public class Event {
         this.name = name; // name of the event
         this.date = date; // date of when the event occured/was created
         this.owner = owner; // the person that created the event
-        this.description = description; //description of the event
+        this.description = description;//description of the event
+        lastActivity = new Date();
     }
 
     public Event() {
@@ -67,6 +71,14 @@ public class Event {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Date getLastActivity() {
+        return lastActivity;
+    }
+
+    public void updateActivityDate() {
+        lastActivity = new Date();
     }
 
     @Override

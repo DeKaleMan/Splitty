@@ -52,7 +52,7 @@ ListView {
     /* Background color */
     /* -fx-background-color: #2E1C8A; */
     -fx-background-color: #ffffff; /* White */
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-text-fill: #333;
 }
 

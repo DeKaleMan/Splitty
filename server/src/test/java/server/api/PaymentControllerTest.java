@@ -44,7 +44,7 @@ public class PaymentControllerTest {
 
     @Test
     void testGetAllPayments() {
-        Payment payment = new Payment(participant1, participant2, 100, new Date(0));
+        Payment payment = new Payment(participant1, participant2, 100, false);
         testPaymentParticipantRepository.payments.add(payment);
         List<Payment> payments = paymentController.getAllPayments();
         assertEquals(testPaymentParticipantRepository.payments, payments);
@@ -52,11 +52,11 @@ public class PaymentControllerTest {
 
     @Test
     void testCreatePayment() {
-        Payment payment = new Payment(participant1, participant2, 100, new Date(0));
+        Payment payment = new Payment(participant1, participant2, 100, false);
         testPaymentParticipantRepository.payments.add(payment);
         PaymentDTO paymentDTO = new PaymentDTO("uuid",
                 "uuid1",
-                1, 100);
+                1, 100, false);
         ResponseEntity<Payment> response = paymentController.createPayment(paymentDTO);
         System.out.println(response.getStatusCode());
         assertEquals(payment, response.getBody());
