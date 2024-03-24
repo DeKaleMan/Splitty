@@ -22,10 +22,14 @@ import client.utils.ServerUtils;
 import commons.Event;
 import client.utils.Language;
 import client.utils.SetLanguage;
+import commons.Participant;
+import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import java.util.List;
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
@@ -78,6 +82,11 @@ public class MainCtrl {
     //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
     private Scene settings;
     private SettingsCtrl settingCtrl;
+
+
+    // probably not the best place to put that here but works for now
+    // maybe in the future isolate it into an eventctrl?
+    private List<Event> events;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
@@ -158,13 +167,36 @@ public class MainCtrl {
     public void showSplittyOverview(int id){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
-        splittyOverview.getStylesheets().add(css);
+//        splittyOverview.getStylesheets().add(css);
         Event event = serverUtils.getEventById(id);
         splittyOverviewCtrl.setTitle(event.getName());
         splittyOverviewCtrl.setEventCode(id);
-        splittyOverviewCtrl.fetchExpenses();
         splittyOverviewCtrl.fetchParticipants();
+        splittyOverviewCtrl.fetchExpenses();
     }
+
+    public List<Event> getMyEvents(){
+        events = serverUtils.getEventsByParticipant(settingCtrl.getId());
+        return events;
+    }
+
+    public Participant joinEvent(int id){ // needs some more error handling
+        Participant participant = serverUtils.createParticipant(
+                new ParticipantDTO(
+                        settingCtrl.getName(),
+                        0,
+                        settingCtrl.getIban(),
+                        settingCtrl.getBic(),
+                        settingCtrl.getEmail(),
+                        id,
+                        settingCtrl.getId()
+                ));
+        if (participant != null) {
+            events.add(serverUtils.getEventById(id));
+        }
+        return participant;
+    }
+
 
     public void showAddExpense(String title) {
         primaryStage.setTitle("Add expense");

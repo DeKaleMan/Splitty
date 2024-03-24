@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.ParticipantId;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,11 @@ public class TestParticipantRepository implements ParticipantRepository {
 
     @Override
     public List<Participant> findByEventId(int eventId) {
+        return null;
+    }
+
+    @Override
+    public List<Event> findEventsByParticipant(String uuid) {
         return null;
     }
 
