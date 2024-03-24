@@ -22,13 +22,6 @@ public class LanguageResponseActual implements LanguageResponse {
             throw new RuntimeException("Error reading JSON file", e);
         }
     }
-//    @Override
-//    public String getTranslationFromJson(String query, JsonObject object) {
-//        if (object.has(query)) {
-//            return object.get(query).getAsString();
-//        }
-//        return null;
-//    }
     @Override
     public String translateWithAPI(String query, String sourceLang, String targetLang) {
         String apiUrl = "https://api.mymemory.translated.net/get";
@@ -56,16 +49,6 @@ public class LanguageResponseActual implements LanguageResponse {
             return translated;
         } catch (IOException e) {
             throw new RuntimeException("Error translating with API", e);
-        }
-    }
-    @Override
-    public void writeJsonFile(JsonObject object, File file) {
-        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
-            Gson gson = new Gson();
-            gson.toJson(object, fileWriter);
-            System.out.println("JSON file updated successfully.");
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing JSON object to file", e);
         }
     }
 }
