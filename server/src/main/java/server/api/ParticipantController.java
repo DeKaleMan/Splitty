@@ -65,6 +65,7 @@ public class ParticipantController {
                 participantDTO.getiBan(),
                 participantDTO.getbIC(),
                 participantDTO.getEmail(),
+                participantDTO.getAccountHolder(),
                 participantDTO.getUuid(),
                 event
         );
@@ -91,6 +92,7 @@ public class ParticipantController {
         existingParticipant.setIBan(participantDTO.getiBan());
         existingParticipant.setBIC(participantDTO.getbIC());
         existingParticipant.setEmail(participantDTO.getEmail());
+        existingParticipant.setAccountHolder(participantDTO.getAccountHolder());
         existingParticipant.setUuid(participantDTO.getUuid());
 
 

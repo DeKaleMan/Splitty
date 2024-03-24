@@ -191,6 +191,7 @@ public class MainCtrl {
                         settingCtrl.getIban(),
                         settingCtrl.getBic(),
                         settingCtrl.getEmail(),
+                        settingCtrl.getName(),
                         id,
                         settingCtrl.getId()
                 ));

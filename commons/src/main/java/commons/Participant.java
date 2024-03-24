@@ -22,6 +22,8 @@ public class Participant implements Serializable {
 
     private String email;
 
+    private String accountHolder;
+
     @EmbeddedId
     private ParticipantId id;
 
@@ -29,13 +31,14 @@ public class Participant implements Serializable {
         id = new ParticipantId();
     }
 
-    public Participant(String name, double balance, String iBan, String bIC, String email, String uuid, Event event) {
+    public Participant(String name, double balance, String iBan, String bIC, String email, String accountHolder, String uuid, Event event) {
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
         this.bIC = bIC;
         this.email = email;
         this.id = new ParticipantId(uuid, event);
+        this.accountHolder = accountHolder;
     }
 
     // Getters and setters
@@ -82,6 +85,14 @@ public class Participant implements Serializable {
 
     public void setEvent(Event event){
         id.setEvent(event);
+    }
+
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public void setAccountHolder(String accountHolder) {
+        this.accountHolder = accountHolder;
     }
 
     public Event getEvent(){
