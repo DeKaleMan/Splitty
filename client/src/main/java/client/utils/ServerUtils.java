@@ -31,6 +31,7 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import jakarta.ws.rs.client.Client;
 import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
 
@@ -52,6 +53,14 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
  * The type Server utils.
  */
 public class ServerUtils {
+
+    private Client client;
+    public ServerUtils(Client client) {
+        this.client = client;
+    }
+    public ServerUtils(){
+        this.client = ClientBuilder.newClient(new ClientConfig());
+    }
 
     private static final String SERVER = "http://localhost:8080/";
 
@@ -259,23 +268,12 @@ public class ServerUtils {
      */
 
     public List<Event> getAllEvents() {
-        Response response = ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/event/all")
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .get();
-
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            List<Event> events = response.readEntity(new GenericType<>() {
-            });
-            response.close();
-            return events;
-        } else {
-            // Handle error response
-            response.close();
-            throw new RuntimeException(
-                "Failed to retrieve events. Status code: " + response.getStatus());
-        }
+        var response = client
+                .target(SERVER).path("api/event/all")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Event>>(){});
+        return response;
     }
 
     /**

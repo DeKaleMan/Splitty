@@ -1,6 +1,10 @@
 package commons;
+import lombok.Builder;
+
 import java.util.Date;
 import java.util.Objects;
+
+@Builder
 public class EventDTO {
 
     public int id;
