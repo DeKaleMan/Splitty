@@ -486,7 +486,7 @@ public class ServerUtils {
         }
 
     }
-}
+
 
     public List<Payment> getPaymentsOfEvent(int eventId){
         return ClientBuilder.newClient(new ClientConfig())
