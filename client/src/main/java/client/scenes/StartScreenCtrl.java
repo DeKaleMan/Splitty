@@ -4,6 +4,7 @@ import client.utils.Config;
 import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.inject.Inject;
-import java.util.Date;
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
@@ -41,29 +41,14 @@ public class StartScreenCtrl {
     @FXML
     private ComboBox languageSelect;
 
-    // the events
-    @FXML
-    private Button eventButton1;
-    @FXML
-    private Label eventLabel1;
-
-    @FXML
-    private Button eventButton2;
-    @FXML
-    private Label eventLabel2;
-
-    @FXML
-    private Button eventButton3;
-    @FXML
-    private Label eventLabel3;
-
-    @FXML
-    private Label noEventLabel;
 
     @FXML
     private ImageView imageView;
 
-    private int eventCode = 1;
+    @FXML
+    private ListView<Event> eventListView;
+
+    private int eventCode;
 
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
@@ -74,20 +59,37 @@ public class StartScreenCtrl {
 
     // list the 3 most recent events on the start page
     public void initialize() {
-        // retrieve from database based on recency (now null to have something)
-        // the commented below is for testing
-        noEventLabel.setVisible(false);
-        String id = config.getId(); // the start of getting this querified
-        Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
-        Event event2 = null;
-        Event event3 = null;
-        setup(event1, eventButton1, eventLabel1);
-        setup(event2, eventButton2, eventLabel2);
-        setup(event3, eventButton3, eventLabel3);
-        // this will be querified
-        if (event1 == null && event2 == null && event3 == null) {
-            noEventLabel.setVisible(true);
+        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
+            @Override
+            protected void updateItem(Event event, boolean empty) {
+                super.updateItem(event, empty);
+                if (empty || event == null) {
+                    setText(null);
+                } else {
+                    setText(event.getName());
+                }
+            }
+        });
+
+        try{
+            eventListView.setItems(FXCollections.observableArrayList(mainCtrl.getMyEvents()));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
+//        // retrieve from database based on recency (now null to have something)
+//        // the commented below is for testing
+//        noEventLabel.setVisible(false);
+//        String id = config.getId(); // the start of getting this querified
+//        Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
+//        Event event2 = null;
+//        Event event3 = null;
+//        setup(event1, eventButton1, eventLabel1);
+//        setup(event2, eventButton2, eventLabel2);
+//        setup(event3, eventButton3, eventLabel3);
+//        // this will be querified
+//        if (event1 == null && event2 == null && event3 == null) {
+//            noEventLabel.setVisible(true);
+//        }
 
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
@@ -132,9 +134,14 @@ public class StartScreenCtrl {
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent(){
-        System.out.println("Joined event: " + joinEventTextField.getText());
+        eventCode = Integer.parseInt(joinEventTextField.getText());
+        Participant p = mainCtrl.joinEvent(eventCode);
+        if (p == null) {
+            // show error message
+            return;
+        }
         mainCtrl.showSplittyOverview(eventCode);
-        //TO DO, this will happen here in this method
+        System.out.println("Joined event: " + joinEventTextField.getText());
     }
 
     @FXML
@@ -171,7 +178,7 @@ public class StartScreenCtrl {
         create.setText(text);
     }
     public void setNoEventLabel(String text){
-        noEventLabel.setText(text);
+//        noEventLabel.setText(text);
     }
 
 

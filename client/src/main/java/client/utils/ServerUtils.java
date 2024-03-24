@@ -455,4 +455,24 @@ public class ServerUtils {
         }
     }
 
+    public List<Event> getEventsByParticipant(String id) {
+
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/participants/{uuid}/events")
+                .resolveTemplate("uuid", id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Event> events = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return events;
+        } else {
+            response.close();
+            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+        }
+
+    }
 }

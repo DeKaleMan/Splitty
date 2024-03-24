@@ -19,7 +19,7 @@ import java.util.*;
 public class SplittyOverviewCtrl implements Initializable {
 
     //We need to store the eventCode right here
-    private int eventCode = 1; //replace with the actual eventCode
+    private int eventCode;
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -69,8 +69,21 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        fetchExpenses();
-        fetchParticipants();
+        participantListView.setCellFactory(param -> new ListCell<Participant>(){
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+//        fetchExpenses();
+//        fetchParticipants();
     }
 
     public void setEventCode(int eventCode){
@@ -171,6 +184,7 @@ public class SplittyOverviewCtrl implements Initializable {
         allExpenses.setContent(expenseList);
     }
     public void fetchParticipants(){
+
         List<Participant> participants = new ArrayList<>();
         try{
             participants = serverUtils.getParticipants(eventCode);
@@ -225,8 +239,5 @@ public class SplittyOverviewCtrl implements Initializable {
     public void setAllExpenses(String text) {
         this.allExpenses.setText(text);
     }
-
-
-
 }
 
