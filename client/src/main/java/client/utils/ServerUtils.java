@@ -42,7 +42,10 @@ public class ServerUtils {
 
     private Client client;
     public ServerUtils(Client client) {
-        this.client=client;
+        this.client= ClientBuilder.newClient(new ClientConfig());
+    }
+    public ServerUtils(){
+
     }
 
     private static final String SERVER = "http://localhost:8080/";
