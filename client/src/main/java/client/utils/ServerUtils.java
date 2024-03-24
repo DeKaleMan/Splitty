@@ -284,7 +284,8 @@ public class ServerUtils {
      */
     public Event getEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/event?id=" + id)
+                .target(SERVER).path("api/event")
+                .queryParam("id", id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get();

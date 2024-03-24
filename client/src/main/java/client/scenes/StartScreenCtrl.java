@@ -63,6 +63,8 @@ public class StartScreenCtrl {
     @FXML
     private ImageView imageView;
 
+    private int eventCode = 1;
+
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
@@ -104,7 +106,7 @@ public class StartScreenCtrl {
         label.setVisible(true);
 
         button.setOnAction(something -> {
-            mainCtrl.showSplittyOverview(event.getName());
+            mainCtrl.showSplittyOverview(event.getId());
         });
 
         button.setText(event.getName());
@@ -131,7 +133,7 @@ public class StartScreenCtrl {
      */
     public void joinEvent(){
         System.out.println("Joined event: " + joinEventTextField.getText());
-        mainCtrl.showSplittyOverview(joinEventTextField.getText());
+        mainCtrl.showSplittyOverview(eventCode);
         //TO DO, this will happen here in this method
     }
 

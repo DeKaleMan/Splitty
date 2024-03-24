@@ -18,14 +18,14 @@ package client.scenes;
 import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
 
+import client.utils.ServerUtils;
+import commons.Event;
 import client.utils.Language;
 import client.utils.SetLanguage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
@@ -66,17 +66,16 @@ public class MainCtrl {
 
     private Scene statistics;
     private StatisticsCtrl statisticsCtrl;
-
     private Scene debts;
     private DebtCtrl debtCtrl;
-
-
     private Scene userEventList;
     private UserEventListCtrl userEventListCtrl;
-
     private Scene createEvent;
     private CreateEventCtrl createEventCtrl;
+    private ServerUtils serverUtils;
 
+    //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
+    //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
     private Scene settings;
     private SettingsCtrl settingCtrl;
 
@@ -112,28 +111,21 @@ public class MainCtrl {
 
         this.adminOverviewCtrl = adminWindows.adminOverview().getKey();
         this.adminOverview = new Scene(adminWindows.adminOverview().getValue());
-
         this.addExpenseCtrl = eventPropGrouper.addExpense().getKey();
         this.addExpense = new Scene(eventPropGrouper.addExpense().getValue());
-
         this.manageParticipantsCtrl = eventPropGrouper.manageParticipants().getKey();
         this.manageParticipants = new Scene(eventPropGrouper.manageParticipants().getValue());
-
         this.statisticsCtrl = eventPropGrouper.statistics().getKey();
         this.statistics = new Scene(eventPropGrouper.statistics().getValue());
-
         this.debtCtrl = eventPropGrouper.debts().getKey();
         this.debts = new Scene(eventPropGrouper.debts().getValue());
-
         this.userEventListCtrl = userEventList.getKey();
         this.userEventList = new Scene(userEventList.getValue());
-
         this.createEventCtrl = createEvent.getKey();
         this.createEvent = new Scene(createEvent.getValue());
-
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
-
+        serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
         showStartScreen();
         primaryStage.show();
@@ -143,7 +135,6 @@ public class MainCtrl {
     public void setLanguage(){
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
-
     }
 
     public void changeLanguage(Language toLang){
@@ -164,12 +155,15 @@ public class MainCtrl {
     }
 
     // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
-    public void showSplittyOverview(String title){
+    public void showSplittyOverview(int id){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
         splittyOverview.getStylesheets().add(css);
-        splittyOverviewCtrl.setTitle(title);
-        //splittyOverviewCtrl.setEventCode(1);
+        Event event = serverUtils.getEventById(id);
+        splittyOverviewCtrl.setTitle(event.getName());
+        splittyOverviewCtrl.setEventCode(id);
+        splittyOverviewCtrl.fetchExpenses();
+        splittyOverviewCtrl.fetchParticipants();
     }
 
     public void showAddExpense(String title) {

@@ -106,7 +106,7 @@ public class CreateEventCtrl {
             }
             return;
         }
-        mainCtrl.showSplittyOverview(name);
+        mainCtrl.showStartScreen();
         System.out.println("Created new event: " + name);
         // create new event and add to database, go to that event overview and add participants via database.
     }
