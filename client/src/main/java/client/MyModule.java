@@ -34,5 +34,15 @@ public class MyModule implements Module {
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(Config.class).in(Scopes.SINGLETON);
+        binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AdminOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CreateEventCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DebtCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(Config.class).in(Scopes.SINGLETON);
+        binder.bind(ManageParticipantsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SettingsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(UserEventListCtrl.class).in(Scopes.SINGLETON);
     }
 }

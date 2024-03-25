@@ -43,10 +43,9 @@ public class Config {
      */
     public void read() {
         try {
-            String filepath = getClass().getClassLoader().getResource("config").getFile();
+            String filepath = getClass().getClassLoader().getResource("config").getPath();
+            filepath = filepath.replaceAll("%20", " ");
             File file = new File(filepath);
-
-            //File file = new File("./client/src/main/resources/config");
 
             Scanner sc = new Scanner(file);
 
@@ -102,7 +101,9 @@ public class Config {
      */
     public boolean write() {
         try {
-            FileWriter writer = new FileWriter("./client/src/main/resources/config");
+            String filepath = getClass().getClassLoader().getResource("config").getPath();
+            filepath = filepath.replaceAll("%20", " ");
+            FileWriter writer = new FileWriter(filepath);
 
             if (connection == null) {
                 writer.write("null ");
