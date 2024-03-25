@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.Config;
-import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
@@ -67,18 +66,18 @@ public class StartScreenCtrl {
 
     // list the 3 most recent events on the start page
     public void initialize() {
-//        eventListView.getItems().clear();
-//        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
-//            @Override
-//            protected void updateItem(Event event, boolean empty) {
-//                super.updateItem(event, empty);
-//                if (empty || event == null) {
-//                    setText(null);
-//                } else {
-//                    setText(event.getName());
-//                }
-//            }
-//        });
+        eventListView.getItems().clear();
+        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
+            @Override
+            protected void updateItem(Event event, boolean empty) {
+                super.updateItem(event, empty);
+                if (empty || event == null) {
+                    setText(null);
+                } else {
+                    setText(event.getName());
+                }
+            }
+        });
 
         List<Event> events = mainCtrl.getMyEvents();
         if(events!=null){
@@ -200,9 +199,10 @@ public class StartScreenCtrl {
 
         ObservableList<String> languages = FXCollections.observableArrayList();
 
-        for(Language l: Language.values()){
-            languages.add(l.toString());
-        }
+//        for(Language l: Language.values()){
+//            languages.add(l.toString());
+//        }
+        languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(language);
     }
@@ -212,8 +212,12 @@ public class StartScreenCtrl {
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                Language toLang = Language.valueOf(selected);
-                mainCtrl.changeLanguage(toLang);
+                //Language toLang = Language.valueOf(selected);
+                if(mainCtrl.languages.contains(selected)){
+                    String toLang = selected;
+                    mainCtrl.changeLanguage(toLang);
+                }
+
             }
         } catch (Exception e) {
             System.out.println(e);

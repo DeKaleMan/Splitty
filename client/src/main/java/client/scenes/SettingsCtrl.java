@@ -17,6 +17,9 @@ public class SettingsCtrl {
     public TextField emailField;
     @FXML
     public TextField currencyField;
+    @FXML
+    private TextField langTextfield;
+
 
     @Inject
     public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
@@ -102,5 +105,27 @@ public class SettingsCtrl {
 
     public String getBic() {
         return config.getBic();
+    }
+
+    @FXML
+    public void addLang(){
+        String newLang = langTextfield.getText();
+        if(newLang != null){
+            //setLanguage to new found language, we can no longer use an enum
+            if(mainCtrl.languages.contains(newLang)){
+                langTextfield.setPromptText("This language already exists");
+                langTextfield.setText("");
+                return;
+            }
+            try{
+                mainCtrl.changeLanguage(newLang);
+                mainCtrl.languages.add(newLang);
+                mainCtrl.language = newLang;
+                langTextfield.setText("");
+            }catch (Exception e){
+                langTextfield.setText("no valid languageCode");
+                System.out.println(e);
+            }
+        }
     }
 }

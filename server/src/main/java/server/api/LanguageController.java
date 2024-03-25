@@ -39,10 +39,10 @@ public class LanguageController {
     @GetMapping(path = {"/", ""})
     public ResponseEntity<String> translate(@RequestParam String query,
                                             @RequestParam String sourceLang, @RequestParam String targetLang) {
-        List<String> lang = Arrays.asList("en", "de", "nl", "ar", "zh", "is", "es");
-        if (!lang.contains(sourceLang) || !lang.contains(targetLang) || Objects.equals(sourceLang, targetLang)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
-        }
+//        List<String> lang = Arrays.asList("en", "de", "nl", "ar", "zh", "is", "es");
+//        if (!lang.contains(sourceLang) || !lang.contains(targetLang) || Objects.equals(sourceLang, targetLang)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
+//        }
         if (query == null || query.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("empty query");
         }

@@ -13,7 +13,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class SetLanguage {
     private static final String SERVER = "http://localhost:8080/";
     private MainCtrl mainCtrl;
-    private Language language;
     private StartScreenCtrl startScreenCtrl;
     private SplittyOverviewCtrl splittyOverviewCtrl;
     private AdminLoginCtrl adminLoginCtrl;

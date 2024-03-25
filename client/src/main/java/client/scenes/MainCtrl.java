@@ -20,7 +20,6 @@ import client.utils.EventPropGrouper;
 
 import client.utils.ServerUtils;
 import commons.Event;
-import client.utils.Language;
 import client.utils.SetLanguage;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
@@ -30,11 +29,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
-    protected Language language = Language.en;
+    //protected Language language = Language.en;
+    protected String language = "en";
+    protected List<String> languages;
+
 
     private SetLanguage setLanguage;
     private Stage primaryStage;
@@ -143,13 +146,15 @@ public class MainCtrl {
 
     }
 
-    public void setLanguage(){
+    private void setLanguage(){
+        languages = new ArrayList<>();
+        languages.addAll(List.of("en", "nl", "is", "zh", "es"));
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
     }
 
 
-    public void changeLanguage(Language toLang){
+    public void changeLanguage(String toLang){
         this.language = toLang;
         setLanguage.changeTo(toLang.toString());
     }
