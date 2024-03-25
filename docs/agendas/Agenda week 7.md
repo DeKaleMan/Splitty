@@ -47,6 +47,7 @@
   - at least finish the extra's we have started working on!
 - How are we dividing these tasks and in what groups? 
   - all together for fixing and cleaning code for maximum efficiency and no merge conflicts?
+  - when are we meeting?
 - Note error handling?
 
 ## Summary of meeting (4 min)
