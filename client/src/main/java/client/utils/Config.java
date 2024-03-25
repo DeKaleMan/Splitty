@@ -43,7 +43,11 @@ public class Config {
      */
     public void read() {
         try {
-            File file = new File("./client/src/main/resources/config");
+            String filepath = getClass().getClassLoader().getResource("config").getFile();
+            File file = new File(filepath);
+
+            //File file = new File("./client/src/main/resources/config");
+
             Scanner sc = new Scanner(file);
 
             String con = sc.next();
