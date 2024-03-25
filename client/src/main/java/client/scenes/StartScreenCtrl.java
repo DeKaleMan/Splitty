@@ -9,13 +9,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
+
 import java.util.List;
+
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
@@ -47,9 +50,13 @@ public class StartScreenCtrl {
     private ImageView imageView;
 
     @FXML
+
     private ListView eventListView;
 
     private int eventCode;
+    @FXML
+    private ImageView flag;
+
 
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
@@ -100,9 +107,9 @@ public class StartScreenCtrl {
 
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
-
         // Set the image to the ImageView
         imageView.setImage(image);
+
     }
 
     private void setup(Event event, Button button, Label label) {
@@ -216,6 +223,7 @@ public class StartScreenCtrl {
         mainCtrl.showSettings();
     }
 
+
     public void handleMouseClick(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
             Event event = (Event) eventListView.getSelectionModel().getSelectedItem();
@@ -223,5 +231,11 @@ public class StartScreenCtrl {
                 mainCtrl.showSplittyOverview(event.getId());
             }
         }
+    }
+
+    public void setFlag(Image image){
+        flag.setImage(new Image("enFlag.png"));
+
+
     }
 }

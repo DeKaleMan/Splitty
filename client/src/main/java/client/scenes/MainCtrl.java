@@ -26,6 +26,7 @@ import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -136,15 +137,17 @@ public class MainCtrl {
         this.settings = new Scene(settings.getValue());
         serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
+        setLanguage();
         showStartScreen();
         primaryStage.show();
-        setLanguage();
+
     }
 
     public void setLanguage(){
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
     }
+
 
     public void changeLanguage(Language toLang){
         this.language = toLang;
@@ -232,6 +235,7 @@ public class MainCtrl {
         primaryStage.setTitle("Splitty");
         startScreenCtrl.setLanguageSelect(language.toString());
         startScreenCtrl.initialize();
+        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
 
     }
