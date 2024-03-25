@@ -109,9 +109,12 @@ public class DebtCtrl implements Initializable {
             emailInfo.setHgap(10.0);
         }
         info.getChildren().add(emailInfo);
-        if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null) {
-            info.getChildren().add(new Text("Banking info available\n" +
-                "IBAN: " + payment.getPayee().getIBan() + "\nBIC: " + payment.getPayee().getBIC()));
+        if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null &&
+            payment.getPayee().getAccountHolder() != null) {
+            info.getChildren().add(new Text("Banking info available" +
+                "\n\tAccount Holder: " + payment.getPayee().getAccountHolder() +
+                "\n\tIBAN: " + payment.getPayee().getIBan() +
+                "\n\tBIC: " + payment.getPayee().getBIC()));
         } else {
             info.getChildren().add(new Text("Incomplete or no banking info available"));
         }
@@ -141,7 +144,7 @@ public class DebtCtrl implements Initializable {
     }
 
     @FXML
-    public void back(){
+    public void back() {
         undo.setVisible(false);
         persistPayments(changed);
         mainCtrl.showSplittyOverview(eventCode);
@@ -160,7 +163,8 @@ public class DebtCtrl implements Initializable {
     private void persistPayments(List<Payment> payments) {
         for (Payment p : payments) {
             serverUtils.updatePayment(
-                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode, p.getAmount(),
+                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode,
+                    p.getAmount(),
                     p.isPaid()), p.getId());
         }
     }
