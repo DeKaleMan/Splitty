@@ -16,11 +16,9 @@
 
 ## Opening by chair (1 min)
 - Is everyone present?
-
 ## Check-in (3 min)
 - How is everyone doing?
 - Are there any errors or problems someone came across?
-
 ## Announcements by the TA (3 min)
 ## Presentation of current app to TA (5 min)
 - Show the features we implemented this week
@@ -38,8 +36,11 @@
 - Cleaning the code and front end, how long will this take?
 - Has everyone seen the oral exam assignment details?
   - how are we making sure everyone understands it, when are we making the presentation?
-## What to do for next week for everyone (18 min)
+## What to do for next week for everyone (20 min)
 - Note the problems, front end? back end?
+- Talk about the graded assignments 
+  - Tasks and Planning, Technology 
+  - did we improve? are we on track?
 - Finish basic requirements, clean up already implemented ones
   - adding events and finishing the overview
   - invite codes, emails?
@@ -53,5 +54,5 @@
 ## Summary of meeting (4 min)
 - Recap of key decisions and assigned tasks.
 ## Feedback for the meeting (2 min)
-## Any questions? + Closure (5 min)
+## Any questions? + Closure (3 min)
 # Minute taker notes
