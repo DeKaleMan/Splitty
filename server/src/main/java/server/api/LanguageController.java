@@ -30,6 +30,7 @@ public class LanguageController {
 
     @Autowired
     public LanguageController(IOUtil ioUtil, LanguageResponse translator) {
+        //create Language dir
         this.io = ioUtil;
         this.filepath = getClass().getClassLoader().getResource("Languages/nl.json").getFile();
         this.basepath = getClass().getClassLoader().getResource("Languages/").getFile();
