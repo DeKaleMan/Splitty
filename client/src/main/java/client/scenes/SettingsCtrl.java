@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
@@ -19,6 +20,8 @@ public class SettingsCtrl {
     public TextField currencyField;
     @FXML
     private TextField langTextfield;
+    @FXML
+    private ProgressBar progressBar;
 
 
     @Inject
@@ -109,8 +112,9 @@ public class SettingsCtrl {
 
     @FXML
     public void addLang(){
+        progressBar.setVisible(true);
         String newLang = langTextfield.getText();
-        if(newLang != null){
+        if(newLang != null || !newLang.isBlank()){
             //setLanguage to new found language, we can no longer use an enum
             if(mainCtrl.languages.contains(newLang)){
                 langTextfield.setPromptText("This language already exists");
@@ -123,9 +127,11 @@ public class SettingsCtrl {
                 mainCtrl.language = newLang;
                 langTextfield.setText("");
             }catch (Exception e){
+                progressBar.setVisible(false);
                 langTextfield.setText("no valid languageCode");
                 System.out.println(e);
             }
         }
+        progressBar.setVisible(false);
     }
 }

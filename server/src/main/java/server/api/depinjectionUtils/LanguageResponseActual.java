@@ -7,6 +7,7 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -35,6 +36,11 @@ public class LanguageResponseActual implements LanguageResponse {
                     .target(url)
                     .request()
                     .get();
+
+            if(response.getStatus() == HttpStatus.FORBIDDEN.value()){
+                return HttpStatus.FORBIDDEN.toString();
+            }
+
 
             //Retrieve and print the response body
             String responseBody = response.readEntity(String.class);

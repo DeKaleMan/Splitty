@@ -142,8 +142,8 @@ public class MainCtrl {
         settingCtrl.initializeConfig();
         setLanguage();
         showStartScreen();
+        startScreenCtrl.setLanguageSelect();
         primaryStage.show();
-
     }
 
     private void setLanguage(){
@@ -238,9 +238,9 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
-        startScreenCtrl.setLanguageSelect(language.toString());
-        startScreenCtrl.initialize();
-        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
+//        startScreenCtrl.setLanguageSelect(language);
+//        startScreenCtrl.initialize();
+//        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
 
     }
@@ -251,7 +251,7 @@ public class MainCtrl {
      */
     public void showStartScreen(String eventTitle){
         primaryStage.setTitle("Splitty");
-        startScreenCtrl.initialize();
+//        startScreenCtrl.initialize();
         primaryStage.setScene(startScreen);
         startScreenCtrl.setTitle(eventTitle);
     }

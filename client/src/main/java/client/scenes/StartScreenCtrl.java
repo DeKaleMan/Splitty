@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,10 +17,12 @@ import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
-public class StartScreenCtrl {
+public class StartScreenCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
@@ -49,9 +52,10 @@ public class StartScreenCtrl {
     private ImageView imageView;
 
     @FXML
-
     private ListView eventListView;
 
+    @FXML
+    private ProgressIndicator progress;
     private int eventCode;
     @FXML
     private ImageView flag;
@@ -62,10 +66,59 @@ public class StartScreenCtrl {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.config = config;
+
     }
 
     // list the 3 most recent events on the start page
-    public void initialize() {
+//    @Override
+//    public void initialize() {
+//        eventListView.getItems().clear();
+//        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
+//            @Override
+//            protected void updateItem(Event event, boolean empty) {
+//                super.updateItem(event, empty);
+//                if (empty || event == null) {
+//                    setText(null);
+//                } else {
+//                    setText(event.getName());
+//                }
+//            }
+//        });
+//
+//        List<Event> events = mainCtrl.getMyEvents();
+//        if(events!=null){
+//            eventListView.setItems(FXCollections.observableArrayList(events));
+//        }
+//
+////        try{
+////            eventListView.getItems().addAll(mainCtrl.getMyEvents());
+////        } catch (Exception e){
+////            System.out.println(e.getMessage());
+////        }
+////        // retrieve from database based on recency (now null to have something)
+////        // the commented below is for testing
+////        noEventLabel.setVisible(false);
+////        String id = config.getId(); // the start of getting this querified
+////        Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
+////        Event event2 = null;
+////        Event event3 = null;
+////        setup(event1, eventButton1, eventLabel1);
+////        setup(event2, eventButton2, eventLabel2);
+////        setup(event3, eventButton3, eventLabel3);
+////        // this will be querified
+////        if (event1 == null && event2 == null && event3 == null) {
+////            noEventLabel.setVisible(true);
+////        }
+//
+//        // Load the image
+//        Image image = new Image("Logo_.png"); // Path relative to your resources folder
+//        // Set the image to the ImageView
+//        imageView.setImage(image);
+//        setFlag(image);
+
+//    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         eventListView.getItems().clear();
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
@@ -108,7 +161,8 @@ public class StartScreenCtrl {
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
         // Set the image to the ImageView
         imageView.setImage(image);
-
+        Image flag = new Image("enFlag.png");
+        setFlag(flag);
     }
 
     private void setup(Event event, Button button, Label label) {
@@ -195,20 +249,21 @@ public class StartScreenCtrl {
     }
 
 
-    public void setLanguageSelect(String language){
-
+    public void setLanguageSelect(){
+        //TODO add a check if this list is the same as the actual list otherwise
+        // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
-
-//        for(Language l: Language.values()){
-//            languages.add(l.toString());
-//        }
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
-        languageSelect.setValue(language);
+        languageSelect.setValue(mainCtrl.language);
+
+
+//        languageSelect.setItems(FXCollections.observableList(mainCtrl.languages));
     }
 
     @FXML
     public void changeLanguage() {
+        setProgress();
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
@@ -222,7 +277,18 @@ public class StartScreenCtrl {
         } catch (Exception e) {
             System.out.println(e);
         }
+        setLanguageSelect();
+        setProgress();
     }
+
+    public void setProgress() {
+        if(this.progress.isVisible()){
+            this.progress.setVisible(false);
+        }else{
+            this.progress.setVisible(true);
+        }
+    }
+
     public void showSettings(){
         mainCtrl.showSettings();
     }
@@ -238,8 +304,9 @@ public class StartScreenCtrl {
     }
 
     public void setFlag(Image image){
-        flag.setImage(new Image("enFlag.png"));
 
-
+        flag.setImage(image);
     }
+
+
 }

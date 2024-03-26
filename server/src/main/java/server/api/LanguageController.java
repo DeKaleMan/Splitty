@@ -16,7 +16,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
 
 @RestController
 @RequestMapping("/api/translate")
@@ -40,46 +40,46 @@ public class LanguageController {
     @GetMapping(path = {"/", ""})
     public ResponseEntity<String> translate(@RequestParam String query,
                                             @RequestParam String sourceLang, @RequestParam String targetLang) {
-//        List<String> lang = Arrays.asList("en", "de", "nl", "ar", "zh", "is", "es");
-//        if (!lang.contains(sourceLang) || !lang.contains(targetLang) || Objects.equals(sourceLang, targetLang)) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
-//        }
         if (query == null || query.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("empty query");
         }
         File newfile = new File(basepath + targetLang + ".json");
         //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
-
-        if (!newfile.exists()) {
-            try {
-                if (newfile.createNewFile()) {
-                    try (FileWriter fileWriter = new FileWriter(newfile)) {
-                        // Write an empty JSON object to the file
-                        fileWriter.write("{}");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                // mynewFile.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        if(newfile.exists()){
+            // Read JSON file
+            JsonObject object = translator.readJsonFile(newfile);
+            // Check if translation exists in JSON
+            String translation = getTranslationFromJson(query, object);
+            if (translation != null) {
+                return ResponseEntity.ok(translation);
             }
+
+        }
+        String translation = translator.translateWithAPI(query, sourceLang, targetLang);
+        if(translation.equals(HttpStatus.FORBIDDEN.toString())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
+        }
+        try {
+            if (newfile.createNewFile()) {
+                try (FileWriter fileWriter = new FileWriter(newfile)) {
+                    // Write an empty JSON object to the file
+                    fileWriter.write("{}");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            // mynewFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
 
-        // Read JSON file
-        JsonObject object = translator.readJsonFile(newfile);
 
-        // Check if translation exists in JSON
-        String translation = getTranslationFromJson(query, object);
-        if (translation != null) {
-            return ResponseEntity.ok(translation);
-        }
 
         // Translate using external API
-        translation = translator.translateWithAPI(query, sourceLang, targetLang);
 
         // Write translation to JSON file
+        JsonObject object = new JsonObject();
         object.addProperty(query, translation);
         writeJsonFile(object, newfile);
 

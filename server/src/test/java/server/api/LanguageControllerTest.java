@@ -67,6 +67,9 @@ class LanguageControllerTest {
         String test = "TestString";
         LanguageResponse responseMock = mock(LanguageResponse.class);
         LanguageController l = new LanguageController(null, responseMock);
+        when(responseMock.translateWithAPI(any(String.class), any(String.class), any(String.class)))
+                .thenReturn(HttpStatus.FORBIDDEN.toString());
+        when(responseMock.readJsonFile(any(File.class))).thenReturn(new JsonObject());
         ResponseEntity<String> response1 = l.translate(test, "en", "noLang");
         ResponseEntity<String> response2 = l.translate(test, "noLang", "en");
         ResponseEntity<String> response3 = l.translate(test, "en", "en");
