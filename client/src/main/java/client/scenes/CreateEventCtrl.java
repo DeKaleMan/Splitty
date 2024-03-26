@@ -100,7 +100,9 @@ public class CreateEventCtrl {
         boolean error = false;
         try {
             String[] dateArr = dateString.split("-");
-            date = new Date(Integer.parseInt(dateArr[2]) - 1900, Integer.parseInt(dateArr[1]) - 1, Integer.parseInt(dateArr[0]));
+            date = new Date(Integer.parseInt(dateArr[2]) - 1900,
+                    Integer.parseInt(dateArr[1]) - 1,
+                    Integer.parseInt(dateArr[0]));
         } catch (Exception e) {
             error = true;
             // error message invalid date, use eu format dd/mm/yyyy
