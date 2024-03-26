@@ -72,10 +72,6 @@ public class LanguageController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
-
-
         // Translate using external API
 
         // Write translation to JSON file
