@@ -8,7 +8,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -93,9 +96,11 @@ public class CreateEventCtrl {
         String dateString = datePicker.getEditor().getText();
         String description = eventDescriptionArea.getText();
         Date date;
+
         boolean error = false;
         try {
-            date = new Date(dateString);
+            String[] dateArr = dateString.split("-");
+            date = new Date(Integer.parseInt(dateArr[2]) - 1900, Integer.parseInt(dateArr[1]) - 1, Integer.parseInt(dateArr[0]));
         } catch (Exception e) {
             error = true;
             // error message invalid date, use eu format dd/mm/yyyy
