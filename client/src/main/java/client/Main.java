@@ -40,8 +40,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage){
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
         var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
@@ -62,7 +60,7 @@ public class Main extends Application {
         var adminWindows = new AdminWindows(adminLogin, adminOverview);
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
+        mainCtrl.initialize(primaryStage, invitation,splittyOverview,
             startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows, settings);
 
     }

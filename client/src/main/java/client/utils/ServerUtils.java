@@ -17,12 +17,7 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.*;
@@ -76,51 +71,6 @@ public class ServerUtils {
     }
 
     public static final String SERVER = "http://localhost:8080/";
-
-
-    /**
-     * Gets quotes the hard way.
-     *
-     * @throws IOException        the io exception
-     * @throws URISyntaxException the uri syntax exception
-     */
-    public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-        var url = new URI("http://localhost:8080/api/quotes").toURL();
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
-    /**
-     * Gets quotes.
-     *
-     * @return the quotes
-     */
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-            .target(SERVER).path("api/quotes") //
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .get(new GenericType<List<Quote>>() {
-            });
-    }
-
-    /**
-     * Add quote quote.
-     *
-     * @param quote the quote
-     * @return the quote
-     */
-    public Quote addQuote(Quote quote) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-            .target(SERVER).path("api/quotes") //
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
 
     /**
      * Gets expense.

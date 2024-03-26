@@ -38,12 +38,6 @@ public class MainCtrl {
     private SetLanguage setLanguage;
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
-
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
-
     private Scene invitation;
     private InvitationCtrl invitationCtrl;
 
@@ -88,8 +82,7 @@ public class MainCtrl {
     // maybe in the future isolate it into an eventctrl?
     private List<Event> events;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<InvitationCtrl, Parent> invitation,
+    public void initialize(Stage primaryStage, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
                            Pair<StartScreenCtrl, Parent> startScreen,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
@@ -99,10 +92,6 @@ public class MainCtrl {
                            AdminWindows adminWindows,
                            Pair<SettingsCtrl, Parent> settings ) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
 
@@ -149,18 +138,6 @@ public class MainCtrl {
     public void changeLanguage(Language toLang){
         this.language = toLang;
         setLanguage.changeTo(toLang.toString());
-    }
-
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
-    }
-
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
     // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
