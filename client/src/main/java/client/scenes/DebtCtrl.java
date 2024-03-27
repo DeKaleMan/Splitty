@@ -163,11 +163,9 @@ public class DebtCtrl implements Initializable {
         }
     }
 
-
     public void setTitlelabel(String title) {
         titlelabel.setText((title));
     }
-
 
     /**
      * removes a Payment from the list and adds it to changed
@@ -179,12 +177,10 @@ public class DebtCtrl implements Initializable {
         changed.add(p);
         this.paymentInstructionListView.getItems().remove(p);
     }
-
     @FXML
     public void sendMessage(Payment payment) {
         //TODO actually send a message
     }
-
     @FXML
     public void undo() {
         changed.remove(undone);

@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
@@ -44,6 +46,8 @@ public class AdminOverviewCtrl {
 
     @FXML
     private ListView<Event> eventList;
+    @FXML
+    public AnchorPane jsonImportPane;
 
     @FXML
     private TextArea jsonImportTextArea;
@@ -92,6 +96,7 @@ public class AdminOverviewCtrl {
 
     @FXML
     public void showImportFields() {
+        jsonImportPane.setVisible(true);
         jsonImportTextArea.setVisible(true);
         jsonImportButton.setVisible(true);
         sortByText.setVisible(false);
@@ -104,7 +109,7 @@ public class AdminOverviewCtrl {
         jsonImportTextArea.clear();
 
         // TODO: Add event, participants etc. to the database based on jsonDump (DB not fully done so can't do it yet)
-
+        jsonImportPane.setVisible(false);
         jsonImportTextArea.setVisible(false);
         jsonImportButton.setVisible(false);
         sortByText.setVisible(true);
@@ -216,5 +221,12 @@ public class AdminOverviewCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             logOut();
         }
+    }
+
+    @FXML
+    public void abortImportMouse(MouseEvent press) {
+        jsonImportTextArea.setVisible(false);
+        jsonImportButton.setVisible(false);
+        jsonImportPane.setVisible(false);
     }
 }

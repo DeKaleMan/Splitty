@@ -32,7 +32,7 @@
             <TextField fx:id="amount" prefHeight="25.0" prefWidth="150.0" />
             <DatePicker fx:id="dateSelect" prefHeight="25.0" prefWidth="150.0" promptText="xx-xx-xxxx" />
             <Button fx:id="selectAll" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="122.0" text="Select all" textAlignment="CENTER" wrapText="true" />
-            <ListView fx:id="splitList" prefHeight="131.0" prefWidth="122.0" />
+            <ListView onKeyPressed="#onKeyPressed" fx:id="splitList" prefHeight="131.0" prefWidth="122.0" />
          </children>
       </VBox>
       <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="84.0" prefHeight="200.0" prefWidth="122.0" spacing="10.0">
