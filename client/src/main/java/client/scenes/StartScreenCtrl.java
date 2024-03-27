@@ -206,6 +206,8 @@ public class StartScreenCtrl {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
                 Language toLang = Language.valueOf(selected);
+                config.setLanguage(toLang);
+                config.write();
                 mainCtrl.changeLanguage(toLang);
             }
         } catch (Exception e) {
