@@ -1,19 +1,24 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -90,11 +95,17 @@ public class AddExpenseCtrl implements Initializable {
     private Button cancel;
     @FXML
     private Button selectAll;
+
+    private Participant payer;
+
+    private ObservableList<Participant> owing;
+    
     @Inject
     public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.splittyCtrl = splittyCtrl;
+        owing = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -102,7 +113,6 @@ public class AddExpenseCtrl implements Initializable {
         //the buttons
         mainCtrl.setButtonRedProperty(cancel);
         mainCtrl.setButtonGreenProperty(add);
-        Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "", "uuid1", new Event());
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
         serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,exp -> {
@@ -114,9 +124,30 @@ public class AddExpenseCtrl implements Initializable {
             allparticipants = new ArrayList<>();
         }
         list.addAll(allparticipants);
-        list.add(person1);
         personComboBox.setItems(list);
         personComboBox.setCellFactory(param -> new ListCell<Participant>() {
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                    setEventHandler(MouseEvent.MOUSE_PRESSED , new EventHandler<Event>() {
+                        @Override
+                        public void handle(Event event) {
+                            payer = item;
+                            owing.removeAll(list);
+                            owing.addAll(list);
+                            owing.remove(item);
+                        }
+                    });
+                }
+            }
+        });
+
+
+        personComboBox.setButtonCell(new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
@@ -127,7 +158,8 @@ public class AddExpenseCtrl implements Initializable {
                 }
             }
         });
-        createSplitList(list);
+        setSplitListUp();
+
         category.setCellFactory(param -> new ListCell<Type>() {
             @Override
             protected void updateItem(Type item, boolean empty) {
@@ -138,7 +170,8 @@ public class AddExpenseCtrl implements Initializable {
                     setText(item.toString());
                 }
             }
-        });this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
+        });
+        this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
     }
 
     @FXML
@@ -216,12 +249,26 @@ public class AddExpenseCtrl implements Initializable {
     // This part is never used because expenses doesn't save who should pay for it only the payer
     // this should be changed eventually but that is not part of the ExpenseController
 
-    public void createSplitList(ObservableList<Participant> people) {
-        for (Participant p : people) {
-            RadioButton button = new RadioButton();
-            button.setText(p.getName());
-            splitList.getItems().add(button);
-        }
+    public void setSplitListUp() {
+        splitList.setItems(owing);
+        splitList.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
+            @Override
+            public ListCell call(ListView listView) {
+                return new ListCell<Participant>(){
+                    @Override
+                    protected void updateItem(Participant participant, boolean b) {
+                        super.updateItem(participant, b);
+                        if(participant == null || b){
+                            setGraphic(null);
+                        }else{
+                            RadioButton button = new RadioButton();
+                            button.setText(participant.getName());
+                            setGraphic(button);
+                        }
+                    }
+                };
+            }
+        });
     }
 
 

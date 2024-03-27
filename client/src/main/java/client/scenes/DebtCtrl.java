@@ -31,7 +31,7 @@ public class DebtCtrl implements Initializable {
     private Config config;
 
     @FXML
-    private ListView paymentInstructionListView;
+    private ListView<Payment> paymentInstructionListView;
     @FXML
     private Label titlelabel;
 
