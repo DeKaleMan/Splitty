@@ -15,13 +15,8 @@
  */
 package client.scenes;
 
-import client.utils.AdminWindows;
-import client.utils.EventPropGrouper;
-
-import client.utils.ServerUtils;
+import client.utils.*;
 import commons.Event;
-import client.utils.Language;
-import client.utils.SetLanguage;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;

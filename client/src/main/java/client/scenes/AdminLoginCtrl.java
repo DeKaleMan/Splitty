@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
@@ -90,5 +92,15 @@ public class AdminLoginCtrl {
 
     public void setPasswordInstructionsText(String txt) {
         this.passwordInstructionsText.setText(txt);
+    }
+
+    public void back() {
+        mainCtrl.showStartScreen();
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 }

@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -125,7 +127,7 @@ public class SplittyOverviewCtrl implements Initializable {
      * go back to Start screen
      */
     @FXML
-    private void back() {
+    public void back() {
         mainCtrl.showStartScreen();
     }
     @FXML
@@ -239,6 +241,12 @@ public class SplittyOverviewCtrl implements Initializable {
     public void leaveEvent(ActionEvent actionEvent) {
         serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
         mainCtrl.showStartScreen();
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 }
 

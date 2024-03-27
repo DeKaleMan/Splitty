@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -113,5 +115,12 @@ public class CreateEventCtrl {
         mainCtrl.showStartScreen();
         System.out.println("Created new event: " + name);
         // create new event and add to database, go to that event overview and add participants via database.
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            cancel();
+        }
     }
 }

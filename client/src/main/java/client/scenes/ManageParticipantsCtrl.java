@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -103,4 +105,10 @@ public class ManageParticipantsCtrl implements Initializable {
         mainCtrl.showInvitation(titleLabel.getText());
     }
 
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            backEventOverview();
+        }
+    }
 }

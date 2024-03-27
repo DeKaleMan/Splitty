@@ -4,6 +4,8 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 
@@ -102,5 +104,11 @@ public class SettingsCtrl {
 
     public String getBic() {
         return config.getBic();
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 }
