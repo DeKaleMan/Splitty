@@ -203,4 +203,16 @@ public class Config {
     public String getBic() {
         return bic;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
+    }
 }

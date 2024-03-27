@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Currency;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -12,11 +13,17 @@ public class SettingsCtrl {
     private final MainCtrl mainCtrl;
     private final Config config;
     @FXML
-    public TextField serverURLField;
+    private TextField serverURLField;
     @FXML
-    public TextField emailField;
+    private TextField emailField;
     @FXML
-    public TextField currencyField;
+    private TextField currencyField;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField ibanField;
+    @FXML
+    private TextField bicField;
 
     @Inject
     public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
@@ -37,6 +44,21 @@ public class SettingsCtrl {
         } else {
             emailField.setText("");
         }
+        if (config.getName() != null) {
+            nameField.setText(config.getName());
+        } else {
+            nameField.setText("");
+        }
+        if (config.getIban() != null) {
+            ibanField.setText(config.getIban());
+        } else {
+            ibanField.setText("");
+        }
+        if (config.getBic() != null) {
+            bicField.setText(config.getBic());
+        } else {
+            bicField.setText("");
+        }
         currencyField.setText(config.getCurrency().toString());
     }
 
@@ -48,6 +70,9 @@ public class SettingsCtrl {
         String email = emailField.getText();
         String connection = serverURLField.getText();
         String currency = currencyField.getText();
+        String name = nameField.getText();
+        String iban  = ibanField.getText();
+        String bic = bicField.getText();
         boolean abort = false;
         if (email == null || email.isEmpty()) {
             email = null;
@@ -66,7 +91,10 @@ public class SettingsCtrl {
         }
         config.setEmail(email);
         config.setConnection(connection);
-        config.setCurrency(config.switchCurrency(currency));
+        config.setCurrency(Currency.valueOf(currency));
+        config.setName(name);
+        config.setIban(iban);
+        config.setBic(bic);
         config.write();
         back();
         // set saved message
@@ -90,8 +118,6 @@ public class SettingsCtrl {
         return config.getConnection();
     }
 
-
-
     public String getName() {
         return config.getName();
     }
@@ -103,4 +129,8 @@ public class SettingsCtrl {
     public String getBic() {
         return config.getBic();
     }
+    public String getLanguage() {
+        return config.getLanguage().toString();
+    }
+
 }
