@@ -26,6 +26,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private boolean admin;
 
     //these are for the css:
     @FXML
@@ -65,6 +66,7 @@ public class SplittyOverviewCtrl implements Initializable {
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        admin = false;
     }
 
     @FXML
@@ -81,7 +83,6 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
-
 //        fetchExpenses();
 //        fetchParticipants();
     }
@@ -128,7 +129,11 @@ public class SplittyOverviewCtrl implements Initializable {
      */
     @FXML
     public void back() {
-        mainCtrl.showStartScreen();
+        if (admin) {
+            mainCtrl.showAdminOverview();
+        } else {
+            mainCtrl.showStartScreen();
+        }
     }
     @FXML
     private void viewDebts(){
@@ -247,6 +252,10 @@ public class SplittyOverviewCtrl implements Initializable {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }
 

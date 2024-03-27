@@ -146,6 +146,9 @@ public class MainCtrl {
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
     }
+    public void setAdmin(Boolean admin) {
+        splittyOverviewCtrl.setAdmin(admin);
+    }
 
     public List<Event> getMyEvents(){
         if(settingCtrl!=null){

@@ -54,6 +54,7 @@ public class AdminLoginCtrl {
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             mainCtrl.showAdminOverview();
+            mainCtrl.setAdmin(true);
         } else {
             System.out.println("incorrect password: " + password);
         }

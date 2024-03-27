@@ -170,6 +170,7 @@ public class AdminOverviewCtrl {
 
     public void logOut() {
         mainCtrl.showStartScreen();
+        mainCtrl.setAdmin(false);
     }
 
     public void setAdminManagementOverviewText(String txt) {
@@ -220,6 +221,15 @@ public class AdminOverviewCtrl {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             logOut();
+        }
+    }
+    @FXML
+    public void handleMouseClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2) {
+            Event event = eventList.getSelectionModel().getSelectedItem();
+            if (event != null) {
+                mainCtrl.showSplittyOverview(event.getId());
+            }
         }
     }
 
