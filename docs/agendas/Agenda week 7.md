@@ -55,4 +55,55 @@
 - Recap of key decisions and assigned tasks.
 ## Feedback for the meeting (2 min)
 ## Any questions? + Closure (3 min)
+
+---
+
 # Minute taker notes
+## Announcements TA
+- The presentation is friday 19th 13:55
+- Thursday, March 28th:
+  - deadline Draft product pitch (Formative)
+  - deadline Implemented features (Formative)
+
+### IMPORTANT MESSAGE:
+ServerUtils has 2 constructors, don't use the one with the clientConfig parameter. 
+See javadoc for more info
+
+## Questions Duuk
+1. The knockout criteria of week 9 is indeed on friday
+2. The presentation is a product pitch, so we don't have to go technical. 
+We can expect questions like: general process like what is spring, our design choices, the lecture stuff etc.
+3. How literal is the backlog? "up to you reading comprehension" 
+He did give us this:
+   - edit participants = edit & remove
+   - add: invite is fine just explain the choice in the presentation
+   - delete: only host is fine, explain in presentation
+#### EXPLAIN THOSE CHOICES
+4. Issues, are the okay now?
+   - Tasks/sub-issues are great
+   - we should add weights to all issues
+   like: easy 1, normal 3, big 5, bigger 7 (only prime numbers)
+5. How low is the bar?
+   - It is 5% of the grade and we need at least a 5.0 = 4/9 requirments
+   - LOOKS ARENT GRADED, just color contrast etc
+   - We need to add undo, MORE ICONS, and other forms of visual communication
+6. JFX testing
+  - use mockito and dependency injection
+  - test whether methods are being called 
+  - google for a helpful library
+
+## Planning this week
+  - focus on basic requirements
+  - next week everything should be working
+  - DISCORD CALL WEDNESDAY 11:30
+
+## Tasks this week
+- JORIS createEvent in CreateEventController
+- JESSE File manager (to make sure that the errors that duuk had gets fixed)
+- MACIEJ service class for grading
+- STIJN Event new window (able to edit an Event title)
+- YAVOR Join Event (invite code how are we going to do it???) -> hash name and append id at the end
+- YAVOR you are only able to leave an event if you have balance 0 (everyone can edit everyone)
+- MACIEJ add expenses to event
+- JULIAN HCI requerementes and test coverage.
+- STIJN test coverage in ServerUtils this is a lot so other people can do this too, but we need to make sure that we are writing same tests for the same file.
