@@ -69,6 +69,8 @@ public class MainCtrl {
     private Scene userEventList;
     private UserEventListCtrl userEventListCtrl;
     private Scene createEvent;
+    private Scene editEvent;
+    private EditEventCrtl editEventCrtl;
     private CreateEventCtrl createEventCtrl;
     private ServerUtils serverUtils;
 
@@ -123,6 +125,8 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
+        this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
+        this.editEventCrtl = eventPropGrouper.editEvent().getKey();
         serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
         showStartScreen();
@@ -280,6 +284,11 @@ public class MainCtrl {
 
     public String getMyUuid(){
         return settingCtrl.getId();
+    }
+
+    public void editEventt(){
+        primaryStage.setTitle("EditEvent");
+        primaryStage.setScene(editEvent);
     }
 
 }
