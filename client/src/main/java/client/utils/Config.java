@@ -15,7 +15,7 @@ public class Config {
     private String email;
     private String id;
 
-    private String name = "Yavor"; // for now hardcoded but need to be changeable in the future
+    private String name;
     private String iban;
     private String bic;
 
@@ -43,7 +43,10 @@ public class Config {
      */
     public void read() {
         try {
-            File file = new File("./client/src/main/resources/config");
+            String filepath = getClass().getClassLoader().getResource("config").getPath();
+            filepath = filepath.replaceAll("%20", " ");
+            File file = new File(filepath);
+
             Scanner sc = new Scanner(file);
 
             String con = sc.next();
@@ -57,7 +60,7 @@ public class Config {
             //language = switchLanguage(lang);
             language = lang;
             String curr = sc.next();
-            currency = switchCurrency(curr);
+            currency = Currency.valueOf(curr);
             String em = sc.next();
             if (nullString.equals(em)) {
                 email = null;
@@ -72,25 +75,6 @@ public class Config {
         }
     }
 
-    public Language switchLanguage(String lang) {
-        return  switch (lang) {
-            case "nl": yield Language.nl;
-            case "es": yield Language.es;
-            case "de": yield Language.de;
-            case "zh": yield Language.zh;
-            case "ar": yield Language.ar;
-            case "is": yield Language.is;
-            default: yield Language.en;
-        };
-    }
-
-    public Currency switchCurrency(String curr) {
-        return switch (curr) {
-            case "USD": yield Currency.USD ;
-            case "CHF": yield Currency.CHF;
-            default: yield Currency.EUR;
-        };
-    }
 
     /**
      * write the fields in the most simple format: connection language currency email id
@@ -99,7 +83,9 @@ public class Config {
      */
     public boolean write() {
         try {
-            FileWriter writer = new FileWriter("./client/src/main/resources/config");
+            String filepath = getClass().getClassLoader().getResource("config").getPath();
+            filepath = filepath.replaceAll("%20", " ");
+            FileWriter writer = new FileWriter(filepath);
 
             if (connection == null) {
                 writer.write("null ");
@@ -198,5 +184,17 @@ public class Config {
 
     public String getBic() {
         return bic;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
     }
 }

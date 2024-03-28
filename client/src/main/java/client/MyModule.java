@@ -26,13 +26,21 @@ public class MyModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(InvitationCtrl.class).in(Scopes.SINGLETON);
         binder.bind(SplittyOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(Config.class).in(Scopes.SINGLETON);
+        binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AdminOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CreateEventCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DebtCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(Config.class).in(Scopes.SINGLETON);
+        binder.bind(ManageParticipantsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SettingsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(UserEventListCtrl.class).in(Scopes.SINGLETON);
     }
 }

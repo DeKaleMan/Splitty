@@ -267,12 +267,14 @@ public class StartScreenCtrl implements Initializable {
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
+
                 //Language toLang = Language.valueOf(selected);
                 if(mainCtrl.languages.contains(selected)){
+                    config.setLanguage(toLang);
+                    config.write();
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
                 }
-
             }
         } catch (Exception e) {
             System.out.println(e);
