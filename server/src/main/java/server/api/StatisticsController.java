@@ -2,15 +2,11 @@ package server.api;
 
 import commons.Event;
 import commons.Expense;
-import commons.Payment;
-import commons.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
-import server.database.ParticipantRepository;
-import server.database.PaymentRepository;
 
 import java.util.List;
 import java.util.Optional;
