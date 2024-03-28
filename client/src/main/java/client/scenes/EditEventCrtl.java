@@ -1,10 +1,9 @@
 package client.scenes;
 
-import client.Main;
+
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import commons.EventDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
