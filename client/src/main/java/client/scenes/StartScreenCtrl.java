@@ -12,7 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.util.Callback;
 
 import javax.inject.Inject;
@@ -50,8 +50,6 @@ public class StartScreenCtrl {
 
     @FXML
     private ListView<Event> eventListView;
-
-    private int eventCode;
 
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
@@ -112,14 +110,21 @@ public class StartScreenCtrl {
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent(){
-        eventCode = Integer.parseInt(joinEventTextField.getText());
-        Participant p = mainCtrl.joinEvent(eventCode);
-        if (p == null) {
-            // show error message
-            return;
+        int eventCode;
+        try {
+            eventCode = Integer.parseInt(joinEventTextField.getText());
+            Participant p = mainCtrl.joinEvent(eventCode);
+            if (p == null) {
+                // show error message
+                return;
+            }
+            mainCtrl.showSplittyOverview(eventCode);
+            System.out.println("Joined event: " + joinEventTextField.getText());
+        } catch (NumberFormatException e) {
+            //set error message
         }
-        mainCtrl.showSplittyOverview(eventCode);
-        System.out.println("Joined event: " + joinEventTextField.getText());
+
+
     }
 
     @FXML
@@ -193,6 +198,14 @@ public class StartScreenCtrl {
             if (event != null) {
                 mainCtrl.showSplittyOverview(event.getId());
             }
+        }
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k.match(press)) {
+            createEvent();
         }
     }
 }

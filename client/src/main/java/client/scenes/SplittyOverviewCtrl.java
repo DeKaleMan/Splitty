@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -252,6 +254,11 @@ public class SplittyOverviewCtrl implements Initializable {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k.match(press)) {
+            showAddExpense();
+        }
+
     }
 
     public void setAdmin(Boolean admin) {
