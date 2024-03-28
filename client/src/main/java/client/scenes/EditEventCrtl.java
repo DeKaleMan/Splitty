@@ -50,7 +50,7 @@ public class EditEventCrtl {
     public void changeName(ActionEvent actionEvent) {
         String newName = nameChange.getText();
         String idTemp = eventId.getText();
-        int eventIdd = Integer.parseInt(idTemp);
+        int eventIdd;
         try{
             eventIdd = Integer.parseInt(idTemp);
         } catch (NumberFormatException ex){

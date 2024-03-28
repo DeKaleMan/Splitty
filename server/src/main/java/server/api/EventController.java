@@ -86,17 +86,3 @@ public class EventController {
         return s == null || s.isEmpty();
     }
 }
-//    Optional<Event> opEvent = eventDB.findById(event.id);
-//        if(opEvent.isEmpty()){
-//                return ResponseEntity.notFound().build();
-//                }
-//                Event event = opEvent.get();
-//
-//                if (event.getName() == null || event.getName().isEmpty()) {
-//                return ResponseEntity.badRequest().build();
-//                }else{
-//                event.setName(newName);
-//                Event updatedEvent = eventDB.save(event);
-//
-//                return ResponseEntity.ok(updatedEvent);
-//                }
