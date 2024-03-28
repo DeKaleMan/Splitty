@@ -5,12 +5,14 @@ import commons.Expense;
 import commons.Participant;
 import commons.Type;
 import javafx.animation.PauseTransition;
+
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,6 +20,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.util.Callback;
 
 import javax.inject.Inject;
@@ -28,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.HashSet;
 
 
 public class AddExpenseCtrl implements Initializable {
@@ -94,18 +100,26 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private Button cancel;
     @FXML
-    private Button selectAll;
+    private RadioButton selectAll;
+    @FXML
+    private RadioButton selectSome;
+
+    @FXML
+    private ToggleGroup selectionToggles;
 
     private Participant payer;
-
-    private ObservableList<Participant> owing;
     
+    private ObservableList<Participant> rest;
+
+    private Set<Participant> owing;
+
     @Inject
     public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.splittyCtrl = splittyCtrl;
-        owing = FXCollections.observableArrayList();
+        rest = FXCollections.observableArrayList();
+        owing = new HashSet<>();
     }
 
     @FXML
@@ -113,6 +127,9 @@ public class AddExpenseCtrl implements Initializable {
         //the buttons
         mainCtrl.setButtonRedProperty(cancel);
         mainCtrl.setButtonGreenProperty(add);
+
+        splitList.setVisible(false);
+
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
         serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,exp -> {
@@ -137,9 +154,18 @@ public class AddExpenseCtrl implements Initializable {
                         @Override
                         public void handle(Event event) {
                             payer = item;
-                            owing.removeAll(list);
-                            owing.addAll(list);
-                            owing.remove(item);
+                            rest.clear();
+                            rest.addAll(list);
+                            rest.remove(item);
+                            if(selectAll.isSelected()){
+                                owing.addAll(rest);
+                                owing.remove(payer);
+                                splitList.setVisible(false);
+                            }
+                            if(selectSome.isSelected()){
+                                owing.clear();
+                                splitList.setVisible(true);
+                            }
                         }
                     });
                 }
@@ -159,7 +185,7 @@ public class AddExpenseCtrl implements Initializable {
             }
         });
         setSplitListUp();
-
+        setTogglesUp();
         category.setCellFactory(param -> new ListCell<Type>() {
             @Override
             protected void updateItem(Type item, boolean empty) {
@@ -172,6 +198,38 @@ public class AddExpenseCtrl implements Initializable {
             }
         });
         this.category.setItems(FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
+    }
+
+    private void setTogglesUp() {
+        selectAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue,
+                                Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    if(payer == null){
+                        System.out.println("Select payer");
+                        return;
+                    }
+                    owing.addAll(rest);
+                    owing.remove(payer);
+                    splitList.setVisible(false);
+                }
+            }
+        });
+        selectSome.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue,
+                                Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    if(payer == null){
+                        System.out.println("Select payer");
+                        return;
+                    }
+                    owing.clear();
+                    splitList.setVisible(true);
+                }
+            }
+        });
     }
 
     @FXML
@@ -194,9 +252,13 @@ public class AddExpenseCtrl implements Initializable {
      */
     @FXML
     public void addExpense() {
-        List<String> participants = getSelected();//get all the names of the participants
         boolean error = false;
         Date date = null;
+        //link these to participants and then add the expense
+        if (dateSelect.getValue() == null) {
+            dateSelect.setPromptText("invalid Date");
+        }
+
         try {
             LocalDate localDate = dateSelect.getValue();
             date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -250,7 +312,7 @@ public class AddExpenseCtrl implements Initializable {
     // this should be changed eventually but that is not part of the ExpenseController
 
     public void setSplitListUp() {
-        splitList.setItems(owing);
+        splitList.setItems(rest);
         splitList.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
             @Override
             public ListCell call(ListView listView) {
@@ -262,6 +324,18 @@ public class AddExpenseCtrl implements Initializable {
                             setGraphic(null);
                         }else{
                             RadioButton button = new RadioButton();
+                            button.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                                @Override
+                                public void changed(
+                                    ObservableValue<? extends Boolean> observableValue,
+                                    Boolean wasPreviouslySelected, Boolean isNowSelected) {
+                                    if(isNowSelected){
+                                        owing.add(participant);
+                                    }else{
+                                        owing.remove(participant);
+                                    }
+                                }
+                            });
                             button.setText(participant.getName());
                             setGraphic(button);
                         }
@@ -271,30 +345,6 @@ public class AddExpenseCtrl implements Initializable {
         });
     }
 
-
-    /**
-     * @return a list with all the selected participants who should contribute to this expense
-     */
-    public List<String> getSelected() {
-        List<String> res = new ArrayList<>();
-        for (Object b : splitList.getItems()) {
-            if (((RadioButton) b).isSelected()) {
-                res.add(((RadioButton) b).getText());
-            }
-        }
-        return res;
-    }
-
-
-    /**
-     * select all buttons to split between
-     */
-    @FXML
-    public void selectAll() {
-        for (Object button : splitList.getItems()) {
-            ((RadioButton) button).setSelected(true);
-        }
-    }
 
 
 
