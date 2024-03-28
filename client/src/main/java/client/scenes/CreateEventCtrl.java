@@ -3,7 +3,9 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.EventDTO;
 import commons.Participant;
+import commons.dto.ParticipantDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
@@ -133,8 +135,11 @@ public class CreateEventCtrl {
 
         //System.out.println("Created new event: " + name);
         // create new event and add to database, go to that event overview and add participants via database.
-        Event event = new Event(name, date, owner, description);
+        EventDTO event = new EventDTO(name, date, owner, description);
         Event eventCreated = serverUtils.addEvent(event);
+        ParticipantDTO participantDTO = new ParticipantDTO(nameField.getText(), 0.0, config.getIban(), config.getBic(),
+                config.getEmail(), config.getName(), eventCreated.getId(), config.getId());
+        serverUtils.createParticipant(participantDTO);
         mainCtrl.showSplittyOverview(eventCreated.getId());
     }
 }

@@ -60,18 +60,17 @@ public class StartScreenCtrl {
 
     // list the 3 most recent events on the start page
     public void initialize() {
-//        eventListView.getItems().clear();
-//        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
-//            @Override
-//            protected void updateItem(Event event, boolean empty) {
-//                super.updateItem(event, empty);
-//                if (empty || event == null) {
-//                    setText(null);
-//                } else {
-//                    setText(event.getName());
-//                }
-//            }
-//        });
+        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
+            @Override
+            protected void updateItem(Event event, boolean empty) {
+                super.updateItem(event, empty);
+                if (empty || event == null) {
+                    setText(null);
+                } else {
+                    setText(event.getName());
+                }
+            }
+        });
 
         List<Event> events = mainCtrl.getMyEvents();
         if(events!=null){

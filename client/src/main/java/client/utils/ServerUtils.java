@@ -289,7 +289,7 @@ public class ServerUtils {
         }
     }
 
-    public Event addEvent(Event newEvent) {
+    public Event addEvent(EventDTO newEvent) {
         Response response = ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/event")
             .request(APPLICATION_JSON)
