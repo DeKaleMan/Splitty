@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -8,6 +10,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 public class CreateEventCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final Config config;
 
     // event text fields
     @FXML
@@ -44,10 +49,11 @@ public class CreateEventCtrl {
     private List<Participant> participants;
 
     @Inject
-    public CreateEventCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
+    public CreateEventCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         participants = new ArrayList<>();
+        this.config = config;
 
     }
 
@@ -91,15 +97,27 @@ public class CreateEventCtrl {
     public void createEvent() {
         String name = titleField.getText();
         String dateString = datePicker.getEditor().getText();
+        if(dateString.isBlank()||dateString.isEmpty()) {
+            datePicker.setPromptText("Invalid date");
+            datePicker.setValue(null);
+            return;
+        }
+        if(name.isEmpty()||name.isBlank()){
+            titleField.setPromptText("invalid name");
+            titleField.setText("");
+            return;
+        }
+        LocalDate localDate = datePicker.getValue();
         String description = eventDescriptionArea.getText();
-        Date date;
-
+        Date date = new Date();
         boolean error = false;
         try {
-            String[] dateArr = dateString.split("-");
-            date = new Date(Integer.parseInt(dateArr[2]) - 1900,
-                    Integer.parseInt(dateArr[1]) - 1,
-                    Integer.parseInt(dateArr[0]));
+//            String[] dateArr = dateString.split("-");
+//            date = new Date(Integer.parseInt(dateArr[2]) - 1900,
+//                    Integer.parseInt(dateArr[1]) - 1,
+//                    Integer.parseInt(dateArr[0]));
+            date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         } catch (Exception e) {
             error = true;
             // error message invalid date, use eu format dd/mm/yyyy
@@ -110,8 +128,13 @@ public class CreateEventCtrl {
             }
             return;
         }
-        mainCtrl.showStartScreen();
-        System.out.println("Created new event: " + name);
+        //fetch owner
+        String owner = config.getId();
+
+        //System.out.println("Created new event: " + name);
         // create new event and add to database, go to that event overview and add participants via database.
+        Event event = new Event(name, date, owner, description);
+        Event eventCreated = serverUtils.addEvent(event);
+        mainCtrl.showSplittyOverview(eventCreated.getId());
     }
 }

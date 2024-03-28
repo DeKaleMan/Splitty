@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javax.inject.Inject;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class AddExpenseCtrl implements Initializable {
@@ -167,7 +168,8 @@ public class AddExpenseCtrl implements Initializable {
 
         try {
             LocalDate localDate = dateSelect.getValue();
-            Date date = java.sql.Date.valueOf(localDate);
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
             Type type = (Type) category.getValue();
             if (type == null) throw new NoSuchElementException();
             double amountDouble = Double.parseDouble(amount.getText());

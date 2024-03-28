@@ -1,6 +1,7 @@
 package client.scenes;
 
 
+import client.utils.ServerUtils;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,19 +15,21 @@ import javax.inject.Inject;
 public class StatisticsCtrl {
     @FXML
     private PieChart pieChart;
-    private int food = 1;
-    private int drinks = 1;
-    private int transport = 1;
-    private int other = 1;
+    private int food = 0;
+    private int drinks = 0;
+    private int transport = 0;
+    private int other = 0;
+    private int[] stat;
 
     @FXML
     private Label titleLabel;
 
-    private int eventCode = 1;
+    private int eventCode;
 
-    MainCtrl mainCtrl;
+    private MainCtrl mainCtrl;
+    private ServerUtils serverUtils;
     @Inject
-    public StatisticsCtrl(MainCtrl mainCtrl){
+    public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils){
         this.mainCtrl = mainCtrl;
     }
     /**
@@ -48,27 +51,36 @@ public class StatisticsCtrl {
         );
 
         pieChart.setData(data);
+
     }
     //these all set the things for the diagram, theoretically they could all
     // be done in one method but I wasn't sure how we were going to implement this
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
-
-    public void setFood(int food) {
-        this.food = food;
+    public void setEventCode(int eventCode) {
+        this.eventCode = eventCode;
+    }
+    public void fetchStat(){
+        this.stat = serverUtils.getStatisticsByEventID(eventCode);
+        setFood();
+        setDrinks();
+        setTransport();
+        setOther();
+    }
+    public void setFood() {
+        this.food = stat[0];
+    }
+    public void setDrinks() {
+        this.drinks = stat[1];
     }
 
-    public void setDrinks(int drinks) {
-        this.drinks = drinks;
+    public void setTransport() {
+        this.transport = stat[2];
     }
 
-    public void setTransport(int transport) {
-        this.transport = transport;
-    }
-
-    public void setOther(int other) {
-        this.other = other;
+    public void setOther() {
+        this.other = stat[3];
     }
 
     @FXML

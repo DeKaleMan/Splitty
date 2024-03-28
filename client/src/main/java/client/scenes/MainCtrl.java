@@ -248,17 +248,20 @@ public class MainCtrl {
 
     /**
      * This shows the statistics window
-     * @param title the title of the current event
+     *
+     * @param title     the title of the current event
+     * @param eventCode
      */
-    public void showStatistics(String title){
+    public void showStatistics(String title, int eventCode){
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
         statisticsCtrl.setTitle(title);
         //this sets the statistics, eventually this should be linked to the statistics class
-        statisticsCtrl.setFood(2);
-        statisticsCtrl.setDrinks(2);
-        statisticsCtrl.setTransport(2);
-        statisticsCtrl.setOther(2);
+//        statisticsCtrl.setFood(2);
+//        statisticsCtrl.setDrinks(2);
+//        statisticsCtrl.setTransport(2);
+//        statisticsCtrl.setOther(2);
+        statisticsCtrl.setEventCode(eventCode);
         //set the pieChart
         statisticsCtrl.setPieChart();
     }

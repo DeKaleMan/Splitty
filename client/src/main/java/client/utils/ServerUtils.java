@@ -524,6 +524,20 @@ public class ServerUtils {
         }
     }
 
+    public int[] getStatisticsByEventID(int eventID){
+        int [] x = ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER)
+                .path("/statistics")
+                .queryParam("eventID", eventID)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<int[]>() {
+                });
+
+        return x;
+    }
+
+
     private int compareDouble(double d1, double d2, double precision) {
         if (Math.abs(d1 - d2) < precision) return 0;
         if (d1 < d2) return -1;

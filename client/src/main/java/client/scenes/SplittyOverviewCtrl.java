@@ -118,7 +118,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showStatistics(){
-        mainCtrl.showStatistics(titleLabel.getText());
+        mainCtrl.showStatistics(titleLabel.getText(), this.eventCode);
     }
 
     /**
