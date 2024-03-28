@@ -38,7 +38,7 @@ public class DebtCtrl implements Initializable {
     @FXML
     private Button undo;
 
-    private Payment undone;
+    private Stack<Payment> undone;
 
     private List<Payment> changed;
 
@@ -52,7 +52,6 @@ public class DebtCtrl implements Initializable {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
-        changed = new ArrayList<>();
     }
 
 
@@ -157,7 +156,7 @@ public class DebtCtrl implements Initializable {
             .getParent().getParent()).getItem();
         System.out.println("removed " + p.getId());
         markAsPaid(p);
-        undone = p;
+        undone.push(p);
         undo.setVisible(true);
     }
 
@@ -174,6 +173,8 @@ public class DebtCtrl implements Initializable {
         payments.clear();
         payments.addAll(
             serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
+        undone = new Stack<>();
+        changed = new ArrayList<>();
     }
 
     public void setTitlelabel(String title) {
@@ -196,10 +197,11 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void undo() {
-        changed.remove(undone);
-        undone.setPaid(false);
-        this.paymentInstructionListView.getItems().add(undone);
-        undo.setVisible(false);
+        Payment p = undone.pop();
+        changed.remove(p);
+        p.setPaid(false);
+        this.paymentInstructionListView.getItems().add(p);
+        if (undone.isEmpty()) undo.setVisible(false);
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
