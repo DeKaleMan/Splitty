@@ -58,9 +58,10 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         mainCtrl.setButtonRedProperty(undo);
-        payments = FXCollections.observableArrayList(
-            serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
+
+        payments = FXCollections.observableArrayList();
         this.paymentInstructionListView.setItems(payments);
         paymentInstructionListView.setCellFactory(
             new Callback<ListView<Payment>, ListCell<Payment>>() {
@@ -167,6 +168,12 @@ public class DebtCtrl implements Initializable {
                     p.getAmount(),
                     p.isPaid()), p.getId());
         }
+    }
+
+    public void refresh() {
+        payments.clear();
+        payments.addAll(
+            serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
     }
 
     public void setTitlelabel(String title) {

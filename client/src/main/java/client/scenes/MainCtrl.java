@@ -286,7 +286,7 @@ public class MainCtrl {
     public void viewDeptsPerEvent(){
         primaryStage.setTitle("Debts per event");
         primaryStage.setScene(debts);
-
+        debtCtrl.refresh();
     }
 
     public void showSettings() {

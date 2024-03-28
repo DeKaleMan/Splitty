@@ -290,7 +290,7 @@ public class AddExpenseCtrl implements Initializable {
             LocalDate localDate = dateSelect.getValue();
 
             date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            
+
             //add to database
             ExpenseDTO
                 exp =
