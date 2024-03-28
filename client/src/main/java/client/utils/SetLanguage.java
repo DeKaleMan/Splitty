@@ -61,7 +61,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setStatisticsButton(translate("Statistics", "en", lang));
         splittyOverviewCtrl.setAddExpenseButton(translate("Add expense", "en", lang));
 //        splittyOverviewCtrl.setEditParticipant(translate("Edit", "en", lang));
-        splittyOverviewCtrl.setTab2(translate("Untitled Tab 2", "en", lang));
+        splittyOverviewCtrl.setPaidByMe(translate("Paid by me", "en", lang));
         splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));

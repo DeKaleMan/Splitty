@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Expense;
 import commons.Participant;
@@ -33,6 +34,8 @@ public class SplittyOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private boolean admin;
 
+    private Config config;
+
     //these are for the css:
     @FXML
     private AnchorPane background;
@@ -54,10 +57,16 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label expenseNotDeletedError;
     @FXML
     private Button editEvent;
+
     @FXML
     private Label eventCreatedLabel;
+
     @FXML
-    private Tab tab2;
+    private Tab paidByMe;
+
+    @FXML
+    private Tab involvingMe;
+
     @FXML
     private Button deleteExpenseButton;
 
@@ -69,8 +78,11 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public Tab allExpenses;
-    private ListView<Expense> expenseList;
-    private TabPane tabPane;
+    private ListView<Expense> allExpensesList;
+    private ListView<Expense> paidByMeList;
+    private ListView<Expense> includingMeList;
+    @FXML
+    private TabPane expensesTabPane;
 
     @FXML
     public Button leaveButton;
@@ -86,10 +98,13 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private ListView<Participant> participantListView;
     @Inject
-    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
+    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+
         admin = false;
+
+        this.config = config;
     }
 
     @FXML
@@ -180,7 +195,7 @@ public class SplittyOverviewCtrl implements Initializable {
     public Expense deleteExpense() {
         Expense toDelete;
         try {
-            toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+            toDelete = ((ListView<Expense>) expensesTabPane.getSelectionModel().getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
             if (toDelete == null) {
                 throw new NoSuchElementException();
             }
@@ -193,6 +208,7 @@ public class SplittyOverviewCtrl implements Initializable {
             );
             visiblePause.play();
             return null;
+
         }
         try{
             serverUtils.deleteExpense(toDelete);
@@ -216,16 +232,24 @@ public class SplittyOverviewCtrl implements Initializable {
      * fetches all expenses of this event and shows them in the assigned box
      */
     public void fetchExpenses(){
-        expenseList = new ListView<>();
         List<Expense> expenses = new ArrayList<>();
         try{
             expenses = serverUtils.getExpense(eventCode);
         }catch (BadRequestException e){
             System.out.println(e);
         }
-
-        expenseList.getItems().addAll(expenses);
-        allExpenses.setContent(expenseList);
+        allExpensesList = new ListView<>();
+        allExpensesList.getItems().addAll(expenses);
+        allExpenses.setContent(allExpensesList);
+        paidByMeList = new ListView<>();
+        paidByMeList.getItems().addAll(expenses.stream().filter(x -> x.getPayer().getUuid().equals(config.getId())).toList());
+        paidByMe.setContent(paidByMeList);
+        includingMeList = new ListView<>();
+        for(Expense e : expenses){
+            List<String> owing = serverUtils.getDebtByExpense(e.getEvent().getId(), e.getExpenseId()).stream().filter(x -> x.getBalance() < 0).map(x -> x.getParticipant().getUuid()).toList();
+            if(owing.contains(config.getId())) includingMeList.getItems().add(e);
+        }
+        involvingMe.setContent(includingMeList);
     }
     public void fetchParticipants(){
 
@@ -266,8 +290,8 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
 
-    public void setTab2(String text) {
-        this.tab2.setText(text);
+    public void setPaidByMe(String text) {
+        this.paidByMe.setText(text);
     }
 
     public void setDeleteExpenseButton(String text) {
