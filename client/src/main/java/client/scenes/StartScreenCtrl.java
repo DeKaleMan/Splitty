@@ -13,8 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.List;
 
 public class StartScreenCtrl {
@@ -47,7 +49,7 @@ public class StartScreenCtrl {
     private ImageView imageView;
 
     @FXML
-    private ListView eventListView;
+    private ListView<Event> eventListView;
 
     private int eventCode;
 
@@ -58,68 +60,37 @@ public class StartScreenCtrl {
         this.config = config;
     }
 
-    // list the 3 most recent events on the start page
     public void initialize() {
-//        eventListView.getItems().clear();
-//        eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
-//            @Override
-//            protected void updateItem(Event event, boolean empty) {
-//                super.updateItem(event, empty);
-//                if (empty || event == null) {
-//                    setText(null);
-//                } else {
-//                    setText(event.getName());
-//                }
-//            }
-//        });
-
+        eventListView.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<Event> call(ListView<Event> listView) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Event event, boolean empty) {
+                        super.updateItem(event, empty);
+                        if (empty || event == null) {
+                            setText(null);
+                        } else {
+                            setText(event.getName());
+                        }
+                    }
+                };
+            }
+        });
+        // sorts the events by last activity
         List<Event> events = mainCtrl.getMyEvents();
         if(events!=null){
-            eventListView.setItems(FXCollections.observableArrayList(events));
+            ObservableList<Event> newEventList = FXCollections.observableArrayList();
+            ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
+            currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
+                    .forEach(newEventList::add);
+            eventListView.setItems(newEventList);
         }
-
-//        try{
-//            eventListView.getItems().addAll(mainCtrl.getMyEvents());
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//        }
-//        // retrieve from database based on recency (now null to have something)
-//        // the commented below is for testing
-//        noEventLabel.setVisible(false);
-//        String id = config.getId(); // the start of getting this querified
-//        Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
-//        Event event2 = null;
-//        Event event3 = null;
-//        setup(event1, eventButton1, eventLabel1);
-//        setup(event2, eventButton2, eventLabel2);
-//        setup(event3, eventButton3, eventLabel3);
-//        // this will be querified
-//        if (event1 == null && event2 == null && event3 == null) {
-//            noEventLabel.setVisible(true);
-//        }
 
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
-
         // Set the image to the ImageView
         imageView.setImage(image);
-    }
-
-    private void setup(Event event, Button button, Label label) {
-        if (event == null) {
-            button.setVisible(false);
-            label.setVisible(false);
-            return;
-        }
-        button.setVisible(true);
-        label.setVisible(true);
-
-        button.setOnAction(something -> {
-            mainCtrl.showSplittyOverview(event.getId());
-        });
-
-        button.setText(event.getName());
-        label.setText(event.getDate() + ": " + event.getDescription());
     }
 
     /**
