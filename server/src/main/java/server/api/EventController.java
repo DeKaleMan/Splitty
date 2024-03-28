@@ -1,6 +1,7 @@
 package server.api;
 import commons.Event;
 import commons.EventDTO;
+import jakarta.ws.rs.QueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,21 @@ public class EventController {
         }
     }
 
+    @PutMapping("/updateName")
+    public ResponseEntity<Event> updateNameEvent(@RequestBody Event event, @RequestParam String newName){
+        Optional<Event> optionalEvent = eventDB.findById(event.getId());
+        if (optionalEvent.isPresent()) {
+            Event eventfinal = optionalEvent.get();
+//            eventDB.deleteById(eventfinal.getId());
+            eventfinal.setName(newName);
+            eventDB.save(eventfinal);
+            System.out.println("the same is changed");
+            return ResponseEntity.ok(eventfinal);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 //    @GetMapping("/getNameByName/{name}")
 //    public ResponseEntity<Event> getEventByName(@RequestParam("name") String name){
 //        ResponseEntity<Event> e = eventDB.getEventByName(name);
@@ -71,3 +87,17 @@ public class EventController {
         return s == null || s.isEmpty();
     }
 }
+//    Optional<Event> opEvent = eventDB.findById(event.id);
+//        if(opEvent.isEmpty()){
+//                return ResponseEntity.notFound().build();
+//                }
+//                Event event = opEvent.get();
+//
+//                if (event.getName() == null || event.getName().isEmpty()) {
+//                return ResponseEntity.badRequest().build();
+//                }else{
+//                event.setName(newName);
+//                Event updatedEvent = eventDB.save(event);
+//
+//                return ResponseEntity.ok(updatedEvent);
+//                }

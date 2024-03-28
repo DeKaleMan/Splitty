@@ -195,7 +195,8 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         participantListView.setItems(FXCollections.observableArrayList(participants));
     }
-    // all textSetters
+
+
 
 
     public void setExpensesText(String text) {

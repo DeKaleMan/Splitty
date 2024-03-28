@@ -93,7 +93,7 @@ public class AddExpenseCtrl implements Initializable {
         serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class ,exp -> {
             System.out.println("expense added " + exp);
         });
-        try {
+         try {
             allparticipants = serverUtils.getParticipants(eventCode);
         } catch (Exception e) {
             allparticipants = new ArrayList<>();
