@@ -50,13 +50,20 @@ public class EditEventCrtl {
     public void changeName(ActionEvent actionEvent) {
         String newName = nameChange.getText();
         String idTemp = eventId.getText();
-        int eventId = Integer.parseInt(idTemp);
+        int eventIdd = Integer.parseInt(idTemp);
+        try{
+            eventIdd = Integer.parseInt(idTemp);
+        } catch (NumberFormatException ex){
+            eventIdd = -1;
+            eventId.setText("Event ID must be an integer");
+            return;
+        }
         if(newName == null || newName.isEmpty()){
             nameChange.setText("please provide a name");
             throw new NoSuchElementException();
         }
         try{
-            Event event = serverUtils.getEventById(eventId);
+            Event event = serverUtils.getEventById(eventIdd);
             Event updatedEvent = serverUtils.updateEvent(event, newName);
             if (updatedEvent == null){
                 throw new RuntimeException();
@@ -65,6 +72,8 @@ public class EditEventCrtl {
             throw new RuntimeException();
         }
         succesFullyChangeName();
+        nameChange.setText("");
+        eventId.setText("");
     }
 
     public void succesFullyChangeName(){
