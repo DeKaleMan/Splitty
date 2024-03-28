@@ -270,7 +270,7 @@ public class StartScreenCtrl implements Initializable {
 
                 //Language toLang = Language.valueOf(selected);
                 if(mainCtrl.languages.contains(selected)){
-                    config.setLanguage(toLang);
+                    config.setLanguage(selected);
                     config.write();
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
