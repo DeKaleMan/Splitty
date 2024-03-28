@@ -24,7 +24,7 @@
       </Label>
         <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" layoutX="40.0" layoutY="153.0" prefHeight="26.0" prefWidth="248.0" promptText="mm/dd/yyyy" />
         <Label fx:id="dateEmptyError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
-        <Label fx:id="dateIncorrectError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Not a valid date, use format mm/dd/yyyy" textFill="RED" visible="false" />
+        <Label fx:id="dateIncorrectError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
 
         <Label layoutX="40.0" layoutY="200.0" text="Event Description">
             <font>
