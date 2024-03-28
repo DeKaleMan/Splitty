@@ -158,7 +158,7 @@ public class MainCtrl {
         return null;
     }
 
-    public Participant joinEvent(int id){ // needs some more error handling
+    public Participant joinEvent(int id) throws RuntimeException{ // needs some more error handling
         Participant participant = serverUtils.createParticipant(
                 new ParticipantDTO(
                         settingCtrl.getName(),

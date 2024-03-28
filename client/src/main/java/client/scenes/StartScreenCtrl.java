@@ -23,6 +23,7 @@ public class StartScreenCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+
     @FXML
     private Label createEventText;
     @FXML
@@ -32,6 +33,10 @@ public class StartScreenCtrl {
     private Label joinEventText;
     @FXML
     private TextField joinEventTextField;
+    @FXML
+    public Label invalidCodeError;
+    @FXML
+    public Label codeNotFoundError;
 
     @FXML
     private Button adminLogin;
@@ -112,7 +117,8 @@ public class StartScreenCtrl {
     public void joinEvent(){
         int eventCode;
         try {
-            eventCode = Integer.parseInt(joinEventTextField.getText());
+            String idString = joinEventTextField.getText();
+            eventCode = Integer.parseInt(idString);
             Participant p = mainCtrl.joinEvent(eventCode);
             if (p == null) {
                 // show error message
@@ -121,10 +127,12 @@ public class StartScreenCtrl {
             mainCtrl.showSplittyOverview(eventCode);
             System.out.println("Joined event: " + joinEventTextField.getText());
         } catch (NumberFormatException e) {
-            //set error message
+            codeNotFoundError.setVisible(false);
+            invalidCodeError.setVisible(true);
+        } catch (RuntimeException e) {
+            invalidCodeError.setVisible(false);
+            codeNotFoundError.setVisible(true);
         }
-
-
     }
 
     @FXML
@@ -207,5 +215,10 @@ public class StartScreenCtrl {
         if (k.match(press)) {
             createEvent();
         }
+    }
+
+    public void resetErrors(KeyEvent actionEvent) {
+        codeNotFoundError.setVisible(false);
+        invalidCodeError.setVisible(false);
     }
 }
