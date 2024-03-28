@@ -4,12 +4,14 @@ import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,11 +20,19 @@ public class CreateEventCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
+
     // event text fields
     @FXML
     private TextField titleField;
     @FXML
+    public Label titleError;
+    @FXML
     private DatePicker datePicker;
+    @FXML
+    public Label dateEmptyError;
+    @FXML
+    public Label dateIncorrectError;
+
     @FXML
     private TextArea eventDescriptionArea;
 
@@ -95,20 +105,27 @@ public class CreateEventCtrl {
         String dateString = datePicker.getEditor().getText();
         String description = eventDescriptionArea.getText();
         Date date;
-
         boolean error = false;
         try {
-            String[] dateArr = dateString.split("-");
+            if (dateString == null || dateString.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
+            String[] dateArr = dateString.split("/");
             date = new Date(Integer.parseInt(dateArr[2]) - 1900,
                     Integer.parseInt(dateArr[1]) - 1,
                     Integer.parseInt(dateArr[0]));
-        } catch (Exception e) {
+        } catch (NumberFormatException | IndexOutOfBoundsException | DateTimeParseException e) {
+            dateEmptyError.setVisible(false);
+            dateIncorrectError.setVisible(true);
             error = true;
-            // error message invalid date, use eu format dd/mm/yyyy
+        } catch (IllegalArgumentException e) {
+            dateIncorrectError.setVisible(false);
+            dateEmptyError.setVisible(true);
+            error = true;
         }
         if (name == null || name.isEmpty() || error){
             if (name == null || name.isEmpty()) {
-                // error message *fill in name*
+                titleError.setVisible(true);
             }
             return;
         }
@@ -122,5 +139,14 @@ public class CreateEventCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             cancel();
         }
+    }
+
+    public void resetTitleFieldError() {
+        titleError.setVisible(false);
+    }
+
+    public void resetDateFieldError() {
+        dateIncorrectError.setVisible(false);
+        dateEmptyError.setVisible(false);
     }
 }

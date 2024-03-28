@@ -14,14 +14,17 @@
                 <Font name="System Bold" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="titleField" layoutX="40.0" layoutY="88.0" prefHeight="25.0" prefWidth="248.0" />
+        <TextField fx:id="titleField" onKeyPressed="#resetTitleFieldError" layoutX="40.0" layoutY="88.0" prefHeight="25.0" prefWidth="248.0" />
+        <Label fx:id="titleError" layoutX="42.0" layoutY="111.0" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
 
       <Label layoutX="40.0" layoutY="127.0" text="Date">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-        <DatePicker fx:id="datePicker" layoutX="40.0" layoutY="153.0" prefHeight="26.0" prefWidth="248.0" promptText="mm-dd-yyyy" />
+        <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" layoutX="40.0" layoutY="153.0" prefHeight="26.0" prefWidth="248.0" promptText="mm/dd/yyyy" />
+        <Label fx:id="dateEmptyError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
+        <Label fx:id="dateIncorrectError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Not a valid date, use format mm/dd/yyyy" textFill="RED" visible="false" />
 
         <Label layoutX="40.0" layoutY="200.0" text="Event Description">
             <font>
@@ -29,7 +32,6 @@
             </font>
         </Label>
       <TextArea fx:id="eventDescriptionArea" layoutX="40.0" layoutY="227.0" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." />
-
 
 
 
@@ -76,6 +78,7 @@
 
 
         <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#createEvent" text="Create Event" />
+
 
 
 
