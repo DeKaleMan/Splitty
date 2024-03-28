@@ -23,6 +23,9 @@ public class EditEventCrtl {
 
     @FXML
     private Button submitButton;
+
+    @FXML
+    private Label succesFullyChanged;
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
@@ -62,5 +65,10 @@ public class EditEventCrtl {
         }catch (RuntimeException e){
             throw new RuntimeException();
         }
+        succesFullyChangeName();
+    }
+
+    public void succesFullyChangeName(){
+        succesFullyChanged.setVisible(true);
     }
 }

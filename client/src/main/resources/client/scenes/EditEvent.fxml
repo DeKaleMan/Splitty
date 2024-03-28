@@ -21,5 +21,6 @@
       </Label>
       <Button layoutX="28.0" layoutY="352.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <TextField fx:id="eventId" layoutX="217.0" layoutY="137.0" prefHeight="38.0" prefWidth="166.0" promptText="Event ID" />
+      <Label fx:id="succesFullyChanged" layoutX="210.0" layoutY="289.0" prefHeight="38.0" prefWidth="180.0" text="event name succesFully changed" visible="false" />
    </children>
 </AnchorPane>
