@@ -4,6 +4,7 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -57,6 +59,10 @@ public class StartScreenCtrl implements Initializable {
     @FXML
     private ListView<Event> eventListView;
     private List<Event> events;
+    @FXML
+    public Label settingsSavedLabel;
+    @FXML
+    public Label eventCreatedLabel;
 
     @FXML
     private ProgressIndicator progress;
@@ -292,8 +298,20 @@ public class StartScreenCtrl implements Initializable {
     }
 
     public void addEvent(Event event) {
+        if (events == null) {
+            events = new ArrayList<>();
+        }
         events.add(event);
         ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
         eventListView.setItems(currentEventList);
+    }
+
+    public void setSettingsSavedLabel() {
+        settingsSavedLabel.setVisible(true);
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(5));
+        visiblePause.setOnFinished(
+                event1 -> settingsSavedLabel.setVisible(false)
+        );
+        visiblePause.play();
     }
 }

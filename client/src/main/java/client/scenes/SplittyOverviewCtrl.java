@@ -25,8 +25,6 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
-
-
     //We need to store the eventCode right here
     private int eventCode;
 
@@ -55,7 +53,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label expenseNotDeletedError;
     @FXML
     private Button editEvent;
-
+    @FXML
+    private Label eventCreatedLabel;
     @FXML
     private Tab tab2;
     @FXML
@@ -290,7 +289,14 @@ public class SplittyOverviewCtrl implements Initializable {
     }
     public void setAdmin(Boolean admin) {
         this.admin = admin;
-
+    }
+    public void setEventCreatedLabel() {
+        eventCreatedLabel.setVisible(true);
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+        visiblePause.setOnFinished(
+                event1 -> eventCreatedLabel.setVisible(false)
+        );
+        visiblePause.play();
     }
 }
 

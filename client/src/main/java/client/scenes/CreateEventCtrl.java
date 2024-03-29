@@ -130,6 +130,7 @@ public class CreateEventCtrl {
         serverUtils.createParticipant(participantDTO);
         mainCtrl.showSplittyOverview(eventCreated.getId());
         mainCtrl.addEvent(eventCreated);
+        mainCtrl.setConfirmationEventCreated();
     }
 
     @FXML

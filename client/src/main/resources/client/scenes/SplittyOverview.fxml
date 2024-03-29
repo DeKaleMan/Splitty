@@ -25,6 +25,11 @@
                   </Label>
                </children>
             </HBox>
+            <Label fx:id="eventCreatedLabel" layoutX="120.0" layoutY="288.0" text="Event created succesfully*" textFill="#3700ff" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
          </children></Pane>
       <Pane layoutX="14.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
          <children>
@@ -77,6 +82,5 @@
             <Font size="10.0" />
          </font>
       </Label>
-      
    </children>
 </AnchorPane>

@@ -299,7 +299,13 @@ public class MainCtrl {
         primaryStage.setScene(editEvent);
     }
 
+    public void setConfirmationSettings() {
+        startScreenCtrl.setSettingsSavedLabel();
+    }
 
+    public void setConfirmationEventCreated() {
+        splittyOverviewCtrl.setEventCreatedLabel();
+    }
     public void addEvent(Event event) {
         startScreenCtrl.addEvent(event);
     }

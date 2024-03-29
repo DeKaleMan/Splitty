@@ -54,7 +54,11 @@
 
         <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="275.0" layoutY="15.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
       <ProgressIndicator fx:id="progress" layoutX="237.0" layoutY="12.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
-
+        <Label fx:id="settingsSavedLabel" layoutX="243.0" layoutY="358.0" text="Settings saved succesfully*" textFill="#3700ff" visible="false">
+            <font>
+                <Font name="System Italic" size="10.0" />
+            </font>
+        </Label>
     </children>
 
 </AnchorPane>

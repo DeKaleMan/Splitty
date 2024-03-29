@@ -110,6 +110,7 @@ public class SettingsCtrl {
         config.setBic(bic);
         config.write();
         back();
+        mainCtrl.setConfirmationSettings();
         // set saved message
     }
 
