@@ -11,7 +11,34 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
-public class IOUtilActual implements IOUtil{
+public class ServerIOUtilActual implements ServerIOUtil {
+
+    @Override
+    public boolean createFileStructure() {
+        boolean changeStatus = false;
+        String folder = getDataFolder();
+        File file = new File(folder);
+        if (!file.isDirectory()) {
+            file.mkdir();
+            changeStatus = true;
+            System.out.println("Created data folder");
+        }
+        folder = getLanguagesFolder();
+        file = new File(folder);
+        if (!file.isDirectory()) {
+            file.mkdir();
+            changeStatus = true;
+            System.out.println("Created languages folder");
+        }
+        folder = getCurrencyFolder();
+        file = new File(folder);
+        if (!file.isDirectory()) {
+            file.mkdir();
+            changeStatus = true;
+            System.out.println("Created languages folder");
+        }
+        return changeStatus;
+    }
 
     @Override
     public String read(File file) {

@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.api.depinjectionUtils.HttpResponse;
-import server.api.depinjectionUtils.IOUtil;
+import server.api.depinjectionUtils.ServerIOUtil;
 import server.util.BadConversionResponse;
 import server.util.ConversionResponse;
 import server.util.OkConversionResponse;
@@ -22,11 +22,11 @@ import java.util.Scanner;
 @RequestMapping("/api/currency")
 public class CurrencyExchange {
 
-    private final IOUtil io;
+    private final ServerIOUtil io;
     private final HttpResponse httpResponse;
 
     @Autowired
-    public CurrencyExchange(IOUtil io, HttpResponse httpResponse) {
+    public CurrencyExchange(ServerIOUtil io, HttpResponse httpResponse) {
         this.io = io;
         this.httpResponse = httpResponse;
     }

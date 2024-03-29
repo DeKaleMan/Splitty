@@ -1,15 +1,17 @@
-package commons.util;
+package client.utils;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
-public class FileIOutil implements FileIOutilInterface{
+public class ClientFileIOutilActual implements ClientFileIOutil {
 
     private final String configJson =
-            "{\"connection\":null,\"language\":null," +
-                    "\"currency\":null,\"email\":null,\"id\":null,\"name\":null,\"iban\":null,\"bic\":null}";
+            "{\"connection\":localhost:8080,\"language\":en," +
+                    "\"currency\":EUR,\"email\":null,\"id\":\"" +
+                    UUID.randomUUID() + "\",\"name\":null,\"iban\":null,\"bic\":null}";
 
     @Override
     public boolean createFileStructure() {
@@ -20,20 +22,6 @@ public class FileIOutil implements FileIOutilInterface{
             file.mkdir();
             changeStatus = true;
             System.out.println("Created data folder");
-        }
-        folder = getLanguagesFolder();
-        file = new File(folder);
-        if (!file.isDirectory()) {
-            file.mkdir();
-            changeStatus = true;
-            System.out.println("Created languages folder");
-        }
-        folder = getCurrencyFolder();
-        file = new File(folder);
-        if (!file.isDirectory()) {
-            file.mkdir();
-            changeStatus = true;
-            System.out.println("Created languages folder");
         }
         folder = getConfigFile();
         file = new File(folder);
