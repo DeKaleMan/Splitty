@@ -247,7 +247,6 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void editEvent(){
         mainCtrl.editEventt();
-        System.out.println("test");
     }
 }
 
