@@ -52,6 +52,8 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Label noExpenseError;
     @FXML
+    public Label expenseNotDeletedError;
+    @FXML
     private Tab tab2;
     @FXML
     private Button deleteExpenseButton;
@@ -166,7 +168,11 @@ public class SplittyOverviewCtrl implements Initializable {
         Expense toDelete;
         try {
             toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+            if (toDelete == null) {
+                throw new NoSuchElementException();
+            }
         } catch (NoSuchElementException e) {
+            expenseNotDeletedError.setVisible(false);
             noExpenseError.setVisible(true);
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
             visiblePause.setOnFinished(
@@ -175,15 +181,16 @@ public class SplittyOverviewCtrl implements Initializable {
             visiblePause.play();
             return null;
         }
-
-
-        if(toDelete == null){
-            throw new NoSuchElementException("No element selected");
-        }
         try{
             serverUtils.deleteExpense(toDelete);
         }catch (RuntimeException e){
-            System.out.println(e);
+            noExpenseError.setVisible(false);
+            expenseNotDeletedError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> expenseNotDeletedError.setVisible(false)
+            );
+            visiblePause.play();
         }
         System.out.println("OK");
         fetchExpenses();

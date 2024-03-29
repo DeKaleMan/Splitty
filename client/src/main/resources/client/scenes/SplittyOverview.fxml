@@ -71,6 +71,11 @@
             <Font size="10.0" />
          </font>
       </Label>
+      <Label fx:id="expenseNotDeletedError" layoutX="188.0" layoutY="360.0" text="Expense could not be deleted*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
       
    </children>
 </AnchorPane>
