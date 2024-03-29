@@ -23,7 +23,7 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="addExpenseText" layoutX="376.0" layoutY="31.0" text="Add/Edit Expense" AnchorPane.rightAnchor="20">
+      <Label fx:id="addExpenseText" layoutX="376.0" layoutY="31.0" text="Add Expense" AnchorPane.rightAnchor="20">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

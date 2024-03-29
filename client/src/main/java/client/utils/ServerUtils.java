@@ -121,6 +121,23 @@ public class ServerUtils {
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
 
+    public Expense updateExpense(int expenseId, ExpenseDTO expenseDTO){
+        List<Debt> debts = getDebtByExpense(expenseDTO.getEventId(), expenseId);
+        for(Debt d : debts){
+            Participant p = d.getParticipant();
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+
+        deleteDebtsOfExpense(expenseDTO.getEventId(), expenseId);
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/expenses/{eventId}/{expenseId}")
+            .resolveTemplate("eventId", expenseDTO.getEventId())
+            .resolveTemplate("expenseId", expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .put(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+    }
+
     /**
      * Gets debt by event code.
      *
@@ -394,7 +411,15 @@ public class ServerUtils {
         session.send(destination, o);
     }
 
-
+    public Participant getParticipantById(int eventId, String uuid){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/participants/{uuid}/{eventId}")
+            .resolveTemplate("uuid",uuid)
+            .resolveTemplate("eventId",eventId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(Participant.class);
+    }
 
     public Participant createParticipant(ParticipantDTO p) {
         Response response = ClientBuilder.newClient(new ClientConfig())

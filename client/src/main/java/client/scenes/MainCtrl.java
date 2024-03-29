@@ -20,6 +20,7 @@ import client.utils.EventPropGrouper;
 import client.utils.ServerUtils;
 import client.utils.SetLanguage;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
@@ -76,6 +77,9 @@ public class MainCtrl {
     private Scene editEvent;
     private EditEventCrtl editEventCrtl;
     private CreateEventCtrl createEventCtrl;
+
+    private Scene editExpense;
+    private EditExpenseCtrl editExpenseCtrl;
     private ServerUtils serverUtils;
 
     //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
@@ -129,8 +133,14 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
+
         this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
         this.editEventCrtl = eventPropGrouper.editEvent().getKey();
+
+
+        this.editExpense = new Scene(eventPropGrouper.editExpense().getValue());
+        this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
+
         serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
         setLanguage();
@@ -340,4 +350,9 @@ public class MainCtrl {
         });
     }
 
+    public void showEditExpense(Expense expense){
+        primaryStage.setTitle("Edit expense");
+        editExpenseCtrl.refresh(expense);
+        primaryStage.setScene(editExpense);
+    }
 }

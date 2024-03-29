@@ -4,9 +4,6 @@ import client.utils.ServerUtils;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
-import javafx.animation.PauseTransition;
-
-
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
@@ -17,13 +14,10 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.util.Duration;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -31,10 +25,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
+public class EditExpenseCtrl {
 
-public class AddExpenseCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final int eventCode = 1;
+    private Expense expense;
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
 
@@ -42,27 +37,15 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     public Label titleLabel;
 
-
-
     @FXML
     private ComboBox<Participant> personComboBox;
-    @FXML
-    public Label payerError;
 
     //all the things needed for the addExpense
     @FXML
     private TextArea whatFor;
-    @FXML
-    private Label amountInvalidError;
-    @FXML
-    public Label amountNegativeError;
-    @FXML
-    public Label noAmountError;
 
     @FXML
     private DatePicker dateSelect;
-    @FXML
-    private Label dateInvalidError;
 
     @FXML
     private ListView splitList;
@@ -72,10 +55,12 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     private ComboBox category;
+    @FXML
+    private Label error;
     private List<Participant> participant;
 
     @FXML
-    private Label addExpenseText;
+    private Label editExpenseLabel;
     @FXML
     private Label whoPaid;
     @FXML
@@ -90,11 +75,11 @@ public class AddExpenseCtrl implements Initializable {
     private Label expenseTypetext;
 
     @FXML
-    private Button add;
+    private Button back;
     @FXML
-    public Label addExpenseError;
+    private Button edit;
     @FXML
-    private Button cancel;
+    private Button abort;
     @FXML
     private RadioButton selectAll;
     @FXML
@@ -104,13 +89,13 @@ public class AddExpenseCtrl implements Initializable {
     private ToggleGroup selectionToggles;
 
     private Participant payer;
-    
+
     private ObservableList<Participant> rest;
 
     private Set<Participant> owing;
 
     @Inject
-    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl,
+    public EditExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl,
                           SplittyOverviewCtrl splittyCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
@@ -121,21 +106,6 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        //the buttons
-        mainCtrl.setButtonRedProperty(cancel);
-        mainCtrl.setButtonGreenProperty(add);
-        
-        personComboBox.setButtonCell(new ListCell<Participant>() {
-            @Override
-            protected void updateItem(Participant item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("Select who paid");
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
         setSplitListUp();
         setTogglesUp();
         setCategoriesUp();
@@ -194,6 +164,7 @@ public class AddExpenseCtrl implements Initializable {
                         return;
                     }
                     owing.clear();
+                    splitList.refresh();
                     splitList.setVisible(true);
                 }
             }
@@ -219,76 +190,54 @@ public class AddExpenseCtrl implements Initializable {
      * expense to the list but that might not be necessary when the database works
      */
     @FXML
-    public void addExpense() {
-        boolean error = false;
-        Date date = null;
+    @Transactional
+    public void editExpense() {
         //link these to participants and then add the expense
         if (dateSelect.getValue() == null) {
             dateSelect.setPromptText("invalid Date");
         }
 
-        Type type = (Type) category.getValue();
-        if (type == null) type= Type.Other;
-        Participant payer = personComboBox.getValue();
-        if (payer == null) {
-            error = true;
-            payerError.setVisible(true);
-        }
-
-        double amountDouble = 0.0;
-        try {
-            if (amount.getText() == null || amount.getText().isEmpty()) {
-                noAmountError.setVisible(true);
-                return;
-            }
-            amountDouble = Double.parseDouble(amount.getText());
-            if (amountDouble <= 0.0) {
-                amountNegativeError.setVisible(true);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            amountInvalidError.setVisible(true);
-            error = true;
-        }
-        if(error) return;
-
-        String description = whatFor.getText();
-
         try {
             LocalDate localDate = dateSelect.getValue();
-
-            date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
+            Date date = java.sql.Date.valueOf(localDate);
+            Type type = (Type) category.getValue();
+            if (type == null) throw new NoSuchElementException();
+            double amountDouble = Double.parseDouble(amount.getText());
+            if (amountDouble <= 0) {
+                amount.setText("NO VALID AMOUNT");
+                throw new NoSuchElementException();
+            }
+            Participant oldPayer = personComboBox.getValue();
+            String description = whatFor.getText();
             //add to database
             ExpenseDTO
                 exp =
                 new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid());
-            Expense expense = serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            double amountPerPerson = amountDouble / (owing.size()+1);
-            for (Participant p : owing) {
+            Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
+            double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
+            for (Participant oldP : owing) {
+                Participant p = serverUtils.getParticipantById(oldP.getEvent().getId(),oldP.getUuid());
                 serverUtils.saveDebt(
-                    new DebtDTO(-amountPerPerson, eventCode, expense.getExpenseId(), p.getUuid()));
+                    new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(), p.getUuid()));
                 serverUtils.updateParticipant(p.getUuid(),
                     new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
                         p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
                         p.getUuid()));
             }
+            Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(),oldPayer.getUuid());
             serverUtils.saveDebt(
-                new DebtDTO(amountDouble - amountPerPerson, eventCode, expense.getExpenseId(), payer.getUuid()));
-            serverUtils.updateParticipant(payer.getUuid(),
-                new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
-                    payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
-                    payer.getUuid()));
+                new DebtDTO(amountDouble - amountPerPerson, eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+            serverUtils.updateParticipant(newPayer.getUuid(),
+                new ParticipantDTO(newPayer.getName(), newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
+                    newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(), newPayer.getEvent().getId(),
+                    newPayer.getUuid()));
             serverUtils.generatePaymentsForEvent(eventCode);
-            splittyCtrl.fetchExpenses();
             back();
         } catch (Exception e) {
-            addExpenseError.setVisible(true);
-            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-            visiblePause.setOnFinished(event1 -> addExpenseError.setVisible(false));
-            visiblePause.play();
+            dateSelect.setPromptText("try again");
+            error.setText("Something is incomplete");
         }
+        splittyCtrl.fetchExpenses();
     }
 
 
@@ -312,6 +261,7 @@ public class AddExpenseCtrl implements Initializable {
                             setGraphic(null);
                         } else {
                             RadioButton button = new RadioButton();
+                            if(owing.contains(participant)) button.setSelected(true);
                             button.selectedProperty().addListener(new ChangeListener<Boolean>() {
                                 @Override
                                 public void changed(
@@ -341,19 +291,45 @@ public class AddExpenseCtrl implements Initializable {
 //        this.error = error;
 //    }
 
-    public void refresh(){
-        splitList.setVisible(false);
+    public void refresh(Expense expense){
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
-        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class, exp -> {
-            System.out.println("expense added " + exp);
-        });
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
         } catch (Exception e) {
             allparticipants = new ArrayList<>();
         }
         list.addAll(allparticipants);
+        setComboboxUp(list);
+        setSplitListUp();
+        setCategoriesUp();
+        setTogglesUp();
+        this.expense = expense;
+        owing.clear();
+        List<Participant> owingFromDb = serverUtils.getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId()).stream().filter(x -> x.getBalance() < 0).map(x -> x.getParticipant()).toList();
+        personComboBox.setValue(expense.getPayer());
+        dateSelect.setValue(expense.getDate().toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate());
+        whatFor.setText(expense.getDescription());
+        category.setValue(expense.getType());
+        amount.setText(expense.getTotalExpense() + "");
+        payer = expense.getPayer();
+        rest.clear();
+        rest.addAll(allparticipants);
+        rest.remove(payer);
+        if(owingFromDb.size() == rest.size()){
+            selectAll.setSelected(true);
+//            splitList.setVisible(false);
+//            owing.addAll(owingFromDb);
+        }else{
+            selectSome.setSelected(true);
+            //splitList.setVisible(true);
+            owing.addAll(owingFromDb);
+        }
+    }
+
+    private void setComboboxUp(ObservableList<Participant> list) {
         personComboBox.setItems(list);
         personComboBox.setCellFactory(param -> new ListCell<Participant>() {
             @Override
@@ -384,20 +360,21 @@ public class AddExpenseCtrl implements Initializable {
                 }
             }
         });
-        payer = null;
-        rest.clear();
-        owing.clear();
-        selectAll.setSelected(false);
-        selectSome.setSelected(false);
-        dateSelect.setValue(null);
-        whatFor.setText("");
-        category.setValue(null);
-        personComboBox.setValue(null);
-        amount.setText("");
+        personComboBox.setButtonCell(new ListCell<Participant>() {
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Select who paid");
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 
-    public void setAddExpenseText(String text) {
-        this.addExpenseText.setText(text);
+    public void setEditExpenseLabel(String text) {
+        this.editExpenseLabel.setText(text);
     }
 
     public void setWhoPaid(String text) {
@@ -424,12 +401,16 @@ public class AddExpenseCtrl implements Initializable {
         this.expenseTypetext.setText(text);
     }
 
-    public void setAdd(String text) {
-        this.add.setText(text);
+    public void setBack(String text) {
+        this.back.setText(text);
+    }
+
+    public void setEdit(String text) {
+        this.edit.setText(text);
     }
 
     public void setAbort(String text) {
-        this.cancel.setText(text);
+        this.abort.setText(text);
     }
 
     public void setSelectAll(String text) {
@@ -442,25 +423,5 @@ public class AddExpenseCtrl implements Initializable {
 
     public void setExpenseTypeBox(String text) {
         this.category.setPromptText(text);
-    }
-    @FXML
-    public void onKeyPressed(KeyEvent press) {
-        if (press.getCode() == KeyCode.ESCAPE) {
-            back();
-        }
-    }
-
-    public void resetPayerErrors() {
-        payerError.setVisible(false);
-    }
-
-    public void resetAmountErrors(KeyEvent keyEvent) {
-        amountNegativeError.setVisible(false);
-        noAmountError.setVisible(false);
-        amountInvalidError.setVisible(false);
-    }
-
-    public void resetDateErrors() {
-        dateInvalidError.setVisible(false);
     }
 }

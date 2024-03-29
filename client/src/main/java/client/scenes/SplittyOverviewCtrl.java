@@ -201,7 +201,12 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void editExpense(){
+        Expense toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel().getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
 
+        if(toEdit == null){
+            throw new NoSuchElementException("No element selected");
+        }
+        mainCtrl.showEditExpense(toEdit);
     }
     @FXML
     public Expense deleteExpense() {
