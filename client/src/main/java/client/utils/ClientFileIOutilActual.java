@@ -9,8 +9,8 @@ import java.util.UUID;
 public class ClientFileIOutilActual implements ClientFileIOutil {
 
     private final String configJson =
-            "{\"connection\":localhost:8080,\"language\":en," +
-                    "\"currency\":EUR,\"email\":null,\"id\":\"" +
+            "{\"connection\":\"localhost:8080\",\"language\":\"en\"," +
+                    "\"currency\":\"EUR\",\"email\":null,\"id\":\"" +
                     UUID.randomUUID() + "\",\"name\":null,\"iban\":null,\"bic\":null}";
 
     @Override
