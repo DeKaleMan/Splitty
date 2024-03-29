@@ -50,8 +50,9 @@ public class Main extends Application {
         var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var debts = FXML.load(DebtCtrl.class, "client", "scenes", "Debts.fxml");
+        var editEvent = FXML.load(EditEventCrtl.class, "client", "scenes", "EditEvent.fxml");
         // group these in the EventPropGrouper
-        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts);
+        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants, statistics, debts, editEvent);
 
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
 
