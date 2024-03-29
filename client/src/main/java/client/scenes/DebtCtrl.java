@@ -3,7 +3,9 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.Participant;
 import commons.Payment;
+import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -166,6 +168,12 @@ public class DebtCtrl implements Initializable {
                 new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode,
                     p.getAmount(),
                     p.isPaid()), p.getId());
+            Participant payer = p.getPayer();
+            Participant payee = p.getPayee();
+            if(p.isPaid()){
+                serverUtils.updateParticipant(payer.getUuid(), new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(), payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),payer.getEvent().getId(),payer.getUuid()));
+                serverUtils.updateParticipant(payee.getUuid(), new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(), payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),payee.getEvent().getId(),payee.getUuid()));
+            }
         }
     }
 
