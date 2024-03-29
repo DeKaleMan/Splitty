@@ -14,7 +14,6 @@ import server.database.ExpenseRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
 import java.util.function.Function;
 
 public class TestExpenseRepository implements ExpenseRepository {

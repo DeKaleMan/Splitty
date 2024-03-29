@@ -10,7 +10,7 @@ import server.database.ExpenseRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
+
 
 @RestController
 @RequestMapping("/api/statistics")
