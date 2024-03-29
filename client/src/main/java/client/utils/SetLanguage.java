@@ -129,25 +129,6 @@ public class SetLanguage {
     }
 
     public Image getFlag(String lang){
-        //I am not sure if passing a file and converting it to an image works so first test locally
-//        Response response = ClientBuilder.newClient(new ClientConfig())
-//                .target(SERVER)
-//                .path("api/translate/flag")
-//                .queryParam("lang", lang)
-//                .request(APPLICATION_JSON)
-//                .get();
-//        if(Response.Status.OK.getStatusCode() != response.getStatus()){
-//            response.close();
-//            throw new RuntimeException("Failed to retrieve flag. Status code: " + response.getStatus());
-//        }
-////        response.readEntity(Image.class);
-//        byte[] responseBody = response.readEntity(byte[].class);
-//        // Convert byte array to InputStream
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBody);
-//
-//        // Create JavaFX Image from InputStream
-//        Image image = new Image(inputStream);
-//        return image;
         Image image;
         try{
             String path = lang + "Flag.png";

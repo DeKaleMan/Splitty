@@ -100,20 +100,4 @@ public class LanguageController {
             throw new RuntimeException("Error writing JSON object to file", e);
         }
     }
-
-    @GetMapping(path = {"/flag", "flag"})
-    public ResponseEntity<File> getFlag(@RequestParam String lang){
-        List<String> flags = Arrays.asList("en", "nl");
-        if (!lang.contains(lang)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        String filepath = basepath + lang + "Flag" + ".png";
-        File image = new File(filepath);
-        if(!image.exists()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-
-        return ResponseEntity.ok(image);
-    }
 }
