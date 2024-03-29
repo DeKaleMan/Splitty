@@ -62,6 +62,21 @@ public class EventController {
         }
     }
 
+    @PutMapping("/updateName")
+    public ResponseEntity<Event> updateNameEvent(@RequestBody Event event, @RequestParam String newName){
+        Optional<Event> optionalEvent = eventDB.findById(event.getId());
+        if (optionalEvent.isPresent()) {
+            Event eventfinal = optionalEvent.get();
+//            eventDB.deleteById(eventfinal.getId());
+            eventfinal.setName(newName);
+            eventDB.save(eventfinal);
+            System.out.println("the same is changed");
+            return ResponseEntity.ok(eventfinal);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 //    @GetMapping("/getNameByName/{name}")
 //    public ResponseEntity<Event> getEventByName(@RequestParam("name") String name){
 //        ResponseEntity<Event> e = eventDB.getEventByName(name);

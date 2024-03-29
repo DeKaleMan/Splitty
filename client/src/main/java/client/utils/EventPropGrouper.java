@@ -1,9 +1,6 @@
 package client.utils;
 
-import client.scenes.AddExpenseCtrl;
-import client.scenes.DebtCtrl;
-import client.scenes.ManageParticipantsCtrl;
-import client.scenes.StatisticsCtrl;
+import client.scenes.*;
 import javafx.scene.Parent;
 import javafx.util.Pair;
 
@@ -16,7 +13,8 @@ import javafx.util.Pair;
 public record EventPropGrouper(Pair<AddExpenseCtrl, Parent> addExpense,
                                Pair<ManageParticipantsCtrl, Parent> manageParticipants,
                                Pair<StatisticsCtrl, Parent> statistics,
-                               Pair<DebtCtrl, Parent> debts) {
+                               Pair<DebtCtrl, Parent> debts,
+                               Pair<EditEventCrtl, Parent> editEvent) {
 
 }
 //package client.scenes;
