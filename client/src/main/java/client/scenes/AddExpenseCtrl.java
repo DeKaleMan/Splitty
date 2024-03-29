@@ -83,8 +83,6 @@ public class AddExpenseCtrl implements Initializable {
     private Label expenseTypetext;
 
     @FXML
-    private Button back;
-    @FXML
     private Button add;
     @FXML
     public Label addExpenseError;
@@ -296,10 +294,6 @@ public class AddExpenseCtrl implements Initializable {
 
     public void setExpenseTypetext(String text) {
         this.expenseTypetext.setText(text);
-    }
-
-    public void setBack(String text) {
-        this.back.setText(text);
     }
 
     public void setAdd(String text) {

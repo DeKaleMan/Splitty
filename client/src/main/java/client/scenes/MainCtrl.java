@@ -228,23 +228,9 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
-//        startScreenCtrl.setLanguageSelect(language);
-//        startScreenCtrl.initialize();
-//        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
-
     }
 
-    /**
-     * show start screen but with the event title which was being created
-     * @param eventTitle the title of the event someone was creating
-     */
-    public void showStartScreen(String eventTitle){
-        primaryStage.setTitle("Splitty");
-//        startScreenCtrl.initialize();
-        primaryStage.setScene(startScreen);
-        startScreenCtrl.setTitle(eventTitle);
-    }
 
     public void showUserEventList() {
         userEventListCtrl.initialize();
@@ -308,7 +294,7 @@ public class MainCtrl {
         return settingCtrl.getId();
     }
 
-    public void editEventt(){
+    public void editEvent(){
         primaryStage.setTitle("EditEvent");
         primaryStage.setScene(editEvent);
     }

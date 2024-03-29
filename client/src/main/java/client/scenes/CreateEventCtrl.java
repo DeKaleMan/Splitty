@@ -80,7 +80,7 @@ public class CreateEventCtrl {
 
     @FXML
     public void cancel() {
-        mainCtrl.showStartScreen(titleField.getText());
+        mainCtrl.showStartScreen();
     }
 
     @FXML

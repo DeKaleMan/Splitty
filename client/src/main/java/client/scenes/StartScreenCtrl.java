@@ -8,23 +8,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javax.inject.Inject;
-import java.util.Comparator;
-import java.util.List;
-
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
-
-
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -204,6 +196,9 @@ public class StartScreenCtrl implements Initializable {
         // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
         mainCtrl.language = config.getLanguage();
+        if (mainCtrl.language == null) {
+            mainCtrl.language = "en";
+        }
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(mainCtrl.language);

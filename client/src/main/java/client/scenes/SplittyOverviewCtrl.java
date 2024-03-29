@@ -274,7 +274,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void editEvent() {
-        mainCtrl.editEventt();
+        mainCtrl.editEvent();
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
