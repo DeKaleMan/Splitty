@@ -20,20 +20,25 @@ import client.utils.EventPropGrouper;
 
 import client.utils.ServerUtils;
 import commons.Event;
-import client.utils.Language;
 import client.utils.SetLanguage;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
-    protected Language language = Language.en;
+    //protected Language language = Language.en;
+    protected String language = "en";
+    protected List<String> languages;
+
 
     private SetLanguage setLanguage;
     private Stage primaryStage;
@@ -92,7 +97,7 @@ public class MainCtrl {
                            Pair<UserEventListCtrl, Parent> userEventList,
                            Pair<CreateEventCtrl, Parent> createEvent,
                            AdminWindows adminWindows,
-                           Pair<SettingsCtrl, Parent> settings ) {
+                           Pair<SettingsCtrl, Parent> settings) {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
@@ -129,17 +134,22 @@ public class MainCtrl {
         this.editEventCrtl = eventPropGrouper.editEvent().getKey();
         serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
-        showStartScreen();
-        primaryStage.show();
         setLanguage();
+        showStartScreen();
+        startScreenCtrl.setLanguageSelect();
+        primaryStage.show();
     }
 
-    public void setLanguage(){
+    private void setLanguage(){
+        languages = new ArrayList<>();
+        //TODO we should add the available languages perhaps to a file
+        languages.addAll(List.of("en", "nl", "is", "zh", "es"));
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
     }
 
-    public void changeLanguage(Language toLang){
+
+    public void changeLanguage(String toLang){
         this.language = toLang;
         setLanguage.changeTo(toLang.toString());
     }
@@ -154,6 +164,9 @@ public class MainCtrl {
         splittyOverviewCtrl.setEventCode(id);
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
+    }
+    public Image getFlag(){
+        return setLanguage.getFlag(this.language);
     }
 
     public List<Event> getMyEvents(){
@@ -211,8 +224,9 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
-        startScreenCtrl.setLanguageSelect(language.toString());
-        startScreenCtrl.initialize();
+//        startScreenCtrl.setLanguageSelect(language);
+//        startScreenCtrl.initialize();
+//        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
 
     }
@@ -223,7 +237,7 @@ public class MainCtrl {
      */
     public void showStartScreen(String eventTitle){
         primaryStage.setTitle("Splitty");
-        startScreenCtrl.initialize();
+//        startScreenCtrl.initialize();
         primaryStage.setScene(startScreen);
         startScreenCtrl.setTitle(eventTitle);
     }

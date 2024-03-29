@@ -4,6 +4,8 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
@@ -17,7 +19,13 @@ public class SettingsCtrl {
     @FXML
     private TextField emailField;
     @FXML
-    private TextField currencyField;
+    public TextField currencyField;
+    @FXML
+    private TextField langTextfield;
+    @FXML
+    private Label languageTextField;
+    @FXML
+    private ProgressBar progressBar;
     @FXML
     private TextField nameField;
     @FXML
@@ -60,6 +68,7 @@ public class SettingsCtrl {
             bicField.setText("");
         }
         currencyField.setText(config.getCurrency().toString());
+        languageTextField.setText(config.getLanguage());
     }
 
     /**
@@ -129,6 +138,32 @@ public class SettingsCtrl {
     public String getBic() {
         return config.getBic();
     }
+
+    @FXML
+    public void addLang(){
+        progressBar.setVisible(true);
+        String newLang = langTextfield.getText();
+        if(newLang != null || !newLang.isBlank()){
+            //setLanguage to new found language, we can no longer use an enum
+            if(mainCtrl.languages.contains(newLang)){
+                langTextfield.setPromptText("This language already exists");
+                langTextfield.setText("");
+                return;
+            }
+            try{
+                mainCtrl.changeLanguage(newLang);
+                mainCtrl.languages.add(newLang);
+                mainCtrl.language = newLang;
+                langTextfield.setText("");
+            }catch (Exception e){
+                progressBar.setVisible(false);
+                langTextfield.setText("no valid languageCode");
+                System.out.println(e);
+            }
+        }
+        progressBar.setVisible(false);
+    }
+
     public String getLanguage() {
         return config.getLanguage().toString();
     }
