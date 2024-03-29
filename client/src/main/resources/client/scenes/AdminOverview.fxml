@@ -12,7 +12,7 @@
                <Font size="35.0" />
             </font>
          </Text>
-         <ListView fx:id="eventList" onMouseClicked="#handleMouseClick" layoutX="170.0" layoutY="106.0" onKeyPressed="#onKeyPressed" prefHeight="270.0" prefWidth="260.0" />
+         <ListView fx:id="eventList" layoutX="170.0" layoutY="106.0" onKeyPressed="#onKeyPressed" onMouseClicked="#handleMouseClick" prefHeight="270.0" prefWidth="260.0" />
          <Button fx:id="importEventButton" layoutX="69.0" layoutY="106.0" mnemonicParsing="false" onAction="#showImportFields" prefHeight="25.0" prefWidth="90.0" text="Import event" />
          <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" prefHeight="25.0" prefWidth="90.0" text="Export event" />
          <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="90.0" text="Delete event" />
@@ -30,9 +30,14 @@
          <ComboBox fx:id="sortComboBox" layoutX="314.0" layoutY="70.0" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
          <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
          <AnchorPane fx:id="jsonImportPane" visible="false">
-            <TextArea fx:id="jsonImportTextArea"  layoutX="125.0" layoutY="13.0" prefHeight="350.0" prefWidth="350.0" promptText="Paste your exported JSON dump here" visible="false" />
+            <TextArea fx:id="jsonImportTextArea" layoutX="125.0" layoutY="13.0" prefHeight="350.0" prefWidth="350.0" promptText="Paste your exported JSON dump here" visible="false" />
             <Button fx:id="jsonImportButton" layoutX="385.0" layoutY="369.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="25.0" prefWidth="90.0" text="Import" visible="false" />
          </AnchorPane>
+         <Label fx:id="noEventSelectedError" layoutX="472.0" layoutY="216.0" text="No event selected*" textFill="RED" visible="false">
+            <font>
+               <Font size="10.0" />
+            </font>
+         </Label>
       </AnchorPane>
    </children>
 </AnchorPane>

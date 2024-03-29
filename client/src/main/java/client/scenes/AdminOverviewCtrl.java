@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import commons.Participant;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,12 +13,14 @@ import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
 
 public class AdminOverviewCtrl {
+
 
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
@@ -32,7 +35,8 @@ public class AdminOverviewCtrl {
 
     @FXML
     private Button exportEventButton;
-
+    @FXML
+    public Label noEventSelectedError;
     @FXML
     private Button deleteEventButton;
 
@@ -117,6 +121,15 @@ public class AdminOverviewCtrl {
     @FXML
     public void exportEvent() {
         Event toExportEvent = eventList.getSelectionModel().getSelectedItem();
+        if (toExportEvent == null) {
+            noEventSelectedError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> noEventSelectedError.setVisible(false)
+            );
+            visiblePause.play();
+            return;
+        }
         List<Participant> toExportParticipants = serverUtils.getParticipants(toExportEvent.getId());
         // TODO: Convert event to json and display somehow (DB not fully done so can't do it yet)
         ObjectMapper objectMapper = new ObjectMapper();
@@ -126,6 +139,15 @@ public class AdminOverviewCtrl {
     @FXML
     public void deleteEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
+        if (event == null) {
+            noEventSelectedError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event1 -> noEventSelectedError.setVisible(false)
+            );
+            visiblePause.play();
+            return;
+        }
         serverUtils.deleteEventById(event.getId());
         ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
         eventList.setItems(events);
@@ -135,6 +157,15 @@ public class AdminOverviewCtrl {
     @FXML
     public void viewEvent() {
         Event event = eventList.getSelectionModel().getSelectedItem();
+        if (event == null) {
+            noEventSelectedError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event1 -> noEventSelectedError.setVisible(false)
+            );
+            visiblePause.play();
+            return;
+        }
         mainCtrl.showSplittyOverview(event.getId());
     }
 
