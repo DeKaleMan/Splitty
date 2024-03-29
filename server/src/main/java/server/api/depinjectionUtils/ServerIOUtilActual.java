@@ -30,12 +30,16 @@ public class ServerIOUtilActual implements ServerIOUtil {
             changeStatus = true;
             System.out.println("Created languages folder");
         }
-        folder = getCurrencyFolder();
+        folder = getCurrencyCacheFile();
         file = new File(folder);
-        if (!file.isDirectory()) {
-            file.mkdir();
-            changeStatus = true;
-            System.out.println("Created languages folder");
+        try {
+            if (file.createNewFile()) {
+                changeStatus = true;
+                // Set up basic json structure
+                System.out.println("Created currency cache file");
+            }
+        } catch (IOException e) {
+            System.out.println(e);
         }
         return changeStatus;
     }
