@@ -5,6 +5,7 @@ import client.scenes.*;
 import jakarta.ws.rs.client.ClientBuilder;
 
 import jakarta.ws.rs.core.Response;
+import javafx.scene.image.Image;
 
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -12,7 +13,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class SetLanguage {
     private static final String SERVER = "http://localhost:8080/";
     private MainCtrl mainCtrl;
-    private Language language;
     private StartScreenCtrl startScreenCtrl;
     private SplittyOverviewCtrl splittyOverviewCtrl;
     private AdminLoginCtrl adminLoginCtrl;
@@ -109,7 +109,7 @@ public class SetLanguage {
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 
 
-    public static String translate(String query, String sourceLang, String targetLang) {
+    public String translate(String query, String sourceLang, String targetLang) {
         Response response = ClientBuilder.newClient()
                 .target(SERVER)
                 .path("api/translate")
@@ -126,6 +126,19 @@ public class SetLanguage {
 
         return res;
 
+    }
+
+    public Image getFlag(String lang){
+        Image image;
+        try{
+            String path = lang + "Flag.png";
+            image =  new Image(path);
+        }
+        catch (Exception e){
+            return null;
+        }
+
+        return image;
     }
 
 

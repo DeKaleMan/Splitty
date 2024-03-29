@@ -5,11 +5,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
+
     <children>
         <AnchorPane layoutX="44.0" layoutY="89.0" prefHeight="132.0" prefWidth="200.0">
             <children>
-                <Button fx:id="create" contentDisplay="RIGHT" layoutX="133.0" layoutY="93.0" mnemonicParsing="false" onAction="#createEvent" text="Create" />
+                <Button fx:id="create" contentDisplay="RIGHT" layoutX="133.0" layoutY="93.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="25.0" prefWidth="84.0" text="Create" AnchorPane.leftAnchor="50.0" />
                 <Label fx:id="createEventText" layoutX="14.0" layoutY="14.0" text="Create New Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
@@ -20,7 +22,7 @@
 
         <AnchorPane layoutX="44.0" layoutY="233.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="132.0" prefWidth="214.0">
             <children>
-                <Button fx:id="join" contentDisplay="RIGHT" layoutX="144.0" layoutY="93.0" mnemonicParsing="false" onAction="#joinEvent" text="Join" />
+                <Button fx:id="join" contentDisplay="RIGHT" layoutX="144.0" layoutY="93.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" AnchorPane.leftAnchor="50.0" />
                 <Label fx:id="joinEventText" layoutX="14.0" layoutY="14.0" text="Join Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
@@ -36,12 +38,13 @@
                 <Font size="36.0" />
             </font>
         </Label>
-      <ComboBox fx:id="languageSelect" layoutX="269.0" layoutY="12.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="62.0" promptText="en" />
+      <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" />
       <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="99.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
 
         <Button layoutX="514.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
 
-        <Button fx:id="adminLogin" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login" AnchorPane.rightAnchor="502.0" />
+
+        <Button fx:id="adminLogin" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login" AnchorPane.leftAnchor="10.0" />
       <Label fx:id="createEventText1" layoutX="397.0" layoutY="71.0" text="My events">
          <font>
             <Font name="System Bold" size="24.0" />
@@ -49,6 +52,8 @@
       </Label>
       <ListView fx:id="eventListView" layoutX="367.0" layoutY="121.0" onMouseClicked="#handleMouseClick" prefHeight="200.0" prefWidth="176.0" />
 
+        <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="275.0" layoutY="15.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
+      <ProgressIndicator fx:id="progress" layoutX="237.0" layoutY="12.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
 
     </children>
 

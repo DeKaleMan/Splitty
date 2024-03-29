@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.Config;
-import client.utils.Language;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
@@ -9,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,10 +18,22 @@ import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
 
-public class StartScreenCtrl {
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+
+import javax.inject.Inject;
+
+
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+
+public class StartScreenCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+    private String currentLang;
 
     @FXML
     private Label createEventText;
@@ -54,14 +67,26 @@ public class StartScreenCtrl {
     @FXML
     private ListView<Event> eventListView;
 
+
+    @FXML
+    private ProgressIndicator progress;
+    private int eventCode;
+    @FXML
+    private ImageView flag;
+
+
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.config = config;
+
     }
 
-    public void initialize() {
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        eventListView.getItems().clear();
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
             protected void updateItem(Event event, boolean empty) {
@@ -74,25 +99,29 @@ public class StartScreenCtrl {
             }
         });
         List<Event> events = mainCtrl.getMyEvents();
-        if(events!=null){
+        if(events!=null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
             ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
             currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
                     .forEach(newEventList::add);
             eventListView.setItems(newEventList);
         }
+        if (events != null) {
+            eventListView.setItems(FXCollections.observableArrayList(events));
+        }
 
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
         // Set the image to the ImageView
         imageView.setImage(image);
+        //Image flag = new Image("enFlag.png");
     }
 
     /**
      * Creates an event with the title specified in the createEventTextField
      * TO DO - actually create an event
      */
-    public void createEvent(){
+    public void createEvent() {
         String name = createEventTextField.getText();
         if (name == null || name.isEmpty()) {
             name = "New event";
@@ -106,7 +135,7 @@ public class StartScreenCtrl {
      * Join an event with the title specified in the joinEventTextField
      * TO DO - join an event by the event id/URL
      */
-    public void joinEvent(){
+    public void joinEvent() {
         int eventCode;
         try {
             String idString = joinEventTextField.getText();
@@ -140,6 +169,7 @@ public class StartScreenCtrl {
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
     }
+
     public void setCreateEventText(String text) {
         createEventText.setText(text);
     }
@@ -151,48 +181,79 @@ public class StartScreenCtrl {
     public void setAdminLogin(String text) {
         adminLogin.setText(text);
     }
+
     public void setShowAllEvents(String text) {
         showAllEventsButton.setText(text);
     }
+
     public void setJoinButtonText(String text) {
         join.setText(text);
     }
+
     public void setCreateButtonText(String text) {
         create.setText(text);
     }
-    public void setNoEventLabel(String text){
+
+    public void setNoEventLabel(String text) {
 //        noEventLabel.setText(text);
     }
 
 
-    public void setLanguageSelect(String language){
-
+    public void setLanguageSelect() {
+        //TODO add a check if this list is the same as the actual list otherwise
+        // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
-
-        for(Language l: Language.values()){
-            languages.add(l.toString());
-        }
+        mainCtrl.language = config.getLanguage();
+        languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
-        languageSelect.setValue(language);
+        languageSelect.setValue(mainCtrl.language);
+        //languageSelect.setValue(flag);
+        Image flag = mainCtrl.getFlag();
+        setFlag(flag);
+        if (!mainCtrl.language.equals(currentLang)) {
+            changeLanguage();
+        }
+//        languageSelect.setItems(FXCollections.observableList(mainCtrl.languages));
     }
 
     @FXML
     public void changeLanguage() {
+        setProgress();
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                Language toLang = Language.valueOf(selected);
-                config.setLanguage(toLang);
-                config.write();
-                mainCtrl.changeLanguage(toLang);
+
+                //Language toLang = Language.valueOf(selected);
+                if (mainCtrl.languages.contains(selected)) {
+                    config.setLanguage(selected);
+                    config.write();
+                    String toLang = selected;
+                    mainCtrl.changeLanguage(toLang);
+                }
+
+                currentLang = selected;
             }
         } catch (Exception e) {
             System.out.println(e);
         }
+        setLanguageSelect();
+        setProgress();
+        languageSelect.setVisible(false);
+
     }
-    public void showSettings(){
+
+    public void setProgress() {
+        if (this.progress.isVisible()) {
+            this.progress.setVisible(false);
+        } else {
+            this.progress.setVisible(true);
+        }
+    }
+
+    public void showSettings() {
         mainCtrl.showSettings();
     }
+
 
     public void handleMouseClick(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
@@ -216,4 +277,27 @@ public class StartScreenCtrl {
         codeNotFoundError.setVisible(false);
         invalidCodeError.setVisible(false);
     }
+
+    public void setFlag(Image image) {
+        flag.setImage(image);
+    }
+
+    @FXML
+    public void showLangOptions() {
+//        this.languageSelect.setVisible(true);
+        //this.languageSelect.setValue(flag);
+        languageSelect.show();
+
+        imageView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
+                // Clicked outside of the choice box, hide it
+                languageSelect.setVisible(false);
+            }
+        });
+        imageView.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Hide the choice box when any key is pressed
+            languageSelect.setVisible(false);
+        });
+    }
+
 }
