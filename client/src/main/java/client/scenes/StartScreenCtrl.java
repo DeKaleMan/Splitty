@@ -253,6 +253,7 @@ public class StartScreenCtrl implements Initializable {
         //TODO add a check if this list is the same as the actual list otherwise
         // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
+        mainCtrl.language = config.getLanguage();
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(mainCtrl.language);

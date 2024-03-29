@@ -4,6 +4,7 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 
@@ -21,6 +22,8 @@ public class SettingsCtrl {
     public TextField currencyField;
     @FXML
     private TextField langTextfield;
+    @FXML
+    private Label languageTextField;
     @FXML
     private ProgressBar progressBar;
     @FXML
@@ -65,6 +68,7 @@ public class SettingsCtrl {
             bicField.setText("");
         }
         currencyField.setText(config.getCurrency().toString());
+        languageTextField.setText(config.getLanguage());
     }
 
     /**
