@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.api.depinjectionUtils.IOUtilActual;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.File;
@@ -20,9 +19,6 @@ import static org.mockito.Mockito.*;
 
 
 class LanguageControllerTest {
-
-    @Mock
-    private IOUtilActual ioUtil;
 
     @Mock
     LanguageResponse response;
@@ -38,7 +34,7 @@ class LanguageControllerTest {
 //        jsonObject.addProperty("TestString", "TestStringResult");
 //        when(responseMock.readJsonFile(any(File.class))).thenReturn(jsonObject);
 //
-//        LanguageController l = new LanguageController(ioUtil, responseMock);
+//        LanguageController l = new LanguageController(null, responseMock);
 //
 //        String test = "TestString";
 //        ResponseEntity<String> result = l.translate(test, "en", "de");
