@@ -57,8 +57,8 @@ public class StartScreenCtrl {
         this.mainCtrl = mainCtrl;
         this.config = config;
     }
-
     // list the 3 most recent events on the start page
+    @FXML
     public void initialize() {
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
