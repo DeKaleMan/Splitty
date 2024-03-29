@@ -72,6 +72,13 @@ public class SplittyOverviewCtrl implements Initializable {
     private TabPane tabPane;
 
     @FXML
+    public Button leaveConfirmationButton;
+    @FXML
+    public Button cancelLeaveButton;
+    @FXML
+    public Label confirmationLabel;
+
+    @FXML
     private ListView<Participant> participantListView;
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
@@ -269,6 +276,9 @@ public class SplittyOverviewCtrl implements Initializable {
     public void leaveEvent(ActionEvent actionEvent) {
         serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
         mainCtrl.showStartScreen();
+        confirmationLabel.setVisible(false);
+        cancelLeaveButton.setVisible(false);
+        leaveConfirmationButton.setVisible(false);
     }
 
 
@@ -297,6 +307,18 @@ public class SplittyOverviewCtrl implements Initializable {
                 event1 -> eventCreatedLabel.setVisible(false)
         );
         visiblePause.play();
+    }
+
+    public void setConfirmation(ActionEvent actionEvent) {
+        confirmationLabel.setVisible(true);
+        cancelLeaveButton.setVisible(true);
+        leaveConfirmationButton.setVisible(true);
+    }
+
+    public void cancelLeave(ActionEvent actionEvent) {
+        confirmationLabel.setVisible(false);
+        cancelLeaveButton.setVisible(false);
+        leaveConfirmationButton.setVisible(false);
     }
 }
 

@@ -6,7 +6,7 @@
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
    <children>
-      <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="91.0" layoutY="14.0" prefHeight="56.0" prefWidth="290.0" text="Title">
+      <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="91.0" layoutY="16.0" prefHeight="56.0" prefWidth="290.0" text="Title">
          <font>
             <Font name="System Bold" size="48.0" />
          </font>
@@ -71,7 +71,7 @@
             <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
          </children>
       </VBox>
-      <Button layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" text="Leave" />
+      <Button layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#setConfirmation" text="Leave" />
       <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
@@ -82,5 +82,8 @@
             <Font size="10.0" />
          </font>
       </Label>
+      <Button fx:id="leaveConfirmationButton" layoutX="261.0" layoutY="26.0" onAction="#leaveEvent" mnemonicParsing="false" text="Leave" visible="false"/>
+      <Button fx:id="cancelLeaveButton" layoutX="329.0" layoutY="26.0" onAction="#cancelLeave" mnemonicParsing="false" text="Cancel" visible="false" />
+      <Label fx:id="confirmationLabel" layoutX="218.0" layoutY="58.0" text="Are you sure you want to leave the event?" visible="false"/>
    </children>
 </AnchorPane>
