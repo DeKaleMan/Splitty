@@ -13,8 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.util.Callback;
-
 import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
@@ -207,7 +205,8 @@ public class StartScreenCtrl {
 
     @FXML
     public void onKeyPressed(KeyEvent press) {
-        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N,
+                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
         if (k.match(press)) {
             createEvent();
         }

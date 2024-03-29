@@ -271,26 +271,26 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
         mainCtrl.showStartScreen();
     }
-<<<<<<< HEAD
 
-    public void editEvent(){
+
+    public void editEvent() {
         mainCtrl.editEventt();
-=======
+    }
     @FXML
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
-        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N,
+                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
         if (k.match(press)) {
             showAddExpense();
         }
 
     }
-
     public void setAdmin(Boolean admin) {
         this.admin = admin;
->>>>>>> HCI
+
     }
 }
 

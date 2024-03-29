@@ -173,10 +173,8 @@ public class AddExpenseCtrl implements Initializable {
      */
     @FXML
     public void addExpense() {
-        //collect information
         List<String> participants = getSelected();//get all the names of the participants
         boolean error = false;
-        //link these to participants and then add the expense
         Date date = null;
         try {
             LocalDate localDate = dateSelect.getValue();
@@ -186,9 +184,7 @@ public class AddExpenseCtrl implements Initializable {
             dateInvalidError.setVisible(true);
         }
         Type type = (Type) category.getValue();
-        if (type == null) {
-            type= Type.Other;
-        }
+        if (type == null) type= Type.Other;
         Participant payer = personComboBox.getValue();
         if (payer == null) {
             error = true;
@@ -201,7 +197,6 @@ public class AddExpenseCtrl implements Initializable {
                 return;
             }
             amountDouble = Double.parseDouble(amount.getText());
-
             if (amountDouble <= 0.0) {
                 amountNegativeError.setVisible(true);
                 return;
@@ -211,18 +206,13 @@ public class AddExpenseCtrl implements Initializable {
             error = true;
         }
         String description = whatFor.getText();
-        if (error) {
-            return;
-        }
-        //add to database
+        if (error) return;
         try {
             splittyCtrl.addExpense(description, type, date, amountDouble, payer.getEmail());
         } catch (Exception e) {
             addExpenseError.setVisible(true);
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-            visiblePause.setOnFinished(
-                    event1 -> addExpenseError.setVisible(false)
-            );
+            visiblePause.setOnFinished(event1 -> addExpenseError.setVisible(false));
             visiblePause.play();
             return;
         }
