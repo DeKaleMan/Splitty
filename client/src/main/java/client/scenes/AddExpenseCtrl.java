@@ -140,6 +140,10 @@ public class AddExpenseCtrl implements Initializable {
         });
         setSplitListUp();
         setTogglesUp();
+        setCategoriesUp();
+    }
+
+    private void setCategoriesUp() {
         category.setCellFactory(param -> new ListCell<Type>() {
             @Override
             protected void updateItem(Type item, boolean empty) {

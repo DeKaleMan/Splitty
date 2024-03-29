@@ -19,7 +19,14 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+
 import javafx.util.Duration;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
+
+
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -191,6 +198,11 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.generatePaymentsForEvent(eventCode);
 
     }
+
+    @FXML
+    public void editExpense(){
+
+    }
     @FXML
     public Expense deleteExpense() {
         Expense toDelete;
@@ -233,6 +245,36 @@ public class SplittyOverviewCtrl implements Initializable {
      * fetches all expenses of this event and shows them in the assigned box
      */
     public void fetchExpenses(){
+        Callback<ListView<Expense>, ListCell<Expense>> cellFactory = new Callback<ListView<Expense>, ListCell<Expense>>() {
+            @Override
+            public ListCell<Expense> call(ListView<Expense> expenseListView) {
+                return new ListCell<Expense>(){
+                    @Override
+                    protected void updateItem(Expense expense, boolean b) {
+                        super.updateItem(expense, b);
+                        if(expense == null || b) setGraphic(null);
+                        else {
+                            GridPane grid = new GridPane();
+                            Date date = expense.getDate();
+                            Label dateLabel = new Label(
+                                date.getDate() + "." +(date.getMonth() < 9 ? "0" : "") + (date.getMonth()+1) + "." + (date.getYear()+1900));
+                            dateLabel.setStyle("-fx-font-size: 12px");
+                            dateLabel.setPrefWidth(70);
+                            Text mainInfo = new Text(expense.getPayer().getName() + " paid " +
+                                expense.getTotalExpense() + " for " + expense.getType());
+                            List<String> involved =
+                                serverUtils.getDebtByExpense(expense.getEvent().getId(),
+                                        expense.getExpenseId()).stream()
+                                    .map(x -> x.getParticipant().getName()).toList();
+                            grid.add(dateLabel, 0, 0);
+                            grid.add(mainInfo, 1, 0);
+                            grid.add(new Text(involved.toString()), 1, 1);
+                            setGraphic(grid);
+                        }
+                    }
+                };
+            }
+        };
         List<Expense> expenses = new ArrayList<>();
         try{
             expenses = serverUtils.getExpense(eventCode);
@@ -241,17 +283,21 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         allExpensesList = new ListView<>();
         allExpensesList.getItems().addAll(expenses);
+        allExpensesList.setCellFactory(cellFactory);
         allExpenses.setContent(allExpensesList);
         paidByMeList = new ListView<>();
         paidByMeList.getItems().addAll(expenses.stream().filter(x -> x.getPayer().getUuid().equals(config.getId())).toList());
+        paidByMeList.setCellFactory(cellFactory);
         paidByMe.setContent(paidByMeList);
         includingMeList = new ListView<>();
         for(Expense e : expenses){
             List<String> owing = serverUtils.getDebtByExpense(e.getEvent().getId(), e.getExpenseId()).stream().filter(x -> x.getBalance() < 0).map(x -> x.getParticipant().getUuid()).toList();
             if(owing.contains(config.getId())) includingMeList.getItems().add(e);
         }
+        includingMeList.setCellFactory(cellFactory);
         involvingMe.setContent(includingMeList);
     }
+
     public void fetchParticipants(){
 
         List<Participant> participants = new ArrayList<>();
