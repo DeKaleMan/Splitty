@@ -2,6 +2,7 @@ package server.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import commons.util.FileIOutil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,9 @@ public class LanguageController {
 
     @Autowired
     public LanguageController(IOUtil ioUtil, LanguageResponse translator) {
+        FileIOutil fileIOutil = new FileIOutil();
         this.io = ioUtil;
-        this.filepath = getClass().getClassLoader().getResource("Languages/nl.json").getFile();
-        this.filepath = this.filepath.replaceAll("%20", " ");
-        this.basepath = getClass().getClassLoader().getResource("Languages/").getFile();
-        this.basepath = this.basepath.replaceAll("%20", " ");
+        this.basepath = fileIOutil.getLanguagesFolder() + File.separator;
         this.translator = translator;
     }
 
