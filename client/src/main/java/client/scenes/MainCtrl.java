@@ -26,6 +26,7 @@ import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -158,6 +159,9 @@ public class MainCtrl {
         splittyOverviewCtrl.setEventCode(id);
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
+    }
+    public Image getFlag(){
+        return setLanguage.getFlag(this.language);
     }
 
     public List<Event> getMyEvents(){

@@ -34,7 +34,7 @@
                 <Font size="36.0" />
             </font>
         </Label>
-      <ComboBox fx:id="languageSelect" layoutX="269.0" layoutY="12.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="62.0" promptText="en" />
+      <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="12.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" />
       <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="99.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
 
         <Button layoutX="514.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
@@ -48,7 +48,7 @@
       </Label>
       <ListView fx:id="eventListView" layoutX="367.0" layoutY="121.0" onMouseClicked="#handleMouseClick" prefHeight="200.0" prefWidth="176.0" />
 
-        <ImageView fx:id="flag" fitHeight="69.0" fitWidth="84.0" layoutX="339.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="flag" fitHeight="25.0" fitWidth="59.0" layoutX="275.0" layoutY="12.0" onMouseClicked="#showLangOptions" pickOnBounds="true" preserveRatio="true" />
       <ProgressIndicator fx:id="progress" layoutX="237.0" layoutY="12.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
 
 

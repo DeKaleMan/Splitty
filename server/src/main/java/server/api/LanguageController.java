@@ -76,7 +76,7 @@ public class LanguageController {
         // Translate using external API
 
         // Write translation to JSON file
-        JsonObject object = new JsonObject();
+        JsonObject object = translator.readJsonFile(newfile);
         object.addProperty(query, translation);
         writeJsonFile(object, newfile);
 

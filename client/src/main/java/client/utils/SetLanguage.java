@@ -148,8 +148,18 @@ public class SetLanguage {
 //        // Create JavaFX Image from InputStream
 //        Image image = new Image(inputStream);
 //        return image;
+        Image image;
+        try{
+            String path = lang + "Flag.png";
+            image =  new Image(path);
+        }
+        catch (Exception e){
+            return null;
+        }
 
-        return new Image("enFlag.png");
+        return image;
+
+
     }
 
 

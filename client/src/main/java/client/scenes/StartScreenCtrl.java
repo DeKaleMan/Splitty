@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
@@ -161,8 +162,7 @@ public class StartScreenCtrl implements Initializable {
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
         // Set the image to the ImageView
         imageView.setImage(image);
-        Image flag = new Image("enFlag.png");
-        setFlag(flag);
+        //Image flag = new Image("enFlag.png");
     }
 
     private void setup(Event event, Button button, Label label) {
@@ -257,7 +257,9 @@ public class StartScreenCtrl implements Initializable {
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(mainCtrl.language);
-
+        //languageSelect.setValue(flag);
+        Image flag = mainCtrl.getFlag();
+        setFlag(flag);
 
 //        languageSelect.setItems(FXCollections.observableList(mainCtrl.languages));
     }
@@ -282,6 +284,7 @@ public class StartScreenCtrl implements Initializable {
         }
         setLanguageSelect();
         setProgress();
+        languageSelect.setVisible(false);
     }
 
     public void setProgress() {
@@ -307,9 +310,25 @@ public class StartScreenCtrl implements Initializable {
     }
 
     public void setFlag(Image image){
-
         flag.setImage(image);
     }
 
+    @FXML
+    public void showLangOptions(){
+//        this.languageSelect.setVisible(true);
+        //this.languageSelect.setValue(flag);
+        languageSelect.show();
+
+        imageView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
+                // Clicked outside of the choice box, hide it
+                languageSelect.setVisible(false);
+            }
+        });
+        imageView.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Hide the choice box when any key is pressed
+            languageSelect.setVisible(false);
+        });
+    }
 
 }
