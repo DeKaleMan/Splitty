@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" fx:id="background" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
    <children>
       <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="91.0" layoutY="14.0" prefHeight="56.0" prefWidth="290.0" text="Title">
          <font>
@@ -22,10 +15,10 @@
       <Button fx:id="backButton" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.leftAnchor="10" />
         <Pane layoutX="347.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
          <children>
-            <ListView onKeyPressed="#onKeyPressed" fx:id="participantListView" layoutX="46.0" layoutY="51.0" prefHeight="200.0" prefWidth="148.0" />
+            <ListView fx:id="participantListView" layoutX="46.0" layoutY="51.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="148.0" />
             <HBox alignment="CENTER" layoutX="-16.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" spacing="10.0">
                <children>
-                  <Label fx:id="participants" text="Participants">
+                  <Label fx:id="participants" styleClass="headerLabel" text="Participants">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -49,7 +42,7 @@
                   </TabPane>
                   <HBox alignment="CENTER" layoutX="-19.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
                      <children>
-                        <Label fx:id="expenses" text="expenses">
+                        <Label fx:id="expenses" styleClass="label" text="expenses">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -59,11 +52,12 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <VBox alignment="CENTER" layoutX="38.0" layoutY="260.0" prefHeight="35.0" prefWidth="163.0">
+            <VBox alignment="CENTER" layoutX="38.0" layoutY="260.0" prefHeight="35.0" prefWidth="156.0">
                <children>
                   <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" text="Delete expense" />
                </children>
             </VBox>
+
          </children></Pane>
       <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="161.0" prefHeight="151.0" prefWidth="100.0" spacing="10.0">
          <children>
@@ -72,5 +66,11 @@
          </children>
       </VBox>
       <Button layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" text="Leave" />
+      <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      
    </children>
 </AnchorPane>

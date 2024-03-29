@@ -1,10 +1,13 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.*;
+import commons.Expense;
+import commons.Participant;
+import commons.Type;
 import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,13 +18,14 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
+
 
     //We need to store the eventCode right here
     private int eventCode;
@@ -45,7 +49,8 @@ public class SplittyOverviewCtrl implements Initializable {
     private Button statisticsButton;
     @FXML
     private Button addExpenseButton;
-
+    @FXML
+    public Label noExpenseError;
     @FXML
     private Tab tab2;
     @FXML
@@ -148,7 +153,7 @@ public class SplittyOverviewCtrl implements Initializable {
             serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
             serverUtils.generatePaymentsForEvent(eventCode);
-        }catch (NotFoundException ep) {
+        } catch (NotFoundException ep) {
             // Handle 404 Not Found error
             // Display an error message or log the error
             System.err.println("Expense creation failed: Resource not found.");
@@ -158,15 +163,26 @@ public class SplittyOverviewCtrl implements Initializable {
     }
     @FXML
     public Expense deleteExpense() {
+        Expense toDelete;
+        try {
+            toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+        } catch (NoSuchElementException e) {
+            noExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> noExpenseError.setVisible(false)
+            );
+            visiblePause.play();
+            return null;
+        }
 
-        Expense toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
 
         if(toDelete == null){
             throw new NoSuchElementException("No element selected");
         }
         try{
             serverUtils.deleteExpense(toDelete);
-        }catch (Exception e){
+        }catch (RuntimeException e){
             System.out.println(e);
         }
         System.out.println("OK");
