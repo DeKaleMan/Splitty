@@ -119,7 +119,7 @@ public class StartScreenCtrl implements Initializable {
 //        imageView.setImage(image);
 //        setFlag(image);
 
-//    }
+    //    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         eventListView.getItems().clear();
@@ -136,7 +136,7 @@ public class StartScreenCtrl implements Initializable {
         });
 
         List<Event> events = mainCtrl.getMyEvents();
-        if(events!=null){
+        if (events != null) {
             eventListView.setItems(FXCollections.observableArrayList(events));
         }
 
@@ -188,7 +188,7 @@ public class StartScreenCtrl implements Initializable {
      * Creates an event with the title specified in the createEventTextField
      * TO DO - actually create an event
      */
-    public void createEvent(){
+    public void createEvent() {
         String name = createEventTextField.getText();
         if (name == null || name.isEmpty()) {
             name = "New event";
@@ -202,7 +202,7 @@ public class StartScreenCtrl implements Initializable {
      * Join an event with the title specified in the joinEventTextField
      * TO DO - join an event by the event id/URL
      */
-    public void joinEvent(){
+    public void joinEvent() {
         eventCode = Integer.parseInt(joinEventTextField.getText());
         Participant p = mainCtrl.joinEvent(eventCode);
         if (p == null) {
@@ -226,6 +226,7 @@ public class StartScreenCtrl implements Initializable {
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
     }
+
     public void setCreateEventText(String text) {
         createEventText.setText(text);
     }
@@ -237,21 +238,25 @@ public class StartScreenCtrl implements Initializable {
     public void setAdminLogin(String text) {
         adminLogin.setText(text);
     }
+
     public void setShowAllEvents(String text) {
         showAllEventsButton.setText(text);
     }
+
     public void setJoinButtonText(String text) {
         join.setText(text);
     }
+
     public void setCreateButtonText(String text) {
         create.setText(text);
     }
-    public void setNoEventLabel(String text){
+
+    public void setNoEventLabel(String text) {
 //        noEventLabel.setText(text);
     }
 
 
-    public void setLanguageSelect(){
+    public void setLanguageSelect() {
         //TODO add a check if this list is the same as the actual list otherwise
         // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
@@ -262,8 +267,8 @@ public class StartScreenCtrl implements Initializable {
         //languageSelect.setValue(flag);
         Image flag = mainCtrl.getFlag();
         setFlag(flag);
-        if(!mainCtrl.language.equals(currentLang)){
-         changeLanguage();
+        if (!mainCtrl.language.equals(currentLang)) {
+            changeLanguage();
         }
 //        languageSelect.setItems(FXCollections.observableList(mainCtrl.languages));
     }
@@ -276,7 +281,7 @@ public class StartScreenCtrl implements Initializable {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
 
                 //Language toLang = Language.valueOf(selected);
-                if(mainCtrl.languages.contains(selected)){
+                if (mainCtrl.languages.contains(selected)) {
                     config.setLanguage(selected);
                     config.write();
                     String toLang = selected;
@@ -295,14 +300,14 @@ public class StartScreenCtrl implements Initializable {
     }
 
     public void setProgress() {
-        if(this.progress.isVisible()){
+        if (this.progress.isVisible()) {
             this.progress.setVisible(false);
-        }else{
+        } else {
             this.progress.setVisible(true);
         }
     }
 
-    public void showSettings(){
+    public void showSettings() {
         mainCtrl.showSettings();
     }
 
@@ -316,12 +321,12 @@ public class StartScreenCtrl implements Initializable {
         }
     }
 
-    public void setFlag(Image image){
+    public void setFlag(Image image) {
         flag.setImage(image);
     }
 
     @FXML
-    public void showLangOptions(){
+    public void showLangOptions() {
 //        this.languageSelect.setVisible(true);
         //this.languageSelect.setValue(flag);
         languageSelect.show();

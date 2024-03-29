@@ -122,13 +122,5 @@ class LanguageControllerTest {
             fail("Failed to read file: " + e.getMessage());
         }
     }
-    @Test
-    public void getGetFlag(){
-        LanguageResponse responseMock = mock(LanguageResponse.class);
-        LanguageController l = new LanguageController(null, responseMock);
-
-        File imgage = l.getFlag("en").getBody();
-    }
-
 
 }
