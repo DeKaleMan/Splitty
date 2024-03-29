@@ -51,6 +51,11 @@ public class TestExpenseRepository implements ExpenseRepository {
         return expenses;
     }
 
+    @Override
+    public double getTotalCostByEvent(int eventID) {
+        return 0.0;
+    }
+
 
     @Override
     public <S extends Expense> S save(S entity) {

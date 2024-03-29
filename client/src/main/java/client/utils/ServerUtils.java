@@ -263,6 +263,24 @@ public class ServerUtils {
         }
     }
 
+    public Event updateEvent(Event event, String newName){
+        Response response = client.target(SERVER).path("api/event/updateName")
+                .queryParam("newName", newName)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(event, APPLICATION_JSON), Response.class);
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Event updatedEvent = response.readEntity(Event.class);
+            response.close();
+            return updatedEvent;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to update event. Status code: " + response.getStatus());
+        }
+    }
+
     /**
      * Delete event by id event.
      *
@@ -289,7 +307,7 @@ public class ServerUtils {
         }
     }
 
-    public Event addEvent(Event newEvent) {
+    public Event addEvent(EventDTO newEvent) {
         Response response = ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/event")
             .request(APPLICATION_JSON)
@@ -523,6 +541,27 @@ public class ServerUtils {
             }
         }
     }
+
+    public double[] getStatisticsByEventID(int eventID){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER)
+                .path("/api/statistics")
+                .queryParam("eventID", eventID)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(double[].class);
+    }
+
+    public double getTotalCostEvent(int eventID){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER)
+                .path("/api/statistics/totalCost")
+                .queryParam("eventID", eventID)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(double.class);
+    }
+
 
     private int compareDouble(double d1, double d2, double precision) {
         if (Math.abs(d1 - d2) < precision) return 0;

@@ -74,6 +74,8 @@ public class MainCtrl {
     private Scene userEventList;
     private UserEventListCtrl userEventListCtrl;
     private Scene createEvent;
+    private Scene editEvent;
+    private EditEventCrtl editEventCrtl;
     private CreateEventCtrl createEventCtrl;
     private ServerUtils serverUtils;
 
@@ -128,6 +130,8 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
+        this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
+        this.editEventCrtl = eventPropGrouper.editEvent().getKey();
         serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
         setLanguage();
@@ -262,17 +266,21 @@ public class MainCtrl {
 
     /**
      * This shows the statistics window
-     * @param title the title of the current event
+     *
+     * @param title     the title of the current event
+     * @param eventCode
      */
-    public void showStatistics(String title){
+    public void showStatistics(String title, int eventCode){
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
         statisticsCtrl.setTitle(title);
         //this sets the statistics, eventually this should be linked to the statistics class
-        statisticsCtrl.setFood(2);
-        statisticsCtrl.setDrinks(2);
-        statisticsCtrl.setTransport(2);
-        statisticsCtrl.setOther(2);
+//        statisticsCtrl.setFood(2);
+//        statisticsCtrl.setDrinks(2);
+//        statisticsCtrl.setTransport(2);
+//        statisticsCtrl.setOther(2);
+        statisticsCtrl.setEventCode(eventCode);
+        statisticsCtrl.fetchStat();
         //set the pieChart
         statisticsCtrl.setPieChart();
     }
@@ -295,5 +303,11 @@ public class MainCtrl {
     public String getMyUuid(){
         return settingCtrl.getId();
     }
+
+    public void editEventt(){
+        primaryStage.setTitle("EditEvent");
+        primaryStage.setScene(editEvent);
+    }
+
 
 }

@@ -42,6 +42,9 @@ public class SplittyOverviewCtrl implements Initializable {
     private Button addExpenseButton;
 
     @FXML
+    private Button editEvent;
+
+    @FXML
     private Tab tab2;
     @FXML
     private Button deleteExpenseButton;
@@ -118,7 +121,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showStatistics(){
-        mainCtrl.showStatistics(titleLabel.getText());
+        mainCtrl.showStatistics(titleLabel.getText(), this.eventCode);
     }
 
     /**
@@ -192,7 +195,8 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         participantListView.setItems(FXCollections.observableArrayList(participants));
     }
-    // all textSetters
+
+
 
 
     public void setExpensesText(String text) {
@@ -239,6 +243,10 @@ public class SplittyOverviewCtrl implements Initializable {
     public void leaveEvent(ActionEvent actionEvent) {
         serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
         mainCtrl.showStartScreen();
+    }
+
+    public void editEvent(){
+        mainCtrl.editEventt();
     }
 }
 
