@@ -27,6 +27,8 @@ public class StartScreenCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+    private String currentLang;
+
     @FXML
     private Label createEventText;
     @FXML
@@ -260,7 +262,9 @@ public class StartScreenCtrl implements Initializable {
         //languageSelect.setValue(flag);
         Image flag = mainCtrl.getFlag();
         setFlag(flag);
-
+        if(!mainCtrl.language.equals(currentLang)){
+         changeLanguage();
+        }
 //        languageSelect.setItems(FXCollections.observableList(mainCtrl.languages));
     }
 
@@ -278,6 +282,8 @@ public class StartScreenCtrl implements Initializable {
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
                 }
+
+                currentLang = selected;
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -285,6 +291,7 @@ public class StartScreenCtrl implements Initializable {
         setLanguageSelect();
         setProgress();
         languageSelect.setVisible(false);
+
     }
 
     public void setProgress() {

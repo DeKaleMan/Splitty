@@ -95,7 +95,7 @@ public class MainCtrl {
                            Pair<UserEventListCtrl, Parent> userEventList,
                            Pair<CreateEventCtrl, Parent> createEvent,
                            AdminWindows adminWindows,
-                           Pair<SettingsCtrl, Parent> settings ) {
+                           Pair<SettingsCtrl, Parent> settings) {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
@@ -138,6 +138,7 @@ public class MainCtrl {
 
     private void setLanguage(){
         languages = new ArrayList<>();
+        //TODO we should add the available languages perhaps to a file
         languages.addAll(List.of("en", "nl", "is", "zh", "es"));
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
