@@ -1,9 +1,9 @@
-package commons.util;
+package client.utils;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class FileIOutilTest implements FileIOutilInterface{
+public class ClientFileIOutilTest implements ClientFileIOutil {
 
     public File file;
     public String lastWrite;

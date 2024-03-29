@@ -41,10 +41,11 @@ public class Config {
      * the write method is called which sets every field to default right after the program starts.
      */
     public void read() {
-        ClientFileIOutil fileIOutil = new ClientFileIOutilActual();
+        ClientFileIOutilActual clientFileIOutil = new ClientFileIOutilActual();
         ObjectMapper objectMapper = new ObjectMapper();
+        clientFileIOutil.createFileStructure();
         try {
-            String filepath = fileIOutil.getConfigFile();
+            String filepath = clientFileIOutil.getConfigFile();
             Config tmpConfig = objectMapper.readValue(new File(filepath), Config.class);
 
             // Assign all fields to the config singleton
@@ -70,16 +71,15 @@ public class Config {
      * @return
      */
     public boolean write() {
-        ClientFileIOutil fileIOutil = new ClientFileIOutilActual();
-        fileIOutil.createFileStructure();
+        ClientFileIOutilActual clientFileIOutil = new ClientFileIOutilActual();
+        clientFileIOutil.createFileStructure();
         try {
-            String filepath = fileIOutil.getConfigFile();
+            String filepath = clientFileIOutil.getConfigFile();
 
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonString = objectMapper.writeValueAsString(this);
 
-            fileIOutil.write(jsonString, new File(filepath));
-
+            clientFileIOutil.write(jsonString, new File(filepath));
         } catch (IOException e) {
             System.out.println("File not found");
             return false;

@@ -1,11 +1,11 @@
 package server.api.testmocks;
 
-import server.api.depinjectionUtils.IOUtil;
+import server.api.depinjectionUtils.ServerIOUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class IOUtilsTest implements IOUtil {
+public class ServerIOUtilsTest implements ServerIOUtil {
 
     public File file;
     public String lastWrite;
@@ -30,6 +30,11 @@ public class IOUtilsTest implements IOUtil {
     @Override
     public boolean fileExists(File file) {
         return rateCached;
+    }
+
+    @Override
+    public boolean createFileStructure() {
+        return false;
     }
 
     public ArrayList<String> clearCallList() {

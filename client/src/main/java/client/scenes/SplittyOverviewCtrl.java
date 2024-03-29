@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Expense;
 import commons.Participant;
@@ -31,6 +32,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final Config config;
     private boolean admin;
 
     //these are for the css:
@@ -86,9 +88,10 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private ListView<Participant> participantListView;
     @Inject
-    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
+    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        this.config = config;
         admin = false;
     }
 
@@ -283,7 +286,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void leaveEvent(ActionEvent actionEvent) {
-        serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
+        serverUtils.deleteParticipant(config.getId(), eventCode);
         mainCtrl.showStartScreen();
         confirmationLabel.setVisible(false);
         cancelLeaveButton.setVisible(false);

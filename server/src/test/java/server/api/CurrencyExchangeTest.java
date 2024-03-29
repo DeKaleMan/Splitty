@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.api.testmocks.HttpResponseTest;
-import server.api.testmocks.IOUtilsTest;
+import server.api.testmocks.ServerIOUtilsTest;
 import server.util.ConversionResponse;
 import server.util.OkConversionResponse;
 
@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class CurrencyExchangeTest {
 
     private CurrencyExchange currencyExchange;
-    private IOUtilsTest ioTest;
+    private ServerIOUtilsTest ioTest;
     private HttpResponseTest httpResponseTest;
 
     @BeforeEach
     void initialize() {
-        ioTest = new IOUtilsTest();
+        ioTest = new ServerIOUtilsTest();
         httpResponseTest = new HttpResponseTest();
         currencyExchange = new CurrencyExchange(ioTest, httpResponseTest);
     }
