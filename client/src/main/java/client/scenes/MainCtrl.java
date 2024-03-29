@@ -15,13 +15,8 @@
  */
 package client.scenes;
 
-import client.utils.AdminWindows;
-import client.utils.EventPropGrouper;
-
-import client.utils.ServerUtils;
+import client.utils.*;
 import commons.Event;
-import client.utils.Language;
-import client.utils.SetLanguage;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
@@ -155,6 +150,9 @@ public class MainCtrl {
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
     }
+    public void setAdmin(Boolean admin) {
+        splittyOverviewCtrl.setAdmin(admin);
+    }
 
     public List<Event> getMyEvents(){
         if(settingCtrl!=null){
@@ -164,7 +162,7 @@ public class MainCtrl {
         return null;
     }
 
-    public Participant joinEvent(int id){ // needs some more error handling
+    public Participant joinEvent(int id) throws RuntimeException{ // needs some more error handling
         Participant participant = serverUtils.createParticipant(
                 new ParticipantDTO(
                         settingCtrl.getName(),

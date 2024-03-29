@@ -12,15 +12,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
+import javafx.util.Callback;
 
 import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.List;
 
 public class StartScreenCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+
     @FXML
     private Label createEventText;
     @FXML
@@ -30,6 +33,10 @@ public class StartScreenCtrl {
     private Label joinEventText;
     @FXML
     private TextField joinEventTextField;
+    @FXML
+    public Label invalidCodeError;
+    @FXML
+    public Label codeNotFoundError;
 
     @FXML
     private Button adminLogin;
@@ -47,9 +54,7 @@ public class StartScreenCtrl {
     private ImageView imageView;
 
     @FXML
-    private ListView eventListView;
-
-    private int eventCode;
+    private ListView<Event> eventListView;
 
     @Inject
     public StartScreenCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
@@ -58,7 +63,6 @@ public class StartScreenCtrl {
         this.config = config;
     }
 
-    // list the 3 most recent events on the start page
     public void initialize() {
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
@@ -71,54 +75,19 @@ public class StartScreenCtrl {
                 }
             }
         });
-
         List<Event> events = mainCtrl.getMyEvents();
         if(events!=null){
-            eventListView.setItems(FXCollections.observableArrayList(events));
+            ObservableList<Event> newEventList = FXCollections.observableArrayList();
+            ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
+            currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
+                    .forEach(newEventList::add);
+            eventListView.setItems(newEventList);
         }
-
-//        try{
-//            eventListView.getItems().addAll(mainCtrl.getMyEvents());
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//        }
-//        // retrieve from database based on recency (now null to have something)
-//        // the commented below is for testing
-//        noEventLabel.setVisible(false);
-//        String id = config.getId(); // the start of getting this querified
-//        Event event1 = new Event("test event", new Date(10, 10, 2005), "Admin", "This is just for testing");
-//        Event event2 = null;
-//        Event event3 = null;
-//        setup(event1, eventButton1, eventLabel1);
-//        setup(event2, eventButton2, eventLabel2);
-//        setup(event3, eventButton3, eventLabel3);
-//        // this will be querified
-//        if (event1 == null && event2 == null && event3 == null) {
-//            noEventLabel.setVisible(true);
-//        }
 
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
-
         // Set the image to the ImageView
         imageView.setImage(image);
-    }
-
-    private void setup(Event event, Button button, Label label) {
-        if (event == null) {
-            button.setVisible(false);
-            label.setVisible(false);
-            return;
-        }
-        button.setVisible(true);
-        label.setVisible(true);
-
-        button.setOnAction(something -> {
-            mainCtrl.showSplittyOverview(event.getId());
-        });
-
-        button.setText(event.getName());
-        label.setText(event.getDate() + ": " + event.getDescription());
     }
 
     /**
@@ -140,14 +109,24 @@ public class StartScreenCtrl {
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent(){
-        eventCode = Integer.parseInt(joinEventTextField.getText());
-        Participant p = mainCtrl.joinEvent(eventCode);
-        if (p == null) {
-            // show error message
-            return;
+        int eventCode;
+        try {
+            String idString = joinEventTextField.getText();
+            eventCode = Integer.parseInt(idString);
+            Participant p = mainCtrl.joinEvent(eventCode);
+            if (p == null) {
+                // show error message
+                return;
+            }
+            mainCtrl.showSplittyOverview(eventCode);
+            System.out.println("Joined event: " + joinEventTextField.getText());
+        } catch (NumberFormatException e) {
+            codeNotFoundError.setVisible(false);
+            invalidCodeError.setVisible(true);
+        } catch (RuntimeException e) {
+            invalidCodeError.setVisible(false);
+            codeNotFoundError.setVisible(true);
         }
-        mainCtrl.showSplittyOverview(eventCode);
-        System.out.println("Joined event: " + joinEventTextField.getText());
     }
 
     @FXML
@@ -224,5 +203,18 @@ public class StartScreenCtrl {
                 mainCtrl.showSplittyOverview(event.getId());
             }
         }
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k.match(press)) {
+            createEvent();
+        }
+    }
+
+    public void resetErrors(KeyEvent actionEvent) {
+        codeNotFoundError.setVisible(false);
+        invalidCodeError.setVisible(false);
     }
 }

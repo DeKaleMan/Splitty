@@ -1,17 +1,24 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.*;
+import commons.Expense;
+import commons.Participant;
+import commons.Type;
 import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -19,11 +26,13 @@ import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
 
+
     //We need to store the eventCode right here
     private int eventCode;
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private boolean admin;
 
     //these are for the css:
     @FXML
@@ -40,7 +49,10 @@ public class SplittyOverviewCtrl implements Initializable {
     private Button statisticsButton;
     @FXML
     private Button addExpenseButton;
-
+    @FXML
+    public Label noExpenseError;
+    @FXML
+    public Label expenseNotDeletedError;
     @FXML
     private Button editEvent;
 
@@ -66,6 +78,7 @@ public class SplittyOverviewCtrl implements Initializable {
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        admin = false;
     }
 
     @FXML
@@ -82,7 +95,6 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
-
 //        fetchExpenses();
 //        fetchParticipants();
     }
@@ -128,40 +140,55 @@ public class SplittyOverviewCtrl implements Initializable {
      * go back to Start screen
      */
     @FXML
-    private void back() {
-        mainCtrl.showStartScreen();
+    public void back() {
+        if (admin) {
+            mainCtrl.showAdminOverview();
+        } else {
+            mainCtrl.showStartScreen();
+        }
     }
     @FXML
     private void viewDebts(){
         mainCtrl.viewDeptsPerEvent();
     }
 
-    public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
-        try{
-            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
-            serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventCode);
-        }catch (NotFoundException ep) {
-            // Handle 404 Not Found error
-            // Display an error message or log the error
-            System.err.println("Expense creation failed: Resource not found.");
-            ep.printStackTrace();
-            // Optionally, notify the user or perform error recovery actions
-        }
+    public void addExpense(String description, Type type, Date date,
+                           Double totalExpense, String payerEmail) throws NotFoundException{
+
+        ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
+        serverUtils.addExpense(exp);
+        serverUtils.send("/app/addExpense", exp);
+        serverUtils.generatePaymentsForEvent(eventCode);
+
     }
     @FXML
     public Expense deleteExpense() {
-
-        Expense toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
-
-        if(toDelete == null){
-            throw new NoSuchElementException("No element selected");
+        Expense toDelete;
+        try {
+            toDelete =  (Expense) expenseList.getSelectionModel().getSelectedItems().getFirst();
+            if (toDelete == null) {
+                throw new NoSuchElementException();
+            }
+        } catch (NoSuchElementException e) {
+            expenseNotDeletedError.setVisible(false);
+            noExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> noExpenseError.setVisible(false)
+            );
+            visiblePause.play();
+            return null;
         }
         try{
             serverUtils.deleteExpense(toDelete);
-        }catch (Exception e){
-            System.out.println(e);
+        }catch (RuntimeException e){
+            noExpenseError.setVisible(false);
+            expenseNotDeletedError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> expenseNotDeletedError.setVisible(false)
+            );
+            visiblePause.play();
         }
         System.out.println("OK");
         fetchExpenses();
@@ -244,9 +271,26 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
         mainCtrl.showStartScreen();
     }
+<<<<<<< HEAD
 
     public void editEvent(){
         mainCtrl.editEventt();
+=======
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k.match(press)) {
+            showAddExpense();
+        }
+
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+>>>>>>> HCI
     }
 }
 

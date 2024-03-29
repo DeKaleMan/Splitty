@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminLoginCtrl">
+<AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminLoginCtrl">
    <children>
       <VBox alignment="CENTER" layoutX="162.0" layoutY="32.0" prefHeight="368.0" prefWidth="276.0" spacing="10.0">
          <children>
@@ -19,8 +19,8 @@
                   <Font size="15.0" />
                </font>
             </Text>
-            <TextField fx:id="urlField" prefHeight="40.0" prefWidth="202.0" promptText="Server Url e.g. localhost:8080" />
-            <PasswordField fx:id="passwordField" prefHeight="40.0" prefWidth="200.0" promptText="Password" />
+            <TextField fx:id="urlField" onKeyPressed="#resetServerErrors" prefHeight="40.0" prefWidth="202.0" promptText="Server Url e.g. localhost:8080" />
+            <PasswordField fx:id="passwordField" onKeyPressed="#resetPasswordError" prefHeight="40.0" prefWidth="200.0" promptText="Password" />
             <Button fx:id="signInButton" mnemonicParsing="false" onAction="#adminSignIn" prefHeight="25.0" prefWidth="130.0" text="Sign in" />
             <Text fx:id="passwordInstructionLink" fill="#0000ee" onMouseClicked="#showPasswordInstructions" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't know how to get a password?">
                <font>
@@ -36,5 +36,16 @@
                </VBox.margin></Label>
          </children>
       </VBox>
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Label fx:id="serverNotFoundError" layoutX="438.0" layoutY="165.0" prefHeight="17.0" prefWidth="83.0" text="Server not found*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="incorrectPasswordError" layoutX="438.0" layoutY="216.0" prefHeight="17.0" prefWidth="96.0" text="Incorrect password*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
