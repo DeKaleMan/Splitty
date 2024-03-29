@@ -18,8 +18,8 @@ public interface ServerIOUtil {
         return getDataFolder() + File.separator + "Languages";
     }
 
-    default String getCurrencyFolder(){
-        return getDataFolder() + File.separator + "CurrencyCache";
+    default String getCurrencyCacheFile(){
+        return getDataFolder() + File.separator + "CurrencyCache.json";
     }
 
     boolean createFileStructure();
