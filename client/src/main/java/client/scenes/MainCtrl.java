@@ -300,4 +300,7 @@ public class MainCtrl {
     }
 
 
+    public void addEvent(Event event) {
+        startScreenCtrl.addEvent(event);
+    }
 }

@@ -129,6 +129,7 @@ public class CreateEventCtrl {
         ParticipantDTO participantDTO = addHost(eventCreated.getId());
         serverUtils.createParticipant(participantDTO);
         mainCtrl.showSplittyOverview(eventCreated.getId());
+        mainCtrl.addEvent(eventCreated);
     }
 
     @FXML

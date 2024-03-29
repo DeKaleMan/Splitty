@@ -16,9 +16,7 @@ import javafx.scene.input.*;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class StartScreenCtrl implements Initializable {
@@ -58,7 +56,7 @@ public class StartScreenCtrl implements Initializable {
 
     @FXML
     private ListView<Event> eventListView;
-
+    private List<Event> events;
 
     @FXML
     private ProgressIndicator progress;
@@ -72,7 +70,7 @@ public class StartScreenCtrl implements Initializable {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.config = config;
-
+        events = new ArrayList<>();
     }
 
 
@@ -90,7 +88,7 @@ public class StartScreenCtrl implements Initializable {
                 }
             }
         });
-        List<Event> events = mainCtrl.getMyEvents();
+        events = mainCtrl.getMyEvents();
         if(events!=null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
             ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
@@ -98,10 +96,6 @@ public class StartScreenCtrl implements Initializable {
                     .forEach(newEventList::add);
             eventListView.setItems(newEventList);
         }
-        if (events != null) {
-            eventListView.setItems(FXCollections.observableArrayList(events));
-        }
-
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
         // Set the image to the ImageView
@@ -122,6 +116,8 @@ public class StartScreenCtrl implements Initializable {
         //TO DO: add event to database, fill in more information about the event.
         //This will happen in the CreateEventCtrl class!
     }
+
+
 
     /**
      * Join an event with the title specified in the joinEventTextField
@@ -295,4 +291,9 @@ public class StartScreenCtrl implements Initializable {
         });
     }
 
+    public void addEvent(Event event) {
+        events.add(event);
+        ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
+        eventListView.setItems(currentEventList);
+    }
 }
