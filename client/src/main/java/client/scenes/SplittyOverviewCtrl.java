@@ -223,6 +223,7 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         System.out.println("OK");
         fetchExpenses();
+        serverUtils.generatePaymentsForEvent(eventCode);
         return toDelete;
     }
 

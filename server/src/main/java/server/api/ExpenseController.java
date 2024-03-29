@@ -44,7 +44,7 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseRepo.findByEvent(event.get()));
     }
 
-    @GetMapping("{payerUuid}")
+    @GetMapping("/{payerUuid}")
     public ResponseEntity<List<Expense>> findByEventCodeAndPayerUuid(@RequestParam int eventCode,
                                                                       @PathVariable("payerUuid")
                                                                       String uuid) {
@@ -90,7 +90,7 @@ public class ExpenseController {
         }
 
         Expense res = expense.get();
-        expenseRepo.deleteById(expenseId);
+        expenseRepo.delete(res);
 
         System.out.println("Deleted\n" + res);
         return ResponseEntity.ok(res);

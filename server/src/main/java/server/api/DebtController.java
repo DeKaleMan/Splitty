@@ -4,6 +4,7 @@ import commons.*;
 import commons.dto.DebtDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import server.database.DebtRepository;
 import server.database.EventRepository;
@@ -99,5 +100,18 @@ public class DebtController {
         }
         return ResponseEntity.ok(
             debtRepo.save(new Debt(expense, debtDTO.getBalance(), participant)));
+    }
+
+    @DeleteMapping("/{eventId}/{expenseId}")
+    @Transactional
+    public ResponseEntity<List<Debt>> deleteDebtsOfExpense(@PathVariable("eventId") int eventId, @PathVariable("expenseId") int expenseId){
+        Optional<Event> eventOptional = eventRepo.findById(eventId);
+        if (eventOptional.isEmpty()) return ResponseEntity.notFound().build();
+        Event event = eventOptional.get();
+        Optional<Expense> expenseOptional =
+            expenseRepo.findById(new ExpenseId(event, expenseId));
+        if (expenseOptional.isEmpty()) return ResponseEntity.notFound().build();
+        Expense expense = expenseOptional.get();
+        return ResponseEntity.ok(debtRepo.deleteDebtsByExpense(expense));
     }
 }

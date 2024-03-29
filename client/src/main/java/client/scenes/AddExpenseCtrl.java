@@ -126,58 +126,13 @@ public class AddExpenseCtrl implements Initializable {
         //the buttons
         mainCtrl.setButtonRedProperty(cancel);
         mainCtrl.setButtonGreenProperty(add);
-
-        splitList.setVisible(false);
-
-        ObservableList<Participant> list = FXCollections.observableArrayList();
-        List<Participant> allparticipants;
-        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class, exp -> {
-            System.out.println("expense added " + exp);
-        });
-        try {
-            allparticipants = serverUtils.getParticipants(eventCode);
-        } catch (RuntimeException e) {
-            allparticipants = new ArrayList<>();
-        }
-        list.addAll(allparticipants);
-        personComboBox.setItems(list);
-        personComboBox.setCellFactory(param -> new ListCell<Participant>() {
-            @Override
-            protected void updateItem(Participant item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                    setEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<Event>() {
-                        @Override
-                        public void handle(Event event) {
-                            payer = item;
-                            rest.clear();
-                            rest.addAll(list);
-                            rest.remove(item);
-                            if (selectAll.isSelected()) {
-                                owing.addAll(rest);
-                                owing.remove(payer);
-                                splitList.setVisible(false);
-                            }
-                            if (selectSome.isSelected()) {
-                                owing.clear();
-                                splitList.setVisible(true);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-
+        
         personComboBox.setButtonCell(new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
-                    setText(null);
+                    setText("Select who paid");
                 } else {
                     setText(item.getName());
                 }
@@ -193,6 +148,17 @@ public class AddExpenseCtrl implements Initializable {
                     setText(null);
                 } else {
                     setText(item.toString());
+                }
+            }
+        });
+        category.setButtonCell(new ListCell<Type>(){
+            @Override
+            protected void updateItem(Type type, boolean b) {
+                super.updateItem(type, b);
+                if(type == null || b){
+                    setText("Select category");
+                }else{
+                    setText("" + type);
                 }
             }
         });
@@ -372,6 +338,61 @@ public class AddExpenseCtrl implements Initializable {
 //    public void setError(String text) {
 //        this.error = error;
 //    }
+
+    public void refresh(){
+        splitList.setVisible(false);
+        ObservableList<Participant> list = FXCollections.observableArrayList();
+        List<Participant> allparticipants;
+        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class, exp -> {
+            System.out.println("expense added " + exp);
+        });
+        try {
+            allparticipants = serverUtils.getParticipants(eventCode);
+        } catch (Exception e) {
+            allparticipants = new ArrayList<>();
+        }
+        list.addAll(allparticipants);
+        personComboBox.setItems(list);
+        personComboBox.setCellFactory(param -> new ListCell<Participant>() {
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                    setEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<Event>() {
+                        @Override
+                        public void handle(Event event) {
+                            payer = item;
+                            rest.clear();
+                            rest.addAll(list);
+                            rest.remove(item);
+                            if (selectAll.isSelected()) {
+                                owing.addAll(rest);
+                                owing.remove(payer);
+                                splitList.setVisible(false);
+                            }
+                            if (selectSome.isSelected()) {
+                                owing.clear();
+                                splitList.setVisible(true);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        payer = null;
+        rest.clear();
+        owing.clear();
+        selectAll.setSelected(false);
+        selectSome.setSelected(false);
+        dateSelect.setValue(null);
+        whatFor.setText("");
+        category.setValue(null);
+        personComboBox.setValue(null);
+        amount.setText("");
+    }
 
     public void setAddExpenseText(String text) {
         this.addExpenseText.setText(text);

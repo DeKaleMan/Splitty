@@ -26,6 +26,7 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import jakarta.servlet.http.Part;
 import jakarta.ws.rs.client.Client;
 import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
@@ -186,22 +187,38 @@ public class ServerUtils {
             .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
     }
 
+    public List<Debt> deleteDebtsOfExpense(int eventId, int expenseId){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/debts/{eventId}/{expenseId}")
+            .resolveTemplate("eventId", eventId)
+            .resolveTemplate("expenseId",expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete(new GenericType<List<Debt>>(){});
+    }
+
 
     /**
      * Delete expense.
      *
      * @param expense the expense
      */
-    public void deleteExpense(Expense expense) {
-        ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
+    public Expense deleteExpense(Expense expense) {
+        List<Debt> debts = getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId());
+        for(Debt d : debts){
+            Participant p = d.getParticipant();
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+        deleteDebtsOfExpense(expense.getEvent().getId(), expense.getExpenseId());
 
-        ClientBuilder.newClient(new ClientConfig())
+        return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER)
             .path("api/expenses")
             .queryParam("eventID", expense.getEvent().id)
             .queryParam("expenseID", expense.getExpenseId())
             .request(APPLICATION_JSON)
-            .delete();
+            .accept(APPLICATION_JSON)
+            .delete(Expense.class);
     }
 
 

@@ -203,8 +203,9 @@ public class MainCtrl {
 
     public void showAddExpense(String title) {
         primaryStage.setTitle("Add expense");
-        primaryStage.setScene(addExpense);
+        addExpenseCtrl.refresh();
         addExpenseCtrl.setTitle(title);
+        primaryStage.setScene(addExpense);
     }
 
     public void showInvitation(String title){
