@@ -149,19 +149,14 @@ public class SplittyOverviewCtrl implements Initializable {
         mainCtrl.viewDeptsPerEvent();
     }
 
-    public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
-        try{
-            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
-            serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventCode);
-        } catch (NotFoundException ep) {
-            // Handle 404 Not Found error
-            // Display an error message or log the error
-            System.err.println("Expense creation failed: Resource not found.");
-            ep.printStackTrace();
-            // Optionally, notify the user or perform error recovery actions
-        }
+    public void addExpense(String description, Type type, Date date,
+                           Double totalExpense, String payerEmail) throws NotFoundException{
+
+        ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail);
+        serverUtils.addExpense(exp);
+        serverUtils.send("/app/addExpense", exp);
+        serverUtils.generatePaymentsForEvent(eventCode);
+
     }
     @FXML
     public Expense deleteExpense() {

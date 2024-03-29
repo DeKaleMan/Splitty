@@ -5,6 +5,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -31,6 +33,7 @@ public class AddExpenseCtrl implements Initializable {
     public Label titleLabel;
 
 
+
     @FXML
     private ComboBox<Participant> personComboBox;
     @FXML
@@ -41,6 +44,10 @@ public class AddExpenseCtrl implements Initializable {
     private TextArea whatFor;
     @FXML
     private Label amountInvalidError;
+    @FXML
+    public Label amountNegativeError;
+    @FXML
+    public Label noAmountError;
 
     @FXML
     private DatePicker dateSelect;
@@ -76,6 +83,8 @@ public class AddExpenseCtrl implements Initializable {
     private Button back;
     @FXML
     private Button add;
+    @FXML
+    public Label addExpenseError;
     @FXML
     private Button cancel;
     @FXML
@@ -183,27 +192,43 @@ public class AddExpenseCtrl implements Initializable {
         if (type == null) {
             type= Type.Other;
         }
-        double amountDouble = 0.0;
-        try {
-            amountDouble = Double.parseDouble(amount.getText());
-            if (amountDouble <= 0.0) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException e) {
-            amountInvalidError.setVisible(true);
-            error = true;
-        }
         Participant payer = personComboBox.getValue();
         if (payer == null) {
             error = true;
             payerError.setVisible(true);
+        }
+        double amountDouble = 0.0;
+        try {
+            if (amount.getText() == null || amount.getText().isEmpty()) {
+                noAmountError.setVisible(true);
+                return;
+            }
+            amountDouble = Double.parseDouble(amount.getText());
+
+            if (amountDouble <= 0.0) {
+                amountNegativeError.setVisible(true);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            amountInvalidError.setVisible(true);
+            error = true;
         }
         String description = whatFor.getText();
         if (error) {
             return;
         }
         //add to database
-        splittyCtrl.addExpense(description, type, date, amountDouble, payer.getEmail());
+        try {
+            splittyCtrl.addExpense(description, type, date, amountDouble, payer.getEmail());
+        } catch (Exception e) {
+            addExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event1 -> addExpenseError.setVisible(false)
+            );
+            visiblePause.play();
+            return;
+        }
         back();
         splittyCtrl.fetchExpenses();
     }
@@ -321,6 +346,8 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     public void resetAmountErrors(KeyEvent keyEvent) {
+        amountNegativeError.setVisible(false);
+        noAmountError.setVisible(false);
         amountInvalidError.setVisible(false);
     }
 
