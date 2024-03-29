@@ -77,6 +77,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Button cancelLeaveButton;
     @FXML
     public Label confirmationLabel;
+    @FXML
+    public Label joinedEventLabel;
 
     @FXML
     private ListView<Participant> participantListView;
@@ -305,6 +307,14 @@ public class SplittyOverviewCtrl implements Initializable {
         PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
         visiblePause.setOnFinished(
                 event1 -> eventCreatedLabel.setVisible(false)
+        );
+        visiblePause.play();
+    }
+    public void setJoinedEventLabel() {
+        joinedEventLabel.setVisible(true);
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+        visiblePause.setOnFinished(
+                event1 -> joinedEventLabel.setVisible(false)
         );
         visiblePause.play();
     }

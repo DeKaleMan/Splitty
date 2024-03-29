@@ -302,6 +302,9 @@ public class MainCtrl {
     public void setConfirmationSettings() {
         startScreenCtrl.setSettingsSavedLabel();
     }
+    public void setConfirmationJoinedEvent() {
+        splittyOverviewCtrl.setJoinedEventLabel();
+    }
 
     public void setConfirmationEventCreated() {
         splittyOverviewCtrl.setEventCreatedLabel();
