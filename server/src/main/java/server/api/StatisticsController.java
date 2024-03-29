@@ -10,6 +10,7 @@ import server.database.ExpenseRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 @RestController
 @RequestMapping("/api/statistics")
@@ -25,26 +26,26 @@ public class StatisticsController {
     }
 
     @GetMapping(path = {"/", ""})
-    public ResponseEntity<int[]> getPaymentsOfEvent(@RequestParam("eventId") int eventId){
-        Optional<Event> optionalEvent = eventRep.findById(eventId);
+    public ResponseEntity<double[]> getPaymentsOfEvent(@RequestParam("eventID") int eventID){
+        Optional<Event> optionalEvent = eventRep.findById(eventID);
         if(optionalEvent.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         List<Expense> expenses = exRep.findByEvent(optionalEvent.get());
-        int[] stat = new int[4];
+        double[] stat = new double[4];
         for (Expense expense : expenses) {
             switch (expense.getType()) {
                 case Food:
-                    stat[0]++;
+                    stat[0]+=expense.getTotalExpense();
                     break;
                 case Drinks:
-                    stat[1]++;
+                    stat[1]+=expense.getTotalExpense();
                     break;
                 case Travel:
-                    stat[2]++;
+                    stat[2]+=expense.getTotalExpense();
                     break;
                 case Other:
-                    stat[3]++;
+                    stat[3]+=expense.getTotalExpense();
                     break;
                 default:
                     // Handle unexpected expense types here, if needed
@@ -53,6 +54,13 @@ public class StatisticsController {
         }
 
         return ResponseEntity.ok(stat);
+    }
+
+    @GetMapping("/totalCost")
+    public ResponseEntity<Double> getTotalCost(@RequestParam("eventID") int eventID){
+        double totalCost = (exRep.getTotalCostByEvent(eventID));
+
+        return ResponseEntity.ok(totalCost);
     }
 
 }

@@ -1,6 +1,7 @@
 package client.scenes;
 
 
+import client.utils.Config;
 import client.utils.ServerUtils;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -15,22 +16,33 @@ import javax.inject.Inject;
 public class StatisticsCtrl {
     @FXML
     private PieChart pieChart;
-    private int food = 0;
-    private int drinks = 0;
-    private int transport = 0;
-    private int other = 0;
-    private int[] stat;
+    private double food = 0;
+    private double drinks = 0;
+    private double transport = 0;
+    private double other = 0;
+    private double[] stat;
 
     @FXML
     private Label titleLabel;
+    @FXML
+    private Label statisticsText;
+    @FXML
+    private Label totalCost;
+    @FXML
+    private Label totalCostText;
+    @FXML
+    private Label currency;
 
     private int eventCode;
 
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
+    private Config config;
     @Inject
-    public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils){
+    public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config){
         this.mainCtrl = mainCtrl;
+        this.serverUtils = serverUtils;
+        this.config = config;
     }
     /**
      * initialize the chart with the current values for food, drinks, transport and other
@@ -67,6 +79,8 @@ public class StatisticsCtrl {
         setDrinks();
         setTransport();
         setOther();
+        setTotalCost(serverUtils.getTotalCostEvent(eventCode));
+        currency.setText(String.valueOf(config.getCurrency()));
     }
     public void setFood() {
         this.food = stat[0];
@@ -81,6 +95,9 @@ public class StatisticsCtrl {
 
     public void setOther() {
         this.other = stat[3];
+    }
+    public void setTotalCost(double totalCost){
+        this.totalCost.setText(String.valueOf(totalCost));
     }
 
     @FXML

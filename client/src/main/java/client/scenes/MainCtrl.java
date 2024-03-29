@@ -262,6 +262,7 @@ public class MainCtrl {
 //        statisticsCtrl.setTransport(2);
 //        statisticsCtrl.setOther(2);
         statisticsCtrl.setEventCode(eventCode);
+        statisticsCtrl.fetchStat();
         //set the pieChart
         statisticsCtrl.setPieChart();
     }

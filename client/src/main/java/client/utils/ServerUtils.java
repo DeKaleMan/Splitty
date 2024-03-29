@@ -524,17 +524,24 @@ public class ServerUtils {
         }
     }
 
-    public int[] getStatisticsByEventID(int eventID){
-        int [] x = ClientBuilder.newClient(new ClientConfig())
+    public double[] getStatisticsByEventID(int eventID){
+        return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER)
-                .path("/statistics")
+                .path("/api/statistics")
                 .queryParam("eventID", eventID)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<int[]>() {
-                });
+                .get(double[].class);
+    }
 
-        return x;
+    public double getTotalCostEvent(int eventID){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER)
+                .path("/api/statistics/totalCost")
+                .queryParam("eventID", eventID)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(double.class);
     }
 
 

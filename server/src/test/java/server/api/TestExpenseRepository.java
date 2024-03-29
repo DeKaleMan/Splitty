@@ -14,6 +14,7 @@ import server.database.ExpenseRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.function.Function;
 
 public class TestExpenseRepository implements ExpenseRepository {
@@ -49,6 +50,11 @@ public class TestExpenseRepository implements ExpenseRepository {
             .forEach(x -> expenses.remove(x));
 
         return expenses;
+    }
+
+    @Override
+    public double getTotalCostByEvent(int eventID) {
+        return 0.0;
     }
 
 
