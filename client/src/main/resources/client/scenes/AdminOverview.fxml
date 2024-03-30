@@ -23,7 +23,7 @@
          </Text>
          <Button fx:id="viewEventButton" layoutX="441.0" layoutY="106.0" mnemonicParsing="false" onAction="#viewEvent" prefHeight="25.0" prefWidth="90.0" text="View Event" />
 
-         <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+         <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
 
          <Label fx:id="noEventSelectedError" layoutX="472.0" layoutY="216.0" text="No event selected*" textFill="RED" visible="false">
             <font>

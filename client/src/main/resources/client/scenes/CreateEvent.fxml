@@ -7,7 +7,7 @@
 <AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
     <children>
 
-        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
 
         <Label layoutX="40.0" layoutY="63.0" text="Event Name">
             <font>
@@ -76,7 +76,7 @@
         <TextField fx:id="accountHolderField" layoutX="369.0" layoutY="320.0" />
 
 
-        <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#createEvent" text="Create Event" />
+        <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#createEvent" text="Create Event" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6" />
       <Label fx:id="hostNameError" layoutX="372.0" layoutY="112.0" text="name is required*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
