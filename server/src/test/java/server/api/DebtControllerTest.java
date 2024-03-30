@@ -30,11 +30,11 @@ class DebtControllerTest {
 
     Participant p2 = new Participant("test2", 11.0, "test2", "test2", "test2", "","test2", e2);
 
-    Expense expense1 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1);
+    Expense expense1 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1,true);
 
-    Expense expense2 = new Expense(e2, "test1", Type.Food, new Date(10), 1.0,p2);
+    Expense expense2 = new Expense(e2, "test1", Type.Food, new Date(10), 1.0,p2,true);
 
-    Expense expense3 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1);
+    Expense expense3 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1,true);
 
     Debt d1 = new Debt(expense1,10.0,p1);
 

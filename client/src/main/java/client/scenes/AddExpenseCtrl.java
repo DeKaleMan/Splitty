@@ -262,7 +262,7 @@ public class AddExpenseCtrl implements Initializable {
             //add to database
             ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid());
+                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),true);
             Expense expense = serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
             double amountPerPerson = amountDouble / (owing.size()+1);

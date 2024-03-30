@@ -32,6 +32,9 @@ public class Expense {
     @ManyToOne
     private Participant payer; // the participant who paid
 
+    @Column(nullable = false)
+    private boolean sharedExpense;
+
 
 
     public Expense() {
@@ -39,13 +42,22 @@ public class Expense {
     }
 
     public Expense(Event event, String description, Type type, Date date,
-                   double totalExpense, Participant payer) {
+                   double totalExpense, Participant payer, boolean sharedExpense) {
         this.event = event;
         this.description = description;
         this.type = type;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payer = payer;
+        this.sharedExpense = sharedExpense;
+    }
+
+    public void setSharedExpense(boolean sharedExpense) {
+        this.sharedExpense = sharedExpense;
+    }
+
+    public boolean isSharedExpense() {
+        return sharedExpense;
     }
 
     public String getDescription() {
@@ -106,7 +118,7 @@ public class Expense {
         Expense expense = (Expense) o;
         return expenseId == expense.expenseId &&
             Double.compare(totalExpense, expense.totalExpense) == 0 &&
-            Objects.equals(event, expense.event) &&
+            sharedExpense == expense.sharedExpense && Objects.equals(event, expense.event) &&
             Objects.equals(description, expense.description) && type == expense.type &&
             Objects.equals(date, expense.date) &&
             Objects.equals(payer, expense.payer);
@@ -114,7 +126,8 @@ public class Expense {
 
     @Override
     public int hashCode() {
-        return Objects.hash(event, expenseId, description, type, date, totalExpense, payer);
+        return Objects.hash(event, expenseId, description, type, date, totalExpense, payer,
+            sharedExpense);
     }
 
     @Override

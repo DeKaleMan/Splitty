@@ -71,7 +71,7 @@ public class ExpenseController {
         Expense expense =
                 new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
                         expenseDTO.getDate(), expenseDTO.getTotalExpense(),
-                        payer);
+                        payer, expenseDTO.isSharedExpense());
         return ResponseEntity.ok(expenseRepo.save(expense));
     }
 
@@ -95,6 +95,7 @@ public class ExpenseController {
         expense.setDescription(expenseDTO.getDescription());
         expense.setPayer(payer);
         expense.setType(expenseDTO.getType());
+        expense.setSharedExpense(expenseDTO.isSharedExpense());
 
         return ResponseEntity.ok(expenseRepo.save(expense));
     }

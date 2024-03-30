@@ -17,13 +17,15 @@ public class ExpenseTest {
             , Type.Food
             , date
             , 150.00
-            , participant);
+            , participant
+    ,true);
     Expense e2 = new Expense(event
             , "food1"
             , Type.Food
             , date
             , 150.00
-            , participant);
+            , participant,
+         true);
 
     @BeforeEach
     void setup(){
@@ -75,5 +77,10 @@ public class ExpenseTest {
     @Test
     void getDescription(){
         assertEquals("food1",e1.getDescription());
+    }
+
+    @Test
+    void getIsShared(){
+        assertTrue(e1.isSharedExpense());
     }
 }

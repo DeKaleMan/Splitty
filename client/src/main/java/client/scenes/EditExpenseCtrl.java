@@ -212,7 +212,7 @@ public class EditExpenseCtrl {
             //add to database
             ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid());
+                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),true);
             Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
             double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
             for (Participant oldP : owing) {
