@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Config {
     private String connection;
-    private Language language;
+    private String language;
     private Currency currency;
     private String email;
     private String id;
@@ -20,7 +20,7 @@ public class Config {
     private String bic;
 
 
-    public Config(String connection, Language language, Currency currency, String email,
+    public Config(String connection, String language, Currency currency, String email,
                   String id, String name, String iban, String bic) {
         this.connection = connection;
         this.language = language;
@@ -57,7 +57,8 @@ public class Config {
                 connection = con;
             }
             String lang = sc.next();
-            language = Language.valueOf(lang);
+            //language = switchLanguage(lang);
+            language = lang;
             String curr = sc.next();
             currency = Currency.valueOf(curr);
             String em = sc.next();
@@ -119,11 +120,11 @@ public class Config {
         return true;
     }
 
-    public Language getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public void setLanguage(Language language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 

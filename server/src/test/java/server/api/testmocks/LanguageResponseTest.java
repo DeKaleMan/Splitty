@@ -19,8 +19,4 @@ public class LanguageResponseTest implements LanguageResponse {
         return "TestStringResult2";
     }
 
-    @Override
-    public void writeJsonFile(JsonObject object, File file) {
-        System.out.println("written");
-    }
 }

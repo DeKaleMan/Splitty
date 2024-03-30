@@ -38,19 +38,19 @@
       </VBox>
       <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="84.0" prefHeight="200.0" prefWidth="122.0" spacing="10.0">
          <children>
-            <Label fx:id="whoPaid" text="Who paid?" />
-            <Label fx:id="howMuch" text="How much?" />
-            <Label fx:id="when" text="When?" />
-            <Label fx:id="howToSplit" text="How to Split?" />
+            <Label fx:id="whoPaid" text="Who paid?" textAlignment="RIGHT" />
+            <Label fx:id="howMuch" text="How much?" textAlignment="RIGHT" />
+            <Label fx:id="when" text="When?" textAlignment="RIGHT" />
+            <Label fx:id="howToSplit" text="How to Split?" textAlignment="RIGHT" wrapText="true" />
          </children>
          <padding>
             <Insets top="5.0" />
          </padding>
       </VBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="380.0" layoutY="336.0" prefHeight="25.0" prefWidth="200.0" spacing="50.0">
+      <HBox alignment="CENTER_RIGHT" layoutX="313.0" layoutY="336.0" prefHeight="25.0" prefWidth="267.0" spacing="20.0">
          <children>
-            <Button fx:id="abort" mnemonicParsing="false" onAction="#back" text="Abort" />
-            <Button fx:id="add" mnemonicParsing="false" onAction="#addExpense" text="Add" />
+            <Button fx:id="abort" mnemonicParsing="false" onAction="#back" prefHeight="25.0" prefWidth="114.0" text="Abort" />
+            <Button fx:id="add" mnemonicParsing="false" onAction="#addExpense" prefHeight="25.0" prefWidth="126.0" text="Add" />
          </children>
       </HBox>
 

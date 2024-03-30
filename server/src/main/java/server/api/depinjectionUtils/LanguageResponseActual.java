@@ -1,12 +1,13 @@
 package server.api.depinjectionUtils;
 
-import com.google.gson.Gson;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -22,13 +23,6 @@ public class LanguageResponseActual implements LanguageResponse {
             throw new RuntimeException("Error reading JSON file", e);
         }
     }
-//    @Override
-//    public String getTranslationFromJson(String query, JsonObject object) {
-//        if (object.has(query)) {
-//            return object.get(query).getAsString();
-//        }
-//        return null;
-//    }
     @Override
     public String translateWithAPI(String query, String sourceLang, String targetLang) {
         String apiUrl = "https://api.mymemory.translated.net/get";
@@ -43,6 +37,11 @@ public class LanguageResponseActual implements LanguageResponse {
                     .request()
                     .get();
 
+            if(response.getStatus() == HttpStatus.FORBIDDEN.value()){
+                return HttpStatus.FORBIDDEN.toString();
+            }
+
+
             //Retrieve and print the response body
             String responseBody = response.readEntity(String.class);
             // Parse the JSON response
@@ -56,16 +55,6 @@ public class LanguageResponseActual implements LanguageResponse {
             return translated;
         } catch (IOException e) {
             throw new RuntimeException("Error translating with API", e);
-        }
-    }
-    @Override
-    public void writeJsonFile(JsonObject object, File file) {
-        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
-            Gson gson = new Gson();
-            gson.toJson(object, fileWriter);
-            System.out.println("JSON file updated successfully.");
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing JSON object to file", e);
         }
     }
 }
