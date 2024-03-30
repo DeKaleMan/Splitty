@@ -72,8 +72,17 @@ public class StartScreenCtrl implements Initializable {
 
     }
     // list the 3 most recent events on the start page
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+                // Load the image
+        Image image = new Image("Logo_.png"); // Path relative to your resources folder
+        // Set the image to the ImageView
+        imageView.setImage(image);
+        //Image flag = new Image("enFlag.png");
+    }
+
+    public void fetchList(){
         eventListView.getItems().clear();
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
@@ -91,16 +100,6 @@ public class StartScreenCtrl implements Initializable {
         if (events != null) {
             eventListView.setItems(FXCollections.observableArrayList(events));
         }
-                // Load the image
-        Image image = new Image("Logo_.png"); // Path relative to your resources folder
-        // Set the image to the ImageView
-        imageView.setImage(image);
-        //Image flag = new Image("enFlag.png");
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources){
-        //this is just because we implement it, I don't think we need it but I wanted to test is like this
     }
 
 
