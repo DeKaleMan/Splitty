@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,13 +87,27 @@ public class EditExpenseCtrl {
     private RadioButton selectSome;
 
     @FXML
+    private RadioButton sharedExpense;
+
+    @FXML
+    private RadioButton givingMoneyToSomeone;
+
+    @FXML
     private ToggleGroup selectionToggles;
+
+    @FXML
+    private HBox receiverHBox;
+
+    @FXML
+    private ListView<Participant> receiverListView;
 
     private Participant payer;
 
     private ObservableList<Participant> rest;
 
     private Set<Participant> owing;
+
+    private boolean isSharedExpense;
 
     @Inject
     public EditExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl,
@@ -106,7 +121,7 @@ public class EditExpenseCtrl {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        setSplitListUp();
+        setSplitListsUp();
         setTogglesUp();
         setCategoriesUp();
     }
@@ -169,6 +184,36 @@ public class EditExpenseCtrl {
                 }
             }
         });
+
+        sharedExpense.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue,
+                                Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    isSharedExpense = true;
+                    selectAll.setVisible(true);
+                    selectSome.setVisible(true);
+                    howToSplit.setVisible(true);
+                    receiverHBox.setVisible(false);
+                    if(selectSome.isSelected()) splitList.setVisible(true);
+                }
+            }
+        });
+
+        givingMoneyToSomeone.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue,
+                                Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    isSharedExpense = false;
+                    selectAll.setVisible(false);
+                    selectSome.setVisible(false);
+                    howToSplit.setVisible(false);
+                    splitList.setVisible(false);
+                    receiverHBox.setVisible(true);
+                }
+            }
+        });
     }
 
     @FXML
@@ -208,29 +253,17 @@ public class EditExpenseCtrl {
                 throw new NoSuchElementException();
             }
             Participant oldPayer = personComboBox.getValue();
+            if(oldPayer == null) throw new NoSuchElementException();
+            Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
+            if(!isSharedExpense && receiver == null) throw new NoSuchElementException();
             String description = whatFor.getText();
             //add to database
             ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),true);
+                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
             Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
-            double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
-            for (Participant oldP : owing) {
-                Participant p = serverUtils.getParticipantById(oldP.getEvent().getId(),oldP.getUuid());
-                serverUtils.saveDebt(
-                    new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(), p.getUuid()));
-                serverUtils.updateParticipant(p.getUuid(),
-                    new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
-                        p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
-                        p.getUuid()));
-            }
-            Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(),oldPayer.getUuid());
-            serverUtils.saveDebt(
-                new DebtDTO(amountDouble - amountPerPerson, eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
-            serverUtils.updateParticipant(newPayer.getUuid(),
-                new ParticipantDTO(newPayer.getName(), newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
-                    newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(), newPayer.getEvent().getId(),
-                    newPayer.getUuid()));
+            if(isSharedExpense) editSharedExpense(editedExpense, oldPayer, amountDouble);
+            else editGivingMoneyToSomeone(editedExpense, oldPayer, amountDouble, receiver);
             serverUtils.generatePaymentsForEvent(eventCode);
             back();
         } catch (Exception e) {
@@ -238,6 +271,43 @@ public class EditExpenseCtrl {
             error.setText("Something is incomplete");
         }
         splittyCtrl.fetchExpenses();
+    }
+
+    private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer, double amountDouble, Participant receiver) {
+        Participant newReceiver = serverUtils.getParticipantById(receiver.getEvent().getId(),receiver.getUuid());
+        serverUtils.saveDebt(
+            new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(), newReceiver.getUuid()));
+        serverUtils.updateParticipant(newReceiver.getUuid(),
+            new ParticipantDTO(newReceiver.getName(), newReceiver.getBalance() - amountDouble, newReceiver.getIBan(),
+                newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(), newReceiver.getEvent().getId(),
+                newReceiver.getUuid()));
+        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(), oldPayer.getUuid());
+        serverUtils.saveDebt(
+            new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+        serverUtils.updateParticipant(newPayer.getUuid(),
+            new ParticipantDTO(newPayer.getName(), newPayer.getBalance() + amountDouble, newPayer.getIBan(),
+                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(), newPayer.getEvent().getId(),
+                newPayer.getUuid()));
+    }
+
+    private void editSharedExpense(Expense editedExpense, Participant oldPayer, double amountDouble) {
+        double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
+        for (Participant oldP : owing) {
+            Participant p = serverUtils.getParticipantById(oldP.getEvent().getId(),oldP.getUuid());
+            serverUtils.saveDebt(
+                new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(), p.getUuid()));
+            serverUtils.updateParticipant(p.getUuid(),
+                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
+                    p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
+                    p.getUuid()));
+        }
+        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(), oldPayer.getUuid());
+        serverUtils.saveDebt(
+            new DebtDTO(amountDouble - amountPerPerson, eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+        serverUtils.updateParticipant(newPayer.getUuid(),
+            new ParticipantDTO(newPayer.getName(), newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
+                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(), newPayer.getEvent().getId(),
+                newPayer.getUuid()));
     }
 
 
@@ -248,7 +318,7 @@ public class EditExpenseCtrl {
     // This part is never used because expenses doesn't save who should pay for it only the payer
     // this should be changed eventually but that is not part of the ExpenseController
 
-    public void setSplitListUp() {
+    public void setSplitListsUp() {
         splitList.setItems(rest);
         splitList.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
             @Override
@@ -281,6 +351,24 @@ public class EditExpenseCtrl {
                 };
             }
         });
+        receiverListView.setItems(rest);
+        receiverListView.setCellFactory(
+            new Callback<ListView<Participant>, ListCell<Participant>>() {
+                @Override
+                public ListCell<Participant> call(ListView<Participant> participantListView) {
+                    return new ListCell<>(){
+                        @Override
+                        protected void updateItem(Participant participant, boolean b) {
+                            super.updateItem(participant, b);
+                            if(participant == null || b){
+                                setText(null);
+                            }else{
+                                setText(participant.getName());
+                            }
+                        }
+                    };
+                }
+            });
     }
 
 
@@ -292,6 +380,7 @@ public class EditExpenseCtrl {
 //    }
 
     public void refresh(Expense expense){
+        isSharedExpense = expense.isSharedExpense();
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
         try {
@@ -301,7 +390,7 @@ public class EditExpenseCtrl {
         }
         list.addAll(allparticipants);
         setComboboxUp(list);
-        setSplitListUp();
+        setSplitListsUp();
         setCategoriesUp();
         setTogglesUp();
         this.expense = expense;
@@ -318,14 +407,18 @@ public class EditExpenseCtrl {
         rest.clear();
         rest.addAll(allparticipants);
         rest.remove(payer);
-        if(owingFromDb.size() == rest.size()){
-            selectAll.setSelected(true);
-//            splitList.setVisible(false);
-//            owing.addAll(owingFromDb);
+        if(isSharedExpense) {
+            sharedExpense.setSelected(true);
+            if (owingFromDb.size() == rest.size()) {
+                selectAll.setSelected(true);
+            } else {
+                selectSome.setSelected(true);
+                owing.addAll(owingFromDb);
+            }
         }else{
-            selectSome.setSelected(true);
-            //splitList.setVisible(true);
-            owing.addAll(owingFromDb);
+            givingMoneyToSomeone.setSelected(true);
+            Participant receiver = owingFromDb.getFirst();
+            receiverListView.getSelectionModel().select(receiver);
         }
     }
 
