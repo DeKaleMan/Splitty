@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -19,6 +21,8 @@ import java.util.ResourceBundle;
 public class ManageParticipantsCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Button removeButton;
     @FXML
     private Label titleLabel;
 
@@ -36,6 +40,7 @@ public class ManageParticipantsCtrl implements Initializable {
     private List<Participant> list;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.setButtonRedProperty(removeButton);
         //for now this is hardcoded but this should eventually be passed on
         this.list = new ArrayList<>();
         participantsList.setCellFactory(param -> new ListCell<Participant>(){
@@ -103,4 +108,10 @@ public class ManageParticipantsCtrl implements Initializable {
         mainCtrl.showInvitation(titleLabel.getText());
     }
 
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            backEventOverview();
+        }
+    }
 }

@@ -4,24 +4,29 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
+<AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
     <children>
 
-        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+        <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
 
         <Label layoutX="40.0" layoutY="63.0" text="Event Name">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="titleField" layoutX="40.0" layoutY="88.0" prefHeight="25.0" prefWidth="248.0" promptText="required" />
+
+        <TextField fx:id="titleField" layoutX="40.0" layoutY="88.0" onKeyPressed="#resetTitleFieldError" prefHeight="25.0" prefWidth="248.0" promptText="required" />
+        <Label fx:id="titleError" layoutX="42.0" layoutY="111.0" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
+
 
       <Label layoutX="40.0" layoutY="127.0" text="Date">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-        <DatePicker fx:id="datePicker" layoutX="40.0" layoutY="153.0" prefHeight="26.0" prefWidth="248.0" promptText="mm-dd-yyyy" />
+        <DatePicker fx:id="datePicker" layoutX="40.0" layoutY="153.0" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="248.0" promptText="mm/dd/yyyy" />
+        <Label fx:id="dateEmptyError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
+        <Label fx:id="dateIncorrectError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
 
         <Label layoutX="40.0" layoutY="200.0" text="Event Description">
             <font>
@@ -31,13 +36,11 @@
       <TextArea fx:id="eventDescriptionArea" layoutX="40.0" layoutY="227.0" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." />
 
 
-
-
         <Label layoutX="369.0" layoutY="27.0" prefHeight="35.0" prefWidth="149.0" text="Host">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
-        </Label> 
+        </Label>
 
       <Label layoutX="369.0" layoutY="67.0" text="Name">
          <font>
@@ -65,18 +68,20 @@
             <Font name="System Bold" size="16.0" />
         </font>
         </Label>
-        
+
         <TextField fx:id="nameField" layoutX="369.0" layoutY="88.0" promptText="required" />
         <TextField fx:id="emailField" layoutX="369.0" layoutY="144.0" />
         <TextField fx:id="iBanField" layoutX="369.0" layoutY="200.0" />
         <TextField fx:id="bICField" layoutX="369.0" layoutY="257.0" />
         <TextField fx:id="accountHolderField" layoutX="369.0" layoutY="320.0" />
 
-        <Button layoutX="468.0" layoutY="361.0" mnemonicParsing="false" onAction="#addParticipant" text="Add  Participant" />
 
-
-        <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#createEvent" text="Create Event" />
-
+        <Button fx:id="createButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#createEvent" text="Create Event" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6" />
+      <Label fx:id="hostNameError" layoutX="372.0" layoutY="112.0" text="name is required*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
 
 
     </children>

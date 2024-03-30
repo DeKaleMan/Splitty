@@ -40,7 +40,7 @@ Button {
     -fx-background-color: #f0f0f0; /* Light Gray */
 }
 
-Label {
+.headerLabel {
     /* Text color */
     /* -fx-text-fill: white; */
     -fx-font-weight: bold; /* Font weight */

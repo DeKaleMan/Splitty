@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 
@@ -103,5 +105,11 @@ public class StatisticsCtrl {
     @FXML
     public void goBack(){
         mainCtrl.showSplittyOverview(eventCode);
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            goBack();
+        }
     }
 }

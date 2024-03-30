@@ -4,8 +4,9 @@ import client.utils.ServerUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 
@@ -19,9 +20,6 @@ public class UserEventListCtrl {
 
     @FXML
     private ChoiceBox<String> choiceBox;
-    @FXML
-    private Button cookie;
-
 
     @Inject
     public UserEventListCtrl(ServerUtils server, MainCtrl mainCtrl){
@@ -38,5 +36,10 @@ public class UserEventListCtrl {
         mainCtrl.showStartScreen();
     }
 
-
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
+    }
 }
