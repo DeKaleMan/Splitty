@@ -17,7 +17,7 @@
       <Label layoutX="186.0" layoutY="133.0" text="Email" />
       <Label layoutX="187.0" layoutY="182.0" text="IBAN" />
       <Label layoutX="186.0" layoutY="226.0" text="BIC" />
-      <Button layoutX="283.0" layoutY="271.0" mnemonicParsing="false" text="Abort" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
+      <Button fx:id="abortButton" layoutX="283.0" layoutY="271.0" mnemonicParsing="false" text="Abort" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
       <Button layoutX="352.0" layoutY="271.0" mnemonicParsing="false" text="Ok" />
       <TextField layoutX="255.0" layoutY="81.0" />
       <TextField layoutX="255.0" layoutY="129.0" />

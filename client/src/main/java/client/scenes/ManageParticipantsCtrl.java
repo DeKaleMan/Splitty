@@ -22,6 +22,8 @@ public class ManageParticipantsCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     @FXML
+    public Button removeButton;
+    @FXML
     private Label titleLabel;
 
     private final int eventCode = 1;
@@ -38,6 +40,7 @@ public class ManageParticipantsCtrl implements Initializable {
     private List<Participant> list;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.setButtonRedProperty(removeButton);
         //for now this is hardcoded but this should eventually be passed on
         this.list = new ArrayList<>();
         participantsList.setCellFactory(param -> new ListCell<Participant>(){

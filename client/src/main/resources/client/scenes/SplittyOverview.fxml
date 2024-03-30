@@ -75,7 +75,7 @@
             <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
          </children>
       </VBox>
-      <Button layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#setConfirmation" text="Leave" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
+      <Button fx:id="leaveButton" layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#setConfirmation" text="Leave" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
       <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />

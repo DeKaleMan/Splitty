@@ -7,10 +7,7 @@ import commons.EventDTO;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -25,7 +22,10 @@ public class CreateEventCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
-
+    @FXML
+    public Button cancelButton;
+    @FXML
+    public Button createButton;
 
 
     // event text fields
@@ -73,6 +73,11 @@ public class CreateEventCtrl {
 
     }
 
+    @FXML
+    public void initialize() {
+        mainCtrl.setButtonGreenProperty(createButton);
+        mainCtrl.setButtonRedProperty(cancelButton);
+    }
 
     public void setTitle(String title) {
         titleField.setText(title);

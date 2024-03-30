@@ -35,6 +35,9 @@ public class InvitationCtrl {
         inviteCode = "testInviteCode";
     }
 
+    public void initialize() {
+        mainCtrl.setButtonGreenProperty(sendInvites);
+    }
     /**
      * Displays the invite code in the associated label
      */

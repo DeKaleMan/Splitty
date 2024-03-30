@@ -58,6 +58,7 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.setButtonRedProperty(undo);
         payments = FXCollections.observableArrayList(
             serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
         this.paymentInstructionListView.setItems(payments);

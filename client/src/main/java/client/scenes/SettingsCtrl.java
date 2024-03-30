@@ -4,6 +4,7 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -18,6 +19,10 @@ public class SettingsCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+    @FXML
+    public Button cancelButton;
+    @FXML
+    public Button saveButton;
     @FXML
     private TextField serverURLField;
     @FXML
@@ -42,6 +47,10 @@ public class SettingsCtrl {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
+    }
+    public void initialize() {
+        mainCtrl.setButtonRedProperty(cancelButton);
+        mainCtrl.setButtonRedProperty(saveButton);
     }
 
     /**

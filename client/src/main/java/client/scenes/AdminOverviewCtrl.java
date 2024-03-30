@@ -71,6 +71,9 @@ public class AdminOverviewCtrl {
 
     @FXML
     public void initialize() {
+        // set buttons
+        mainCtrl.setButtonRedProperty(deleteEventButton);
+        mainCtrl.setButtonRedProperty(logOutButton);
         sortComboBox.setItems(sortList);
 
         // This code (It took me some googling to find this out) makes sure that the items

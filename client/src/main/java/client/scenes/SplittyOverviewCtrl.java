@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
+
     //We need to store the eventCode right here
     private int eventCode;
 
@@ -72,6 +73,8 @@ public class SplittyOverviewCtrl implements Initializable {
     private TabPane tabPane;
 
     @FXML
+    public Button leaveButton;
+    @FXML
     public Button leaveConfirmationButton;
     @FXML
     public Button cancelLeaveButton;
@@ -91,6 +94,10 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.setButtonRedProperty(deleteExpenseButton);
+        mainCtrl.setButtonRedProperty(leaveButton);
+        mainCtrl.setButtonRedProperty(leaveConfirmationButton);
+        mainCtrl.setButtonGreenProperty(cancelLeaveButton);
         participantListView.setCellFactory(param -> new ListCell<Participant>(){
             @Override
             protected void updateItem(Participant item, boolean empty) {

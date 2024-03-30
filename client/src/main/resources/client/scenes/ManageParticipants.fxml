@@ -18,7 +18,7 @@
             <Font name="System Bold" size="48.0" />
          </font>
       </Label>
-      <Button layoutX="232.0" layoutY="188.0" mnemonicParsing="false" onAction="#removeParticipantFromList" text="Remove" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
+      <Button fx:id="removeButton" layoutX="232.0" layoutY="188.0" mnemonicParsing="false" onAction="#removeParticipantFromList" text="Remove" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
       <Button layoutX="186.0" layoutY="155.0" mnemonicParsing="false" onAction="#showInvitation" prefHeight="25.0" prefWidth="105.0" text="Add participants" />
    </children>
 </AnchorPane>

@@ -7,7 +7,7 @@
 <AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsCtrl">
    <children>
 
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Cancel" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Cancel" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
 
       <Label layoutX="200.0" layoutY="14.0" text="Splitty Settings">
          <font>
@@ -15,7 +15,7 @@
          </font>
       </Label>
 
-      <Button layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" text="Save settings" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6"/>
+      <Button fx:id="saveButton" layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" text="Save settings" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6"/>
       <VBox layoutX="346.0" layoutY="200.0" prefHeight="155.0" prefWidth="232.0" spacing="5.0">
          <children>
             <Label text="Add language">

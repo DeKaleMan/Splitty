@@ -15,15 +15,16 @@
  */
 package client.scenes;
 
-import client.utils.*;
-import commons.Event;
-
+import client.utils.AdminWindows;
+import client.utils.EventPropGrouper;
+import client.utils.ServerUtils;
 import client.utils.SetLanguage;
+import commons.Event;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -312,4 +313,24 @@ public class MainCtrl {
     public void addEvent(Event event) {
         startScreenCtrl.addEvent(event);
     }
+
+    public void setButtonGreenProperty(Button button) {
+        button.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                button.setStyle("-fx-background-color: #2a8000; -fx-border-color: #365eff; -fx-border-width: 1px; -fx-border-radius: 2");
+            } else {
+                button.setStyle("-fx-background-color: #2a8000;");
+            }
+        });
+    }
+    public void setButtonRedProperty(Button button) {
+        button.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                button.setStyle("-fx-background-color: #c50000; -fx-border-color: #365eff; -fx-border-width: 1px; -fx-border-radius: 2");
+            } else {
+                button.setStyle("-fx-background-color: #c50000;");
+            }
+        });
+    }
+
 }
