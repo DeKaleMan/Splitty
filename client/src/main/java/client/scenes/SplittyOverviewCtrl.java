@@ -272,12 +272,18 @@ public class SplittyOverviewCtrl implements Initializable {
                                 date.getDate() + "." +(date.getMonth() < 9 ? "0" : "") + (date.getMonth()+1) + "." + (date.getYear()+1900));
                             dateLabel.setStyle("-fx-font-size: 12px");
                             dateLabel.setPrefWidth(70);
-                            Text mainInfo = new Text(expense.getPayer().getName() + " paid " +
-                                expense.getTotalExpense() + " for " + expense.getType());
                             List<String> involved =
                                 serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                         expense.getExpenseId()).stream()
                                     .map(x -> x.getParticipant().getName()).toList();
+                            Text mainInfo = new Text();
+                            if(expense.isSharedExpense()){
+                                mainInfo.setText(expense.getPayer().getName() + " paid " +
+                                    expense.getTotalExpense() + " for " + expense.getType());
+                            }else{
+                                mainInfo.setText(expense.getPayer().getName() + " gave " +
+                                    expense.getTotalExpense() + " to " + involved.stream().filter(x -> !x.equals(expense.getPayer().getName())).findFirst().get());
+                            }
                             grid.add(dateLabel, 0, 0);
                             grid.add(mainInfo, 1, 0);
                             grid.add(new Text(involved.toString()), 1, 1);

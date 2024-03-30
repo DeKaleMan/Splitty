@@ -68,7 +68,7 @@ public class SetLanguage {
     }
 
     public void setAddExpense(String lang){
-        addExpenseCtrl.setAddExpenseText(translate("Add/Edit Expense", "en", lang));
+        addExpenseCtrl.setAddExpenseText(translate("Add Expense", "en", lang));
         addExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         addExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
         addExpenseCtrl.setWhen(translate("When?", "en", lang));
