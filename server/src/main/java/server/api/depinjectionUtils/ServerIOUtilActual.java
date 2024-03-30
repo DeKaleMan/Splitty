@@ -1,5 +1,8 @@
 package server.api.depinjectionUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import commons.Conversion;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -9,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ServerIOUtilActual implements ServerIOUtil {
@@ -45,6 +50,27 @@ public class ServerIOUtilActual implements ServerIOUtil {
     }
 
     @Override
+    public void writeConversionObjects(File file, List<Conversion> conversionList) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(file, conversionList);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Conversion> readConversionObjects(File file) {
+        createFileStructure();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(file, new TypeReference<>() {});
+        } catch (Exception e){
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
     public String read(File file) {
         try {
             Path path = Paths.get(file.getPath());
@@ -58,6 +84,7 @@ public class ServerIOUtilActual implements ServerIOUtil {
 
     @Override
     public void write(String string, File file) {
+        createFileStructure();
         try {
             file.createNewFile();
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
