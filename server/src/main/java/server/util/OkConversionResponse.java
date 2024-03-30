@@ -12,11 +12,11 @@ public class OkConversionResponse implements ConversionResponse{
         this.message = message;
     }
 
-    public Conversion getAmount() {
+    public Conversion getConversion() {
         return conversion;
     }
 
-    public void setAmount(Conversion conversion) {
+    public void setConversion(Conversion conversion) {
         this.conversion = conversion;
     }
 

@@ -1,16 +1,19 @@
 package server.api.testmocks;
 
+import commons.Conversion;
 import server.api.depinjectionUtils.ServerIOUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ServerIOUtilsTest implements ServerIOUtil {
 
     public File file;
     public String lastWrite;
     public String nextRead = "";
-    public boolean rateCached = false; // flag to control if it should run the program as if the rate is cached or not
+    public String lastConversionWrite;
+    public List<Conversion> nextConversionRead = new ArrayList<>();
     public ArrayList<String> ioCalls = new ArrayList<>();
 
     @Override
@@ -29,12 +32,29 @@ public class ServerIOUtilsTest implements ServerIOUtil {
 
     @Override
     public boolean fileExists(File file) {
-        return rateCached;
+        return true;
     }
 
     @Override
     public boolean createFileStructure() {
-        return false;
+        ioCalls.add("createFileStructure");
+        return true;
+    }
+
+    @Override
+    public void writeConversionObjects(File file, List<Conversion> conversionList) {
+        this.file = file;
+        ioCalls.add("writeConversion");
+        nextConversionRead.addAll(conversionList);
+        lastConversionWrite = conversionList.toString();
+    }
+
+    @Override
+    public List<Conversion> readConversionObjects(File file) {
+        this.file = file;
+        ioCalls.add("readConversion");
+        List<Conversion> tmpConversionRead = nextConversionRead;
+        return tmpConversionRead;
     }
 
     public ArrayList<String> clearCallList() {

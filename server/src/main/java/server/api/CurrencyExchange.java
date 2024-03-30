@@ -1,6 +1,5 @@
 package server.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,9 @@ public class CurrencyExchange {
         this.httpResponse = httpResponse;
     }
 
-    // Conversion can have 6 values: eurusd, eurchf, usdeur, usdchf, chfeur, chfusd
-    @GetMapping("/")
-    public ResponseEntity<ConversionResponse> getConvertedAmount(@RequestParam("from") String from,
+    // 6 conversions are supported: eur->usd, eur->chf, usd->eur, usd->chf, chf->eur, chf->usd
+    @GetMapping({"", "/"})
+    public ResponseEntity<ConversionResponse> getConversion(@RequestParam("from") String from,
                                                                  @RequestParam("to") String to,
                                                                  @RequestParam("date") String date) {
                                                                 // date has to be formatted dd-mm-yyyy
@@ -83,12 +82,10 @@ public class CurrencyExchange {
         String[] dateArray = date.split("-");
 
         // If a file (from today) is not cached it will update the conversion rates
-        Conversion possibleCacheConversion = checkForCachedConversion(Integer.parseInt(dateArray[2]),
-                Integer.parseInt(dateArray[1]), Integer.parseInt(dateArray[0]), baseCurrency, conversionCurrency);
+        Conversion possibleCacheConversion = checkForCachedConversion(date, baseCurrency, conversionCurrency);
         if (possibleCacheConversion == null) {
             updateExchangeRates(baseCurrency, date);
-            possibleCacheConversion = checkForCachedConversion(Integer.parseInt(dateArray[2]),
-                    Integer.parseInt(dateArray[1]), Integer.parseInt(dateArray[0]), baseCurrency, conversionCurrency);
+            possibleCacheConversion = checkForCachedConversion(date, baseCurrency, conversionCurrency);
         }
 
         return possibleCacheConversion;
@@ -117,36 +114,24 @@ public class CurrencyExchange {
                 case "USD" -> {
                     double usdToEurRate = ratesNode.get("EUR").asDouble();
                     double usdToChfRate = ratesNode.get("CHF").asDouble();
-                    writeCurrencyCache(List.of(new Conversion("USD", "EUR", usdToEurRate,
-                                    new Date(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]) - 1,
-                                            Integer.parseInt(dateArray[0]))),
-                            new Conversion("USD", "CHF", usdToChfRate,
-                                    new Date(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]) - 1,
-                                            Integer.parseInt(dateArray[0])))));
+                    writeCurrencyCache(List.of(new Conversion("USD", "EUR", usdToEurRate, date),
+                            new Conversion("USD", "CHF", usdToChfRate, date)));
                 }
                 case "EUR" -> {
                     double eurToUsdRate = 1/(ratesNode.get("EUR").asDouble());
                     double eurToChfRate = (ratesNode.get("CHF").asDouble())/(ratesNode.get("EUR").asDouble());
-                    writeCurrencyCache(List.of(new Conversion("EUR", "USD", eurToUsdRate,
-                                    new Date(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]) - 1,
-                                            Integer.parseInt(dateArray[0]))),
-                            new Conversion("EUR", "CHF", eurToChfRate,
-                                    new Date(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]) - 1,
-                                            Integer.parseInt(dateArray[0])))));
+                    writeCurrencyCache(List.of(new Conversion("EUR", "USD", eurToUsdRate, date),
+                            new Conversion("EUR", "CHF", eurToChfRate, date)));
                 }
                 case "CHF" -> {
                     double chfToUsdRate = 1/(ratesNode.get("CHF").asDouble());
                     double chfToEurRate = (ratesNode.get("EUR").asDouble())/(ratesNode.get("CHF").asDouble());
-                    writeCurrencyCache(List.of(new Conversion("CHF", "USD", chfToUsdRate,
-                                    new Date(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]) - 1,
-                                            Integer.parseInt(dateArray[0]))),
-                            new Conversion("CHF", "EUR", chfToEurRate,
-                                    new Date(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]) - 1,
-                                            Integer.parseInt(dateArray[0])))));
+                    writeCurrencyCache(List.of(new Conversion("CHF", "USD", chfToUsdRate, date),
+                            new Conversion("CHF", "EUR", chfToEurRate, date)));
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -154,31 +139,19 @@ public class CurrencyExchange {
      * Util method that writes the exchange rates to a file for caching
      */
     public void writeCurrencyCache(List<Conversion> conversionsToAdd) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            List<Conversion> newCacheList = getConversionCache();
-            newCacheList.addAll(conversionsToAdd);
-            objectMapper.writeValue(new File(io.getCurrencyCacheFile()), newCacheList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<Conversion> newCacheList = getConversionCache();
+        newCacheList.addAll(conversionsToAdd);
+        io.writeConversionObjects(new File(io.getCurrencyCacheFile()), newCacheList);
     }
 
     public List<Conversion> getConversionCache() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(new File(io.getCurrencyCacheFile()), new TypeReference<>() {});
-        } catch (Exception e){
-            return new ArrayList<>();
-        }
+        return io.readConversionObjects(new File(io.getCurrencyCacheFile()));
     }
 
-    public Conversion checkForCachedConversion(int year, int month, int day,
-                                               String baseCurrency, String conversionCurrency) {
+    public Conversion checkForCachedConversion(String date, String baseCurrency, String conversionCurrency) {
         for (Conversion conversion : getConversionCache()){
-            if (conversion.date().getYear() == year && conversion.date().getMonth() + 1 == month
-                    && conversion.date().getDate() == day
-                && conversion.from().equals(baseCurrency) && conversion.to().equals(conversionCurrency)) {
+            if (date.equals(conversion.date())
+                    && conversion.from().equals(baseCurrency) && conversion.to().equals(conversionCurrency)) {
                 return conversion;
             }
         }

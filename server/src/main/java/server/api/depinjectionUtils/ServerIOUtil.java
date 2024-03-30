@@ -1,6 +1,9 @@
 package server.api.depinjectionUtils;
 
+import commons.Conversion;
+
 import java.io.File;
+import java.util.List;
 
 public interface ServerIOUtil {
 
@@ -23,5 +26,9 @@ public interface ServerIOUtil {
     }
 
     boolean createFileStructure();
+
+    void writeConversionObjects(File file, List<Conversion> conversionList);
+
+    List<Conversion> readConversionObjects(File file);
 
 }
