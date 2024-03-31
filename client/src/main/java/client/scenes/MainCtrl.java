@@ -279,7 +279,8 @@ public class MainCtrl {
 
     public int getCurrentEventCode(){
         if(splittyOverviewCtrl==null){
-            throw new RuntimeException("Splitty overview controller is null, exception thrown in MainCtrl getCurrentEventCode()");
+            throw new RuntimeException("Splitty overview controller is null," +
+                    " exception thrown in MainCtrl getCurrentEventCode()");
         }
         return splittyOverviewCtrl.getCurrentEventCode();
     }
