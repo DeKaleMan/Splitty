@@ -86,7 +86,7 @@ public class MainCtrl {
 
     // probably not the best place to put that here but works for now
     // maybe in the future isolate it into an eventctrl?
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
 
     public void initialize(Stage primaryStage, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
@@ -182,7 +182,7 @@ public class MainCtrl {
         return null;
     }
 
-    public Participant joinEvent(int id) throws RuntimeException{ // needs some more error handling
+    public Participant joinEvent(String inviteCode) throws RuntimeException{ // needs some more error handling
         Participant participant = serverUtils.createParticipant(
                 new ParticipantDTO(
                         settingCtrl.getName(),
@@ -191,11 +191,12 @@ public class MainCtrl {
                         settingCtrl.getBic(),
                         settingCtrl.getEmail(),
                         settingCtrl.getName(),
-                        id,
-                        settingCtrl.getId()
+                        -1,
+                        settingCtrl.getId(),
+                        inviteCode
                 ));
         if (participant != null) {
-            events.add(serverUtils.getEventById(id));
+            events.add(serverUtils.getEventById(participant.getEvent().getId()));
         }
         return participant;
     }

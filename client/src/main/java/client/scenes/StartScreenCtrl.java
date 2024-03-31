@@ -130,16 +130,14 @@ public class StartScreenCtrl implements Initializable {
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent() {
-        int eventCode;
         try {
-            String idString = joinEventTextField.getText();
-            eventCode = Integer.parseInt(idString);
-            Participant p = mainCtrl.joinEvent(eventCode);
+            String eventInviteCode = joinEventTextField.getText();
+            Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
                 // show error message
                 return;
             }
-            mainCtrl.showSplittyOverview(eventCode);
+            mainCtrl.showSplittyOverview(p.getEvent().getId());
             System.out.println("Joined event: " + joinEventTextField.getText());
         } catch (NumberFormatException e) {
             codeNotFoundError.setVisible(false);
