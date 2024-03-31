@@ -39,6 +39,9 @@ public class EditEventCrtl {
         this.mainCtrl = mainCtrl;
     }
 
+    public void initialize() {
+        mainCtrl.setButtonGreenProperty(submitButton);
+    }
     private void setUp(Button submitButton){
         submitButton.setVisible(true);
     }

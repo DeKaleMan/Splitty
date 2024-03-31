@@ -5,19 +5,25 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
-
-
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+
 
 public class AddExpenseCtrl implements Initializable {
     private final ServerUtils serverUtils;
@@ -29,15 +35,27 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     public Label titleLabel;
 
+
+
     @FXML
     private ComboBox<Participant> personComboBox;
+    @FXML
+    public Label payerError;
 
     //all the things needed for the addExpense
     @FXML
     private TextArea whatFor;
+    @FXML
+    private Label amountInvalidError;
+    @FXML
+    public Label amountNegativeError;
+    @FXML
+    public Label noAmountError;
 
     @FXML
     private DatePicker dateSelect;
+    @FXML
+    private Label dateInvalidError;
 
     @FXML
     private ListView splitList;
@@ -47,8 +65,6 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     private ComboBox category;
-    @FXML
-    private Label error;
     private List<Participant> participant;
 
     @FXML
@@ -67,16 +83,13 @@ public class AddExpenseCtrl implements Initializable {
     private Label expenseTypetext;
 
     @FXML
-    private Button back;
-    @FXML
     private Button add;
     @FXML
-    private Button abort;
+    public Label addExpenseError;
+    @FXML
+    private Button cancel;
     @FXML
     private Button selectAll;
-
-
-
 
 
     @Inject
@@ -88,6 +101,9 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        //the buttons
+        mainCtrl.setButtonRedProperty(cancel);
+        mainCtrl.setButtonGreenProperty(add);
         Participant person1 = new Participant("name", 1000.00, "iBAN", "bIC", "holder", "", "uuid1", new Event());
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
@@ -96,24 +112,13 @@ public class AddExpenseCtrl implements Initializable {
         });
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             allparticipants = new ArrayList<>();
         }
         list.addAll(allparticipants);
         list.add(person1);
         personComboBox.setItems(list);
         personComboBox.setCellFactory(param -> new ListCell<Participant>() {
-            @Override
-            protected void updateItem(Participant item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
-        personComboBox.setButtonCell(new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
@@ -158,34 +163,50 @@ public class AddExpenseCtrl implements Initializable {
      */
     @FXML
     public void addExpense() {
-        //collect information
         List<String> participants = getSelected();//get all the names of the participants
-
-        //link these to participants and then add the expense
-        if (dateSelect.getValue() == null) {
-            dateSelect.setPromptText("invalid Date");
-        }
-
+        boolean error = false;
+        Date date = null;
         try {
             LocalDate localDate = dateSelect.getValue();
-            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            Type type = (Type) category.getValue();
-            if (type == null) throw new NoSuchElementException();
-            double amountDouble = Double.parseDouble(amount.getText());
-            if (amountDouble <= 0) {
-                amount.setText("NO VALID AMOUNT");
-                throw new NoSuchElementException();
-            }
-            Participant payer = personComboBox.getValue();
-            String description = whatFor.getText();
-            //add to database
-            splittyCtrl.addExpense(description, type, date, amountDouble, payer.getEmail());
-            back();
+            date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         } catch (Exception e) {
-            dateSelect.setPromptText("try again");
-            error.setText("Something is incomplete");
+            error = true;
+            dateInvalidError.setVisible(true);
         }
+        Type type = (Type) category.getValue();
+        if (type == null) type= Type.Other;
+        Participant payer = personComboBox.getValue();
+        if (payer == null) {
+            error = true;
+            payerError.setVisible(true);
+        }
+        double amountDouble = 0.0;
+        try {
+            if (amount.getText() == null || amount.getText().isEmpty()) {
+                noAmountError.setVisible(true);
+                return;
+            }
+            amountDouble = Double.parseDouble(amount.getText());
+            if (amountDouble <= 0.0) {
+                amountNegativeError.setVisible(true);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            amountInvalidError.setVisible(true);
+            error = true;
+        }
+        String description = whatFor.getText();
+        if (error) return;
+        try {
+            splittyCtrl.addExpense(description, type, date, amountDouble, payer.getEmail());
+        } catch (Exception e) {
+            addExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(event1 -> addExpenseError.setVisible(false));
+            visiblePause.play();
+            return;
+        }
+        back();
         splittyCtrl.fetchExpenses();
     }
 
@@ -267,16 +288,12 @@ public class AddExpenseCtrl implements Initializable {
         this.expenseTypetext.setText(text);
     }
 
-    public void setBack(String text) {
-        this.back.setText(text);
-    }
-
     public void setAdd(String text) {
         this.add.setText(text);
     }
 
     public void setAbort(String text) {
-        this.abort.setText(text);
+        this.cancel.setText(text);
     }
 
     public void setSelectAll(String text) {
@@ -289,5 +306,25 @@ public class AddExpenseCtrl implements Initializable {
 
     public void setExpenseTypeBox(String text) {
         this.category.setPromptText(text);
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
+    }
+
+    public void resetPayerErrors() {
+        payerError.setVisible(false);
+    }
+
+    public void resetAmountErrors(KeyEvent keyEvent) {
+        amountNegativeError.setVisible(false);
+        noAmountError.setVisible(false);
+        amountInvalidError.setVisible(false);
+    }
+
+    public void resetDateErrors() {
+        dateInvalidError.setVisible(false);
     }
 }

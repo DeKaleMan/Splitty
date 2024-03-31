@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="background" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
    <children>
-      <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="91.0" layoutY="14.0" prefHeight="56.0" prefWidth="290.0" text="Title">
+      <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="91.0" layoutY="16.0" prefHeight="56.0" prefWidth="290.0" text="Title">
          <font>
             <Font name="System Bold" size="48.0" />
          </font>
@@ -15,21 +15,25 @@
       <Button fx:id="backButton" layoutX="10.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.leftAnchor="10.0" />
         <Pane layoutX="347.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0" styleClass="blueBox">
          <children>
-            <ListView fx:id="participantListView" layoutX="46.0" layoutY="51.0" prefHeight="200.0" prefWidth="148.0" />
+            <ListView fx:id="participantListView" layoutX="46.0" layoutY="51.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="148.0" />
             <HBox alignment="CENTER" layoutX="-16.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" spacing="10.0">
                <children>
-                  <Label fx:id="participants" text="Participants">
+                  <Label fx:id="participants" styleClass="headerLabel" text="Participants">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <VBox alignment="CENTER" layoutX="38.0" layoutY="260.0" prefHeight="35.0" prefWidth="163.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#leaveEvent" text="Leave" />
-               </children>
-            </VBox>
+            <Label fx:id="eventCreatedLabel" layoutX="120.0" layoutY="288.0" text="Event created successfully*" textFill="#3700ff" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="joinedEventLabel" layoutX="112.0" layoutY="280.0" text="Event joined successfully#" textFill="#3700ff" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font></Label>
          </children></Pane>
       <Pane layoutX="14.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0" styleClass="blueBox">
          <children>
@@ -47,7 +51,7 @@
                   </TabPane>
                   <HBox alignment="CENTER" layoutX="-19.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
                      <children>
-                        <Label fx:id="expenses" text="expenses">
+                        <Label fx:id="expenses" styleClass="label" text="expenses">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -57,11 +61,12 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <VBox alignment="CENTER" layoutX="38.0" layoutY="260.0" prefHeight="35.0" prefWidth="163.0">
+            <VBox alignment="CENTER" layoutX="38.0" layoutY="260.0" prefHeight="35.0" prefWidth="156.0">
                <children>
-                  <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" text="Delete expense" />
+                  <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" text="Delete expense" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
                </children>
             </VBox>
+
          </children></Pane>
       <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="161.0" prefHeight="151.0" prefWidth="100.0" spacing="10.0">
          <children>
@@ -70,5 +75,19 @@
             <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
          </children>
       </VBox>
+      <Button fx:id="leaveButton" layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#setConfirmation" text="Leave" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
+      <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="expenseNotDeletedError" layoutX="188.0" layoutY="360.0" text="Expense could not be deleted*" textFill="RED" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Button fx:id="leaveConfirmationButton" layoutX="261.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" text="Leave" visible="false" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
+      <Button fx:id="cancelLeaveButton" layoutX="329.0" layoutY="26.0" mnemonicParsing="false" onAction="#cancelLeave" text="Stay" visible="false" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6"/>
+      <Label fx:id="confirmationLabel" layoutX="218.0" layoutY="58.0" text="Are you sure you want to leave the event?" visible="false" />
    </children>
 </AnchorPane>

@@ -3,6 +3,9 @@ package client.scenes;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import javax.inject.Inject;
 import java.util.Scanner;
 
@@ -32,6 +35,9 @@ public class InvitationCtrl {
         inviteCode = "testInviteCode";
     }
 
+    public void initialize() {
+        mainCtrl.setButtonGreenProperty(sendInvites);
+    }
     /**
      * Displays the invite code in the associated label
      */
@@ -81,6 +87,12 @@ public class InvitationCtrl {
      */
     public void setTitle(String title){
         titleLabel.setText(title);
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 
 //    /**

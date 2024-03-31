@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="background" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageParticipantsCtrl">
+<AnchorPane onKeyPressed="#onKeyPressed" fx:id="background" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageParticipantsCtrl">
    <children>
       <ListView fx:id="participantsList" layoutX="338.0" layoutY="120.0" prefHeight="255.0" prefWidth="200.0" />
       <Label layoutX="164.0" layoutY="120.0" prefHeight="35.0" prefWidth="136.0" text="Participants">
@@ -18,7 +18,7 @@
             <Font name="System Bold" size="48.0" />
          </font>
       </Label>
-      <Button layoutX="232.0" layoutY="188.0" mnemonicParsing="false" onAction="#removeParticipantFromList" text="Remove" />
+      <Button fx:id="removeButton" layoutX="232.0" layoutY="188.0" mnemonicParsing="false" onAction="#removeParticipantFromList" text="Remove" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6" />
       <Button layoutX="186.0" layoutY="155.0" mnemonicParsing="false" onAction="#showInvitation" prefHeight="25.0" prefWidth="105.0" text="Add participants" />
    </children>
 </AnchorPane>
