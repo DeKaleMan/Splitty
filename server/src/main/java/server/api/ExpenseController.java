@@ -76,7 +76,8 @@ public class ExpenseController {
     }
 
     @PutMapping("/{eventId}/{expenseId}")
-    public ResponseEntity<Expense> updateExpense(@PathVariable("eventId") int eventId, @PathVariable("expenseId") int expenseId,
+    public ResponseEntity<Expense> updateExpense(@PathVariable("eventId") int eventId,
+                                                 @PathVariable("expenseId") int expenseId,
                                                  @RequestBody ExpenseDTO expenseDTO){
         Optional<Event> optionalEvent = eventRepo.findById(eventId);
         if (optionalEvent.isEmpty()) {

@@ -18,7 +18,7 @@ public class ExpenseTest {
             , date
             , 150.00
             , participant
-    ,true);
+            ,true);
     Expense e2 = new Expense(event
             , "food1"
             , Type.Food

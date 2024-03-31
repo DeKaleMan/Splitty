@@ -104,7 +104,10 @@ public class DebtController {
 
     @DeleteMapping("/{eventId}/{expenseId}")
     @Transactional
-    public ResponseEntity<List<Debt>> deleteDebtsOfExpense(@PathVariable("eventId") int eventId, @PathVariable("expenseId") int expenseId){
+    public ResponseEntity<List<Debt>> deleteDebtsOfExpense(@PathVariable("eventId")
+                                                               int eventId,
+                                                           @PathVariable("expenseId")
+                                                           int expenseId){
         Optional<Event> eventOptional = eventRepo.findById(eventId);
         if (eventOptional.isEmpty()) return ResponseEntity.notFound().build();
         Event event = eventOptional.get();

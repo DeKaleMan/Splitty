@@ -26,7 +26,6 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
-import jakarta.servlet.http.Part;
 import jakarta.ws.rs.client.Client;
 import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
@@ -125,7 +124,9 @@ public class ServerUtils {
         List<Debt> debts = getDebtByExpense(expenseDTO.getEventId(), expenseId);
         for(Debt d : debts){
             Participant p = d.getParticipant();
-            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
         }
 
         deleteDebtsOfExpense(expenseDTO.getEventId(), expenseId);
@@ -224,7 +225,9 @@ public class ServerUtils {
         List<Debt> debts = getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId());
         for(Debt d : debts){
             Participant p = d.getParticipant();
-            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
         }
         deleteDebtsOfExpense(expense.getEvent().getId(), expense.getExpenseId());
 

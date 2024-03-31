@@ -137,7 +137,7 @@ public class EditExpenseCtrl {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        setSplitListsUp();
+        setListViewsUp();
         setTogglesUp();
         setCategoriesUp();
     }
@@ -170,37 +170,11 @@ public class EditExpenseCtrl {
     }
 
     private void setTogglesUp() {
-        selectAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue,
-                                Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    if (payer == null) {
-                        System.out.println("Select payer");
-                        return;
-                    }
-                    owing.addAll(rest);
-                    owing.remove(payer);
-                    splitList.setVisible(false);
-                }
-            }
-        });
-        selectSome.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue,
-                                Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    if (payer == null) {
-                        System.out.println("Select payer");
-                        return;
-                    }
-                    owing.clear();
-                    splitList.refresh();
-                    splitList.setVisible(true);
-                }
-            }
-        });
+        setSelectionTogesUp();
+        setExpenseTypeTogglesUp();
+    }
 
+    private void setExpenseTypeTogglesUp() {
         sharedExpense.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue,
@@ -232,6 +206,39 @@ public class EditExpenseCtrl {
         });
     }
 
+    private void setSelectionTogesUp() {
+        selectAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue,
+                                Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    if (payer == null) {
+                        System.out.println("Select payer");
+                        return;
+                    }
+                    owing.addAll(rest);
+                    owing.remove(payer);
+                    splitList.setVisible(false);
+                }
+            }
+        });
+        selectSome.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue,
+                                Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    if (payer == null) {
+                        System.out.println("Select payer");
+                        return;
+                    }
+                    owing.clear();
+                    splitList.refresh();
+                    splitList.setVisible(true);
+                }
+            }
+        });
+    }
+
     @FXML
     public void back() {
         mainCtrl.showSplittyOverview(eventCode);
@@ -254,54 +261,32 @@ public class EditExpenseCtrl {
     @Transactional
     public void editExpense() {
         boolean error = false;
-        Date date = null;
-        //link these to participants and then add the expense
-        if (dateSelect.getValue() == null) {
-            dateSelect.setPromptText("invalid Date");
-        }
+        Date date = getDate();
 
-        Type type = (Type) category.getValue();
-        if (type == null) type= Type.Other;
+        Type type = getType();
         Participant oldPayer = personComboBox.getValue();
         if (oldPayer == null) {
-            error = true;
             payerError.setVisible(true);
+            return;
         }
 
-        double amountDouble = 0.0;
-        try {
-            if (amount.getText() == null || amount.getText().isEmpty()) {
-                amountError.setText("An amount is required");
-                amountError.setVisible(true);
-                return;
-            }
-            amountDouble = Double.parseDouble(amount.getText());
-            if (amountDouble <= 0.0) {
-                amountError.setVisible(true);
-                amountError.setText("Amount cannot be negative or zero*");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            amountError.setVisible(true);
-            amountError.setText("Not a number, format e.g 13.99");
-            error = true;
-        }
+        Double amountDouble = getAmountDouble();
+        if (amountDouble == null) return;
 
         Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
         if(!isSharedExpense && receiver == null) {
-            error = true;
+            return;
         }
-        if(error) return;
+
 
         String description = whatFor.getText();
 
         try {
-            LocalDate localDate = dateSelect.getValue();
-            date = java.sql.Date.valueOf(localDate);
             //add to database
             ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
+                new ExpenseDTO(eventCode, description, type, date, amountDouble,
+                    payer.getUuid(),isSharedExpense);
             Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
             if(isSharedExpense) editSharedExpense(editedExpense, oldPayer, amountDouble);
             else editGivingMoneyToSomeone(editedExpense, oldPayer, amountDouble, receiver);
@@ -316,40 +301,97 @@ public class EditExpenseCtrl {
         splittyCtrl.fetchExpenses();
     }
 
-    private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer, double amountDouble, Participant receiver) {
-        Participant newReceiver = serverUtils.getParticipantById(receiver.getEvent().getId(),receiver.getUuid());
+    private Double getAmountDouble() {
+        double amountDouble = 0.0;
+        try {
+            if (amount.getText() == null || amount.getText().isEmpty()) {
+                amountError.setText("An amount is required");
+                amountError.setVisible(true);
+                return null;
+            }
+            amountDouble = Double.parseDouble(amount.getText());
+            if (amountDouble <= 0.0) {
+                amountError.setVisible(true);
+                amountError.setText("Amount cannot be negative or zero*");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            amountError.setVisible(true);
+            amountError.setText("Not a number, format e.g 13.99");
+            return null;
+        }
+        return amountDouble;
+    }
+
+    private Type getType() {
+        Type type = (Type) category.getValue();
+        if (type == null) type= Type.Other;
+        return type;
+    }
+
+    private Date getDate() {
+        Date date = null;
+        //link these to participants and then add the expense
+        if (dateSelect.getValue() == null) {
+            dateSelect.setPromptText("invalid Date");
+        }
+
+        LocalDate localDate = dateSelect.getValue();
+        date = java.sql.Date.valueOf(localDate);
+        return date;
+    }
+
+    private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer,
+                                          double amountDouble, Participant receiver) {
+        Participant newReceiver = serverUtils.getParticipantById(receiver.getEvent().getId(),
+            receiver.getUuid());
         serverUtils.saveDebt(
-            new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(), newReceiver.getUuid()));
-        serverUtils.updateParticipant(newReceiver.getUuid(),
-            new ParticipantDTO(newReceiver.getName(), newReceiver.getBalance() - amountDouble, newReceiver.getIBan(),
-                newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(), newReceiver.getEvent().getId(),
+            new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(),
                 newReceiver.getUuid()));
-        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(), oldPayer.getUuid());
+        serverUtils.updateParticipant(newReceiver.getUuid(),
+            new ParticipantDTO(newReceiver.getName(),
+                newReceiver.getBalance() - amountDouble, newReceiver.getIBan(),
+                newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(),
+                newReceiver.getEvent().getId(),
+                newReceiver.getUuid()));
+        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(),
+            oldPayer.getUuid());
         serverUtils.saveDebt(
-            new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+            new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(),
+                newPayer.getUuid()));
         serverUtils.updateParticipant(newPayer.getUuid(),
-            new ParticipantDTO(newPayer.getName(), newPayer.getBalance() + amountDouble, newPayer.getIBan(),
-                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(), newPayer.getEvent().getId(),
+            new ParticipantDTO(newPayer.getName(),
+                newPayer.getBalance() + amountDouble, newPayer.getIBan(),
+                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
+                newPayer.getEvent().getId(),
                 newPayer.getUuid()));
     }
 
-    private void editSharedExpense(Expense editedExpense, Participant oldPayer, double amountDouble) {
+    private void editSharedExpense(Expense editedExpense,
+                                   Participant oldPayer, double amountDouble) {
         double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
         for (Participant oldP : owing) {
-            Participant p = serverUtils.getParticipantById(oldP.getEvent().getId(),oldP.getUuid());
+            Participant p = serverUtils.getParticipantById(oldP.getEvent().getId(),
+                oldP.getUuid());
             serverUtils.saveDebt(
-                new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(), p.getUuid()));
+                new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(),
+                    p.getUuid()));
             serverUtils.updateParticipant(p.getUuid(),
-                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
+                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson
+                    , p.getIBan(),
                     p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
                     p.getUuid()));
         }
-        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(), oldPayer.getUuid());
+        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(),
+            oldPayer.getUuid());
         serverUtils.saveDebt(
-            new DebtDTO(amountDouble - amountPerPerson, eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+            new DebtDTO(amountDouble - amountPerPerson,
+                eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
         serverUtils.updateParticipant(newPayer.getUuid(),
-            new ParticipantDTO(newPayer.getName(), newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
-                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(), newPayer.getEvent().getId(),
+            new ParticipantDTO(newPayer.getName(),
+                newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
+                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
+                newPayer.getEvent().getId(),
                 newPayer.getUuid()));
     }
 
@@ -361,7 +403,33 @@ public class EditExpenseCtrl {
     // This part is never used because expenses doesn't save who should pay for it only the payer
     // this should be changed eventually but that is not part of the ExpenseController
 
-    public void setSplitListsUp() {
+    public void setListViewsUp() {
+        setSplitListUp();
+        setReceiverListUp();
+    }
+
+    private void setReceiverListUp() {
+        receiverListView.setItems(rest);
+        receiverListView.setCellFactory(
+            new Callback<ListView<Participant>, ListCell<Participant>>() {
+                @Override
+                public ListCell<Participant> call(ListView<Participant> participantListView) {
+                    return new ListCell<>(){
+                        @Override
+                        protected void updateItem(Participant participant, boolean b) {
+                            super.updateItem(participant, b);
+                            if(participant == null || b){
+                                setText(null);
+                            }else{
+                                setText(participant.getName());
+                            }
+                        }
+                    };
+                }
+            });
+    }
+
+    private void setSplitListUp() {
         splitList.setItems(rest);
         splitList.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
             @Override
@@ -394,24 +462,6 @@ public class EditExpenseCtrl {
                 };
             }
         });
-        receiverListView.setItems(rest);
-        receiverListView.setCellFactory(
-            new Callback<ListView<Participant>, ListCell<Participant>>() {
-                @Override
-                public ListCell<Participant> call(ListView<Participant> participantListView) {
-                    return new ListCell<>(){
-                        @Override
-                        protected void updateItem(Participant participant, boolean b) {
-                            super.updateItem(participant, b);
-                            if(participant == null || b){
-                                setText(null);
-                            }else{
-                                setText(participant.getName());
-                            }
-                        }
-                    };
-                }
-            });
     }
 
 
@@ -433,12 +483,14 @@ public class EditExpenseCtrl {
         }
         list.addAll(allparticipants);
         setComboboxUp(list);
-        setSplitListsUp();
+        setListViewsUp();
         setCategoriesUp();
         setTogglesUp();
         this.expense = expense;
         owing.clear();
-        List<Participant> owingFromDb = serverUtils.getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId()).stream().filter(x -> x.getBalance() < 0).map(x -> x.getParticipant()).toList();
+        List<Participant> owingFromDb = serverUtils.getDebtByExpense(expense.getEvent().getId(),
+            expense.getExpenseId()).stream().filter(x -> x.getBalance() < 0)
+            .map(x -> x.getParticipant()).toList();
         personComboBox.setValue(expense.getPayer());
         dateSelect.setValue(expense.getDate().toInstant()
             .atZone(ZoneId.systemDefault())

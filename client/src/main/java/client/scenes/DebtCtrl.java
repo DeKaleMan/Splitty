@@ -171,8 +171,14 @@ public class DebtCtrl implements Initializable {
             Participant payer = p.getPayer();
             Participant payee = p.getPayee();
             if(p.isPaid()){
-                serverUtils.updateParticipant(payer.getUuid(), new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(), payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),payer.getEvent().getId(),payer.getUuid()));
-                serverUtils.updateParticipant(payee.getUuid(), new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(), payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),payee.getEvent().getId(),payee.getUuid()));
+                serverUtils.updateParticipant(payer.getUuid(),
+                    new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(),
+                        payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),
+                        payer.getEvent().getId(),payer.getUuid()));
+                serverUtils.updateParticipant(payee.getUuid(),
+                    new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(),
+                        payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),
+                        payee.getEvent().getId(),payee.getUuid()));
             }
         }
     }

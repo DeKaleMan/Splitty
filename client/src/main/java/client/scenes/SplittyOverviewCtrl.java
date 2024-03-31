@@ -22,10 +22,8 @@ import javafx.scene.layout.AnchorPane;
 
 import javafx.util.Duration;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-
 
 
 import javax.inject.Inject;
@@ -104,8 +102,9 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     private ListView<Participant> participantListView;
+
     @Inject
-    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
+    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
 
@@ -120,7 +119,7 @@ public class SplittyOverviewCtrl implements Initializable {
         mainCtrl.setButtonRedProperty(leaveButton);
         mainCtrl.setButtonRedProperty(leaveConfirmationButton);
         mainCtrl.setButtonGreenProperty(cancelLeaveButton);
-        participantListView.setCellFactory(param -> new ListCell<Participant>(){
+        participantListView.setCellFactory(param -> new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
@@ -136,7 +135,7 @@ public class SplittyOverviewCtrl implements Initializable {
 //        fetchParticipants();
     }
 
-    public void setEventCode(int eventCode){
+    public void setEventCode(int eventCode) {
         this.eventCode = eventCode;
     }
 
@@ -144,15 +143,16 @@ public class SplittyOverviewCtrl implements Initializable {
      * Shows the invitation scene (sends it the title to retain it)
      */
     @FXML
-    public void sendInvitesOnClick(){
+    public void sendInvitesOnClick() {
         mainCtrl.showInvitation(titleLabel.getText());
     }
 
     /**
      * Sets the title of the event
+     *
      * @param title event's title
      */
-    public void setTitle(String title){
+    public void setTitle(String title) {
         titleLabel.setText(title);
     }
 
@@ -163,13 +163,13 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     @FXML
-    public void viewParticipantManager(){
+    public void viewParticipantManager() {
         mainCtrl.showParticipantManager(titleLabel.getText());
     }
 
 
     @FXML
-    public void showStatistics(){
+    public void showStatistics() {
         mainCtrl.showStatistics(titleLabel.getText(), this.eventCode);
     }
 
@@ -184,19 +184,22 @@ public class SplittyOverviewCtrl implements Initializable {
             mainCtrl.showStartScreen();
         }
     }
+
     @FXML
-    private void viewDebts(){
+    private void viewDebts() {
         mainCtrl.viewDeptsPerEvent();
     }
 
 
-    public void addExpense(String description, Type type, Date date, Double totalExpense, String payerEmail){
-        try{
-            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type, date, totalExpense, payerEmail,true);
+    public void addExpense(String description, Type type, Date date,
+                           Double totalExpense, String payerEmail) {
+        try {
+            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type,
+                date, totalExpense, payerEmail, true);
             serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
             serverUtils.generatePaymentsForEvent(eventCode);
-        }catch (NotFoundException ep) {
+        } catch (NotFoundException ep) {
             // Handle 404 Not Found error
             // Display an error message or log the error
             System.err.println("Expense creation failed: Resource not found.");
@@ -207,19 +210,22 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     @FXML
-    public void editExpense(){
-        Expense toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel().getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
+    public void editExpense() {
+        Expense toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel()
+            .getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
 
-        if(toEdit == null){
+        if (toEdit == null) {
             throw new NoSuchElementException("No element selected");
         }
         mainCtrl.showEditExpense(toEdit);
     }
+
     @FXML
     public Expense deleteExpense() {
         Expense toDelete;
         try {
-            toDelete = ((ListView<Expense>) expensesTabPane.getSelectionModel().getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
+            toDelete = ((ListView<Expense>) expensesTabPane.getSelectionModel()
+                .getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
             if (toDelete == null) {
                 throw new NoSuchElementException();
             }
@@ -228,20 +234,20 @@ public class SplittyOverviewCtrl implements Initializable {
             noExpenseError.setVisible(true);
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
             visiblePause.setOnFinished(
-                    event -> noExpenseError.setVisible(false)
+                event -> noExpenseError.setVisible(false)
             );
             visiblePause.play();
             return null;
 
         }
-        try{
+        try {
             serverUtils.deleteExpense(toDelete);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
             expenseNotDeletedError.setVisible(true);
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
             visiblePause.setOnFinished(
-                    event -> expenseNotDeletedError.setVisible(false)
+                event -> expenseNotDeletedError.setVisible(false)
             );
             visiblePause.play();
         }
@@ -252,51 +258,16 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
 
-
     /**
      * fetches all expenses of this event and shows them in the assigned box
      */
-    public void fetchExpenses(){
-        Callback<ListView<Expense>, ListCell<Expense>> cellFactory = new Callback<ListView<Expense>, ListCell<Expense>>() {
-            @Override
-            public ListCell<Expense> call(ListView<Expense> expenseListView) {
-                return new ListCell<Expense>(){
-                    @Override
-                    protected void updateItem(Expense expense, boolean b) {
-                        super.updateItem(expense, b);
-                        if(expense == null || b) setGraphic(null);
-                        else {
-                            GridPane grid = new GridPane();
-                            Date date = expense.getDate();
-                            Label dateLabel = new Label(
-                                date.getDate() + "." +(date.getMonth() < 9 ? "0" : "") + (date.getMonth()+1) + "." + (date.getYear()+1900));
-                            dateLabel.setStyle("-fx-font-size: 12px");
-                            dateLabel.setPrefWidth(70);
-                            List<String> involved =
-                                serverUtils.getDebtByExpense(expense.getEvent().getId(),
-                                        expense.getExpenseId()).stream()
-                                    .map(x -> x.getParticipant().getName()).toList();
-                            Text mainInfo = new Text();
-                            if(expense.isSharedExpense()){
-                                mainInfo.setText(expense.getPayer().getName() + " paid " +
-                                    expense.getTotalExpense() + " for " + expense.getType());
-                            }else{
-                                mainInfo.setText(expense.getPayer().getName() + " gave " +
-                                    expense.getTotalExpense() + " to " + involved.stream().filter(x -> !x.equals(expense.getPayer().getName())).findFirst().get());
-                            }
-                            grid.add(dateLabel, 0, 0);
-                            grid.add(mainInfo, 1, 0);
-                            grid.add(new Text(involved.toString()), 1, 1);
-                            setGraphic(grid);
-                        }
-                    }
-                };
-            }
-        };
+    public void fetchExpenses() {
+        Callback<ListView<Expense>, ListCell<Expense>>
+            cellFactory = getExpenseListCellFactory();
         List<Expense> expenses = new ArrayList<>();
-        try{
+        try {
             expenses = serverUtils.getExpense(eventCode);
-        }catch (BadRequestException e){
+        } catch (BadRequestException e) {
             System.out.println(e);
         }
         allExpensesList = new ListView<>();
@@ -304,30 +275,80 @@ public class SplittyOverviewCtrl implements Initializable {
         allExpensesList.setCellFactory(cellFactory);
         allExpenses.setContent(allExpensesList);
         paidByMeList = new ListView<>();
-        paidByMeList.getItems().addAll(expenses.stream().filter(x -> x.getPayer().getUuid().equals(config.getId())).toList());
+        paidByMeList.getItems().addAll(expenses
+            .stream()
+            .filter(x -> x.getPayer().getUuid().equals(config.getId()))
+            .toList()
+        );
         paidByMeList.setCellFactory(cellFactory);
         paidByMe.setContent(paidByMeList);
         includingMeList = new ListView<>();
-        for(Expense e : expenses){
-            List<String> including = serverUtils.getDebtByExpense(e.getEvent().getId(), e.getExpenseId()).stream().map(x -> x.getParticipant().getUuid()).toList();
-            if(including.contains(config.getId())) includingMeList.getItems().add(e);
+        for (Expense e : expenses) {
+            List<String> including = serverUtils.getDebtByExpense(e.getEvent().getId(),
+                e.getExpenseId()).stream().map(x -> x.getParticipant().getUuid()).toList();
+            if (including.contains(config.getId())) includingMeList.getItems().add(e);
         }
         includingMeList.setCellFactory(cellFactory);
         involvingMe.setContent(includingMeList);
     }
 
-    public void fetchParticipants(){
+    private Callback<ListView<Expense>, ListCell<Expense>> getExpenseListCellFactory() {
+        Callback<ListView<Expense>,
+            ListCell<Expense>> cellFactory = new Callback<ListView<Expense>, ListCell<Expense>>() {
+                @Override
+                public ListCell<Expense> call(ListView<Expense> expenseListView) {
+                    return new ListCell<Expense>() {
+                        @Override
+                        protected void updateItem(Expense expense, boolean b) {
+                            super.updateItem(expense, b);
+                            if (expense == null || b) setGraphic(null);
+                            else {
+                                GridPane grid = new GridPane();
+                                Date date = expense.getDate();
+                                Label dateLabel = new Label(
+                                    date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
+                                        + (date.getMonth() + 1) + "."
+                                        + (date.getYear() + 1900));
+                                dateLabel.setStyle("-fx-font-size: 12px");
+                                dateLabel.setPrefWidth(70);
+                                List<String> involved =
+                                    serverUtils.getDebtByExpense(expense.getEvent().getId(),
+                                            expense.getExpenseId()).stream()
+                                        .map(x -> x.getParticipant().getName()).toList();
+                                Text mainInfo = new Text();
+                                if (expense.isSharedExpense()) {
+                                    mainInfo.setText(expense.getPayer().getName() + " paid " +
+                                        expense.getTotalExpense() + " for " + expense.getType());
+                                } else {
+                                    mainInfo.setText(expense.getPayer().getName() + " gave " +
+                                        expense.getTotalExpense() + " to " +
+                                        involved
+                                            .stream()
+                                            .filter(x -> !x.equals(expense.getPayer().getName()))
+                                            .findFirst().get());
+                                }
+                                grid.add(dateLabel, 0, 0);
+                                grid.add(mainInfo, 1, 0);
+                                grid.add(new Text(involved.toString()), 1, 1);
+                                setGraphic(grid);
+                            }
+                        }
+                    };
+                }
+            };
+        return cellFactory;
+    }
+
+    public void fetchParticipants() {
 
         List<Participant> participants = new ArrayList<>();
-        try{
+        try {
             participants = serverUtils.getParticipants(eventCode);
-        }catch (BadRequestException | NotFoundException e){
+        } catch (BadRequestException | NotFoundException e) {
             System.out.println(e);
         }
         participantListView.setItems(FXCollections.observableArrayList(participants));
     }
-
-
 
 
     public void setExpensesText(String text) {
@@ -383,34 +404,38 @@ public class SplittyOverviewCtrl implements Initializable {
     public void editEvent() {
         mainCtrl.editEvent();
     }
+
     @FXML
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.N,
-                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+            KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
         if (k.match(press)) {
             showAddExpense();
         }
 
     }
+
     public void setAdmin(Boolean admin) {
         this.admin = admin;
     }
+
     public void setEventCreatedLabel() {
         eventCreatedLabel.setVisible(true);
         PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
         visiblePause.setOnFinished(
-                event1 -> eventCreatedLabel.setVisible(false)
+            event1 -> eventCreatedLabel.setVisible(false)
         );
         visiblePause.play();
     }
+
     public void setJoinedEventLabel() {
         joinedEventLabel.setVisible(true);
         PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
         visiblePause.setOnFinished(
-                event1 -> joinedEventLabel.setVisible(false)
+            event1 -> joinedEventLabel.setVisible(false)
         );
         visiblePause.play();
     }
