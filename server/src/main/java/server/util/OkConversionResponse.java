@@ -1,21 +1,23 @@
 package server.util;
 
+import commons.Conversion;
+
 public class OkConversionResponse implements ConversionResponse{
 
-    private double amount;
+    private Conversion conversion;
     private String message;
 
-    public OkConversionResponse(double amount, String message) {
-        this.amount = amount;
+    public OkConversionResponse(Conversion conversion, String message) {
+        this.conversion = conversion;
         this.message = message;
     }
 
-    public double getAmount() {
-        return amount;
+    public Conversion getConversion() {
+        return conversion;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setConversion(Conversion conversion) {
+        this.conversion = conversion;
     }
 
     public String getMessage() {
