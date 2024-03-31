@@ -4,23 +4,21 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
-
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class StartScreenCtrl implements Initializable {
@@ -38,6 +36,10 @@ public class StartScreenCtrl implements Initializable {
     private Label joinEventText;
     @FXML
     private TextField joinEventTextField;
+    @FXML
+    public Label invalidCodeError;
+    @FXML
+    public Label codeNotFoundError;
 
     @FXML
     private Button adminLogin;
@@ -55,7 +57,12 @@ public class StartScreenCtrl implements Initializable {
     private ImageView imageView;
 
     @FXML
-    private ListView eventListView;
+    private ListView<Event> eventListView;
+    private List<Event> events;
+    @FXML
+    public Label settingsSavedLabel;
+    @FXML
+    public Label eventCreatedLabel;
 
     @FXML
     private ProgressIndicator progress;
@@ -69,9 +76,10 @@ public class StartScreenCtrl implements Initializable {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.config = config;
-
+        events = new ArrayList<>();
     }
-    // list the 3 most recent events on the start page
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -95,10 +103,13 @@ public class StartScreenCtrl implements Initializable {
                 }
             }
         });
-
-        List<Event> events = mainCtrl.getMyEvents();
-        if (events != null) {
-            eventListView.setItems(FXCollections.observableArrayList(events));
+        events = mainCtrl.getMyEvents();
+        if(events!=null) {
+            ObservableList<Event> newEventList = FXCollections.observableArrayList();
+            ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
+            currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
+                    .forEach(newEventList::add);
+            eventListView.setItems(newEventList);
         }
     }
 
@@ -135,19 +146,32 @@ public class StartScreenCtrl implements Initializable {
         //This will happen in the CreateEventCtrl class!
     }
 
+
+
     /**
      * Join an event with the title specified in the joinEventTextField
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent() {
-        eventCode = Integer.parseInt(joinEventTextField.getText());
-        Participant p = mainCtrl.joinEvent(eventCode);
-        if (p == null) {
-            // show error message
-            return;
+        int eventCode;
+        try {
+            String idString = joinEventTextField.getText();
+            eventCode = Integer.parseInt(idString);
+            Participant p = mainCtrl.joinEvent(eventCode);
+            if (p == null) {
+                // show error message
+                return;
+            }
+            mainCtrl.showSplittyOverview(eventCode);
+            System.out.println("Joined event: " + joinEventTextField.getText());
+        } catch (NumberFormatException e) {
+            codeNotFoundError.setVisible(false);
+            invalidCodeError.setVisible(true);
+        } catch (RuntimeException e) {
+            invalidCodeError.setVisible(false);
+            codeNotFoundError.setVisible(true);
         }
-        mainCtrl.showSplittyOverview(eventCode);
-        System.out.println("Joined event: " + joinEventTextField.getText());
+        mainCtrl.setConfirmationJoinedEvent();
     }
 
     @FXML
@@ -198,6 +222,9 @@ public class StartScreenCtrl implements Initializable {
         // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
         mainCtrl.language = config.getLanguage();
+        if (mainCtrl.language == null) {
+            mainCtrl.language = "en";
+        }
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(mainCtrl.language);
@@ -258,6 +285,20 @@ public class StartScreenCtrl implements Initializable {
         }
     }
 
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.N,
+                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k.match(press)) {
+            createEvent();
+        }
+    }
+
+    public void resetErrors(KeyEvent actionEvent) {
+        codeNotFoundError.setVisible(false);
+        invalidCodeError.setVisible(false);
+    }
+
     public void setFlag(Image image) {
         flag.setImage(image);
     }
@@ -280,4 +321,21 @@ public class StartScreenCtrl implements Initializable {
         });
     }
 
+    public void addEvent(Event event) {
+        if (events == null) {
+            events = new ArrayList<>();
+        }
+        events.add(event);
+        ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
+        eventListView.setItems(currentEventList);
+    }
+
+    public void setSettingsSavedLabel() {
+        settingsSavedLabel.setVisible(true);
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(5));
+        visiblePause.setOnFinished(
+                event1 -> settingsSavedLabel.setVisible(false)
+        );
+        visiblePause.play();
+    }
 }

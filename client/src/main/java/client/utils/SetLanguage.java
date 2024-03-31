@@ -32,9 +32,9 @@ public class SetLanguage {
     }
 
     public void changeTo(String lang){
-//        if (lang.equals("en")){
-//            return;
-//        }
+        if (lang.equals("en")){
+            return;
+        }
         setMainScreen(lang);
         setSpittyoverview(lang);
         setAddExpense(lang);
@@ -75,7 +75,6 @@ public class SetLanguage {
         addExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
         addExpenseCtrl.setDescription(translate("Description", "en", lang));
         addExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
-        addExpenseCtrl.setBack(translate("Back", "en", lang));
         addExpenseCtrl.setAdd(translate("Add expense", "en", lang));
         addExpenseCtrl.setAbort(translate("Cancel", "en", lang));
         addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
