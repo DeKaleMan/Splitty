@@ -85,7 +85,7 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Label joinedEventLabel;
 
-    private Config config;
+//    private Config config;
 
     @FXML
     private ListView<Participant> participantListView;
