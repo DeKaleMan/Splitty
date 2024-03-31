@@ -113,6 +113,25 @@ public class StartScreenCtrl implements Initializable {
         }
     }
 
+
+
+    private void setup(Event event, Button button, Label label) {
+        if (event == null) {
+            button.setVisible(false);
+            label.setVisible(false);
+            return;
+        }
+        button.setVisible(true);
+        label.setVisible(true);
+
+        button.setOnAction(something -> {
+            mainCtrl.showSplittyOverview(event.getId());
+        });
+
+        button.setText(event.getName());
+        label.setText(event.getDate() + ": " + event.getDescription());
+    }
+
     /**
      * Creates an event with the title specified in the createEventTextField
      * TO DO - actually create an event

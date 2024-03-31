@@ -22,7 +22,7 @@ Button {
     /* Background color */
     /* -fx-background-color: #DFA80F; */
     -fx-background-color: #4CAF50; /* Green */
-    -fx-text-fill: white;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 12px;
     -fx-alignment: center;
     /* Preferred width and height */
@@ -55,4 +55,3 @@ ListView {
     -fx-font-size: 12px;
     -fx-text-fill: #333;
 }
-

@@ -543,7 +543,7 @@ public class ServerUtils {
     }
 
     public double[] getStatisticsByEventID(int eventID){
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
                 .target(SERVER)
                 .path("/api/statistics")
                 .queryParam("eventID", eventID)
@@ -553,7 +553,7 @@ public class ServerUtils {
     }
 
     public double getTotalCostEvent(int eventID){
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
                 .target(SERVER)
                 .path("/api/statistics/totalCost")
                 .queryParam("eventID", eventID)

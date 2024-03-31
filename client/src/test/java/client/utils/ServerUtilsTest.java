@@ -21,8 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -141,4 +140,61 @@ class ServerUtilsTest {
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
+
+    @Test
+    public void getStatisticsByEventIDTest() {
+        // Mock setup
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        // Stubbing the response
+        double[] res = {0, 2, 46.5, 99.99};
+        when(mockBuilder.get(double[].class)).thenReturn(res);
+
+        // Calling the method under test
+        double[] statistics = serverUtils.getStatisticsByEventID(1);
+
+        // Verifying the interactions
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("/api/statistics");
+        verify(mockWebTarget).queryParam("eventID", 1);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(double[].class); // Ensure that get method is invoked
+
+        // Verifying the result
+        assertArrayEquals(res, statistics);
+    }
+
+    @Test
+    public void getTotalCostEventTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        // Stubbing the response
+        double res = 20.2;
+        when(mockBuilder.get(double.class)).thenReturn(res);
+
+        // Calling the method under test
+        double statistics = serverUtils.getTotalCostEvent(1);
+
+        // Verifying the interactions
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("/api/statistics/totalCost");
+        verify(mockWebTarget).queryParam("eventID", 1);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(double.class); // Ensure that get method is invoked
+
+        // Verifying the result
+        assertEquals(res, statistics);
+    }
+
+
 }

@@ -1,11 +1,9 @@
-package server.api.testmocks;
-
-import server.api.depinjectionUtils.IOUtil;
+package client.utils;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class IOUtilsTest implements IOUtil {
+public class ClientFileIOutilTest implements ClientFileIOutil {
 
     public File file;
     public String lastWrite;
@@ -36,5 +34,10 @@ public class IOUtilsTest implements IOUtil {
         ArrayList<String> result = new ArrayList<>(ioCalls);
         ioCalls.clear();
         return result;
+    }
+
+    @Override
+    public boolean createFileStructure() {
+        return false;
     }
 }

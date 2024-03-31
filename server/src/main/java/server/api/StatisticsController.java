@@ -33,6 +33,7 @@ public class StatisticsController {
         }
         List<Expense> expenses = exRep.findByEvent(optionalEvent.get());
         double[] stat = new double[4];
+        //order = food, drinks, travel, other
         for (Expense expense : expenses) {
             switch (expense.getType()) {
                 case Food:
@@ -58,6 +59,7 @@ public class StatisticsController {
 
     @GetMapping("/totalCost")
     public ResponseEntity<Double> getTotalCost(@RequestParam("eventID") int eventID){
+
         double totalCost = (exRep.getTotalCostByEvent(eventID));
 
         return ResponseEntity.ok(totalCost);

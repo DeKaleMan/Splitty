@@ -90,8 +90,6 @@ public class AddExpenseCtrl implements Initializable {
     private Button cancel;
     @FXML
     private Button selectAll;
-
-
     @Inject
     public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, SplittyOverviewCtrl splittyCtrl) {
         this.serverUtils = serverUtils;

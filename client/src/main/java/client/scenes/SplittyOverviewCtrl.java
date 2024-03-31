@@ -32,6 +32,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final Config config;
     private boolean admin;
 
     //these are for the css:

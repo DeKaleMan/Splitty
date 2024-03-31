@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import server.api.depinjectionUtils.IOUtil;
+import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
@@ -19,19 +19,15 @@ import java.io.*;
 @RequestMapping("/api/translate")
 public class LanguageController {
 
-    private final IOUtil io;
-    private String filepath;
+    private final ServerIOUtil serverIoUtil;
     private String basepath;
 
     private LanguageResponse translator;
 
     @Autowired
-    public LanguageController(IOUtil ioUtil, LanguageResponse translator) {
-        this.io = ioUtil;
-        this.filepath = getClass().getClassLoader().getResource("Languages/nl.json").getFile();
-        this.filepath = this.filepath.replaceAll("%20", " ");
-        this.basepath = getClass().getClassLoader().getResource("Languages/").getFile();
-        this.basepath = this.basepath.replaceAll("%20", " ");
+    public LanguageController(ServerIOUtil serverIoUtil, LanguageResponse translator) {
+        this.serverIoUtil = serverIoUtil;
+        this.basepath = this.serverIoUtil.getLanguagesFolder() + File.separator;
         this.translator = translator;
     }
 
