@@ -184,7 +184,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     private void viewDebts() {
-        mainCtrl.viewDeptsPerEvent();
+        mainCtrl.viewDeptsPerEvent(eventCode);
     }
 
 

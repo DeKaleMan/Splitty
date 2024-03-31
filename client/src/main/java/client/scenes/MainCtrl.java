@@ -294,10 +294,10 @@ public class MainCtrl {
     /**
      * this shows the statistics window
      */
-    public void viewDeptsPerEvent(){
+    public void viewDeptsPerEvent(int eventCode){
         primaryStage.setTitle("Debts per event");
         primaryStage.setScene(debts);
-        debtCtrl.refresh();
+        debtCtrl.refresh(eventCode);
     }
 
     public void showSettings() {

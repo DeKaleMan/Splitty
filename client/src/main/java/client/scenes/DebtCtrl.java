@@ -46,8 +46,7 @@ public class DebtCtrl implements Initializable {
 
     private ObservableList<Payment> payments;
 
-    //TODO make eventCode not hardcoded
-    private int eventCode = 1;
+    private int eventCode;
 
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
@@ -183,7 +182,8 @@ public class DebtCtrl implements Initializable {
         }
     }
 
-    public void refresh() {
+    public void refresh(int eventCode) {
+        this.eventCode = eventCode;
         payments.clear();
         payments.addAll(
             serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
