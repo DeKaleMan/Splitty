@@ -22,6 +22,7 @@ public class ExpenseDTO {
 
     private String payerUuid; // the participant who paid
 
+    private boolean sharedExpense;
 
 
     public ExpenseDTO() {
@@ -29,13 +30,14 @@ public class ExpenseDTO {
     }
 
     public ExpenseDTO(int eventId, String description, Type type, Date date,
-                   double totalExpense, String payerUuid) {
+                   double totalExpense, String payerUuid, boolean sharedExpense) {
         this.eventId = eventId;
         this.description = description;
         this.type = type;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payerUuid = payerUuid;
+        this.sharedExpense = sharedExpense;
     }
 
     public String getDescription() {
@@ -85,6 +87,14 @@ public class ExpenseDTO {
         return eventId;
     }
 
+    public void setSharedExpense(boolean sharedExpense) {
+        this.sharedExpense = sharedExpense;
+    }
+
+    public boolean isSharedExpense() {
+        return sharedExpense;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,6 +102,7 @@ public class ExpenseDTO {
         ExpenseDTO that = (ExpenseDTO) o;
         return eventId == that.eventId &&
             Double.compare(totalExpense, that.totalExpense) == 0 &&
+            sharedExpense == that.sharedExpense &&
             Objects.equals(description, that.description) && type == that.type &&
             Objects.equals(date, that.date) &&
             Objects.equals(payerUuid, that.payerUuid);
@@ -99,7 +110,8 @@ public class ExpenseDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, description, type, date, totalExpense, payerUuid);
+        return Objects.hash(eventId, description, type, date, totalExpense, payerUuid,
+            sharedExpense);
     }
 
     @Override

@@ -120,6 +120,25 @@ public class ServerUtils {
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
 
+    public Expense updateExpense(int expenseId, ExpenseDTO expenseDTO){
+        List<Debt> debts = getDebtByExpense(expenseDTO.getEventId(), expenseId);
+        for(Debt d : debts){
+            Participant p = d.getParticipant();
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+
+        deleteDebtsOfExpense(expenseDTO.getEventId(), expenseId);
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/expenses/{eventId}/{expenseId}")
+            .resolveTemplate("eventId", expenseDTO.getEventId())
+            .resolveTemplate("expenseId", expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .put(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
+    }
+
     /**
      * Gets debt by event code.
      *
@@ -186,22 +205,40 @@ public class ServerUtils {
             .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
     }
 
+    public List<Debt> deleteDebtsOfExpense(int eventId, int expenseId){
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(SERVER).path("api/debts/{eventId}/{expenseId}")
+            .resolveTemplate("eventId", eventId)
+            .resolveTemplate("expenseId",expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete(new GenericType<List<Debt>>(){});
+    }
+
 
     /**
      * Delete expense.
      *
      * @param expense the expense
      */
-    public void deleteExpense(Expense expense) {
-        ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
+    public Expense deleteExpense(Expense expense) {
+        List<Debt> debts = getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId());
+        for(Debt d : debts){
+            Participant p = d.getParticipant();
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+        deleteDebtsOfExpense(expense.getEvent().getId(), expense.getExpenseId());
 
-        ClientBuilder.newClient(new ClientConfig())
+        return ClientBuilder.newClient(new ClientConfig())
             .target(SERVER)
             .path("api/expenses")
             .queryParam("eventID", expense.getEvent().id)
             .queryParam("expenseID", expense.getExpenseId())
             .request(APPLICATION_JSON)
-            .delete();
+            .accept(APPLICATION_JSON)
+            .delete(Expense.class);
     }
 
 
@@ -377,8 +414,6 @@ public class ServerUtils {
         session.send(destination, o);
     }
 
-
-
     public Participant createParticipant(ParticipantDTO p) {
         Response response = ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/participants")
@@ -499,8 +534,8 @@ public class ServerUtils {
         Stack<Pair<String, Double>> rest = new Stack<>();
         List<PaymentDTO> payments = new ArrayList<>();
         for (Participant p : participants) {
-            if (p.getBalance() > 0) banks.add(new Pair<>(p.getUuid(), p.getBalance()));
-            else if (p.getBalance() < 0) rest.add(new Pair<>(p.getUuid(), p.getBalance()));
+            if (compareDouble(p.getBalance(),0,0.001) > 0) banks.add(new Pair<>(p.getUuid(), p.getBalance()));
+            else if (compareDouble(p.getBalance(),0,0.001) < 0) rest.add(new Pair<>(p.getUuid(), p.getBalance()));
         }
         generateDTOs(eventCode, rest, banks, payments);
         if (!rest.isEmpty() || !banks.isEmpty())

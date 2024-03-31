@@ -3,7 +3,9 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.Participant;
 import commons.Payment;
+import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,36 +33,35 @@ public class DebtCtrl implements Initializable {
     private Config config;
 
     @FXML
-    private ListView paymentInstructionListView;
+    private ListView<Payment> paymentInstructionListView;
     @FXML
     private Label titlelabel;
 
     @FXML
     private Button undo;
 
-    private Payment undone;
+    private Stack<Payment> undone;
 
     private List<Payment> changed;
 
     private ObservableList<Payment> payments;
 
-    //TODO make eventCode not hardcoded
-    private int eventCode = 1;
+    private int eventCode;
 
     @Inject
     public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
-        changed = new ArrayList<>();
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         mainCtrl.setButtonRedProperty(undo);
-        payments = FXCollections.observableArrayList(
-            serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
+
+        payments = FXCollections.observableArrayList();
         this.paymentInstructionListView.setItems(payments);
         paymentInstructionListView.setCellFactory(
             new Callback<ListView<Payment>, ListCell<Payment>>() {
@@ -109,9 +110,12 @@ public class DebtCtrl implements Initializable {
             emailInfo.setHgap(10.0);
         }
         info.getChildren().add(emailInfo);
-        if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null) {
-            info.getChildren().add(new Text("Banking info available\n" +
-                "IBAN: " + payment.getPayee().getIBan() + "\nBIC: " + payment.getPayee().getBIC()));
+        if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null &&
+            payment.getPayee().getAccountHolder() != null) {
+            info.getChildren().add(new Text("Banking info available" +
+                "\n\tAccount Holder: " + payment.getPayee().getAccountHolder() +
+                "\n\tIBAN: " + payment.getPayee().getIBan() +
+                "\n\tBIC: " + payment.getPayee().getBIC()));
         } else {
             info.getChildren().add(new Text("Incomplete or no banking info available"));
         }
@@ -141,7 +145,8 @@ public class DebtCtrl implements Initializable {
     }
 
     @FXML
-    public void back(){
+    public void back() {
+        undo.setVisible(false);
         persistPayments(changed);
         mainCtrl.showSplittyOverview(eventCode);
     }
@@ -152,16 +157,38 @@ public class DebtCtrl implements Initializable {
             .getParent().getParent()).getItem();
         System.out.println("removed " + p.getId());
         markAsPaid(p);
-        undone = p;
+        undone.push(p);
         undo.setVisible(true);
     }
 
     private void persistPayments(List<Payment> payments) {
         for (Payment p : payments) {
             serverUtils.updatePayment(
-                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode, p.getAmount(),
+                new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode,
+                    p.getAmount(),
                     p.isPaid()), p.getId());
+            Participant payer = p.getPayer();
+            Participant payee = p.getPayee();
+            if(p.isPaid()){
+                serverUtils.updateParticipant(payer.getUuid(),
+                    new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(),
+                        payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),
+                        payer.getEvent().getId(),payer.getUuid()));
+                serverUtils.updateParticipant(payee.getUuid(),
+                    new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(),
+                        payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),
+                        payee.getEvent().getId(),payee.getUuid()));
+            }
         }
+    }
+
+    public void refresh(int eventCode) {
+        this.eventCode = eventCode;
+        payments.clear();
+        payments.addAll(
+            serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
+        undone = new Stack<>();
+        changed = new ArrayList<>();
     }
 
     public void setTitlelabel(String title) {
@@ -184,10 +211,11 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void undo() {
-        changed.remove(undone);
-        undone.setPaid(false);
-        this.paymentInstructionListView.getItems().add(undone);
-        undo.setVisible(false);
+        Payment p = undone.pop();
+        changed.remove(p);
+        p.setPaid(false);
+        this.paymentInstructionListView.getItems().add(p);
+        if (undone.isEmpty()) undo.setVisible(false);
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {

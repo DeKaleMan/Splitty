@@ -50,14 +50,14 @@ class ExpenseControllerTest {
     void nullSaveDate() {
         var actual =
             sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-                null, 0.0, "uuid"));
+                null, 0.0, "uuid",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
     @Test
     void nullSaveUuid() {
         var actual = sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-            new Date(), 0.0, null));
+            new Date(), 0.0, null,true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
@@ -65,14 +65,14 @@ class ExpenseControllerTest {
     void nullSaveNegative() {
         var actual =
             sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-                new Date(), -1.0, "uuid"));
+                new Date(), -1.0, "uuid",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
     @Test
     void emptyUuid() {
         var actual = sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-            new Date(), 0.0, ""));
+            new Date(), 0.0, "",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
@@ -81,9 +81,9 @@ class ExpenseControllerTest {
         Date date = new Date();
         var actual =
             sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
-                date, 0.0, "uuid"));
+                date, 0.0, "uuid",true));
         assertEquals(new Expense(event1, "", Type.Drinks,
-                date, 0.0, p1),
+                date, 0.0, p1,true),
             actual.getBody());
         assertEquals("save", expenseRepository.methods.getLast());
     }
@@ -92,11 +92,11 @@ class ExpenseControllerTest {
     void testGetByEventCode() {
         Date date = new Date();
         var e1 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, p1);
+            date, 0.0, p1,true);
         var e2 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, p1);
+            date, 0.0, p1,true);
         var e3 = new Expense(event2, "", Type.Drinks,
-            date, 0.0, p1);
+            date, 0.0, p1,true);
         List<Expense> expected = List.of(e1, e2);
         expenseRepository.expenses.add(e1);
         expenseRepository.expenses.add(e2);
@@ -110,11 +110,11 @@ class ExpenseControllerTest {
     void testGetByEventCodeAndPayerEmail() {
         Date date = new Date();
         var e1 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, p1);
+            date, 0.0, p1,true);
         var e2 = new Expense(event1, "", Type.Drinks,
-            date, 0.0, p2);
+            date, 0.0, p2,true);
         var e3 = new Expense(event2, "", Type.Drinks,
-            date, 0.0, p3);
+            date, 0.0, p3,true);
         List<Expense> expected = List.of(e1);
         expenseRepository.expenses.add(e1);
         expenseRepository.expenses.add(e2);
@@ -130,7 +130,7 @@ class ExpenseControllerTest {
         assertEquals(NOT_FOUND, actual.getStatusCode());
         Date date = new Date();
         ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
-                date, 0.0, "uuid");
+                date, 0.0, "uuid",true);
         var actual2 = sut.deleteExpenseByEventIdAndExpenseId(event1.id, -33);
         assertEquals(NOT_FOUND, actual.getStatusCode());
         // TODO the one where you check whether the eventCode is incorrect and the expenseID is correct,
