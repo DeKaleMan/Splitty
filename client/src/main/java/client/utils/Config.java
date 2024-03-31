@@ -1,12 +1,11 @@
 package client.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Currency;
 
-import java.util.UUID;
 import java.io.*;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Config {
     private String connection;
@@ -42,32 +41,22 @@ public class Config {
      * the write method is called which sets every field to default right after the program starts.
      */
     public void read() {
+        ClientFileIOutilActual clientFileIOutil = new ClientFileIOutilActual();
+        ObjectMapper objectMapper = new ObjectMapper();
+        clientFileIOutil.createFileStructure();
         try {
-            String filepath = getClass().getClassLoader().getResource("config").getPath();
-            filepath = filepath.replaceAll("%20", " ");
-            File file = new File(filepath);
+            String filepath = clientFileIOutil.getConfigFile();
+            Config tmpConfig = objectMapper.readValue(new File(filepath), Config.class);
 
-            Scanner sc = new Scanner(file);
-
-            String con = sc.next();
-            String nullString = "null";
-            if (nullString.equals(con)) {
-                connection = null;
-            } else {
-                connection = con;
-            }
-            String lang = sc.next();
-            //language = switchLanguage(lang);
-            language = lang;
-            String curr = sc.next();
-            currency = Currency.valueOf(curr);
-            String em = sc.next();
-            if (nullString.equals(em)) {
-                email = null;
-            } else {
-                email = em;
-            }
-            id = sc.next();
+            // Assign all fields to the config singleton
+            this.bic = tmpConfig.getBic();
+            this.id = tmpConfig.getId();
+            this.email = tmpConfig.getEmail();
+            this.iban = tmpConfig.getIban();
+            this.connection = tmpConfig.getConnection();
+            this.currency = tmpConfig.getCurrency();
+            this.language = tmpConfig.getLanguage();
+            this.name = tmpConfig.getName();
         } catch (NoSuchElementException | IOException e) {
             if (!write()) {
                 System.out.println("Config file could not be created");
@@ -82,37 +71,15 @@ public class Config {
      * @return
      */
     public boolean write() {
+        ClientFileIOutilActual clientFileIOutil = new ClientFileIOutilActual();
+        clientFileIOutil.createFileStructure();
         try {
-            String filepath = getClass().getClassLoader().getResource("config").getPath();
-            filepath = filepath.replaceAll("%20", " ");
-            FileWriter writer = new FileWriter(filepath);
+            String filepath = clientFileIOutil.getConfigFile();
 
-            if (connection == null) {
-                writer.write("null ");
-            } else {
-                writer.write(connection + " ");
-            }
-            if (language == null) {
-                writer.write("en ");
-            } else {
-                writer.write(language+ " ");
-            }
-            if (currency == null) {
-                writer.write("EUR ");
-            } else {
-                writer.write(currency + " ");
-            }
-            if (email == null) {
-                writer.write("null ");
-            } else {
-                writer.write(email + " ");
-            }
-            if (id == null) {
-                id = UUID.randomUUID().toString();
-            }
-            writer.write(id + " ");
-            writer.flush();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonString = objectMapper.writeValueAsString(this);
 
+            clientFileIOutil.write(jsonString, new File(filepath));
         } catch (IOException e) {
             System.out.println("File not found");
             return false;

@@ -183,7 +183,7 @@ public class HttpResponseTest implements HttpResponse {
                   }
                 }""";
     @Override
-    public String getExchangeRateResponse() {
+    public String getExchangeRateResponse(String date) {
         return mockHttpResponse;
     }
 }

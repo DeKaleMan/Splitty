@@ -211,9 +211,9 @@ public class MainCtrl {
     }
 
 
-    public void showAddExpense(String title) {
+    public void showAddExpense(String title, int eventCode) {
         primaryStage.setTitle("Add expense");
-        addExpenseCtrl.refresh();
+        addExpenseCtrl.refresh(eventCode);
         addExpenseCtrl.setTitle(title);
         primaryStage.setScene(addExpense);
     }

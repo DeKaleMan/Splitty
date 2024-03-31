@@ -35,7 +35,7 @@ import java.util.*;
 
 public class AddExpenseCtrl implements Initializable {
     private final ServerUtils serverUtils;
-    private final int eventCode = 1;
+    private int eventCode;
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
 
@@ -451,7 +451,8 @@ public class AddExpenseCtrl implements Initializable {
 //        this.error = error;
 //    }
 
-    public void refresh(){
+    public void refresh(int eventCode){
+        this.eventCode = eventCode;
         splitList.setVisible(false);
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;

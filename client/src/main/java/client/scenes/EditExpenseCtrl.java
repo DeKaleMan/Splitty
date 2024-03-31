@@ -33,7 +33,7 @@ import java.util.*;
 public class EditExpenseCtrl {
 
     private final ServerUtils serverUtils;
-    private final int eventCode = 1;
+    private int eventCode;
     private Expense expense;
     private final MainCtrl mainCtrl;
     private final SplittyOverviewCtrl splittyCtrl;
@@ -473,6 +473,7 @@ public class EditExpenseCtrl {
 //    }
 
     public void refresh(Expense expense){
+        this.eventCode = expense.getEvent().getId();
         isSharedExpense = expense.isSharedExpense();
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;

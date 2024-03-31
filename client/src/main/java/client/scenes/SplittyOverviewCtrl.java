@@ -37,9 +37,8 @@ public class SplittyOverviewCtrl implements Initializable {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final Config config;
     private boolean admin;
-
-    private Config config;
 
     //these are for the css:
     @FXML
@@ -104,13 +103,11 @@ public class SplittyOverviewCtrl implements Initializable {
     private ListView<Participant> participantListView;
 
     @Inject
-    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
+    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
-
-        admin = false;
-
         this.config = config;
+        admin = false;
     }
 
     @FXML
@@ -159,7 +156,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText());
+        mainCtrl.showAddExpense(titleLabel.getText(),eventCode);
     }
 
     @FXML
@@ -393,7 +390,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void leaveEvent(ActionEvent actionEvent) {
-        serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
+        serverUtils.deleteParticipant(config.getId(), eventCode);
         mainCtrl.showStartScreen();
         confirmationLabel.setVisible(false);
         cancelLeaveButton.setVisible(false);
