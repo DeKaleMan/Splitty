@@ -309,8 +309,8 @@ public class SplittyOverviewCtrl implements Initializable {
         paidByMe.setContent(paidByMeList);
         includingMeList = new ListView<>();
         for(Expense e : expenses){
-            List<String> owing = serverUtils.getDebtByExpense(e.getEvent().getId(), e.getExpenseId()).stream().filter(x -> x.getBalance() < 0).map(x -> x.getParticipant().getUuid()).toList();
-            if(owing.contains(config.getId())) includingMeList.getItems().add(e);
+            List<String> including = serverUtils.getDebtByExpense(e.getEvent().getId(), e.getExpenseId()).stream().map(x -> x.getParticipant().getUuid()).toList();
+            if(including.contains(config.getId())) includingMeList.getItems().add(e);
         }
         includingMeList.setCellFactory(cellFactory);
         involvingMe.setContent(includingMeList);
