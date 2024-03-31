@@ -88,10 +88,6 @@ public class StartScreenCtrl implements Initializable {
         // Set the image to the ImageView
         imageView.setImage(image);
         //Image flag = new Image("enFlag.png");
-    }
-
-    public void fetchList(){
-        eventListView.getItems().clear();
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
             protected void updateItem(Event event, boolean empty) {
@@ -103,6 +99,11 @@ public class StartScreenCtrl implements Initializable {
                 }
             }
         });
+    }
+
+    public void fetchList(){
+        eventListView.getItems().clear();
+
         events = mainCtrl.getMyEvents();
         if(events!=null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
