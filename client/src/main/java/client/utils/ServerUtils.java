@@ -568,4 +568,25 @@ public class ServerUtils {
         if (d1 < d2) return -1;
         return 1;
     }
+
+    public Participant getParticipant(String uuid, int eventCode) {
+        Response response = client.target(SERVER).path("api/participants/{uuid}/{eventId}")
+                .resolveTemplate("uuid", uuid)
+                .resolveTemplate("eventId", eventCode)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Participant participant = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return participant;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                "Failed to retrieve participant. Status code: " + response.getStatus());
+        }
+
+    }
 }

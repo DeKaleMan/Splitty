@@ -153,7 +153,6 @@ public class MainCtrl {
         setLanguage.changeTo(toLang.toString());
     }
 
-    // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
     public void showSplittyOverview(int id){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
@@ -230,6 +229,7 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
+        startScreenCtrl.fetchList();
         primaryStage.setScene(startScreen);
     }
 
@@ -275,6 +275,13 @@ public class MainCtrl {
         statisticsCtrl.fetchStat();
         //set the pieChart
         statisticsCtrl.setPieChart();
+    }
+
+    public int getCurrentEventCode(){
+        if(splittyOverviewCtrl==null){
+            throw new RuntimeException("Splitty overview controller is null, exception thrown in MainCtrl getCurrentEventCode()");
+        }
+        return splittyOverviewCtrl.getCurrentEventCode();
     }
 
     /**

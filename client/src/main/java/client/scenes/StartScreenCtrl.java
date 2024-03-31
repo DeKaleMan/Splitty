@@ -82,7 +82,11 @@ public class StartScreenCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        eventListView.getItems().clear();
+        // Load the image
+        Image image = new Image("Logo_.png"); // Path relative to your resources folder
+        // Set the image to the ImageView
+        imageView.setImage(image);
+        //Image flag = new Image("enFlag.png");
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
             protected void updateItem(Event event, boolean empty) {
@@ -94,6 +98,11 @@ public class StartScreenCtrl implements Initializable {
                 }
             }
         });
+    }
+
+    public void fetchList(){
+        eventListView.getItems().clear();
+
         events = mainCtrl.getMyEvents();
         if(events!=null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
@@ -102,11 +111,6 @@ public class StartScreenCtrl implements Initializable {
                     .forEach(newEventList::add);
             eventListView.setItems(newEventList);
         }
-        // Load the image
-        Image image = new Image("Logo_.png"); // Path relative to your resources folder
-        // Set the image to the ImageView
-        imageView.setImage(image);
-        //Image flag = new Image("enFlag.png");
     }
 
     /**
