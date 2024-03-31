@@ -229,6 +229,10 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
+//        startScreenCtrl.setLanguageSelect(language);
+//        startScreenCtrl.initialize();
+        startScreenCtrl.fetchList();
+//        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
     }
 
