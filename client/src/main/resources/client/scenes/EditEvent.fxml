@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditEventCrtl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditEventCrtl">
    <children>
-      <Button fx:id="submitButton" layoutX="274.0" layoutY="257.0" mnemonicParsing="false" onAction="#changeName" text="submit" />
+      <Button fx:id="submitButton" layoutX="274.0" layoutY="257.0" mnemonicParsing="false" onAction="#changeName" text="submit" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6"/>
       <TextField fx:id="nameChange" layoutX="217.0" layoutY="200.0" prefHeight="38.0" prefWidth="166.0" promptText="new name">
          <font>
             <Font size="16.0" />
@@ -19,7 +17,7 @@
             <Font size="35.0" />
          </font>
       </Label>
-      <Button layoutX="28.0" layoutY="352.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <TextField fx:id="eventId" layoutX="217.0" layoutY="137.0" prefHeight="38.0" prefWidth="166.0" promptText="Event ID" />
       <Label fx:id="succesFullyChanged" layoutX="210.0" layoutY="289.0" prefHeight="38.0" prefWidth="180.0" text="event name succesFully changed" visible="false" />
    </children>

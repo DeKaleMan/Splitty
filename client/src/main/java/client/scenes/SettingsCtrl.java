@@ -4,9 +4,14 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 
@@ -14,6 +19,10 @@ public class SettingsCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+    @FXML
+    public Button cancelButton;
+    @FXML
+    public Button saveButton;
     @FXML
     private TextField serverURLField;
     @FXML
@@ -38,6 +47,10 @@ public class SettingsCtrl {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
+    }
+    public void initialize() {
+        mainCtrl.setButtonRedProperty(cancelButton);
+        mainCtrl.setButtonRedProperty(saveButton);
     }
 
     /**
@@ -106,6 +119,7 @@ public class SettingsCtrl {
         config.setBic(bic);
         config.write();
         back();
+        mainCtrl.setConfirmationSettings();
         // set saved message
     }
 
@@ -168,4 +182,14 @@ public class SettingsCtrl {
         return config.getLanguage().toString();
     }
 
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            saveSettings();
+        }
+    }
 }

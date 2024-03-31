@@ -17,15 +17,14 @@ package client.scenes;
 
 import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
-
 import client.utils.ServerUtils;
-import commons.Event;
 import client.utils.SetLanguage;
+import commons.Event;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -165,8 +164,14 @@ public class MainCtrl {
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
     }
+
+    public void setAdmin(Boolean admin) {
+        splittyOverviewCtrl.setAdmin(admin);
+    }
+
     public Image getFlag(){
         return setLanguage.getFlag(this.language);
+
     }
 
     public List<Event> getMyEvents(){
@@ -177,7 +182,7 @@ public class MainCtrl {
         return null;
     }
 
-    public Participant joinEvent(int id){ // needs some more error handling
+    public Participant joinEvent(int id) throws RuntimeException{ // needs some more error handling
         Participant participant = serverUtils.createParticipant(
                 new ParticipantDTO(
                         settingCtrl.getName(),
@@ -224,23 +229,9 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
-//        startScreenCtrl.setLanguageSelect(language);
-//        startScreenCtrl.initialize();
-//        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
-
     }
 
-    /**
-     * show start screen but with the event title which was being created
-     * @param eventTitle the title of the event someone was creating
-     */
-    public void showStartScreen(String eventTitle){
-        primaryStage.setTitle("Splitty");
-//        startScreenCtrl.initialize();
-        primaryStage.setScene(startScreen);
-        startScreenCtrl.setTitle(eventTitle);
-    }
 
     public void showUserEventList() {
         userEventListCtrl.initialize();
@@ -304,10 +295,44 @@ public class MainCtrl {
         return settingCtrl.getId();
     }
 
-    public void editEventt(){
+    public void editEvent(){
         primaryStage.setTitle("EditEvent");
         primaryStage.setScene(editEvent);
     }
 
+    public void setConfirmationSettings() {
+        startScreenCtrl.setSettingsSavedLabel();
+    }
+    public void setConfirmationJoinedEvent() {
+        splittyOverviewCtrl.setJoinedEventLabel();
+    }
+
+    public void setConfirmationEventCreated() {
+        splittyOverviewCtrl.setEventCreatedLabel();
+    }
+    public void addEvent(Event event) {
+        startScreenCtrl.addEvent(event);
+    }
+
+    public void setButtonGreenProperty(Button button) {
+        button.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                button.setStyle("-fx-background-color: #2a8000; -fx-border-color: #365eff; " +
+                        "-fx-border-width: 1px; -fx-border-radius: 2");
+            } else {
+                button.setStyle("-fx-background-color: #2a8000;");
+            }
+        });
+    }
+    public void setButtonRedProperty(Button button) {
+        button.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                button.setStyle("-fx-background-color: #c50000; -fx-border-color: #365eff; " +
+                        "-fx-border-width: 1px; -fx-border-radius: 2");
+            } else {
+                button.setStyle("-fx-background-color: #c50000;");
+            }
+        });
+    }
 
 }

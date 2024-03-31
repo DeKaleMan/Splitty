@@ -9,10 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 public class AdminLoginCtrl {
+
+
 
     private MainCtrl mainCtrl;
     private AdminServerUtils adminServerUtils;
@@ -36,10 +40,12 @@ public class AdminLoginCtrl {
 
     @FXML
     private TextField urlField;
-
+    @FXML
+    public Label serverNotFoundError;
     @FXML
     private PasswordField passwordField;
-
+    @FXML
+    public Label incorrectPasswordError;
     @FXML
     private Label passwordInstructionsText;
 
@@ -47,15 +53,24 @@ public class AdminLoginCtrl {
     public void adminSignIn(ActionEvent actionEvent) {
         String serverUrl = urlField.getText();
         String password = passwordField.getText();
-
-        Response response = adminServerUtils.validatePassword(password, serverUrl);
+        if (serverUrl == null || serverUrl.isEmpty()) {
+            serverNotFoundError.setVisible(true);
+            return;
+        }
+        Response response;
+        try {
+            response = adminServerUtils.validatePassword(password, serverUrl);
+        } catch (RuntimeException e) {
+            serverNotFoundError.setVisible(true);
+            return;
+        }
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             mainCtrl.showAdminOverview();
+            mainCtrl.setAdmin(true);
         } else {
-            System.out.println("incorrect password: " + password);
+            incorrectPasswordError.setVisible(true);
         }
-
 
     }
 
@@ -90,5 +105,23 @@ public class AdminLoginCtrl {
 
     public void setPasswordInstructionsText(String txt) {
         this.passwordInstructionsText.setText(txt);
+    }
+
+    public void back() {
+        mainCtrl.showStartScreen();
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
+    }
+
+    public void resetPasswordError(KeyEvent keyEvent) {
+        incorrectPasswordError.setVisible(false);
+    }
+
+    public void resetServerErrors(KeyEvent keyEvent) {
+        serverNotFoundError.setVisible(false);
     }
 }

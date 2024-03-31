@@ -12,6 +12,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -56,6 +58,7 @@ public class DebtCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.setButtonRedProperty(undo);
         payments = FXCollections.observableArrayList(
             serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
         this.paymentInstructionListView.setItems(payments);
@@ -161,11 +164,9 @@ public class DebtCtrl implements Initializable {
         }
     }
 
-
     public void setTitlelabel(String title) {
         titlelabel.setText((title));
     }
-
 
     /**
      * removes a Payment from the list and adds it to changed
@@ -177,17 +178,21 @@ public class DebtCtrl implements Initializable {
         changed.add(p);
         this.paymentInstructionListView.getItems().remove(p);
     }
-
     @FXML
     public void sendMessage(Payment payment) {
         //TODO actually send a message
     }
-
     @FXML
     public void undo() {
         changed.remove(undone);
         undone.setPaid(false);
         this.paymentInstructionListView.getItems().add(undone);
         undo.setVisible(false);
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 }

@@ -4,35 +4,47 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
+<AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
    <children>
-      <Text fx:id="adminManagementOverviewText" layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
-         <font>
-            <Font size="35.0" />
-         </font>
-      </Text>
-      <ListView fx:id="eventList" layoutX="170.0" layoutY="106.0" prefHeight="270.0" prefWidth="260.0" />
-      <Button fx:id="importEventButton" layoutX="43.0" layoutY="106.0" mnemonicParsing="false" onAction="#showImportFields" prefHeight="25.0" prefWidth="116.0" text="Import event" />
-      <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" prefHeight="25.0" prefWidth="90.0" text="Export event" />
-      <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="90.0" text="Delete event" />
-      <Text fx:id="serverTag" layoutX="20.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server: Localhost:8080" wrappingWidth="150.0">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Button fx:id="viewEventButton" layoutX="441.0" layoutY="106.0" mnemonicParsing="false" onAction="#viewEvent" prefHeight="25.0" prefWidth="90.0" text="View Event" />
-      <TextArea fx:id="jsonImportTextArea" layoutX="125.0" layoutY="13.0" prefHeight="350.0" prefWidth="350.0" promptText="Paste your exported JSON dump here" visible="false" />
-      <Button fx:id="jsonImportButton" layoutX="385.0" layoutY="369.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="25.0" prefWidth="90.0" text="Import" visible="false" />
-      <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" prefHeight="25.0" prefWidth="80.0" text="Log Out" />
-      <HBox alignment="CENTER_RIGHT" layoutX="170.0" layoutY="69.0" prefHeight="25.0" prefWidth="260.0" spacing="15.0">
-         <children>
-            <Text fx:id="sortByText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort by:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
-            <ComboBox fx:id="sortComboBox" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
-         </children>
-      </HBox>
+      <AnchorPane onMouseClicked="#abortImportMouse">
+         <Text fx:id="adminManagementOverviewText" layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
+            <font>
+               <Font size="35.0" />
+            </font>
+         </Text>
+         <ListView fx:id="eventList" layoutX="170.0" layoutY="106.0" onKeyPressed="#onKeyPressed" onMouseClicked="#handleMouseClick" prefHeight="270.0" prefWidth="260.0" />
+         <Button fx:id="importEventButton" layoutX="69.0" layoutY="106.0" mnemonicParsing="false" onAction="#showImportFields" prefHeight="25.0" prefWidth="90.0" text="Import event" />
+         <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" prefHeight="25.0" prefWidth="90.0" text="Export event" />
+         <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="90.0" text="Delete event" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
+         <Text fx:id="serverTag" layoutX="20.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server: Localhost:8080" wrappingWidth="150.0">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Text>
+         <Button fx:id="viewEventButton" layoutX="441.0" layoutY="106.0" mnemonicParsing="false" onAction="#viewEvent" prefHeight="25.0" prefWidth="90.0" text="View Event" />
+
+         <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
+
+         <Label fx:id="noEventSelectedError" layoutX="472.0" layoutY="216.0" text="No event selected*" textFill="RED" visible="false">
+            <font>
+               <Font size="10.0" />
+            </font>
+         </Label>
+          <HBox alignment="CENTER_RIGHT" layoutX="170.0" layoutY="69.0" prefHeight="25.0" prefWidth="260.0" spacing="15.0">
+              <children>
+                  <Text fx:id="sortByText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort by:">
+                      <font>
+                          <Font size="14.0" />
+                      </font>
+                  </Text>
+                  <ComboBox fx:id="sortComboBox" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
+              </children>
+          </HBox>
+      </AnchorPane>
+       <AnchorPane fx:id="jsonImportPane" visible="false">
+       <TextArea fx:id="jsonImportTextArea" layoutX="125.0" layoutY="13.0" prefHeight="350.0" prefWidth="350.0" promptText="Paste your exported JSON dump here" visible="false" />
+       <Button fx:id="jsonImportButton" layoutX="385.0" layoutY="369.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="25.0" prefWidth="90.0" text="Import" visible="false" />
+   </AnchorPane>
+
    </children>
 </AnchorPane>
