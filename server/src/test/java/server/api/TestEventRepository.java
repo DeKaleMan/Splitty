@@ -178,4 +178,9 @@ public class TestEventRepository implements EventRepository {
     public Event findEventById(int eventId) {
         return events.stream().filter(x -> x.id == eventId).findFirst().orElse(null);
     }
+
+    @Override
+    public Event findByInviteCode(String code) {
+        return events.stream().filter(x -> x.getInviteCode().equals(code)).findFirst().orElse(null);
+    }
 }
