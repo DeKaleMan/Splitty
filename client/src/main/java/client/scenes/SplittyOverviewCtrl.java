@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Expense;
 import commons.Participant;
@@ -83,12 +84,15 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Label joinedEventLabel;
 
+    private Config config;
+
     @FXML
     private ListView<Participant> participantListView;
     @Inject
-    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl){
+    public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        this.config = config;
         admin = false;
     }
 
@@ -283,7 +287,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void leaveEvent(ActionEvent actionEvent) {
         // can only leave if balance is 0
-        Participant me = serverUtils.getParticipant(mainCtrl.getMyUuid(), eventCode);
+        Participant me = serverUtils.getParticipant(config.getId(), eventCode);
         if (me.getBalance() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -293,7 +297,7 @@ public class SplittyOverviewCtrl implements Initializable {
             return;
         }
 
-        serverUtils.deleteParticipant(mainCtrl.getMyUuid(), eventCode);
+        serverUtils.deleteParticipant(config.getId(), eventCode);
         mainCtrl.showStartScreen();
         confirmationLabel.setVisible(false);
         cancelLeaveButton.setVisible(false);

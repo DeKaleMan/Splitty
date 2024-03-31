@@ -300,9 +300,9 @@ public class MainCtrl {
         settingCtrl.initializeFields();
     }
 
-    public String getMyUuid(){
-        return settingCtrl.getId();
-    }
+//    public String getMyUuid(){
+//        return settingCtrl.getId();
+//    }
 
     public void editEvent(){
         primaryStage.setTitle("EditEvent");
