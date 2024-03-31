@@ -4,12 +4,10 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.database.ExpenseRepository;
 
 import java.util.Arrays;
 import java.util.Date;
