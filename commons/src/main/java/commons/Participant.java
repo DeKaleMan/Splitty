@@ -24,6 +24,7 @@ public class Participant implements Serializable {
 
     private String accountHolder;
 
+
     @EmbeddedId
     private ParticipantId id;
 

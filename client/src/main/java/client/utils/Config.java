@@ -14,7 +14,7 @@ public class Config {
     private String email;
     private String id;
 
-    private String name;
+    private String name = "Test Name";
     private String iban;
     private String bic;
 

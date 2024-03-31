@@ -99,6 +99,8 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Label joinedEventLabel;
 
+//    private Config config;
+
     @FXML
     private ListView<Participant> participantListView;
 
@@ -128,8 +130,6 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
-//        fetchExpenses();
-//        fetchParticipants();
     }
 
     public void setEventCode(int eventCode) {
@@ -289,6 +289,7 @@ public class SplittyOverviewCtrl implements Initializable {
         involvingMe.setContent(includingMeList);
     }
 
+
     private Callback<ListView<Expense>, ListCell<Expense>> getExpenseListCellFactory() {
         Callback<ListView<Expense>,
             ListCell<Expense>> cellFactory = new Callback<ListView<Expense>, ListCell<Expense>>() {
@@ -337,7 +338,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void fetchParticipants() {
-
+        participantListView.getItems().clear();
         List<Participant> participants = new ArrayList<>();
         try {
             participants = serverUtils.getParticipants(eventCode);
@@ -390,6 +391,17 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void leaveEvent(ActionEvent actionEvent) {
+        // can only leave if balance is 0
+        Participant me = serverUtils.getParticipant(config.getId(), eventCode);
+        if (me.getBalance() != 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("You can't leave the event");
+            alert.setContentText("You can only leave the event if your balance is 0");
+            alert.showAndWait();
+            return;
+        }
+
         serverUtils.deleteParticipant(config.getId(), eventCode);
         mainCtrl.showStartScreen();
         confirmationLabel.setVisible(false);
@@ -447,6 +459,10 @@ public class SplittyOverviewCtrl implements Initializable {
         confirmationLabel.setVisible(false);
         cancelLeaveButton.setVisible(false);
         leaveConfirmationButton.setVisible(false);
+    }
+
+    public int getCurrentEventCode(){
+        return this.eventCode;
     }
 }
 

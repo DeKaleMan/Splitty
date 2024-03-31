@@ -77,7 +77,7 @@ public class InvitationCtrl {
     @FXML
     private void back() {
         System.out.println("going back to event overview");
-        mainCtrl.showSplittyOverview(eventCode);
+        mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
     }
 
 

@@ -343,8 +343,8 @@ public class EditExpenseCtrl {
 
     private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer,
                                           double amountDouble, Participant receiver) {
-        Participant newReceiver = serverUtils.getParticipantById(receiver.getEvent().getId(),
-            receiver.getUuid());
+        Participant newReceiver = serverUtils.getParticipant(
+            receiver.getUuid(), receiver.getEvent().getId());
         serverUtils.saveDebt(
             new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(),
                 newReceiver.getUuid()));
@@ -354,8 +354,8 @@ public class EditExpenseCtrl {
                 newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(),
                 newReceiver.getEvent().getId(),
                 newReceiver.getUuid()));
-        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(),
-            oldPayer.getUuid());
+        Participant newPayer = serverUtils.getParticipant(
+            oldPayer.getUuid(), oldPayer.getEvent().getId());
         serverUtils.saveDebt(
             new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(),
                 newPayer.getUuid()));
@@ -371,8 +371,8 @@ public class EditExpenseCtrl {
                                    Participant oldPayer, double amountDouble) {
         double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
         for (Participant oldP : owing) {
-            Participant p = serverUtils.getParticipantById(oldP.getEvent().getId(),
-                oldP.getUuid());
+            Participant p = serverUtils.getParticipant(
+                oldP.getUuid(), oldP.getEvent().getId());
             serverUtils.saveDebt(
                 new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(),
                     p.getUuid()));
@@ -382,8 +382,8 @@ public class EditExpenseCtrl {
                     p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
                     p.getUuid()));
         }
-        Participant newPayer = serverUtils.getParticipantById(oldPayer.getEvent().getId(),
-            oldPayer.getUuid());
+        Participant newPayer = serverUtils.getParticipant(
+            oldPayer.getUuid(), oldPayer.getEvent().getId());
         serverUtils.saveDebt(
             new DebtDTO(amountDouble - amountPerPerson,
                 eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));

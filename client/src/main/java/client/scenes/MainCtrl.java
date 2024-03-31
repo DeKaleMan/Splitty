@@ -90,7 +90,7 @@ public class MainCtrl {
 
     // probably not the best place to put that here but works for now
     // maybe in the future isolate it into an eventctrl?
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
 
     public void initialize(Stage primaryStage, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
@@ -163,7 +163,6 @@ public class MainCtrl {
         setLanguage.changeTo(toLang.toString());
     }
 
-    // We should add the eventID to the parameters here so that it opens the splittyoverview of a specific event
     public void showSplittyOverview(int id){
         primaryStage.setTitle("Event overview");
         primaryStage.setScene(splittyOverview);
@@ -192,7 +191,7 @@ public class MainCtrl {
         return null;
     }
 
-    public Participant joinEvent(int id) throws RuntimeException{ // needs some more error handling
+    public Participant joinEvent(String inviteCode) throws RuntimeException{ // needs some more error handling
         Participant participant = serverUtils.createParticipant(
                 new ParticipantDTO(
                         settingCtrl.getName(),
@@ -201,11 +200,12 @@ public class MainCtrl {
                         settingCtrl.getBic(),
                         settingCtrl.getEmail(),
                         settingCtrl.getName(),
-                        id,
-                        settingCtrl.getId()
+                        -1,
+                        settingCtrl.getId(),
+                        inviteCode
                 ));
         if (participant != null) {
-            events.add(serverUtils.getEventById(id));
+            events.add(serverUtils.getEventById(participant.getEvent().getId()));
         }
         return participant;
     }
@@ -240,10 +240,7 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
-//        startScreenCtrl.setLanguageSelect(language);
-//        startScreenCtrl.initialize();
         startScreenCtrl.fetchList();
-//        startScreenCtrl.setFlag(setLanguage.getFlag(this.language.toString()));
         primaryStage.setScene(startScreen);
     }
 
@@ -291,6 +288,14 @@ public class MainCtrl {
         statisticsCtrl.setPieChart();
     }
 
+    public int getCurrentEventCode(){
+        if(splittyOverviewCtrl==null){
+            throw new RuntimeException("Splitty overview controller is null," +
+                    " exception thrown in MainCtrl getCurrentEventCode()");
+        }
+        return splittyOverviewCtrl.getCurrentEventCode();
+    }
+
     /**
      * this shows the statistics window
      */
@@ -306,9 +311,9 @@ public class MainCtrl {
         settingCtrl.initializeFields();
     }
 
-    public String getMyUuid(){
-        return settingCtrl.getId();
-    }
+//    public String getMyUuid(){
+//        return settingCtrl.getId();
+//    }
 
     public void editEvent(){
         primaryStage.setTitle("EditEvent");
