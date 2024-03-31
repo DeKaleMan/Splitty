@@ -105,12 +105,14 @@ class ServerUtilsTest {
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
 
-//        Date d1 = new Date(2004, Calendar.JULY,16);
-//        Event e1 = new Event("test", d1, "stijn", "this is an event");
-//        Participant p1 = new Participant("stijn", 70.0, "1234567890", "123456", "bal@gmail.com", "","uuidtest", e1);
-//        Expense exp1 = new Expense(e1, "this is a expense", Type.Drinks, d1, 100.0, p1);
-//        List<Expense> expListMock = List.of(exp1);
-//
+        Date d1 = new Date(2004, Calendar.JULY,16);
+        Event e1 = new Event("test", d1, "stijn", "this is an event");
+        Participant p1 = new Participant("stijn", 70.0, "1234567890", "123456", "bal@gmail.com", "","uuidtest", e1);
+        Expense exp1 = new Expense(e1, "this is a expense", Type.Drinks, d1, 100.0, p1);
+        List<Expense> expListMock = List.of(exp1);
+
+        when(mockBuilder.get(new GenericType<List<Expense>>() {})).thenReturn(expListMock);
+
         List<Expense> withServerUtils = serverUtils.getExpenseByEmail(1, "bal.gmail.com");
 
         verify(mockClient).target(ServerUtils.SERVER);
@@ -122,7 +124,7 @@ class ServerUtilsTest {
         verify(mockBuilder).get(new GenericType<List<Expense>>(){
         });
         verify(mockBuilder).get(new GenericType<List<Expense>>(){});
-        assertEquals(null, withServerUtils);
+        assertEquals(expListMock, withServerUtils);
 
     }
 
