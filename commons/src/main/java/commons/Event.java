@@ -18,6 +18,8 @@ public class Event {
     private String description;
     private Date lastActivity;
 
+    @Column(unique = true)
+    private String inviteCode;
     public Event(String name, Date date,
                  String owner,
                  String description) {
@@ -79,6 +81,14 @@ public class Event {
 
     public void updateActivityDate() {
         lastActivity = new Date();
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
     }
 
     @Override
