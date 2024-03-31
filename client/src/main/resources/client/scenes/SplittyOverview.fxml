@@ -63,7 +63,7 @@
 
                   <HBox spacing="10.0">
                      <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Edit" HBox.hgrow="ALWAYS" />
+                        <Button maxWidth="1.7976931348623157E308" onAction="#editExpense" mnemonicParsing="false" text="Edit" HBox.hgrow="ALWAYS" />
                         <Button fx:id="deleteExpenseButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteExpense" text="Delete" HBox.hgrow="ALWAYS" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
                      </children>
                   </HBox>

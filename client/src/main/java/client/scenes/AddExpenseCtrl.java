@@ -54,11 +54,7 @@ public class AddExpenseCtrl implements Initializable {
     @FXML
     private TextArea whatFor;
     @FXML
-    private Label amountInvalidError;
-    @FXML
-    public Label amountNegativeError;
-    @FXML
-    public Label noAmountError;
+    private Label amountError;
 
     @FXML
     private DatePicker dateSelect;
@@ -73,7 +69,6 @@ public class AddExpenseCtrl implements Initializable {
 
     @FXML
     private ComboBox category;
-    private List<Participant> participant;
 
     @FXML
     private Label addExpenseText;
@@ -283,16 +278,19 @@ public class AddExpenseCtrl implements Initializable {
         double amountDouble = 0.0;
         try {
             if (amount.getText() == null || amount.getText().isEmpty()) {
-                noAmountError.setVisible(true);
+                amountError.setText("An amount is required");
+                amountError.setVisible(true);
                 return;
             }
             amountDouble = Double.parseDouble(amount.getText());
             if (amountDouble <= 0.0) {
-                amountNegativeError.setVisible(true);
+                amountError.setVisible(true);
+                amountError.setText("Amount cannot be negative or zero*");
                 return;
             }
         } catch (NumberFormatException e) {
-            amountInvalidError.setVisible(true);
+            amountError.setVisible(true);
+            amountError.setText("Not a number, format e.g 13.99");
             error = true;
         }
 
@@ -362,10 +360,6 @@ public class AddExpenseCtrl implements Initializable {
                 payer.getUuid()));
     }
 
-
-    public void setParticipant(List<Participant> participant) {
-        this.participant = participant;
-    }
 
     // This part is never used because expenses doesn't save who should pay for it only the payer
     // this should be changed eventually but that is not part of the ExpenseController
@@ -546,9 +540,7 @@ public class AddExpenseCtrl implements Initializable {
     }
 
     public void resetAmountErrors(KeyEvent keyEvent) {
-        amountNegativeError.setVisible(false);
-        noAmountError.setVisible(false);
-        amountInvalidError.setVisible(false);
+        amountError.setVisible(false);
     }
 
     public void resetDateErrors() {

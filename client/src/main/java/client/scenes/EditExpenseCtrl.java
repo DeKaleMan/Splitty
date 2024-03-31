@@ -7,6 +7,7 @@ import commons.Type;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,9 +16,12 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -76,7 +80,7 @@ public class EditExpenseCtrl {
     private Label expenseTypetext;
 
     @FXML
-    private Button back;
+    private Button cancel;
     @FXML
     private Button edit;
     @FXML
@@ -108,6 +112,18 @@ public class EditExpenseCtrl {
     private Set<Participant> owing;
 
     private boolean isSharedExpense;
+
+    @FXML
+    public Label editExpenseError;
+
+    @FXML
+    public Label payerError;
+
+    @FXML
+    private Label amountError;
+
+    @FXML
+    private Label dateInvalidError;
 
     @Inject
     public EditExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl,
@@ -237,26 +253,51 @@ public class EditExpenseCtrl {
     @FXML
     @Transactional
     public void editExpense() {
+        boolean error = false;
+        Date date = null;
         //link these to participants and then add the expense
         if (dateSelect.getValue() == null) {
             dateSelect.setPromptText("invalid Date");
         }
 
+        Type type = (Type) category.getValue();
+        if (type == null) type= Type.Other;
+        Participant oldPayer = personComboBox.getValue();
+        if (oldPayer == null) {
+            error = true;
+            payerError.setVisible(true);
+        }
+
+        double amountDouble = 0.0;
+        try {
+            if (amount.getText() == null || amount.getText().isEmpty()) {
+                amountError.setText("An amount is required");
+                amountError.setVisible(true);
+                return;
+            }
+            amountDouble = Double.parseDouble(amount.getText());
+            if (amountDouble <= 0.0) {
+                amountError.setVisible(true);
+                amountError.setText("Amount cannot be negative or zero*");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            amountError.setVisible(true);
+            amountError.setText("Not a number, format e.g 13.99");
+            error = true;
+        }
+
+        Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
+        if(!isSharedExpense && receiver == null) {
+            error = true;
+        }
+        if(error) return;
+
+        String description = whatFor.getText();
+
         try {
             LocalDate localDate = dateSelect.getValue();
-            Date date = java.sql.Date.valueOf(localDate);
-            Type type = (Type) category.getValue();
-            if (type == null) throw new NoSuchElementException();
-            double amountDouble = Double.parseDouble(amount.getText());
-            if (amountDouble <= 0) {
-                amount.setText("NO VALID AMOUNT");
-                throw new NoSuchElementException();
-            }
-            Participant oldPayer = personComboBox.getValue();
-            if(oldPayer == null) throw new NoSuchElementException();
-            Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
-            if(!isSharedExpense && receiver == null) throw new NoSuchElementException();
-            String description = whatFor.getText();
+            date = java.sql.Date.valueOf(localDate);
             //add to database
             ExpenseDTO
                 exp =
@@ -267,8 +308,10 @@ public class EditExpenseCtrl {
             serverUtils.generatePaymentsForEvent(eventCode);
             back();
         } catch (Exception e) {
-            dateSelect.setPromptText("try again");
-            error.setText("Something is incomplete");
+            editExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(event1 -> editExpenseError.setVisible(false));
+            visiblePause.play();
         }
         splittyCtrl.fetchExpenses();
     }
@@ -494,8 +537,8 @@ public class EditExpenseCtrl {
         this.expenseTypetext.setText(text);
     }
 
-    public void setBack(String text) {
-        this.back.setText(text);
+    public void setCancel(String text) {
+        this.cancel.setText(text);
     }
 
     public void setEdit(String text) {
@@ -516,5 +559,24 @@ public class EditExpenseCtrl {
 
     public void setExpenseTypeBox(String text) {
         this.category.setPromptText(text);
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
+    }
+
+    public void resetPayerErrors() {
+        payerError.setVisible(false);
+    }
+
+    public void resetAmountErrors(KeyEvent keyEvent) {
+        amountError.setVisible(false);
+    }
+
+    public void resetDateErrors() {
+        dateInvalidError.setVisible(false);
     }
 }
