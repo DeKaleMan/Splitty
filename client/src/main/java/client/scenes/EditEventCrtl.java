@@ -47,6 +47,7 @@ public class EditEventCrtl {
     }
 
     public void back(){
+        succesFullyChanged.setVisible(false);
         mainCtrl.showSplittyOverview(eventCode);
     }
 

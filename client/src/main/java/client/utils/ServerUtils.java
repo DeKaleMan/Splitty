@@ -95,7 +95,7 @@ public class ServerUtils {
      * @return the expense by email
      */
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(SERVER).path("api/expenses/{payerEmail}")
             .resolveTemplate("payerEmail", email)
             .queryParam("eventCode", eventCode)
