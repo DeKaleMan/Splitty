@@ -25,6 +25,7 @@ public class StartScreenCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+
     private String currentLang;
 
     @FXML
@@ -63,7 +64,8 @@ public class StartScreenCtrl implements Initializable {
     public Label settingsSavedLabel;
     @FXML
     public Label eventCreatedLabel;
-
+    @FXML
+    public Button settingsButton;
     @FXML
     private ProgressIndicator progress;
     private int eventCode;
@@ -82,6 +84,10 @@ public class StartScreenCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ImageView settings = new ImageView(new Image("Settings-icon.png"));
+        settings.setFitWidth(15);
+        settings.setFitHeight(15);
+        settingsButton.setGraphic(settings);
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
         // Set the image to the ImageView

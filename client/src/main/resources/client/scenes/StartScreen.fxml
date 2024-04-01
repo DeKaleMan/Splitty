@@ -4,6 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
 
     <children>
@@ -25,7 +26,7 @@
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
-                <TextField fx:id="joinEventTextField" onKeyPressed="#resetErrors" layoutX="33.0" layoutY="54.0" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
+                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
                 <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="79.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
                 <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="79.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
             </children>
@@ -39,7 +40,7 @@
         <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" />
         <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="99.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
 
-        <Button layoutX="514.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
+        <Button fx:id="settingsButton" layoutX="499.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
 
 
         <Button fx:id="adminLogin" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login" AnchorPane.leftAnchor="10.0" />

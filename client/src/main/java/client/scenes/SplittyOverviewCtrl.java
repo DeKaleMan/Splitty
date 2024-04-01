@@ -14,6 +14,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -114,6 +116,10 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        ImageView stats = new ImageView(new Image("statistics.png"));
+        stats.setFitHeight(15);
+        stats.setFitWidth(15);
+        statisticsButton.setGraphic(stats);
         mainCtrl.setButtonRedProperty(deleteExpenseButton);
         mainCtrl.setButtonRedProperty(leaveButton);
         mainCtrl.setButtonRedProperty(leaveConfirmationButton);
