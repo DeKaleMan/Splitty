@@ -78,6 +78,8 @@ public class StartScreenCtrl implements Initializable {
 
     @FXML
     private ImageView flag;
+    @FXML
+    private Button settings;
 
 
     @Inject
@@ -262,6 +264,9 @@ public class StartScreenCtrl implements Initializable {
 
     public void setNoEventLabel(String text) {
 //        noEventLabel.setText(text);
+    }
+    public void setSettings(String text){
+        this.settings.setText(text);
     }
 
 

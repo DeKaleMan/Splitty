@@ -188,7 +188,7 @@ public class MainCtrl {
         //TODO we should add the available languages perhaps to a file
         languages.addAll(List.of("en", "nl", "is", "zh", "es"));
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
-                addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
+                addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl);
     }
 
 

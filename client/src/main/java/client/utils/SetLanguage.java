@@ -17,17 +17,18 @@ public class SetLanguage {
     private SplittyOverviewCtrl splittyOverviewCtrl;
     private AdminLoginCtrl adminLoginCtrl;
     private AddExpenseCtrl addExpenseCtrl;
-
     private AdminOverviewCtrl adminOverviewCtrl;
+    private CreateEventCtrl createEventCtrl;
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
-                       AdminOverviewCtrl adminOverviewCtrl){
+                       AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
         this.addExpenseCtrl = addExpenseCtrl;
         this.adminLoginCtrl = adminLoginCtrl;
         this.adminOverviewCtrl = adminOverviewCtrl;
+        this.createEventCtrl = createEventCtrl;
         //this.language = Language.en;
     }
 
@@ -37,6 +38,7 @@ public class SetLanguage {
         setAddExpense(lang);
         setAdminLogin(lang);
         setAdminOverview(lang);
+        setCreateEvent(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -44,11 +46,12 @@ public class SetLanguage {
     public void setMainScreen(String lang){
         startScreenCtrl.setCreateEventText(translate("Create event", "en", lang));
         startScreenCtrl.setJoinEventText(translate("Join event", "en", lang));
-        startScreenCtrl.setAdminLogin(translate("Admin login", "en", lang));
+        startScreenCtrl.setAdminLogin(translate("Admin Login", "en", lang));
         startScreenCtrl.setShowAllEvents(translate("Show all events", "en", lang));
         startScreenCtrl.setJoinButtonText(translate("Join", "en", lang));
         startScreenCtrl.setCreateButtonText(translate("Create", "en", lang));
         startScreenCtrl.setNoEventLabel(translate("You do not have any events to list still", "en", lang));
+        startScreenCtrl.setSettings(translate("Settings", "en", lang));
     }
     public void setSpittyoverview(String lang){
         splittyOverviewCtrl.setExpensesText(translate("Expenses", "en", lang));
@@ -63,7 +66,6 @@ public class SetLanguage {
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
     }
-
     public void setAddExpense(String lang){
         addExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
         addExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
@@ -78,7 +80,6 @@ public class SetLanguage {
         addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
     }
-
     public void setAdminLogin(String lang){
         adminLoginCtrl.setSignIn(translate("Sign in", "en", lang));
         adminLoginCtrl.setInstruction(translate("Log into your server instance", "en", lang));
@@ -89,7 +90,6 @@ public class SetLanguage {
         adminLoginCtrl.setPasswordInstructionsText(translate(
                 "You can find your password in the console of your server instance", "en", lang));
     }
-
     public void setAdminOverview(String lang){
         adminOverviewCtrl.setAdminManagementOverviewText(translate("Admin management overview", "en", lang));
         adminOverviewCtrl.setImportEventButtonText(translate("Import event", "en", lang));
@@ -101,6 +101,17 @@ public class SetLanguage {
         adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
     }
+    public void setCreateEvent(String lang){
+        createEventCtrl.setEventNameText(translate("Event name", "en", lang));
+        createEventCtrl.setDateText(translate("Date", "en", lang));
+        createEventCtrl.setEventDescriptionText(translate("Event description", "en", lang));
+        createEventCtrl.setEventDescriptionArea(translate("What is the event about...", "en", lang));
+        createEventCtrl.setNameText(translate("Name", "en", lang));
+        createEventCtrl.setCreateButton(translate("Create event", "en", lang));
+        createEventCtrl.setCancelButton(translate("Cancel", "en", lang));
+        createEventCtrl.setRequired(translate("required", "en", lang));
+    }
+
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 
