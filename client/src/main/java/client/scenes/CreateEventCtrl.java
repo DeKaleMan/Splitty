@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,7 +92,7 @@ public class CreateEventCtrl {
     @FXML
     public ParticipantDTO addHost(int id) {
         return new ParticipantDTO(nameField.getText(), 0.0, config.getIban(), config.getBic(),
-                config.getEmail(), config.getName(), id, config.getId());
+                config.getEmail(), nameField.getText(), id, config.getId());
     }
 
     @FXML
@@ -106,15 +107,17 @@ public class CreateEventCtrl {
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
             dateEmptyError.setVisible(true);
             error = true;
+            return;
         } catch (Exception e) {
             dateEmptyError.setVisible(false);
             dateIncorrectError.setVisible(true);
             error = true;
+            return;
         }
         if (name == null || name.isEmpty() || error){
             if (name == null || name.isEmpty()) {
