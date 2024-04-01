@@ -10,7 +10,6 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -21,12 +20,10 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-
-import javafx.util.Duration;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -93,10 +90,6 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Button leaveButton;
     @FXML
-    public Button leaveConfirmationButton;
-    @FXML
-    public Button cancelLeaveButton;
-    @FXML
     public Label confirmationLabel;
     @FXML
     public Label joinedEventLabel;
@@ -122,8 +115,6 @@ public class SplittyOverviewCtrl implements Initializable {
         statisticsButton.setGraphic(stats);
         mainCtrl.setButtonRedProperty(deleteExpenseButton);
         mainCtrl.setButtonRedProperty(leaveButton);
-        mainCtrl.setButtonRedProperty(leaveConfirmationButton);
-        mainCtrl.setButtonGreenProperty(cancelLeaveButton);
         participantListView.setCellFactory(param -> new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
@@ -396,9 +387,22 @@ public class SplittyOverviewCtrl implements Initializable {
         this.allExpenses.setText(text);
     }
 
-    public void leaveEvent(ActionEvent actionEvent) {
-        // can only leave if balance is 0
-        Participant me = serverUtils.getParticipant(config.getId(), eventCode);
+    public void leaveEvent() {
+        if (admin) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("You can't leave the event");
+            alert.setContentText("You cannot leave the event since you are in admin mode");
+            alert.showAndWait();
+        }
+//        can only leave if balance is 0
+        Participant me;
+        try {
+            me = serverUtils.getParticipant(config.getId(), eventCode);
+        } catch (RuntimeException e) {
+            // label or error?
+            return;
+        }
         if (me.getBalance() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -407,12 +411,16 @@ public class SplittyOverviewCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
-
-        serverUtils.deleteParticipant(config.getId(), eventCode);
-        mainCtrl.showStartScreen();
-        confirmationLabel.setVisible(false);
-        cancelLeaveButton.setVisible(false);
-        leaveConfirmationButton.setVisible(false);
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirmation");
+        confirmation.setHeaderText("Leaving event");
+        confirmation.setContentText("Are you sure you want to leave the event?");
+        confirmation.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                serverUtils.deleteParticipant(config.getId(), eventCode);
+                mainCtrl.showStartScreen();
+            }
+        });
     }
 
 
@@ -455,17 +463,6 @@ public class SplittyOverviewCtrl implements Initializable {
         visiblePause.play();
     }
 
-    public void setConfirmation(ActionEvent actionEvent) {
-        confirmationLabel.setVisible(true);
-        cancelLeaveButton.setVisible(true);
-        leaveConfirmationButton.setVisible(true);
-    }
-
-    public void cancelLeave(ActionEvent actionEvent) {
-        confirmationLabel.setVisible(false);
-        cancelLeaveButton.setVisible(false);
-        leaveConfirmationButton.setVisible(false);
-    }
 
     public int getCurrentEventCode(){
         return this.eventCode;
