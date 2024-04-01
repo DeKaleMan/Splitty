@@ -9,6 +9,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -261,6 +262,35 @@ class ServerUtilsTest {
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
         assertNotNull(debtList);
+        assertEquals(mockDebtList, debtList);
+    }
+
+    @Test
+    public void getDebtByExpenseTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Expense mockExp = new Expense(e, "this is a expense", Type.Drinks, d, 100.0, p);
+        Debt mockDebt = new Debt(mockExp, 100.0, p);
+        List<Debt> mockDebtList = List.of(mockDebt);
+        when(mockBuilder.get(new GenericType<List<Debt>>(){})).thenReturn(mockDebtList);
+
+        List<Debt> debtList = serverUtils.getDebtByExpense(123, 123);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/debts/{eventId}/expense/{expenseId}");
+        verify(mockWebTarget).resolveTemplate("eventId", 123);
+        verify(mockWebTarget).resolveTemplate("expenseId", 123);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
         assertEquals(mockDebtList, debtList);
     }
 

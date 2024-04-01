@@ -162,7 +162,7 @@ public class ServerUtils {
      * @return the debt by expense
      */
     public List<Debt> getDebtByExpense(int eventCode, int expenseId) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(SERVER).path("api/debts/{eventId}/expense/{expenseId}")
             .resolveTemplate("eventId", eventCode)
             .resolveTemplate("expenseId", expenseId)
