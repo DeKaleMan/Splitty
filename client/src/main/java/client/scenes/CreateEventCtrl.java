@@ -90,9 +90,9 @@ public class CreateEventCtrl {
     }
 
     @FXML
-    public ParticipantDTO addHost(int id) {
+    public ParticipantDTO addHost(int id, String inviteID) {
         return new ParticipantDTO(nameField.getText(), 0.0, config.getIban(), config.getBic(),
-                config.getEmail(), nameField.getText(), id, config.getId());
+                config.getEmail(), nameField.getText(), id, config.getId(), inviteID);
     }
 
     @FXML
@@ -134,7 +134,7 @@ public class CreateEventCtrl {
         // create new event and add to database, go to that event overview and add participants via database.
         EventDTO event = new EventDTO(name, date, owner, description);
         Event eventCreated = serverUtils.addEvent(event);
-        ParticipantDTO participantDTO = addHost(eventCreated.getId());
+        ParticipantDTO participantDTO = addHost(eventCreated.getId(), eventCreated.getInviteCode());
         serverUtils.createParticipant(participantDTO);
         mainCtrl.showSplittyOverview(eventCreated.getId());
         mainCtrl.addEvent(eventCreated);
