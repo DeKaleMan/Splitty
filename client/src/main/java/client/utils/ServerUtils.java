@@ -113,8 +113,8 @@ public class ServerUtils {
      * @return the expense
      */
     public Expense addExpense(ExpenseDTO expenseDTO) {
-        return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses")
+        return client
+            .target(SERVER).path("api/expenses/addExp")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);

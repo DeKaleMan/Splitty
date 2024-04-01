@@ -4,7 +4,9 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
+import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
@@ -21,8 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -35,8 +36,12 @@ class ServerUtilsTest {
     private WebTarget mockWebTarget;
     @Mock
     private Invocation.Builder mockBuilder;
+
+//    @Mock
+//    private Expense mockExpense;
     @Mock
     private Response mockResponse;
+
     ServerUtils serverUtils;
 
     @BeforeEach
@@ -123,7 +128,6 @@ class ServerUtilsTest {
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
         verify(mockBuilder).get(new GenericType<List<Expense>>(){
         });
-        verify(mockBuilder).get(new GenericType<List<Expense>>(){});
         assertEquals(expListMock, withServerUtils);
 
     }
@@ -173,4 +177,34 @@ class ServerUtilsTest {
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
+
+    @Test
+    public void addExpenseTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        Date d1 = new Date(2004, Calendar.AUGUST,16);
+        Event e1 = new Event("test", d1, "stijn", "this is an event");
+        Participant p1 = new Participant("stijn", 70.0, "1234567890", "123456", "bal@gmail.com", "","uuidtest", e1);
+        Expense mockExp = new Expense(e1, "this is a expense", Type.Drinks, d1, 100.0, p1);
+
+        when(mockBuilder.post(any(Entity.class), eq(Expense.class))).thenReturn(mockExp);
+
+        Date d = new Date(2004, Calendar.AUGUST,16);
+        ExpenseDTO expenseDTO = new ExpenseDTO(1, "test DTO Expense", Type.Food, d, 100.0, "uuidtest");
+
+        Expense res = serverUtils.addExpense(expenseDTO);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/expenses/addExp");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(mockExp, res);
+        assertNotNull(res);
+
+    }
+
 }
