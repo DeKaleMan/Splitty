@@ -20,6 +20,7 @@ public class SettingsCtrl {
     private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+    private boolean startup = false;
     @FXML
     public Button cancelButton;
     @FXML
@@ -48,13 +49,19 @@ public class SettingsCtrl {
     }
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
-        mainCtrl.setButtonRedProperty(saveButton);
+        mainCtrl.setButtonGreenProperty(saveButton);
     }
 
     /**
      * sets all the fields to the values obtained by the config file
      */
-    public void initializeFields() {
+    public void initializeFields(boolean startup) {
+        this.startup = startup;
+        if (startup) {
+            cancelButton.setVisible(false);
+        } else {
+            cancelButton.setVisible(true);
+        }
         if (config.getEmail() != null) {
             emailField.setText(config.getEmail());
         } else {
@@ -107,9 +114,13 @@ public class SettingsCtrl {
         config.setIban(iban);
         config.setBic(bic);
         config.write();
-        back();
-        mainCtrl.setConfirmationSettings();
-        // set saved message
+        if (startup) {
+            mainCtrl.showServerStartup(true);
+        } else {
+            back();
+            mainCtrl.setConfirmationSettings();
+        }
+
     }
 
     public void back() {

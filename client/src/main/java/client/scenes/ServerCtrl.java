@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -23,10 +24,11 @@ import javax.inject.Inject;
 
 
 public class ServerCtrl {
-    public Button connectButton;
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
     private Config config;
+
+    boolean startup = false;
     @FXML
     public Label startupNotification;
     @FXML
@@ -35,6 +37,10 @@ public class ServerCtrl {
     public ImageView imageView;
     @FXML
     public TextField serverField;
+    @FXML
+    public Button connectButton;
+    @FXML
+    public Button backButton;
 
     @Inject
     public ServerCtrl(MainCtrl mainCtrl, Config config) {
@@ -44,14 +50,18 @@ public class ServerCtrl {
 
 
     public void setField(boolean startup) {
-
+        this.startup = startup;
         if (config.getConnection() != null) {
             serverField.setText(config.getConnection());
         }
         if (startup) {
             startupNotification.setVisible(true);
+            imageView.setImage(new Image("no-connection.png"));
+            backButton.setText("Settings");
         } else {
             startupNotification.setVisible(false);
+            imageView.setImage(new Image("connection2.png"));
+            backButton.setText("Back");
         }
     }
 
@@ -65,6 +75,7 @@ public class ServerCtrl {
             config.write();
             relaunch();
             mainCtrl.closeStage();
+            startup = false;
         } catch (RuntimeException e) {
             notConnectedError.setVisible(true);
         }
@@ -101,7 +112,7 @@ public class ServerCtrl {
     }
 
     public void back() {
-        mainCtrl.showSettings();
+        mainCtrl.showSettings(startup);
     }
     public void resetError(KeyEvent keyEvent) {
         notConnectedError.setVisible(false);

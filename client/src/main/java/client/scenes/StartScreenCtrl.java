@@ -276,7 +276,7 @@ public class StartScreenCtrl implements Initializable {
     }
 
     public void showSettings() {
-        mainCtrl.showSettings();
+        mainCtrl.showSettings(false);
     }
 
 

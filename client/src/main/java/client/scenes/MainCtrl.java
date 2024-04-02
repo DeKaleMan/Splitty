@@ -328,10 +328,10 @@ public class MainCtrl {
         debtCtrl.refresh(eventCode);
     }
 
-    public void showSettings() {
+    public void showSettings(boolean startup) {
         primaryStage.setScene(settings);
         primaryStage.setTitle("Settings");
-        settingCtrl.initializeFields();
+        settingCtrl.initializeFields(startup);
     }
 
 //    public String getMyUuid(){
