@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
-    //protected Language language = Language.en;
+
     protected String language = "en";
     protected List<String> languages;
 
@@ -376,5 +376,9 @@ public class MainCtrl {
         primaryStage.setTitle("Edit expense");
         editExpenseCtrl.refresh(expense);
         primaryStage.setScene(editExpense);
+    }
+
+    public void closeStage() {
+        primaryStage.close();
     }
 }

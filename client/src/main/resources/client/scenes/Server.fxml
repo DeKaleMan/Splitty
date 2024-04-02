@@ -17,9 +17,9 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="serverField" onKeyPressed="#resetError" layoutX="191.0" layoutY="247.0" prefHeight="26.0" prefWidth="240.0" />
+      <TextField fx:id="serverField" layoutX="191.0" layoutY="247.0" onKeyPressed="#resetError" prefHeight="26.0" prefWidth="240.0" />
       <ImageView fx:id="imageView" fitHeight="102.0" fitWidth="171.0" layoutX="215.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefHeight="45.0" prefWidth="302.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url*" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefHeight="54.0" prefWidth="302.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url or try again by repressing connect*" textFill="#949494" visible="true" wrapText="true">
          <font>
             <Font name="System Italic" size="12.0" />
          </font></Label>
@@ -28,6 +28,6 @@
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
-      <Button fx:id="connectButton" layoutX="431.0" layoutY="247.0" onAction="#connect" mnemonicParsing="false" text="Connect" />
+      <Button fx:id="connectButton" layoutX="431.0" layoutY="247.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
    </children>
 </AnchorPane>
