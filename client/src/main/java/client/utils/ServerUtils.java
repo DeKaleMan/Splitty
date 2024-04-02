@@ -45,7 +45,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 /**
- * The type Server utils.
+ * The type server utils.
  */
 public class ServerUtils {
 
@@ -72,10 +72,10 @@ public class ServerUtils {
     }
 
     public static void resetServer() {
-        SERVER = "http://" + serverDomain + "/";
+        server = "http://" + serverDomain + "/";
     }
     public static String serverDomain = "localhost:8080";
-    public static String SERVER = "http://localhost:8080/";
+    public static String server = "http://localhost:8080/";
 
     /**
      * Gets expense.
@@ -84,7 +84,7 @@ public class ServerUtils {
      * @return the expense
      */
     public List<Expense> getExpense(int eventCode) {
-        return client.target(SERVER).path("api/expenses")
+        return client.target(server).path("api/expenses")
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -101,7 +101,7 @@ public class ServerUtils {
      */
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses/{payerEmail}")
+            .target(server).path("api/expenses/{payerEmail}")
             .resolveTemplate("payerEmail", email)
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
@@ -119,7 +119,7 @@ public class ServerUtils {
      */
     public Expense addExpense(ExpenseDTO expenseDTO) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses")
+            .target(server).path("api/expenses")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
@@ -136,7 +136,7 @@ public class ServerUtils {
 
         deleteDebtsOfExpense(expenseDTO.getEventId(), expenseId);
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/expenses/{eventId}/{expenseId}")
+            .target(server).path("api/expenses/{eventId}/{expenseId}")
             .resolveTemplate("eventId", expenseDTO.getEventId())
             .resolveTemplate("expenseId", expenseId)
             .request(APPLICATION_JSON)
@@ -152,7 +152,7 @@ public class ServerUtils {
      */
     public List<Debt> getDebtByEventCode(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/debts/{eventId}")
+            .target(server).path("api/debts/{eventId}")
             .resolveTemplate("eventId", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -169,7 +169,7 @@ public class ServerUtils {
      */
     public List<Debt> getDebtByParticipant(int eventCode, String email) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/debts/{eventId}/participant/{email}")
+            .target(server).path("api/debts/{eventId}/participant/{email}")
             .resolveTemplate("eventId", eventCode)
             .resolveTemplate("email", email)
             .request(APPLICATION_JSON)
@@ -187,7 +187,7 @@ public class ServerUtils {
      */
     public List<Debt> getDebtByExpense(int eventCode, int expenseId) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/debts/{eventId}/expense/{expenseId}")
+            .target(server).path("api/debts/{eventId}/expense/{expenseId}")
             .resolveTemplate("eventId", eventCode)
             .resolveTemplate("expenseId", expenseId)
             .request(APPLICATION_JSON)
@@ -204,7 +204,7 @@ public class ServerUtils {
      */
     public Debt saveDebt(DebtDTO debtDTO) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/debts")
+            .target(server).path("api/debts")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
@@ -212,7 +212,7 @@ public class ServerUtils {
 
     public List<Debt> deleteDebtsOfExpense(int eventId, int expenseId){
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/debts/{eventId}/{expenseId}")
+            .target(server).path("api/debts/{eventId}/{expenseId}")
             .resolveTemplate("eventId", eventId)
             .resolveTemplate("expenseId",expenseId)
             .request(APPLICATION_JSON)
@@ -237,7 +237,7 @@ public class ServerUtils {
         deleteDebtsOfExpense(expense.getEvent().getId(), expense.getExpenseId());
 
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER)
+            .target(server)
             .path("api/expenses")
             .queryParam("eventID", expense.getEvent().id)
             .queryParam("expenseID", expense.getExpenseId())
@@ -257,7 +257,7 @@ public class ServerUtils {
 
     public List<Participant> getParticipants(int eventCode) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants")
+                .target(server).path("api/participants")
                 .queryParam("eventID", eventCode)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -274,7 +274,7 @@ public class ServerUtils {
 
     public List<Event> getAllEvents() {
         var response = client
-                .target(SERVER).path("api/event/all")
+                .target(server).path("api/event/all")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Event>>(){});
@@ -288,7 +288,7 @@ public class ServerUtils {
      * @return the event by id
      */
     public Event getEventById(int id) {
-        Response response = client.target(SERVER).path("api/event")
+        Response response = client.target(server).path("api/event")
                 .queryParam("id", id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -306,7 +306,7 @@ public class ServerUtils {
     }
 
     public Event updateEvent(Event event, String newName){
-        Response response = client.target(SERVER).path("api/event/updateName")
+        Response response = client.target(server).path("api/event/updateName")
                 .queryParam("newName", newName)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -331,7 +331,7 @@ public class ServerUtils {
      */
     public Event deleteEventById(int id) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/event")
+            .target(server).path("api/event")
             .queryParam("id", id)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -351,7 +351,7 @@ public class ServerUtils {
 
     public Event addEvent(EventDTO newEvent) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/event")
+            .target(server).path("api/event")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(newEvent, APPLICATION_JSON));
@@ -421,7 +421,7 @@ public class ServerUtils {
 
     public Participant createParticipant(ParticipantDTO p) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants")
+                .target(server).path("api/participants")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(p, APPLICATION_JSON));
@@ -439,7 +439,7 @@ public class ServerUtils {
 
     public void deleteParticipant(String uuid, int eventId) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants/{uuid}/{eventId}")
+                .target(server).path("api/participants/{uuid}/{eventId}")
                 .resolveTemplate("uuid", uuid)
                 .resolveTemplate("eventId", eventId)
                 .request(APPLICATION_JSON)
@@ -455,7 +455,7 @@ public class ServerUtils {
     // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
     public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
         Response response = ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/participants/{uuid}/{eventId}")
+            .target(server).path("api/participants/{uuid}/{eventId}")
             .resolveTemplate("uuid", oldUuid)
             .resolveTemplate("eventId", participant.getEventId())
             .request(APPLICATION_JSON)
@@ -477,7 +477,7 @@ public class ServerUtils {
     public List<Event> getEventsByParticipant(String id) {
 
         Response response = ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/participants/{uuid}/events")
+                .target(server).path("api/participants/{uuid}/events")
                 .resolveTemplate("uuid", id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -498,7 +498,7 @@ public class ServerUtils {
 
     public List<Payment> getPaymentsOfEvent(int eventId){
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/payments/{id}")
+            .target(server).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -508,7 +508,7 @@ public class ServerUtils {
 
     public Payment savePayment(PaymentDTO paymentDTO) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/payments")
+            .target(server).path("api/payments")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
@@ -516,7 +516,7 @@ public class ServerUtils {
 
     public Payment updatePayment(PaymentDTO paymentDTO, long paymentId) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/payments/{id}")
+            .target(server).path("api/payments/{id}")
             .resolveTemplate("id", paymentId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -525,7 +525,7 @@ public class ServerUtils {
 
     public Payment deletePaymentsOfEvent(int eventId) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(SERVER).path("api/payments/{id}")
+            .target(server).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -584,7 +584,7 @@ public class ServerUtils {
 
     public double[] getStatisticsByEventID(int eventID){
         return client
-                .target(SERVER)
+                .target(server)
                 .path("/api/statistics")
                 .queryParam("eventID", eventID)
                 .request(APPLICATION_JSON)
@@ -594,7 +594,7 @@ public class ServerUtils {
 
     public double getTotalCostEvent(int eventID){
         return client
-                .target(SERVER)
+                .target(server)
                 .path("/api/statistics/totalCost")
                 .queryParam("eventID", eventID)
                 .request(APPLICATION_JSON)
@@ -610,7 +610,7 @@ public class ServerUtils {
     }
 
     public Participant getParticipant(String uuid, int eventCode) {
-        Response response = client.target(SERVER).path("api/participants/{uuid}/{eventId}")
+        Response response = client.target(server).path("api/participants/{uuid}/{eventId}")
                 .resolveTemplate("uuid", uuid)
                 .resolveTemplate("eventId", eventCode)
                 .request(APPLICATION_JSON)
