@@ -1,6 +1,7 @@
 package client.utils;
 
 import commons.*;
+import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
@@ -294,16 +295,95 @@ class ServerUtilsTest {
         assertEquals(mockDebtList, debtList);
     }
 
-//    @Test
-//    public void saveDebtTest(){
-//        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
-//        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
-//        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
-//        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
-//
-//        when(mockBuilder.post(any(Entity.class), eq(Expense.class))).thenReturn(mockExp);
-//        when(mockBuilder.post(Entity.class))
-//
-//    }
+    @Test
+    public void saveDebtTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Expense mockExp = new Expense(e, "this is a expense", Type.Drinks, d, 100.0, p);
+        Debt mockDebt = new Debt(mockExp, 100.0, p);
+
+        when(mockBuilder.post(any(Entity.class), eq(Debt.class))).thenReturn(mockDebt);
+
+        double balance = 100.0;
+        int expenseId = 123;
+        int eventID = 123;
+        DebtDTO debtt = new DebtDTO(balance, eventID, expenseId, "uuid");
+
+        Debt realDebt = serverUtils.saveDebt(debtt);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/debts");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(realDebt, mockDebt);
+    }
+
+
+    @Test
+    public void deleteExpenseTest() {
+        // Mocking necessary components
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), any(ExpenseId.class))).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Expense mockExp = new Expense(e, "this is a expense", Type.Drinks, d, 100.0, p);
+        ExpenseId expenseId = new ExpenseId(e, mockExp.getExpenseId());
+
+        when(mockResponse.readEntity((Class<Object>) any())).thenReturn(mockExp);
+        when(mockBuilder.delete()).thenReturn(mockResponse);
+
+        Expense exp = serverUtils.deleteExpense(mockExp);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/expenses");
+        verify(mockWebTarget).queryParam("eventID", e.getId());
+        verify(mockWebTarget).queryParam("expenseID", expenseId); // Use getExpenseId()
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).delete();
+
+        assertNotNull(exp);
+        assertEquals(exp, mockExp);
+    }
+
+    @Test
+    public void getParticipantsTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        List<Participant> participantList = List.of(p);
+        when(mockBuilder.get(new GenericType<List<Participant>>(){})).thenReturn(participantList);
+
+        List<Participant> realPartList = serverUtils.getParticipants(123);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/participants");
+        verify(mockWebTarget).queryParam("eventID", 123);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(realPartList, participantList);
+
+    }
 
 }

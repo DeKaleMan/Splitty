@@ -179,7 +179,7 @@ public class ServerUtils {
      * @return the debt
      */
     public Debt saveDebt(DebtDTO debtDTO) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(SERVER).path("api/debts")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -192,16 +192,25 @@ public class ServerUtils {
      *
      * @param expense the expense
      */
-    public void deleteExpense(Expense expense) {
+    public Expense deleteExpense(Expense expense) {
         ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
 
-        ClientBuilder.newClient(new ClientConfig())
+         Response response = client
             .target(SERVER)
             .path("api/expenses")
             .queryParam("eventID", expense.getEvent().id)
-            .queryParam("expenseID", expense.getExpenseId())
+            .queryParam("expenseID", expenseId)
             .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
             .delete();
+         if (response.getStatus() == Response.Status.OK.getStatusCode()){
+             Expense e = response.readEntity(Expense.class);
+             response.close();
+             return e;
+         } else{
+             response.close();
+             throw new RuntimeException("failed to delete an expense " + response.getStatus());
+         }
     }
 
 
@@ -214,7 +223,7 @@ public class ServerUtils {
      */
 
     public List<Participant> getParticipants(int eventCode) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
                 .target(SERVER).path("api/participants")
                 .queryParam("eventID", eventCode)
                 .request(APPLICATION_JSON)
