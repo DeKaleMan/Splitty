@@ -16,7 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 
 public class SettingsCtrl {
-    private final ServerUtils serverUtils;
+    private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
     @FXML
@@ -43,8 +43,7 @@ public class SettingsCtrl {
     private TextField bicField;
 
     @Inject
-    public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
-        this.serverUtils = server;
+    public SettingsCtrl(MainCtrl mainCtrl, Config config){
         this.mainCtrl = mainCtrl;
         this.config = config;
     }

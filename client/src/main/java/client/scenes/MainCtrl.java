@@ -82,15 +82,28 @@ public class MainCtrl {
     private EditExpenseCtrl editExpenseCtrl;
     private ServerUtils serverUtils;
 
-    //mainCtrl.initialize(primaryStage, overview, add, invitation,splittyOverview,
-    //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
     private Scene settings;
     private SettingsCtrl settingCtrl;
 
+    private Scene server;
+    private ServerCtrl serverCtrl;
 
     // probably not the best place to put that here but works for now
     // maybe in the future isolate it into an eventctrl?
     private List<Event> events = new ArrayList<>();
+
+    public void initialize(Stage primaryStage, Pair<ServerCtrl, Parent> server,
+                           Pair<SettingsCtrl, Parent> settings) {
+        this.primaryStage = primaryStage;
+        this.serverCtrl = server.getKey();
+        this.server = new Scene(server.getValue());
+        this.settingCtrl = settings.getKey();
+        this.settings = new Scene(settings.getValue());
+        settingCtrl.initializeConfig();
+        showServerStartup(true);
+        primaryStage.show();
+    }
+
 
     public void initialize(Stage primaryStage, Pair<InvitationCtrl, Parent> invitation,
                            Pair<SplittyOverviewCtrl, Parent> splittyOverview,
@@ -100,7 +113,8 @@ public class MainCtrl {
                            Pair<UserEventListCtrl, Parent> userEventList,
                            Pair<CreateEventCtrl, Parent> createEvent,
                            AdminWindows adminWindows,
-                           Pair<SettingsCtrl, Parent> settings) {
+                           Pair<SettingsCtrl, Parent> settings,
+                           Pair<ServerCtrl, Parent> server) {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
@@ -133,14 +147,12 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
-
         this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
         this.editEventCrtl = eventPropGrouper.editEvent().getKey();
-
-
         this.editExpense = new Scene(eventPropGrouper.editExpense().getValue());
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
-
+        this.serverCtrl = server.getKey();
+        this.server = new Scene(server.getValue());
         serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
         setLanguage();
@@ -149,6 +161,11 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    private void showServerStartup(boolean startup) {
+        primaryStage.setScene(server);
+        primaryStage.setTitle("Server");
+        serverCtrl.setField(startup);
+    }
     private void setLanguage(){
         languages = new ArrayList<>();
         //TODO we should add the available languages perhaps to a file

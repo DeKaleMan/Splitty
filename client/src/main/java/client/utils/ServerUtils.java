@@ -67,10 +67,14 @@ public class ServerUtils {
     public ServerUtils(){
         this.client = ClientBuilder.newClient(new ClientConfig());
         // This is only called if the serverutils class was constructed from the actual program and not a test
-        session = connect("ws://localhost:8080/websocket");
+        session = connect("ws://"+ serverDomain + "/websocket");
     }
 
-    public static final String SERVER = "http://localhost:8080/";
+    public static void resetServer() {
+        SERVER = "http://" + serverDomain + "/";
+    }
+    public static String serverDomain = "localhost:8080";
+    public static String SERVER = "http://localhost:8080/";
 
     /**
      * Gets expense.

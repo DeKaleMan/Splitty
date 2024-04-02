@@ -39,32 +39,36 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage){
-
-        var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
-        var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
-        var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
-        var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
-        var userEventList = FXML.load(UserEventListCtrl.class, "client", "scenes", "UserEventList.fxml");
-        var createEvent = FXML.load(CreateEventCtrl.class, "client", "scenes", "createEvent.fxml");
-        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
-        var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
-        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
-        var debts = FXML.load(DebtCtrl.class, "client", "scenes", "Debts.fxml");
-        var editEvent = FXML.load(EditEventCrtl.class, "client", "scenes", "EditEvent.fxml");
-        var editExpense = FXML.load(EditExpenseCtrl.class,"client", "scenes", "EditExpense.fxml");
-        // group these in the EventPropGrouper
-        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants,
-            statistics, debts,editEvent, editExpense);
-
+        var server = FXML.load(ServerCtrl.class, "client", "scenes", "Server.fxml");
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
+        try {
+            var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+            var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
+            var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+            var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
+            var userEventList = FXML.load(UserEventListCtrl.class, "client", "scenes", "UserEventList.fxml");
+            var createEvent = FXML.load(CreateEventCtrl.class, "client", "scenes", "createEvent.fxml");
+            var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+            var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
+            var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
+            var debts = FXML.load(DebtCtrl.class, "client", "scenes", "Debts.fxml");
+            var editEvent = FXML.load(EditEventCrtl.class, "client", "scenes", "EditEvent.fxml");
+            var editExpense = FXML.load(EditExpenseCtrl.class, "client", "scenes", "EditExpense.fxml");
+            // group these in the EventPropGrouper
+            var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants,
+                    statistics, debts, editEvent, editExpense);
 
-        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
-        var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
-        var adminWindows = new AdminWindows(adminLogin, adminOverview);
+            var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
+            var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
+            var adminWindows = new AdminWindows(adminLogin, adminOverview);
+            var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+            mainCtrl.initialize(primaryStage, invitation,splittyOverview,
+                    startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows, settings, server);
 
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, invitation,splittyOverview,
-            startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows, settings);
+        } catch (Exception e) {
+            var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+            mainCtrl.initialize(primaryStage, server, settings);
+        }
 
     }
 }
