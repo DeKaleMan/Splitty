@@ -153,12 +153,18 @@ public class MainCtrl {
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
         this.serverCtrl = server.getKey();
         this.server = new Scene(server.getValue());
-        serverUtils = new ServerUtils();
         settingCtrl.initializeConfig();
+        serverUtils = new ServerUtils();
+        setupConnection();
         setLanguage();
         showStartScreen();
         startScreenCtrl.setLanguageSelect();
         primaryStage.show();
+    }
+
+    private void setupConnection() {
+        ServerUtils.serverDomain = settingCtrl.getConnection();
+        ServerUtils.resetServer();
     }
 
     public void showServerStartup(boolean startup) {

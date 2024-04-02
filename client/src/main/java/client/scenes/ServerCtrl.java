@@ -7,6 +7,7 @@ import client.utils.Config;
 import client.utils.EventPropGrouper;
 import client.utils.ServerUtils;
 import com.google.inject.Injector;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import static com.google.inject.Guice.createInjector;
 
