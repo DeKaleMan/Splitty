@@ -40,6 +40,8 @@ public class StartScreenCtrl implements Initializable {
     public Label invalidCodeError;
     @FXML
     public Label codeNotFoundError;
+    @FXML
+    public Label alreadyParticipantError;
 
     @FXML
     private Button adminLogin;
@@ -100,11 +102,11 @@ public class StartScreenCtrl implements Initializable {
         });
     }
 
-    public void fetchList(){
+    public void fetchList() {
         eventListView.getItems().clear();
 
         events = mainCtrl.getMyEvents();
-        if(events!=null) {
+        if (events != null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
             ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
             currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
@@ -112,7 +114,6 @@ public class StartScreenCtrl implements Initializable {
             eventListView.setItems(newEventList);
         }
     }
-
 
 
     private void setup(Event event, Button button, Label label) {
@@ -147,14 +148,27 @@ public class StartScreenCtrl implements Initializable {
     }
 
 
-
     /**
      * Join an event with the title specified in the joinEventTextField
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent() {
+        String eventInviteCode = joinEventTextField.getText();
+        if (eventInviteCode == null || eventInviteCode.isEmpty()) {
+            invalidCodeError.setVisible(true);
+            invalidCodeError.setVisible(false);
+            return;
+        }
+        // already a participant of this event?
+        if (mainCtrl.getMyEvents().stream().anyMatch(e ->
+                e.getInviteCode().equals(eventInviteCode))) {
+            alreadyParticipantError.setVisible(false);
+            alreadyParticipantError.setVisible(true);
+            return;
+        }
+
         try {
-            String eventInviteCode = joinEventTextField.getText();
+
             Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
                 // show error message
@@ -168,10 +182,11 @@ public class StartScreenCtrl implements Initializable {
         } catch (RuntimeException e) {
             invalidCodeError.setVisible(false);
             codeNotFoundError.setVisible(true);
-//        }
-            mainCtrl.setConfirmationJoinedEvent();
         }
+        mainCtrl.setConfirmationJoinedEvent();
     }
+
+
 
     @FXML
     public void showAllEvents() {
