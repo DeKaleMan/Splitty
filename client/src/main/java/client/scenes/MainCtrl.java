@@ -254,6 +254,7 @@ public class MainCtrl {
     public void showCreateEvent (String name) {
         primaryStage.setTitle("Create Event");
         primaryStage.setScene(createEvent);
+        createEventCtrl.resetError();
         createEventCtrl.setTitle(name);
     }
 

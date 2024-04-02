@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CreateEventCtrl {
     private final ServerUtils serverUtils;
@@ -45,20 +47,13 @@ public class CreateEventCtrl {
     private TextArea eventDescriptionArea;
 
 
+    @FXML
+    private Button goToSettings;
     // participant text fields
 
     @FXML
-    private TextField nameField;
-    @FXML
     public Label hostNameError;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private TextField iBanField;
-    @FXML
-    private TextField bICField;
-    @FXML
-    private TextField accountHolderField;
+
 
     // this list will store all added participants until
     // the create event button is clicked, then it will be added to the database
@@ -88,22 +83,30 @@ public class CreateEventCtrl {
     public void cancel() {
         mainCtrl.showStartScreen();
     }
+    @FXML
+    public void showSettings(){
+        mainCtrl.showSettings();
+    }
 
     @FXML
     public ParticipantDTO addHost(int id, String inviteID) {
-        return new ParticipantDTO(nameField.getText(), 0.0, config.getIban(), config.getBic(),
-                config.getEmail(), nameField.getText(), id, config.getId(), inviteID);
+        return new ParticipantDTO(config.getName(), 0.0, config.getIban(), config.getBic(),
+                config.getEmail(), config.getName(), id, config.getId(), inviteID);
     }
 
     @FXML
     public void createEvent() {
         String name = titleField.getText();
         String dateString = datePicker.getEditor().getText();
-        LocalDate localDate = datePicker.getValue();
         String description = eventDescriptionArea.getText();
         Date date = null;
         boolean error = false;
+        if(config.getName() == null){
+            noNameError();
+            error = true;
+        }
         try {
+            LocalDate localDate = datePicker.getValue();
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
@@ -119,22 +122,25 @@ public class CreateEventCtrl {
             error = true;
             return;
         }
-        if (name == null || name.isEmpty() || error){
-            if (name == null || name.isEmpty()) {
-                titleError.setVisible(true);
-            }
-            if (nameField.getText() == null || nameField.getText().isEmpty()) {
-                hostNameError.setVisible(true);
-            }
-            return;
-        }
+//        if (name == null || name.isEmpty() || error){
+//            if (name == null || name.isEmpty()) {
+//                titleError.setVisible(true);
+//            }
+//            if (nameField.getText() == null || nameField.getText().isEmpty()) {
+//                hostNameError.setVisible(true);
+//            }
+//            return;
+//        }
 
         //fetch owner
         String owner = config.getId();
         // create new event and add to database, go to that event overview and add participants via database.
         EventDTO event = new EventDTO(name, date, owner, description);
         Event eventCreated = serverUtils.addEvent(event);
-        ParticipantDTO participantDTO = addHost(eventCreated.getId(), eventCreated.getInviteCode());
+        ParticipantDTO participantDTO = null;
+        participantDTO = addHost(eventCreated.getId(), eventCreated.getInviteCode());
+
+
         serverUtils.createParticipant(participantDTO);
         mainCtrl.showSplittyOverview(eventCreated.getId());
         mainCtrl.addEvent(eventCreated);
@@ -156,4 +162,15 @@ public class CreateEventCtrl {
         dateIncorrectError.setVisible(false);
         dateEmptyError.setVisible(false);
     }
+    public void noNameError(){
+        hostNameError.setVisible(true);
+        goToSettings.setVisible(true);
+    }
+    public void resetError(){
+        resetDateFieldError();
+        resetTitleFieldError();
+        hostNameError.setVisible(false);
+        goToSettings.setVisible(false);
+    }
+
 }
