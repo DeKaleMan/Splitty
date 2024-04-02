@@ -386,4 +386,33 @@ class ServerUtilsTest {
 
     }
 
+    @Test
+    public void updateEventTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        String newName = "newName";
+
+        when(mockBuilder.put(any(), eq(Response.class))).thenReturn(mockResponse);
+
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+        when(mockResponse.readEntity(Event.class)).thenReturn(new Event(newName, d, "stijn", "this is an event"));
+
+        Event updatedEvent = serverUtils.updateEvent(e, newName);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/event/updateName");
+        verify(mockWebTarget).queryParam("newName", newName);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(updatedEvent.getName(), newName);
+
+    }
+
 }
