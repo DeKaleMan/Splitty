@@ -122,16 +122,6 @@ public class CreateEventCtrl {
             error = true;
             return;
         }
-//        if (name == null || name.isEmpty() || error){
-//            if (name == null || name.isEmpty()) {
-//                titleError.setVisible(true);
-//            }
-//            if (nameField.getText() == null || nameField.getText().isEmpty()) {
-//                hostNameError.setVisible(true);
-//            }
-//            return;
-//        }
-
         //fetch owner
         String owner = config.getId();
         // create new event and add to database, go to that event overview and add participants via database.
