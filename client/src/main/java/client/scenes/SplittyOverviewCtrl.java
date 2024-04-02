@@ -2,9 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.Expense;
-import commons.Participant;
-import commons.Type;
+import commons.*;
+import commons.Currency;
 import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -26,7 +25,9 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
@@ -312,13 +313,24 @@ public class SplittyOverviewCtrl implements Initializable {
                                             expense.getExpenseId()).stream()
                                         .map(x -> x.getParticipant().getName()).toList();
                                 Text mainInfo = new Text();
+                                double totalExpense = expense.getTotalExpense();
+                                if(config.getCurrency() != Currency.EUR) totalExpense = getAmountInDifferentCurrency(Currency.EUR,
+                                    config.getCurrency(), getDateString(date), totalExpense);
+                                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                                decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
                                 if (expense.isSharedExpense()) {
-                                    mainInfo.setText(expense.getPayer().getName() + " paid " +
-                                        expense.getTotalExpense() + " for " + expense.getType());
+                                    mainInfo.setText(expense.getPayer().getName()
+                                        + " paid "
+                                        + decimalFormat.format(totalExpense)
+                                        + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
+                                        + " for " + expense.getType());
                                 } else {
-                                    mainInfo.setText(expense.getPayer().getName() + " gave " +
-                                        expense.getTotalExpense() + " to " +
-                                        involved
+                                    mainInfo.setText(expense.getPayer().getName()
+                                        + " gave "
+                                        + decimalFormat.format(totalExpense)
+                                        + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
+                                        + " to "
+                                        + involved
                                             .stream()
                                             .filter(x -> !x.equals(expense.getPayer().getName()))
                                             .findFirst().get());
@@ -344,6 +356,21 @@ public class SplittyOverviewCtrl implements Initializable {
             System.out.println(e);
         }
         participantListView.setItems(FXCollections.observableArrayList(participants));
+    }
+
+    private double getAmountInDifferentCurrency(commons.Currency from, Currency to,
+                                                  String date, double amount){
+        Conversion conversion = serverUtils.getConversion(from, to, date);
+        return amount * conversion.conversionRate();
+    }
+
+    private static String getDateString(Date date) {
+        String dateString = ((date.getDate() < 10) ? "0" : "")
+            + date.getDate() + "-"
+            + ((date.getMonth() < 9) ? "0" : "")
+            + (date.getMonth()+1)
+            + "-" + (1900 + date.getYear());
+        return dateString;
     }
 
 

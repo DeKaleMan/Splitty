@@ -902,10 +902,12 @@ class ServerUtilsTest {
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Payment paymentmock = new Payment(payer, payee, 100.0, false);
 
-        when(mockBuilder.delete(Payment.class)).thenReturn(paymentmock);
+        List<Payment> expected = List.of(paymentmock);
+
+        when(mockBuilder.delete(new GenericType<List<Payment>>(){})).thenReturn(expected);
 
         int eventId = 123;
-        Payment payment = serverUtils.deletePaymentsOfEvent(eventId);
+        List<Payment> payments = serverUtils.deletePaymentsOfEvent(eventId);
 
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/payments/{id}");
@@ -913,7 +915,7 @@ class ServerUtilsTest {
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
-        assertEquals(payment, paymentmock);
+        assertEquals(expected, payments);
     }
 
     @Test

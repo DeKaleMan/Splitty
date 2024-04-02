@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Currency;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
@@ -27,14 +29,15 @@ import java.util.*;
 public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @Inject
-    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
-        super(serverUtils, mainCtrl);
+    public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
+        super(serverUtils, mainCtrl, config);
     }
 
 
     @FXML
     public void addExpense() {
         Date date = getDate();
+        if(date == null) return;
 
         Type type = getType();
         Participant payer = personComboBox.getValue();
@@ -43,7 +46,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             return;
         }
 
-        Double amountDouble = getAmountDouble();
+        Double amountDouble = getAmountDouble(date);
         if (amountDouble == null) return;
 
         Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
@@ -109,7 +112,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 payer.getUuid()));
     }
 
-    
+
     void setSplitListUp() {
         splitList.setItems(rest);
         splitList.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
@@ -169,6 +172,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         dateSelect.setValue(null);
         whatFor.setText("");
         category.setValue(null);
+        currencyComboBox.setValue(Currency.EUR);
         personComboBox.setValue(null);
         amount.setText("");
     }

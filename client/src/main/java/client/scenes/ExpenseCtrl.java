@@ -1,6 +1,9 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Conversion;
+import commons.Currency;
 import commons.Participant;
 import commons.Type;
 import javafx.beans.value.ChangeListener;
@@ -29,6 +32,7 @@ public abstract class ExpenseCtrl {
     protected final ServerUtils serverUtils;
     protected int eventCode;
     protected final MainCtrl mainCtrl;
+    protected final Config config;
 
 
     @FXML
@@ -102,6 +106,9 @@ public abstract class ExpenseCtrl {
     @FXML
     protected ListView<Participant> receiverListView;
 
+    @FXML
+    protected ComboBox<Currency> currencyComboBox;
+
     protected Participant payer;
 
     protected ObservableList<Participant> rest;
@@ -111,9 +118,10 @@ public abstract class ExpenseCtrl {
     protected boolean isSharedExpense;
 
 
-    public ExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
+    public ExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.config = config;
         rest = FXCollections.observableArrayList();
         owing = new HashSet<>();
     }
@@ -125,6 +133,40 @@ public abstract class ExpenseCtrl {
         setListViewsUp();
         setTogglesUp();
         setCategoriesUp();
+        setCurrencyUp();
+    }
+
+    protected void setCurrencyUp() {
+        currencyComboBox.setItems(FXCollections.observableArrayList(Currency.EUR,Currency.CHF,Currency.USD));
+        currencyComboBox.setCellFactory(new Callback<ListView<Currency>, ListCell<Currency>>() {
+            @Override
+            public ListCell<Currency> call(ListView<Currency> currencyListView) {
+                return new ListCell<>(){
+                    @Override
+                    protected void updateItem(Currency currency, boolean b) {
+                        super.updateItem(currency, b);
+                        if(currency == null || b){
+                            setText(null);
+                        }else{
+                            setText(currency.toString());
+                        }
+                    }
+                };
+            }
+        });
+        currencyComboBox.setButtonCell(new ListCell<>(){
+            @Override
+            protected void updateItem(Currency currency, boolean b) {
+                super.updateItem(currency, b);
+                if(currency == null || b){
+                    setText("Select currency");
+                }else{
+                    setText(currency.toString());
+                }
+            }
+        });
+
+        currencyComboBox.setValue(Currency.EUR);
     }
 
     protected void setListViewsUp() {
@@ -252,7 +294,7 @@ public abstract class ExpenseCtrl {
             });
     }
 
-    protected Double getAmountDouble() {
+    protected Double getAmountDouble(Date date) {
         double amountDouble = 0.0;
         try {
             if (amount.getText() == null || amount.getText().isEmpty()) {
@@ -266,12 +308,31 @@ public abstract class ExpenseCtrl {
                 amountError.setText("Amount cannot be negative or zero*");
                 return null;
             }
+            if(currencyComboBox.getValue() == null){
+                System.out.println("Select currency");
+                return null;
+            }
+            String dateString = getDateString(date);
+            amountDouble = getAmountInDifferentCurrency(currencyComboBox.getValue(),
+                Currency.EUR,dateString,amountDouble);
         } catch (NumberFormatException e) {
             amountError.setVisible(true);
             amountError.setText("Not a number, format e.g 13.99");
             return null;
+        } catch (RuntimeException e){
+            System.out.println("Failed to convert amount");
+            return null;
         }
         return amountDouble;
+    }
+
+    protected static String getDateString(Date date) {
+        String dateString = ((date.getDate() < 10) ? "0" : "")
+            + date.getDate() + "-"
+            + ((date.getMonth() < 9) ? "0" : "")
+            + (date.getMonth()+1)
+            + "-" + (1900 + date.getYear());
+        return dateString;
     }
 
     protected Type getType() {
@@ -281,10 +342,11 @@ public abstract class ExpenseCtrl {
     }
 
     protected Date getDate() {
-        Date date = null;
+        Date date;
         //link these to participants and then add the expense
         if (dateSelect.getValue() == null) {
             dateSelect.setPromptText("invalid Date");
+            return null;
         }
 
         LocalDate localDate = dateSelect.getValue();
@@ -334,6 +396,12 @@ public abstract class ExpenseCtrl {
                 }
             }
         });
+    }
+
+    protected double getAmountInDifferentCurrency(Currency from, Currency to,
+                                                  String date, double amount){
+        Conversion conversion = serverUtils.getConversion(from, to, date);
+        return amount * conversion.conversionRate();
     }
 
     @FXML

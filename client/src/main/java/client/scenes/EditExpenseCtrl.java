@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Currency;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
@@ -19,6 +21,8 @@ import javafx.util.Duration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -28,14 +32,15 @@ public class EditExpenseCtrl extends ExpenseCtrl {
 
 
     @Inject
-    public EditExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
-        super(serverUtils, mainCtrl);
+    public EditExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
+        super(serverUtils, mainCtrl, config);
     }
 
     @FXML
     @Transactional
     public void editExpense() {
         Date date = getDate();
+        if(date == null) return;
 
         Type type = getType();
         Participant oldPayer = personComboBox.getValue();
@@ -44,7 +49,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             return;
         }
 
-        Double amountDouble = getAmountDouble();
+        Double amountDouble = getAmountDouble(date);
         if (amountDouble == null) return;
 
         Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
@@ -176,9 +181,10 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             allparticipants = new ArrayList<>();
         }
         list.addAll(allparticipants);
+        setCategoriesUp();
+        setCurrencyUp();
         setComboboxUp(list);
         setListViewsUp();
-        setCategoriesUp();
         setTogglesUp();
         this.expense = expense;
         owing.clear();
@@ -189,9 +195,16 @@ public class EditExpenseCtrl extends ExpenseCtrl {
         dateSelect.setValue(expense.getDate().toInstant()
             .atZone(ZoneId.systemDefault())
             .toLocalDate());
+        currencyComboBox.setValue(config.getCurrency());
         whatFor.setText(expense.getDescription());
         category.setValue(expense.getType());
-        amount.setText(expense.getTotalExpense() + "");
+        double totalExpense = expense.getTotalExpense();
+        if(config.getCurrency() != commons.Currency.EUR) totalExpense = getAmountInDifferentCurrency(
+            Currency.EUR,
+            config.getCurrency(), getDateString(expense.getDate()), totalExpense);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+        amount.setText(decimalFormat.format(totalExpense));
         payer = expense.getPayer();
         rest.clear();
         rest.addAll(allparticipants);

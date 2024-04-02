@@ -3,6 +3,8 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.Conversion;
+import commons.Currency;
 import commons.Participant;
 import commons.Payment;
 import commons.dto.ParticipantDTO;
@@ -25,7 +27,9 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import javax.inject.Inject;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class DebtCtrl implements Initializable {
@@ -129,9 +133,17 @@ public class DebtCtrl implements Initializable {
     }
 
     private GridPane getGrid(Payment payment) {
-        String title = payment.getPayer().getName() + " pays " +
-            payment.getPayee().getName() + " " +
-            payment.getAmount();
+        double amount = payment.getAmount();
+        if(config.getCurrency() != Currency.EUR) amount = getAmountInDifferentCurrency(Currency.EUR,
+            config.getCurrency(), getDateString(new Date()), amount);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+        String title = payment.getPayer().getName()
+            + " pays "
+            + payment.getPayee().getName()
+            + " "
+            + decimalFormat.format(amount)
+            + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
         Button received = new Button("Mark received");
         received.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -203,6 +215,21 @@ public class DebtCtrl implements Initializable {
 
     public void setTitlelabel(String title) {
         titlelabel.setText((title));
+    }
+
+    private double getAmountInDifferentCurrency(commons.Currency from, Currency to,
+                                                  String date, double amount){
+        Conversion conversion = serverUtils.getConversion(from, to, date);
+        return amount * conversion.conversionRate();
+    }
+
+    private static String getDateString(Date date) {
+        String dateString = ((date.getDate() < 10) ? "0" : "")
+            + date.getDate() + "-"
+            + ((date.getMonth() < 9) ? "0" : "")
+            + (date.getMonth()+1)
+            + "-" + (1900 + date.getYear());
+        return dateString;
     }
 
     /**

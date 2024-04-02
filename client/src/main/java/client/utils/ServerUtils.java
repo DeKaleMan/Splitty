@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import java.util.*;
 
 import commons.*;
+import commons.Currency;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
@@ -528,13 +529,14 @@ public class ServerUtils {
             .put(Entity.entity(paymentDTO, APPLICATION_JSON), Payment.class);
     }
 
-    public Payment deletePaymentsOfEvent(int eventId) {
+
+    public List<Payment> deletePaymentsOfEvent(int eventId) {
         return client
             .target(server).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .delete(Payment.class);
+            .delete(new GenericType<List<Payment>>(){});
     }
 
     public List<Payment> generatePaymentsForEvent(int eventCode) {
@@ -633,5 +635,19 @@ public class ServerUtils {
                 "Failed to retrieve participant. Status code: " + response.getStatus());
         }
 
+    }
+
+    //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
+    public Conversion getConversion(Currency from, Currency to, String date){
+         Response response = ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/currency")
+            .queryParam("from", from.toString())
+            .queryParam("to", to.toString())
+            .queryParam("date",date)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
+
+         return response.readEntity(Conversion.class);
     }
 }
