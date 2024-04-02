@@ -311,6 +311,7 @@ public class MainCtrl {
         }
         primaryStage.setTitle("Create Event");
         primaryStage.setScene(createEvent);
+        createEventCtrl.resetError();
         createEventCtrl.setTitle(name);
     }
 
