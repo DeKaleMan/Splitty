@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

@@ -49,7 +49,8 @@ public class Main extends Application {
             var userEventList = FXML.load(UserEventListCtrl.class, "client", "scenes", "UserEventList.fxml");
             var createEvent = FXML.load(CreateEventCtrl.class, "client", "scenes", "createEvent.fxml");
             var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
-            var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes", "ManageParticipants.fxml");
+            var manageParticipants = FXML.load(ManageParticipantsCtrl.class, "client", "scenes",
+                    "ManageParticipants.fxml");
             var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
             var debts = FXML.load(DebtCtrl.class, "client", "scenes", "Debts.fxml");
             var editEvent = FXML.load(EditEventCrtl.class, "client", "scenes", "EditEvent.fxml");
@@ -63,7 +64,8 @@ public class Main extends Application {
             var adminWindows = new AdminWindows(adminLogin, adminOverview);
             var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
             mainCtrl.initialize(primaryStage, invitation,splittyOverview,
-                    startScreen, contactDetails, eventPropGrouper, userEventList, createEvent, adminWindows, settings, server);
+                    startScreen, contactDetails, eventPropGrouper, userEventList,
+                    createEvent, adminWindows, settings, server);
 
         } catch (Exception e) {
             var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
