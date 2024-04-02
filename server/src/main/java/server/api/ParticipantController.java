@@ -69,7 +69,7 @@ public class ParticipantController {
                 participantDTO.getUuid(),
                 event
         );
-        participant.setGhostStatus(participantDTO.isGhost());
+        participant.setGhost(participantDTO.isGhost());
 
         Participant savedParticipant = participantRepository.save(participant);
         return ResponseEntity.ok(savedParticipant);

@@ -23,6 +23,7 @@ public class ParticipantDTO {
 
     public ParticipantDTO(String name, double balance, String iBan, String bIC,
                           String email, String accountHolder, int eventId, String uuid) {
+        // DELETE THIS CONSTRUCTOR
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;

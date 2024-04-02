@@ -410,6 +410,12 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
 
+    public void addGhostParticipant() {
+
+        mainCtrl.showAddParticipant(eventCode);
+
+    }
+
     public void editEvent() {
         mainCtrl.editEvent();
     }

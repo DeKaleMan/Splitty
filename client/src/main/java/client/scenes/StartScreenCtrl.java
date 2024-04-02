@@ -168,8 +168,9 @@ public class StartScreenCtrl implements Initializable {
         } catch (RuntimeException e) {
             invalidCodeError.setVisible(false);
             codeNotFoundError.setVisible(true);
+//        }
+            mainCtrl.setConfirmationJoinedEvent();
         }
-        mainCtrl.setConfirmationJoinedEvent();
     }
 
     @FXML
