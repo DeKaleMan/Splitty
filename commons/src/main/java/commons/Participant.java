@@ -24,6 +24,9 @@ public class Participant implements Serializable {
 
     private String accountHolder;
 
+    @Column(nullable = false)
+    private boolean isGhost;
+
 
     @EmbeddedId
     private ParticipantId id;
@@ -39,6 +42,7 @@ public class Participant implements Serializable {
         this.iBan = iBan;
         this.bIC = bIC;
         this.email = email;
+        this.isGhost = false;
         this.id = new ParticipantId(uuid, event);
         this.accountHolder = accountHolder;
     }
@@ -113,6 +117,14 @@ public class Participant implements Serializable {
         return id;
     }
 
+    public boolean isGhost() {
+        return isGhost;
+    }
+
+    public void setGhostStatus(boolean ghost) {
+        this.isGhost = ghost;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -135,6 +147,9 @@ public class Participant implements Serializable {
                 ", balance=" + balance +
                 ", iBan='" + iBan + '\'' +
                 ", bIC='" + bIC + '\'' +
+                ", email='" + email + '\'' +
+                ", accountHolder='" + accountHolder + '\'' +
+                ", isGhost=" + isGhost +
                 ", id=" + id +
                 '}';
     }

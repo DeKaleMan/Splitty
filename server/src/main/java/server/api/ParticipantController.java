@@ -69,6 +69,7 @@ public class ParticipantController {
                 participantDTO.getUuid(),
                 event
         );
+        participant.setGhostStatus(participantDTO.isGhost());
 
         Participant savedParticipant = participantRepository.save(participant);
         return ResponseEntity.ok(savedParticipant);
@@ -94,7 +95,7 @@ public class ParticipantController {
         existingParticipant.setEmail(participantDTO.getEmail());
         existingParticipant.setAccountHolder(participantDTO.getAccountHolder());
         existingParticipant.setUuid(participantDTO.getUuid());
-
+//        existingParticipant.setGhost(participantDTO.isGhost()); // this part is
 
         Participant updatedParticipant = participantRepository.save(existingParticipant);
         return ResponseEntity.ok(updatedParticipant);
