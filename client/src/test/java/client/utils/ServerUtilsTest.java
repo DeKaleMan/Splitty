@@ -294,4 +294,16 @@ class ServerUtilsTest {
         assertEquals(mockDebtList, debtList);
     }
 
+//    @Test
+//    public void saveDebtTest(){
+//        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+//        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+//        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+//        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+//
+//        when(mockBuilder.post(any(Entity.class), eq(Expense.class))).thenReturn(mockExp);
+//        when(mockBuilder.post(Entity.class))
+//
+//    }
+
 }
