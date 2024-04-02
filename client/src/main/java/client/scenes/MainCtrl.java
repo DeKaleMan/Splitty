@@ -161,7 +161,7 @@ public class MainCtrl {
         primaryStage.show();
     }
 
-    private void showServerStartup(boolean startup) {
+    public void showServerStartup(boolean startup) {
         primaryStage.setScene(server);
         primaryStage.setTitle("Server");
         serverCtrl.setField(startup);

@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,8 +24,6 @@ public class SettingsCtrl {
     public Button cancelButton;
     @FXML
     public Button saveButton;
-    @FXML
-    private TextField serverURLField;
     @FXML
     private TextField emailField;
     @FXML
@@ -56,9 +55,6 @@ public class SettingsCtrl {
      * sets all the fields to the values obtained by the config file
      */
     public void initializeFields() {
-        if (config.getConnection() != null) {
-            serverURLField.setText(config.getConnection());
-        }
         if (config.getEmail() != null) {
             emailField.setText(config.getEmail());
         } else {
@@ -89,7 +85,6 @@ public class SettingsCtrl {
      */
     public void saveSettings() {
         String email = emailField.getText();
-        String connection = serverURLField.getText();
         String currency = currencyField.getText();
         String name = nameField.getText();
         String iban  = ibanField.getText();
@@ -103,15 +98,10 @@ public class SettingsCtrl {
             abort = true;
             // set error message
         }
-        if (connection == null || connection.isEmpty()) {
-            abort = true;
-            // set error message
-        }
         if (abort) {
             return;
         }
         config.setEmail(email);
-        config.setConnection(connection);
         config.setCurrency(Currency.valueOf(currency));
         config.setName(name);
         config.setIban(iban);
@@ -190,5 +180,9 @@ public class SettingsCtrl {
         if (k.match(press)) {
             saveSettings();
         }
+    }
+
+    public void changeServer() {
+        mainCtrl.showServerStartup(false);
     }
 }

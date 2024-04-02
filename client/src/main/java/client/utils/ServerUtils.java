@@ -51,6 +51,7 @@ public class ServerUtils {
 
     private Client client;
     private StompSession session;
+    private Config config;
 
     /**
      * ONLY USE THIS CONSTRUCTOR FOR TESTING PURPOSES
@@ -64,7 +65,7 @@ public class ServerUtils {
     /**
      * Constructor to use for the actual program (so not for testing)
      */
-    public ServerUtils(){
+    public ServerUtils() {
         this.client = ClientBuilder.newClient(new ClientConfig());
         // This is only called if the serverutils class was constructed from the actual program and not a test
         session = connect("ws://"+ serverDomain + "/websocket");

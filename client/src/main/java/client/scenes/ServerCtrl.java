@@ -59,6 +59,8 @@ public class ServerCtrl {
             ServerUtils.serverDomain = serverField.getText();
             ServerUtils.resetServer();
             serverUtils = new ServerUtils();
+            config.setConnection(serverField.getText());
+            config.write();
             relaunch();
             mainCtrl.closeStage();
         } catch (RuntimeException e) {
@@ -96,6 +98,9 @@ public class ServerCtrl {
 
     }
 
+    public void back() {
+        mainCtrl.showSettings();
+    }
     public void resetError(KeyEvent keyEvent) {
         notConnectedError.setVisible(false);
     }
