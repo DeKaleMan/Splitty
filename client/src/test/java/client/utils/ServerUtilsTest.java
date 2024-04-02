@@ -184,7 +184,6 @@ class ServerUtilsTest {
         // Calling the method under test
         double statistics = serverUtils.getTotalCostEvent(1);
 
-        // Verifying the interactions
         verify(mockClient).target(ServerUtils.SERVER);
         verify(mockWebTarget).path("/api/statistics/totalCost");
         verify(mockWebTarget).queryParam("eventID", 1);
