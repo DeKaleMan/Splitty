@@ -39,7 +39,8 @@ public class LanguageController {
         }
         File newfile = new File(basepath + targetLang + ".json");
         //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
-        if(newfile.exists()){
+        //TODO no newfile.exists
+        if (/*newfile.exists()*/serverIoUtil.fileExists(newfile)) {
             // Read JSON file
             JsonObject object = translator.readJsonFile(newfile);
             // Check if translation exists in JSON
@@ -50,33 +51,35 @@ public class LanguageController {
 
         }
         String translation = translator.translateWithAPI(query, sourceLang, targetLang);
-        if(translation.equals(HttpStatus.FORBIDDEN.toString())){
+        if (translation.equals(HttpStatus.FORBIDDEN.toString())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("not a valid language");
         }
-        try {
-            if (newfile.createNewFile()) {
-                try (FileWriter fileWriter = new FileWriter(newfile)) {
-                    // Write an empty JSON object to the file
-                    fileWriter.write("{}");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            // mynewFile.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        //TODO NO FILEWRITER & NO CREATE NEW FILE
+
+//            if (newfile.createNewFile()) {
+//                try (FileWriter fileWriter = new FileWriter(newfile)) {
+//                    // Write an empty JSON object to the file
+//                    fileWriter.write("{}");
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//            // mynewFile.createNewFile();
+        if (serverIoUtil.createNewFile(newfile)) {
+            serverIoUtil.write("{}", newfile);
         }
         // Translate using external API
 
         // Write translation to JSON file
         JsonObject object = translator.readJsonFile(newfile);
         object.addProperty(query, translation);
-        writeJsonFile(object, newfile);
-
+        //writeJsonFile(object, newfile);
+        serverIoUtil.writeJson(object, newfile);
         return ResponseEntity.ok(translation);
 
 
     }
+
     private String getTranslationFromJson(String query, JsonObject object) {
         if (object.has(query)) {
             return object.get(query).getAsString();
@@ -84,6 +87,7 @@ public class LanguageController {
         return null;
     }
 
+    //TODO NO FILEWRITE...move to ServerioUtils
     public void writeJsonFile(JsonObject object, File file) {
         try (FileWriter fileWriter = new FileWriter(file.getPath())) {
             Gson gson = new Gson();

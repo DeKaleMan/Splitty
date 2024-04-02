@@ -1,5 +1,6 @@
 package server.api.testmocks;
 
+import com.google.gson.JsonObject;
 import commons.Conversion;
 import server.api.depinjectionUtils.ServerIOUtil;
 
@@ -55,6 +56,19 @@ public class ServerIOUtilsTest implements ServerIOUtil {
         ioCalls.add("readConversion");
         List<Conversion> tmpConversionRead = nextConversionRead;
         return tmpConversionRead;
+    }
+
+    @Override
+    public void writeJson(JsonObject object, File file) {
+        this.file = file;
+        ioCalls.add("writeJson");
+        lastWrite = String.valueOf(object);
+    }
+
+    @Override
+    public boolean createNewFile(File newfile) {
+        ioCalls.add("createdFile");
+        return true;
     }
 
     public ArrayList<String> clearCallList() {

@@ -2,6 +2,8 @@ package server.api.depinjectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import commons.Conversion;
 import org.springframework.stereotype.Component;
 
@@ -98,5 +100,25 @@ public class ServerIOUtilActual implements ServerIOUtil {
     @Override
     public boolean fileExists(File file) {
         return file.exists();
+    }
+
+    @Override
+    public void writeJson(JsonObject object, File file){
+        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
+            Gson gson = new Gson();
+            gson.toJson(object, fileWriter);
+            System.out.println("JSON file updated successfully.");
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing JSON object to file", e);
+        }
+    }
+
+    @Override
+    public boolean createNewFile(File newfile){
+        try {
+            return newfile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
