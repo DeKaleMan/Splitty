@@ -47,9 +47,10 @@ public class EditEventCrtl {
     }
     @FXML
     public void changeValues() {
+        //possibly edit date and description
         String newName = nameChange.getText();
         if(newName == null || newName.isEmpty()){
-            nameChange.setText("please provide a name");
+            nameChange.setPromptText("please provide a name");
             throw new NoSuchElementException();
         }
         try{
@@ -63,6 +64,7 @@ public class EditEventCrtl {
         }
         succesFullyChangeName();
         nameChange.setText("");
+
     }
 
 

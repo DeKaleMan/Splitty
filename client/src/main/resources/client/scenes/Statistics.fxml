@@ -7,7 +7,7 @@
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
    <children>
-      <PieChart fx:id="pieChart" layoutX="48.0" layoutY="138.0" prefHeight="254.0" prefWidth="504.0" stylesheets="@../../openDebtsStyleSheet.css" />
+      <PieChart fx:id="pieChart" layoutX="48.0" layoutY="138.0" prefHeight="254.0" prefWidth="504.0" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
       <VBox alignment="TOP_CENTER" layoutX="171.0" layoutY="14.0" prefHeight="200.0" prefWidth="258.0">
          <children>
