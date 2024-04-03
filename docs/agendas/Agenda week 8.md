@@ -63,3 +63,36 @@ The message on the client is "event code not found".
 
 ## Feedback for the meeting (2 min)
 ## Any questions? + Closure (3 min)
+
+## this weeks goals:
+ - finish everything, cleanup application is next week
+
+## what couldn't be done last week:
+ - undo operations and Service classes.
+
+## Bug fixes and implementations to do the following weeks:
+
+ - clear text fields when changing windows -> joris
+ - HCI requirements for new scenes -> everyone
+ - language switch finalize -> joris
+ - when joining event make a new participant -> yavor and julian
+ - a host can add ghost participants -> yavor and julian
+ - only host can change ghost participants and no one else and the rest only can change themselves. -> yavor and julian all the participant
+ - a host can delete the event -> yavor and julian
+ - testing when you have free time -> everyone
+ - email notifications -> Stijn
+ - long polling -> Maciej
+ - finishing expenses -> Maciej
+ - currency display -> Maciej
+ - json dumps -> jesse
+ - creating events -> joris
+ - HCI requirements -> julian
+
+## important decision 
+ - Names are nullable and the participant cannot change their name per event. If the name is null just put unknown. Make sure its updated
+    when the settings are updated. 
+
+## polishing week 9:
+ - statistics percentages
+ - testing: 80%
+ - css
