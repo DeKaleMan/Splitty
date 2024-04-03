@@ -4,7 +4,8 @@
 #background {
     /* Background color */
     /* -fx-background-color: #6318BD; */
-    -fx-background-color: #f0f0f0; /* Light Gray */
+    /*-fx-background-color: #f0f0f0; !* Light Gray *!*/
+    -fx-background-color: #6A6E71; /* Dark gray background */
 }
 
 Pane {
@@ -12,8 +13,8 @@ Pane {
     /* -fx-background-color: #5117A9; */
     /* Text color */
     /* -fx-text-fill: white; */
-    -fx-background-color: #ffffff; /* White */
-    -fx-border-color: #ccc; /* Light Gray */
+    /*-fx-background-color: #ffffff; !* White *!*/
+    /*-fx-border-color: #ccc; !* Light Gray *!*/
     -fx-border-width: 1px;
     -fx-padding: 10px;
 }
@@ -25,13 +26,18 @@ Button {
     -fx-text-fill: #ffffff;
     -fx-font-size: 12px;
     -fx-alignment: center;
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 100, 0, 0.5), 10, 0.5, 5, 5); /* Darker green shadow with bigger offset */
+    -fx-border-radius: 20px; /* Rounded corners */
+    -fx-background-radius: 20px;
+    -fx-border-color: transparent; /* No border */
+    -fx-border-width: 0; /* No border */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 2, 2); /* Subtle shadow effect */
 
     /* Preferred width and height */
     /* -fx-pref-width: 120px; */
     /* -fx-pref-height: 40px; */
+}
+Button:hover{
+    -fx-background-color: #1AAE9E; /* Darker turquoise on hover */
 }
 
 #titleLabel {
@@ -39,7 +45,7 @@ Button {
     /* -fx-text-fill: white; */
     -fx-font-size: 36px; /* Bigger font size */
     -fx-font-weight: bold; /* Font weight */
-    -fx-text-fill: #333;
+    /*-fx-text-fill: #333;*/
     -fx-padding: 5px;
     /*-fx-background-color: #f0f0f0; !* Light Gray *!*/
 }
@@ -49,13 +55,107 @@ Button {
     /* -fx-text-fill: white; */
     -fx-font-weight: bold; /* Font weight */
     -fx-font-size: 18px;
-    -fx-text-fill: #333;
+    /*-fx-text-fill: #333;*/
+    -fx-text-fill: white;
 }
 
 ListView {
     /* Background color */
     /* -fx-background-color: #2E1C8A; */
-    -fx-background-color: #ffffff; /* White */
+    /*-fx-background-color: #ffffff; !* White *!*/
+    /*-fx-background-color: #4CAF50;*/
     -fx-font-size: 12px;
     -fx-text-fill: #333;
 }
+
+.blueBox {
+    -fx-background-color: #4479FD; /* Blue background for VBox */
+
+    -fx-border-radius: 20px; /* Rounded corners */
+    -fx-background-radius: 20px;
+    -fx-spacing: 10px; /* Added spacing between child nodes */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0); /* Soft shadow effect */
+}
+
+/*#background {*/
+/*    -fx-background-color: #6A6E71; !* Dark gray background *!*/
+/*}*/
+/*#titleLabel {*/
+/*    -fx-font-size: 24px; !* Larger font size for title *!*/
+/*    -fx-font-weight: bold; !* Bold font weight *!*/
+/*    -fx-text-fill: white; !* White text color *!*/
+/*    -fx-padding: 10px 20px; !* Adjusted padding *!*/
+/*    -fx-background-color: #1FC8C0; !* Turquoise background color *!*/
+/*    -fx-border-radius: 20px; !* Rounded corners *!*/
+/*    -fx-background-radius: 20px;*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
+/*}*/
+
+/*Button {*/
+/*    -fx-background-color: #1FC8C0; !* Turquoise button color *!*/
+/*    -fx-text-fill: white; !* White text color *!*/
+/*    -fx-font-size: 14px; !* Moderate font size *!*/
+/*    -fx-border-radius: 20px; !* Rounded corners *!*/
+/*    -fx-background-radius: 20px;*/
+/*    -fx-border-color: transparent; !* No border *!*/
+/*    -fx-border-width: 0; !* No border *!*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
+/*}*/
+
+
+
+/*!*VBox {*!*/
+/*!*    -fx-background-color: #4479FD; !* Blue background for VBox *!*!*/
+/*!*    -fx-border-radius: 20px; !* Rounded corners *!*!*/
+/*!*    -fx-background-radius: 20px;*!*/
+/*!*    -fx-spacing: 10px; !* Added spacing between child nodes *!*!*/
+/*!*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0); !* Soft shadow effect *!*!*/
+/*!*}*!*/
+
+Label {
+    -fx-text-fill: white; /* White text color */
+}
+
+/*#banner {*/
+/*    -fx-background-color: #FDB521; !* Yellow banner color *!*/
+/*    -fx-padding: 10px; !* Added padding for better visibility *!*/
+/*    -fx-background-radius: 0px; !* No rounded corners *!*/
+/*}*/
+
+/*ImageView{*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
+
+/*}*/
+ComboBox {
+    -fx-background-color: #1FC8C0; /* Turquoise button color */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-size: 14px; /* Moderate font size */
+    -fx-border-radius: 20px; /* Rounded corners */
+    -fx-background-radius: 20px;
+    -fx-border-color: transparent; /* No border */
+    -fx-border-width: 0; /* No border */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); /* Subtle shadow effect */
+}
+
+
+ComboBox .text {
+    -fx-text-fill: white; /* White text color */
+}
+
+#allExpenses{
+    -fx-background-color: #4CAF50;
+}
+#paidByMe{
+    -fx-background-color: #4CAF50;
+}
+#involvingMe{
+    -fx-background-color: #4CAF50;
+}
+.chart-pie-label {
+    -fx-text-fill: white;
+}
+.chart-legend{
+   -fx-background-color: #4CAF50;
+}
+
+
