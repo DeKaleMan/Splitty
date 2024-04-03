@@ -26,7 +26,7 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     private Label titleLabel;
 
-    private final int eventCode = 1;
+    private int eventCode;
 
     @FXML
     private ListView participantsList;
@@ -105,7 +105,7 @@ public class ManageParticipantsCtrl implements Initializable {
 
     @FXML
     public void showInvitation(){
-        mainCtrl.showInvitation(titleLabel.getText());
+        mainCtrl.showInvitation(this.eventCode);
     }
 
     @FXML
@@ -113,5 +113,8 @@ public class ManageParticipantsCtrl implements Initializable {
         if (press.getCode() == KeyCode.ESCAPE) {
             backEventOverview();
         }
+    }
+    public void setEventCode(int eventCode) {
+        this.eventCode = eventCode;
     }
 }

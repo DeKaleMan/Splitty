@@ -14,7 +14,7 @@ public class InvitationCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private String inviteCode;
-    private int eventCode = 1;
+    private int eventCode;
 
     @FXML
     private Label titleLabel;
@@ -93,6 +93,12 @@ public class InvitationCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
+    }
+    public void setEventCode(int eventCode) {
+        this.eventCode = eventCode;
+    }
+    public void setInviteCode(String inviteCode){
+        this.inviteCode = inviteCode;
     }
 
 //    /**
