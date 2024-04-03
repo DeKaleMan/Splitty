@@ -141,7 +141,7 @@ public class SplittyOverviewCtrl implements Initializable {
      */
     @FXML
     public void sendInvitesOnClick() {
-        mainCtrl.showInvitation(titleLabel.getText());
+        mainCtrl.showInvitation(this.eventCode);
     }
 
     /**
@@ -161,7 +161,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void viewParticipantManager() {
-        mainCtrl.showParticipantManager(titleLabel.getText());
+        mainCtrl.showParticipantManager(this.eventCode);
     }
 
 

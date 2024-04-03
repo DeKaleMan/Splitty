@@ -156,11 +156,13 @@ public class CreateEventCtrl {
         hostNameError.setVisible(true);
         goToSettings.setVisible(true);
     }
-    public void resetError(){
+    public void resetValues(){
+        titleField.setText(null);
+        datePicker.setValue(null);
+        eventDescriptionArea.setText(null);
         resetDateFieldError();
         resetTitleFieldError();
         hostNameError.setVisible(false);
         goToSettings.setVisible(false);
     }
-
 }

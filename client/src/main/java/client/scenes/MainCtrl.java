@@ -218,11 +218,14 @@ public class MainCtrl {
         primaryStage.setScene(addExpense);
     }
 
-    public void showInvitation(String title){
+    public void showInvitation(int eventID){
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
+        Event event = serverUtils.getEventById(eventID);
+        invitationCtrl.setEventCode(eventID);
+        invitationCtrl.setInviteCode(event.getInviteCode());
         invitationCtrl.showInviteCode();
-        invitationCtrl.setTitle(title);
+        invitationCtrl.setTitle(event.getName());
     }
 
     public void showAdminLogin() {
@@ -254,7 +257,7 @@ public class MainCtrl {
     public void showCreateEvent (String name) {
         primaryStage.setTitle("Create Event");
         primaryStage.setScene(createEvent);
-        createEventCtrl.resetError();
+        createEventCtrl.resetValues();
         createEventCtrl.setTitle(name);
     }
 
@@ -262,10 +265,12 @@ public class MainCtrl {
      * Shows the participants manager
      * @param title the title of the current event
      */
-    public void showParticipantManager(String title){
+    public void showParticipantManager(int eventID){
         primaryStage.setTitle("ManageParticipants");
         primaryStage.setScene(manageParticipants);
-        manageParticipantsCtrl.setTitle(title);
+        Event event = serverUtils.getEventById(eventID);
+        manageParticipantsCtrl.setEventCode(eventID);
+        manageParticipantsCtrl.setTitle(event.getName());
     }
 
     /**
@@ -278,11 +283,6 @@ public class MainCtrl {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
         statisticsCtrl.setTitle(title);
-        //this sets the statistics, eventually this should be linked to the statistics class
-//        statisticsCtrl.setFood(2);
-//        statisticsCtrl.setDrinks(2);
-//        statisticsCtrl.setTransport(2);
-//        statisticsCtrl.setOther(2);
         statisticsCtrl.setEventCode(eventCode);
         statisticsCtrl.fetchStat();
         //set the pieChart
