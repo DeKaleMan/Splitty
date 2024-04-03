@@ -16,15 +16,14 @@ import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 
 public class SettingsCtrl {
-    private final ServerUtils serverUtils;
+    private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+    private boolean noConnection = false;
     @FXML
     public Button cancelButton;
     @FXML
     public Button saveButton;
-    @FXML
-    private TextField serverURLField;
     @FXML
     private TextField emailField;
     @FXML
@@ -43,23 +42,20 @@ public class SettingsCtrl {
     private TextField bicField;
 
     @Inject
-    public SettingsCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
-        this.serverUtils = server;
+    public SettingsCtrl(MainCtrl mainCtrl, Config config){
         this.mainCtrl = mainCtrl;
         this.config = config;
     }
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
-        mainCtrl.setButtonRedProperty(saveButton);
+        mainCtrl.setButtonGreenProperty(saveButton);
     }
 
     /**
      * sets all the fields to the values obtained by the config file
      */
-    public void initializeFields() {
-        if (config.getConnection() != null) {
-            serverURLField.setText(config.getConnection());
-        }
+    public void initializeFields(boolean noConnection) {
+        this.noConnection = noConnection;
         if (config.getEmail() != null) {
             emailField.setText(config.getEmail());
         } else {
@@ -90,7 +86,6 @@ public class SettingsCtrl {
      */
     public void saveSettings() {
         String email = emailField.getText();
-        String connection = serverURLField.getText();
         String currency = currencyField.getText();
         String name = nameField.getText();
         String iban  = ibanField.getText();
@@ -104,23 +99,22 @@ public class SettingsCtrl {
             abort = true;
             // set error message
         }
-        if (connection == null || connection.isEmpty()) {
-            abort = true;
-            // set error message
-        }
         if (abort) {
             return;
         }
         config.setEmail(email);
-        config.setConnection(connection);
         config.setCurrency(Currency.valueOf(currency));
         config.setName(name);
         config.setIban(iban);
         config.setBic(bic);
         config.write();
-        back();
-        mainCtrl.setConfirmationSettings();
-        // set saved message
+        if (noConnection) {
+            mainCtrl.showServerStartup(true);
+        } else {
+            back();
+            mainCtrl.setConfirmationSettings();
+        }
+
     }
 
     public void back() {
@@ -191,5 +185,9 @@ public class SettingsCtrl {
         if (k.match(press)) {
             saveSettings();
         }
+    }
+
+    public void changeServer() {
+        mainCtrl.showServerStartup(noConnection);
     }
 }
