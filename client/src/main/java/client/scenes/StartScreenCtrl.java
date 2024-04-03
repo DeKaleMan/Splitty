@@ -168,11 +168,12 @@ public class StartScreenCtrl implements Initializable {
             alreadyParticipantError.setVisible(true);
             return;
         }
-
         try {
             Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
-                // show error message
+                invalidCodeError.setVisible(false);
+                codeNotFoundError.setVisible(true);
+                alreadyParticipantError.setVisible(false);
                 return;
             }
             mainCtrl.showSplittyOverview(p.getEvent().getId());

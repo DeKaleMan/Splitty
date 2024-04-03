@@ -195,18 +195,19 @@ public class MainCtrl {
     }
 
     public Participant joinEvent(String inviteCode) throws RuntimeException {
-        Participant participant = serverUtils.createParticipant(
-                new ParticipantDTO(
-                        settingCtrl.getName(),
-                        0,
-                        settingCtrl.getIban(),
-                        settingCtrl.getBic(),
-                        settingCtrl.getEmail(),
-                        settingCtrl.getName(),
-                        -1,
-                        settingCtrl.getId(),
-                        inviteCode
-                ));
+        ParticipantDTO participantDTO =  new ParticipantDTO(
+                settingCtrl.getName(),
+                0,
+                settingCtrl.getIban(),
+                settingCtrl.getBic(),
+                settingCtrl.getEmail(),
+                settingCtrl.getName(),
+                -1,
+                settingCtrl.getId(),
+                inviteCode
+        );
+        participantDTO.setGhostStatus(false);
+        Participant participant = serverUtils.createParticipant(participantDTO);
         if (participant != null) {
             events.add(serverUtils.getEventById(participant.getEvent().getId()));
         }

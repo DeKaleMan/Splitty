@@ -13,6 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -169,5 +170,11 @@ public class ManageParticipantsCtrl implements Initializable {
     }
     public void setParticipantEditedConfirmation() {
         setPauseTransition(participantEditedConfirmation);
+    }
+
+    public void editOnClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() >= 2) {
+            editParticipant();
+        }
     }
 }

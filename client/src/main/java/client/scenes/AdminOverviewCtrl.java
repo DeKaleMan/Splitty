@@ -7,6 +7,7 @@ import commons.Participant;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
@@ -94,7 +95,6 @@ public class AdminOverviewCtrl {
                 };
             }
         });
-
         ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
         eventList.setItems(events);
     }
@@ -270,5 +270,10 @@ public class AdminOverviewCtrl {
         jsonImportTextArea.setVisible(false);
         jsonImportButton.setVisible(false);
         jsonImportPane.setVisible(false);
+    }
+
+    public void refreshEvents() {
+        ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
+        eventList.setItems(events);
     }
 }
