@@ -40,6 +40,14 @@ public class TestDebtRepository implements DebtRepository {
     }
 
     @Override
+    public List<Debt> deleteDebtsByExpense(Expense expense) {
+        methods.add("deleteDebtsByExpense");
+        List<Debt> result = debts.stream().filter(x -> x.getExpense().equals(expense)).toList();
+        debts.removeAll(result);
+        return result;
+    }
+
+    @Override
     public void flush() {
 
     }

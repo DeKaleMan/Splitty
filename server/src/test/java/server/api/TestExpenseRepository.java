@@ -53,7 +53,11 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public double getTotalCostByEvent(int eventID) {
-        return 0.0;
+        double res = 0;
+        for(Expense e: expenses.stream().filter(e -> eventID == e.getEvent().id).toList()){
+            res += e.getTotalExpense();
+        }
+        return res;
     }
 
 

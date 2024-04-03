@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerCtrl">
+   <children>
+      <Label layoutX="118.0" layoutY="57.0" text="Change Splitty Server">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="137.0" layoutY="246.0" text="Server:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="serverField" layoutX="191.0" layoutY="247.0" onKeyPressed="#resetError" prefHeight="26.0" prefWidth="240.0" />
+      <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="103.0" layoutX="249.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefHeight="54.0" prefWidth="302.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url or try again by repressing connect*" textFill="#949494" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font></Label>
+      <Label fx:id="startupNotification" layoutX="151.0" layoutY="213.0" text="No server has been found, type here the server you want to connect to">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font>
+      </Label>
+      <Button fx:id="connectButton" layoutX="431.0" layoutY="247.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+   </children>
+</AnchorPane>

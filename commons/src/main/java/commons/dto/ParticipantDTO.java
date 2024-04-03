@@ -13,6 +13,7 @@ public class ParticipantDTO {
 
     private String accountHolder;
 
+    private String eventInviteCode;
     private int eventId;
 
     private String uuid;
@@ -30,6 +31,18 @@ public class ParticipantDTO {
         this.accountHolder = accountHolder;
         this.eventId = eventId;
         this.uuid = uuid;
+    }
+    public ParticipantDTO(String name, double balance, String iBan, String bIC,
+                          String email, String accountHolder, int eventId, String uuid, String eventInviteCode) {
+        this.name = name;
+        this.balance = balance;
+        this.iBan = iBan;
+        this.bIC = bIC;
+        this.email = email;
+        this.accountHolder = accountHolder;
+        this.eventId = eventId;
+        this.uuid = uuid;
+        this.eventInviteCode = eventInviteCode;
     }
 
     public String getName() {
@@ -94,5 +107,13 @@ public class ParticipantDTO {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getEventInviteCode() {
+        return eventInviteCode;
+    }
+
+    public void setEventInviteCode(String eventInviteCode) {
+        this.eventInviteCode = eventInviteCode;
     }
 }

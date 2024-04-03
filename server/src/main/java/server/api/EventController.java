@@ -1,88 +1,66 @@
 package server.api;
+
 import commons.Event;
 import commons.EventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.EventRepository;
+import server.service.EventService;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/api/event")
 public class EventController {
-    private final EventRepository eventDB;
+    private final EventService eventService;
 
     @Autowired
-    public EventController(EventRepository eventDB) {
-        this.eventDB = eventDB;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
     @GetMapping(path = {"","/"})
-    public ResponseEntity<Event> getEventById(@RequestParam int id){
-        Optional<Event> event = eventDB.findById(id);
-        if(event.isPresent()){
-            return ResponseEntity.ok(event.get());
-
+    public ResponseEntity<Event> getEventById(@RequestParam int id) {
+        Event event = eventService.getEventById(id);
+        if (event != null) {
+            return ResponseEntity.ok(event);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping(path = "/all")
-    public ResponseEntity<List<Event>> getAllEvents(){
-        List<Event> allEvents = eventDB.findAll();
+    public ResponseEntity<List<Event>> getAllEvents() {
+        List<Event> allEvents = eventService.getAllEvents();
         return ResponseEntity.ok(allEvents);
     }
 
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO inputEvent){
-        // an event needs to have a date and name and owner
-        if (inputEvent == null || isNullOrEmpty(inputEvent.getName()) || inputEvent.getDate() == null
-                || isNullOrEmpty(inputEvent.getOwner()) || inputEvent.getDescription() == null) {
+    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO inputEvent) {
+        Event newEvent = eventService.saveEvent(inputEvent);
+        if (newEvent == null) {
             return ResponseEntity.badRequest().build();
         }
-        Event newEvent = new Event(inputEvent.getName(), inputEvent.getDate(),
-                inputEvent.getOwner(), inputEvent.getDescription());
-        eventDB.save(newEvent);
         return ResponseEntity.ok(newEvent);
     }
 
     @DeleteMapping(path = {"","/"})
-    public ResponseEntity<Event> removeEvent(@RequestParam Integer id){
-        System.out.println(id);
-        Optional<Event> eventToDelete = eventDB.findById(id);
-        if (eventToDelete.isEmpty()) {
+    public ResponseEntity<Event> removeEvent(@RequestParam Integer id) {
+        Event eventToDelete = eventService.removeEvent(id);
+        if (eventToDelete == null) {
             return ResponseEntity.notFound().build();
         } else {
-            eventDB.deleteById(id);
-            return ResponseEntity.ok(eventToDelete.get());
+            return ResponseEntity.ok(eventToDelete);
         }
     }
 
     @PutMapping("/updateName")
-    public ResponseEntity<Event> updateNameEvent(@RequestBody Event event, @RequestParam String newName){
-        Optional<Event> optionalEvent = eventDB.findById(event.getId());
-        if (optionalEvent.isPresent()) {
-            Event eventfinal = optionalEvent.get();
-//            eventDB.deleteById(eventfinal.getId());
-            eventfinal.setName(newName);
-            eventDB.save(eventfinal);
-            System.out.println("the same is changed");
-            return ResponseEntity.ok(eventfinal);
-        } else {
+    public ResponseEntity<Event> updateNameEvent(@RequestParam Integer id, @RequestParam String newName) {
+        Event updatedEvent = eventService.updateEventName(id, newName);
+        if (updatedEvent == null) {
             return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(updatedEvent);
         }
-    }
-
-//    @GetMapping("/getNameByName/{name}")
-//    public ResponseEntity<Event> getEventByName(@RequestParam("name") String name){
-//        ResponseEntity<Event> e = eventDB.getEventByName(name);
-//        return e;
-//    }
-    private boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
     }
 }

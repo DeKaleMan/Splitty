@@ -2,6 +2,7 @@ package server.api;
 import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.service.EventService;
 
 import java.util.*;
 
@@ -19,7 +20,7 @@ public class EventControllerTest {
     @BeforeEach
     void setup() {
         eventRepository = new TestEventRepository();
-        ctrl = new EventController(eventRepository);
+        ctrl = new EventController(new EventService(eventRepository));
         event1.id = 1;
         event2.id = 2;
         event3.id = 3;

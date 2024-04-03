@@ -14,7 +14,9 @@ public record EventPropGrouper(Pair<AddExpenseCtrl, Parent> addExpense,
                                Pair<ManageParticipantsCtrl, Parent> manageParticipants,
                                Pair<StatisticsCtrl, Parent> statistics,
                                Pair<DebtCtrl, Parent> debts,
-                               Pair<EditEventCrtl, Parent> editEvent) {
+
+                               Pair<EditEventCrtl, Parent> editEvent,
+                               Pair<EditExpenseCtrl, Parent> editExpense) {
 
 }
 //package client.scenes;

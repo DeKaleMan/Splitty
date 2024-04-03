@@ -17,4 +17,6 @@ public interface DebtRepository extends JpaRepository<Debt, Integer> {
     List<Debt> findByExpense(Expense expense);
 
     List<Debt> findByParticipant(Participant participant);
+
+    List<Debt> deleteDebtsByExpense(Expense expense);
 }

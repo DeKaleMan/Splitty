@@ -26,6 +26,7 @@ public class ParticipantControllerTest {
         participantController = new ParticipantController(testParticipantRepository, testEventRepository);
 
         event = new Event("Event1", new Date(10, 10, 2005), "Yavor", "cool event");
+        event.setInviteCode("testInviteCode");
         event.setId(1);
         testEventRepository.save(event);
     }
@@ -66,7 +67,7 @@ public class ParticipantControllerTest {
         ResponseEntity<Participant> response = participantController.createParticipant(
                 new ParticipantDTO(participant.getName(), participant.getBalance(),
                         participant.getIBan(), participant.getBIC(), participant.getEmail(), "",
-                        event.getId(), participant.getUuid()));
+                        event.getId(), participant.getUuid(), event.getInviteCode()));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -74,7 +75,8 @@ public class ParticipantControllerTest {
     void testCreateParticipantNotFoundInvalidEvent() {
         ResponseEntity<Participant> response = participantController
                 .createParticipant(new ParticipantDTO("Yavor", 100.0,
-                        "IBAN1", "BIC1", "yavor@tudelft.nl", "",2, "uuid2"));
+                        "IBAN1", "BIC1", "yavor@tudelft.nl", "",2,
+                        "uuid2", "notValidINvite"));
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 

@@ -44,7 +44,7 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseRepo.findByEvent(event.get()));
     }
 
-    @GetMapping("{payerUuid}")
+    @GetMapping("/{payerUuid}")
     public ResponseEntity<List<Expense>> findByEventCodeAndPayerUuid(@RequestParam int eventCode,
                                                                       @PathVariable("payerUuid")
                                                                       String uuid) {
@@ -71,7 +71,33 @@ public class ExpenseController {
         Expense expense =
                 new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
                         expenseDTO.getDate(), expenseDTO.getTotalExpense(),
-                        payer);
+                        payer, expenseDTO.isSharedExpense());
+        return ResponseEntity.ok(expenseRepo.save(expense));
+    }
+
+    @PutMapping("/{eventId}/{expenseId}")
+    public ResponseEntity<Expense> updateExpense(@PathVariable("eventId") int eventId,
+                                                 @PathVariable("expenseId") int expenseId,
+                                                 @RequestBody ExpenseDTO expenseDTO){
+        Optional<Event> optionalEvent = eventRepo.findById(eventId);
+        if (optionalEvent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Event event = optionalEvent.get();
+        Optional<Expense> optionalExpense = expenseRepo.findById(new ExpenseId(event,expenseId));
+        if (optionalExpense.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Participant payer = participantRepo.findById(new ParticipantId(expenseDTO.getPayerUuid(), event));
+        if(payer == null) return ResponseEntity.notFound().build();
+        Expense expense = optionalExpense.get();
+        expense.setTotalExpense(expenseDTO.getTotalExpense());
+        expense.setDate(expenseDTO.getDate());
+        expense.setDescription(expenseDTO.getDescription());
+        expense.setPayer(payer);
+        expense.setType(expenseDTO.getType());
+        expense.setSharedExpense(expenseDTO.isSharedExpense());
+
         return ResponseEntity.ok(expenseRepo.save(expense));
     }
 
@@ -90,7 +116,7 @@ public class ExpenseController {
         }
 
         Expense res = expense.get();
-        expenseRepo.deleteById(expenseId);
+        expenseRepo.delete(res);
 
         System.out.println("Deleted\n" + res);
         return ResponseEntity.ok(res);

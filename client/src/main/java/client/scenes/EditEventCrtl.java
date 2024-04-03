@@ -28,8 +28,6 @@ public class EditEventCrtl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
-    //TODO make eventCode not hardcoded
-    private int eventCode = 1;
 
 
 
@@ -47,8 +45,7 @@ public class EditEventCrtl {
     }
 
     public void back(){
-        succesFullyChanged.setVisible(false);
-        mainCtrl.showSplittyOverview(eventCode);
+        mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
     }
 
     public void changeName(ActionEvent actionEvent) {

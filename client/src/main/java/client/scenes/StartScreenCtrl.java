@@ -25,6 +25,9 @@ public class StartScreenCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+
+
+
     private String currentLang;
 
     @FXML
@@ -58,12 +61,17 @@ public class StartScreenCtrl implements Initializable {
 
     @FXML
     private ListView<Event> eventListView;
+    @FXML
+    public Label myEventsNotFoundError;
+    @FXML
+    public Label noConnectionError;
     private List<Event> events;
     @FXML
     public Label settingsSavedLabel;
     @FXML
     public Label eventCreatedLabel;
-
+    @FXML
+    public Button settingsButton;
     @FXML
     private ProgressIndicator progress;
     private int eventCode;
@@ -82,7 +90,15 @@ public class StartScreenCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        eventListView.getItems().clear();
+        ImageView settings = new ImageView(new Image("Settings-icon.png"));
+        settings.setFitWidth(15);
+        settings.setFitHeight(15);
+        settingsButton.setGraphic(settings);
+        // Load the image
+        Image image = new Image("Logo_.png"); // Path relative to your resources folder
+        // Set the image to the ImageView
+        imageView.setImage(image);
+        //Image flag = new Image("enFlag.png");
         eventListView.setCellFactory(eventListView -> new ListCell<Event>() {
             @Override
             protected void updateItem(Event event, boolean empty) {
@@ -94,6 +110,11 @@ public class StartScreenCtrl implements Initializable {
                 }
             }
         });
+    }
+
+    public void fetchList(){
+        eventListView.getItems().clear();
+
         events = mainCtrl.getMyEvents();
         if(events!=null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
@@ -102,11 +123,25 @@ public class StartScreenCtrl implements Initializable {
                     .forEach(newEventList::add);
             eventListView.setItems(newEventList);
         }
-        // Load the image
-        Image image = new Image("Logo_.png"); // Path relative to your resources folder
-        // Set the image to the ImageView
-        imageView.setImage(image);
-        //Image flag = new Image("enFlag.png");
+    }
+
+
+
+    private void setup(Event event, Button button, Label label) {
+        if (event == null) {
+            button.setVisible(false);
+            label.setVisible(false);
+            return;
+        }
+        button.setVisible(true);
+        label.setVisible(true);
+
+        button.setOnAction(something -> {
+            mainCtrl.showSplittyOverview(event.getId());
+        });
+
+        button.setText(event.getName());
+        label.setText(event.getDate() + ": " + event.getDescription());
     }
 
     /**
@@ -130,16 +165,14 @@ public class StartScreenCtrl implements Initializable {
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent() {
-        int eventCode;
         try {
-            String idString = joinEventTextField.getText();
-            eventCode = Integer.parseInt(idString);
-            Participant p = mainCtrl.joinEvent(eventCode);
+            String eventInviteCode = joinEventTextField.getText();
+            Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
                 // show error message
                 return;
             }
-            mainCtrl.showSplittyOverview(eventCode);
+            mainCtrl.showSplittyOverview(p.getEvent().getId());
             System.out.println("Joined event: " + joinEventTextField.getText());
         } catch (NumberFormatException e) {
             codeNotFoundError.setVisible(false);
@@ -249,7 +282,7 @@ public class StartScreenCtrl implements Initializable {
     }
 
     public void showSettings() {
-        mainCtrl.showSettings();
+        mainCtrl.showSettings(noConnectionError.visibleProperty().get());
     }
 
 
@@ -314,5 +347,9 @@ public class StartScreenCtrl implements Initializable {
                 event1 -> settingsSavedLabel.setVisible(false)
         );
         visiblePause.play();
+    }
+    public void setNoEventsError(boolean b) {
+        myEventsNotFoundError.setVisible(b);
+        noConnectionError.setVisible(b);
     }
 }
