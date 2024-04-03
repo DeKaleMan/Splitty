@@ -33,7 +33,7 @@ import java.util.*;
 public class SplittyOverviewCtrl implements Initializable {
 
     //We need to store the eventCode right here
-    private int eventCode;
+    private int eventId;
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -132,8 +132,8 @@ public class SplittyOverviewCtrl implements Initializable {
         });
     }
 
-    public void setEventCode(int eventCode) {
-        this.eventCode = eventCode;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     /**
@@ -156,7 +156,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText(),eventCode);
+        mainCtrl.showAddExpense(titleLabel.getText(), eventId);
     }
 
     @FXML
@@ -167,7 +167,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showStatistics() {
-        mainCtrl.showStatistics(titleLabel.getText(), this.eventCode);
+        mainCtrl.showStatistics(titleLabel.getText(), this.eventId);
     }
 
     /**
@@ -184,18 +184,18 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     private void viewDebts() {
-        mainCtrl.viewDeptsPerEvent(eventCode);
+        mainCtrl.viewDeptsPerEvent(eventId);
     }
 
 
     public void addExpense(String description, Type type, Date date,
                            Double totalExpense, String payerEmail) {
         try {
-            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type,
+            ExpenseDTO exp = new ExpenseDTO(eventId, description, type,
                 date, totalExpense, payerEmail, true);
             serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventCode);
+            serverUtils.generatePaymentsForEvent(eventId);
         } catch (NotFoundException ep) {
             // Handle 404 Not Found error
             // Display an error message or log the error
@@ -250,7 +250,7 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         System.out.println("OK");
         fetchExpenses();
-        serverUtils.generatePaymentsForEvent(eventCode);
+        serverUtils.generatePaymentsForEvent(eventId);
         return toDelete;
     }
 
@@ -263,7 +263,7 @@ public class SplittyOverviewCtrl implements Initializable {
             cellFactory = getExpenseListCellFactory();
         List<Expense> expenses = new ArrayList<>();
         try {
-            expenses = serverUtils.getExpense(eventCode);
+            expenses = serverUtils.getExpense(eventId);
         } catch (BadRequestException e) {
             System.out.println(e);
         }
@@ -341,7 +341,7 @@ public class SplittyOverviewCtrl implements Initializable {
         participantListView.getItems().clear();
         List<Participant> participants = new ArrayList<>();
         try {
-            participants = serverUtils.getParticipants(eventCode);
+            participants = serverUtils.getParticipants(eventId);
         } catch (BadRequestException | NotFoundException e) {
             System.out.println(e);
         }
@@ -392,7 +392,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void leaveEvent(ActionEvent actionEvent) {
         // can only leave if balance is 0
-        Participant me = serverUtils.getParticipant(config.getId(), eventCode);
+        Participant me = serverUtils.getParticipant(config.getId(), eventId);
         if (me.getBalance() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -402,7 +402,7 @@ public class SplittyOverviewCtrl implements Initializable {
             return;
         }
 
-        serverUtils.deleteParticipant(config.getId(), eventCode);
+        serverUtils.deleteParticipant(config.getId(), eventId);
         mainCtrl.showStartScreen();
         confirmationLabel.setVisible(false);
         cancelLeaveButton.setVisible(false);
@@ -412,7 +412,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void addGhostParticipant() {
 
-        mainCtrl.showAddParticipant(eventCode);
+        mainCtrl.showAddParticipant(eventId);
 
     }
 
@@ -467,8 +467,12 @@ public class SplittyOverviewCtrl implements Initializable {
         leaveConfirmationButton.setVisible(false);
     }
 
-    public int getCurrentEventCode(){
-        return this.eventCode;
+    public int getCurrentEventId(){
+        return this.eventId;
+    }
+
+    public void editMyDetails(ActionEvent actionEvent) {
+        mainCtrl.showMyDetails(eventId);
     }
 }
 

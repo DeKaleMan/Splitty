@@ -31,7 +31,6 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainCtrl {
@@ -68,6 +67,9 @@ public class MainCtrl {
     private Scene addParticipant;
     private AddParticipantCtrl addParticipantCtrl;
 
+    private Scene editParticipant;
+    private EditParticipantCtrl editParticipantCtrl;
+
     private Scene statistics;
     private StatisticsCtrl statisticsCtrl;
     private Scene debts;
@@ -86,6 +88,8 @@ public class MainCtrl {
     //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
     private Scene settings;
     private SettingsCtrl settingCtrl;
+
+
 
 
     // probably not the best place to put that here but works for now
@@ -123,6 +127,8 @@ public class MainCtrl {
         this.addExpense = new Scene(eventPropGrouper.addExpense().getValue());
         this.addParticipantCtrl = eventPropGrouper.addParticipant().getKey();
         this.addParticipant = new Scene(eventPropGrouper.addParticipant().getValue());
+        this.editParticipantCtrl = eventPropGrouper.editParticipant().getKey();
+        this.editParticipant = new Scene(eventPropGrouper.editParticipant().getValue());
         this.statisticsCtrl = eventPropGrouper.statistics().getKey();
         this.statistics = new Scene(eventPropGrouper.statistics().getValue());
         this.debtCtrl = eventPropGrouper.debts().getKey();
@@ -169,7 +175,7 @@ public class MainCtrl {
         splittyOverview.getStylesheets().add(css);
         Event event = serverUtils.getEventById(id);
         splittyOverviewCtrl.setTitle(event.getName());
-        splittyOverviewCtrl.setEventCode(id);
+        splittyOverviewCtrl.setEventId(id);
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
     }
@@ -293,7 +299,7 @@ public class MainCtrl {
             throw new RuntimeException("Splitty overview controller is null," +
                     " exception thrown in MainCtrl getCurrentEventCode()");
         }
-        return splittyOverviewCtrl.getCurrentEventCode();
+        return splittyOverviewCtrl.getCurrentEventId();
     }
 
     /**
@@ -361,12 +367,17 @@ public class MainCtrl {
         primaryStage.setScene(editExpense);
     }
 
-    public void showAddParticipant(int eventCode) {
+    public void showAddParticipant(int eventId) {
         primaryStage.setScene(addParticipant);
 
-        // get the correct event from the arraylist of events
-        this.addParticipantCtrl.setEventId(eventCode);
+        this.addParticipantCtrl.setEventId(eventId);
     }
 
+    public void showMyDetails(int eventId) {
+        this.editParticipantCtrl.setTitle("My details");
+        this.editParticipantCtrl.setEventId(eventId);
+        this.editParticipantCtrl.autoFillWithMyData();
+        primaryStage.setScene(editParticipant);
+    }
 
 }

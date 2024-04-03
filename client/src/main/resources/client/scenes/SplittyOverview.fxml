@@ -84,6 +84,7 @@
          <children>
             <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" prefHeight="26.0" prefWidth="88.0" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
             <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="85.0" text="Statistics" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" onAction="#editMyDetails" text="My details" />
             <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
          </children>
       </VBox>

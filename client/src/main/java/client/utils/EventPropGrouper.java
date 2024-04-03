@@ -12,6 +12,7 @@ import javafx.util.Pair;
  */
 public record EventPropGrouper(Pair<AddExpenseCtrl, Parent> addExpense,
                                Pair<AddParticipantCtrl, Parent> addParticipant,
+                               Pair<EditParticipantCtrl, Parent> editParticipant,
                                Pair<StatisticsCtrl, Parent> statistics,
                                Pair<DebtCtrl, Parent> debts,
 

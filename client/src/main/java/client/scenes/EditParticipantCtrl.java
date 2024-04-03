@@ -1,7 +1,8 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.Event;
+import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -15,9 +16,9 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddParticipantCtrl implements Initializable {
+public class EditParticipantCtrl implements Initializable {
     private final ServerUtils serverUtils;
-
+    private final Config config;
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -27,6 +28,8 @@ public class AddParticipantCtrl implements Initializable {
     @FXML
     public Label invalidBicLabel;
 
+    @FXML
+    private Label title;
 
     @FXML
     private TextField nameField;
@@ -42,9 +45,10 @@ public class AddParticipantCtrl implements Initializable {
     private int eventId;
 
     @Inject
-    public AddParticipantCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
+    public EditParticipantCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.config = config;
     }
 
     @Override
@@ -55,6 +59,9 @@ public class AddParticipantCtrl implements Initializable {
         this.eventId = eventId;
     }
 
+    public void setTitle(String title) {
+        this.title.setText(title);
+    }
     public void showErrorBriefly(Label errorLabel) {
         errorLabel.setVisible(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -62,13 +69,23 @@ public class AddParticipantCtrl implements Initializable {
         pause.play();
     }
 
+    public void autoFillWithMyData(){ // autofill the fields with the current participant's data
 
-    public void addParticipant(){
+        // make sure to get my information from the server since i might have modified my profile before
+        Participant me = serverUtils.getParticipant(config.getId(), eventId);
+        nameField.setText(me.getName());
+        emailField.setText(me.getEmail());
+        ibanField.setText(me.getIBan());
+        bicField.setText(me.getBIC());
+        accountHolderField.setText(me.getAccountHolder());
+    }
+    public void editParticipant(ActionEvent actionEvent) {
+        Participant me = serverUtils.getParticipant(config.getId(), eventId);
+
         String name = nameField.getText();
         if(name==null || name.isEmpty()){
             // maybe make this more explicit like alert the user using an
             // alertbox that his name will be "unknown name"
-
             name = "Unknown name";
         }
         String email = emailField.getText();
@@ -93,28 +110,21 @@ public class AddParticipantCtrl implements Initializable {
             return;
         }
 
-        Event event = serverUtils.getEventById(eventId);
-
-        // generate a random uuid
-        String uuid = java.util.UUID.randomUUID().toString();
-
-        ParticipantDTO participantDTO = new ParticipantDTO(
+        ParticipantDTO participant = new ParticipantDTO(
                 name,
-                0,
+                me.getBalance(), // make sure to keep the balance the same
                 iban,
                 bic,
                 email,
                 accountHolder,
                 eventId,
-                uuid,
-                event.getInviteCode()
+                config.getId()
         );
-        participantDTO.setGhostStatus(true);
+        participant.setGhostStatus(false); // make sure to set the ghost property ghost to true in case you want to edit a ghost participant
 
-        serverUtils.createParticipant(participantDTO); // Maybe some error handling?
+        serverUtils.updateParticipant(config.getId(), participant);
         mainCtrl.showSplittyOverview(eventId);
     }
-
 
     public void cancel(ActionEvent actionEvent) {
         mainCtrl.showSplittyOverview(eventId);

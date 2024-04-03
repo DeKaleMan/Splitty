@@ -15,16 +15,11 @@
  */
 package server;
 
-import commons.Event;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
 import server.api.depinjectionUtils.ServerIOUtilActual;
-import server.database.EventRepository;
 
-import java.util.Date;
 import java.util.UUID;
 
 @SpringBootApplication
