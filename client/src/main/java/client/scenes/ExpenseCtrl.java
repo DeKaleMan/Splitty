@@ -320,7 +320,8 @@ public abstract class ExpenseCtrl {
             amountError.setText("Not a number, format e.g 13.99");
             return null;
         } catch (RuntimeException e){
-            System.out.println("Failed to convert amount");
+            amountError.setVisible(true);
+            amountError.setText(e.getMessage());
             return null;
         }
         return amountDouble;
@@ -401,6 +402,7 @@ public abstract class ExpenseCtrl {
     protected double getAmountInDifferentCurrency(Currency from, Currency to,
                                                   String date, double amount){
         Conversion conversion = serverUtils.getConversion(from, to, date);
+        if(conversion == null) throw new RuntimeException("Failed to convert amount");
         return amount * conversion.conversionRate();
     }
 

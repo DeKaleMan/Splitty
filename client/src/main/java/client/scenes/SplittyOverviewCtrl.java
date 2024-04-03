@@ -314,8 +314,16 @@ public class SplittyOverviewCtrl implements Initializable {
                                         .map(x -> x.getParticipant().getName()).toList();
                                 Text mainInfo = new Text();
                                 double totalExpense = expense.getTotalExpense();
-                                if(config.getCurrency() != Currency.EUR) totalExpense = getAmountInDifferentCurrency(Currency.EUR,
-                                    config.getCurrency(), getDateString(date), totalExpense);
+                                try {
+                                    if (config.getCurrency() != Currency.EUR)
+                                        totalExpense = getAmountInDifferentCurrency(Currency.EUR,
+                                            config.getCurrency(), getDateString(date),
+                                            totalExpense);
+                                }catch (RuntimeException e){
+                                    grid.add(new Text(e.getMessage()),0,0);
+                                    setGraphic(grid);
+                                    return;
+                                }
                                 DecimalFormat decimalFormat = new DecimalFormat("0.00");
                                 decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
                                 if (expense.isSharedExpense()) {
@@ -361,6 +369,7 @@ public class SplittyOverviewCtrl implements Initializable {
     private double getAmountInDifferentCurrency(commons.Currency from, Currency to,
                                                   String date, double amount){
         Conversion conversion = serverUtils.getConversion(from, to, date);
+        if(conversion == null) throw new RuntimeException("Failed to convert amount");
         return amount * conversion.conversionRate();
     }
 

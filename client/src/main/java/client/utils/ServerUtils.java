@@ -22,6 +22,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.Currency;
 import commons.dto.DebtDTO;
@@ -648,6 +651,20 @@ public class ServerUtils {
             .accept(APPLICATION_JSON)
             .get();
 
-         return response.readEntity(Conversion.class);
+         try {
+             ObjectMapper objectMapper = new ObjectMapper();
+             JsonNode jsonNode = response.readEntity(JsonNode.class);
+             Conversion conversion =
+                 objectMapper.treeToValue(jsonNode.get("conversion"), Conversion.class);
+             if(conversion == null) throw new RuntimeException("Failed to retrieve conversion");
+             return conversion;
+         }catch (JsonProcessingException e){
+             System.out.println("Error while parsing JSON");
+             return null;
+         }catch (RuntimeException e){
+             System.out.println(e.getMessage());
+             return null;
+         }
+
     }
 }

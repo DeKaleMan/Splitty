@@ -134,8 +134,15 @@ public class DebtCtrl implements Initializable {
 
     private GridPane getGrid(Payment payment) {
         double amount = payment.getAmount();
-        if(config.getCurrency() != Currency.EUR) amount = getAmountInDifferentCurrency(Currency.EUR,
-            config.getCurrency(), getDateString(new Date()), amount);
+        try {
+            if (config.getCurrency() != Currency.EUR)
+                amount = getAmountInDifferentCurrency(Currency.EUR,
+                    config.getCurrency(), getDateString(new Date()), amount);
+        }catch (RuntimeException e){
+            GridPane errorGrid = new GridPane();
+            errorGrid.add(new Text(e.getMessage()),0,0);
+            return errorGrid;
+        }
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
         String title = payment.getPayer().getName()
@@ -220,6 +227,7 @@ public class DebtCtrl implements Initializable {
     private double getAmountInDifferentCurrency(commons.Currency from, Currency to,
                                                   String date, double amount){
         Conversion conversion = serverUtils.getConversion(from, to, date);
+        if(conversion == null) throw new RuntimeException("Failed to convert amount");
         return amount * conversion.conversionRate();
     }
 
