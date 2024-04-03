@@ -353,13 +353,13 @@ public class MainCtrl {
             statisticsCtrl.setTitle(title);
             //this sets the statistics, eventually this should be linked to the statistics class
             statisticsCtrl.setEventCode(eventCode);
+            statisticsCtrl.refresh();
             statisticsCtrl.fetchStat();
             //set the pieChart
             statisticsCtrl.setPieChart();
         } catch (RuntimeException e) {
             checkConnection();
         }
-
     }
 
     public int getCurrentEventCode(){

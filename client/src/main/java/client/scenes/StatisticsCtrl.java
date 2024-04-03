@@ -4,6 +4,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
+import commons.Participant;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -11,14 +12,17 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
+import java.net.URL;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 public class StatisticsCtrl {
     @FXML
@@ -39,6 +43,12 @@ public class StatisticsCtrl {
     private Label totalCostText;
     @FXML
     private Label errorLabel;
+    @FXML
+    private ListView<Participant> shareListView;
+
+    private double total;
+
+    ObservableList<Participant> listViewData;
 
     private int eventCode;
 
@@ -50,7 +60,36 @@ public class StatisticsCtrl {
         this.mainCtrl = mainCtrl;
         this.serverUtils = serverUtils;
         this.config = config;
+        listViewData = FXCollections.observableArrayList();
     }
+
+    private void setListViewUp() {
+        shareListView.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
+            @Override
+            public ListCell<Participant> call(ListView<Participant> participantListView) {
+                return new ListCell<>(){
+                    @Override
+                    protected void updateItem(Participant participant, boolean b) {
+                        super.updateItem(participant, b);
+                        if(participant == null || b){
+                            setText(null);
+                        }else{
+                            double share = serverUtils.getExpenseByUuid(eventCode,
+                                participant.getUuid())
+                                .stream()
+                                .mapToDouble(x -> x.getTotalExpense() * 100)
+                                .sum()/total;
+                            setText(participant.getName()
+                                + ": "
+                                + mainCtrl.getFormattedDoubleString(share)
+                                + "%");
+                        }
+                    }
+                };
+            }
+        });
+    }
+
     /**
      * initialize the chart with the current values for food, drinks, transport and other
      */
@@ -87,7 +126,7 @@ public class StatisticsCtrl {
         setDrinks();
         setTransport();
         setOther();
-        setTotalCost(serverUtils.getTotalCostEvent(eventCode));
+        setTotalCost(total);
     }
     public void setFood() {
         try {
@@ -146,5 +185,13 @@ public class StatisticsCtrl {
         PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
         visiblePause.setOnFinished(event1 -> errorLabel.setVisible(false));
         visiblePause.play();
+    }
+
+    public void refresh(){
+        listViewData.clear();
+        listViewData.addAll(serverUtils.getParticipants(eventCode));
+        total = serverUtils.getTotalCostEvent(eventCode);
+        shareListView.setItems(listViewData);
+        setListViewUp();
     }
 }

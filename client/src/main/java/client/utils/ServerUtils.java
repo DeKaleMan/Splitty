@@ -100,13 +100,13 @@ public class ServerUtils {
      * Gets expense by email.
      *
      * @param eventCode the event code
-     * @param email     the email
+     * @param uuid     the uuid
      * @return the expense by email
      */
-    public List<Expense> getExpenseByEmail(int eventCode, String email) {
+    public List<Expense> getExpenseByUuid(int eventCode, String uuid) {
         return client
-            .target(server).path("api/expenses/{payerEmail}")
-            .resolveTemplate("payerEmail", email)
+            .target(server).path("api/expenses/{uuid}")
+            .resolveTemplate("uuid", uuid)
             .queryParam("eventCode", eventCode)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)

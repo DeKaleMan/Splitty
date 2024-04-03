@@ -21,8 +21,6 @@ import javafx.util.Duration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.util.*;
 

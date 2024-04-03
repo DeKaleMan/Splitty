@@ -117,11 +117,11 @@ class ServerUtilsTest {
 
         when(mockBuilder.get(new GenericType<List<Expense>>() {})).thenReturn(expListMock);
 
-        List<Expense> withServerUtils = serverUtils.getExpenseByEmail(1, "bal.gmail.com");
+        List<Expense> withServerUtils = serverUtils.getExpenseByUuid(1, "uuidtest");
 
         verify(mockClient).target(ServerUtils.server);
-        verify(mockWebTarget).path("api/expenses/{payerEmail}");
-        verify(mockWebTarget).resolveTemplate("payerEmail", "bal.gmail.com");
+        verify(mockWebTarget).path("api/expenses/{uuid}");
+        verify(mockWebTarget).resolveTemplate("uuid", "uuidtest");
         verify(mockWebTarget).queryParam("eventCode" ,1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
