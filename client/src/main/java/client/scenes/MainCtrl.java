@@ -467,4 +467,8 @@ public class MainCtrl {
     public void closeStage() {
         primaryStage.close();
     }
+
+    public void stopLongPolling(){
+        splittyOverviewCtrl.stopUpdates();
+    }
 }

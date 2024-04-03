@@ -468,5 +468,9 @@ public class SplittyOverviewCtrl implements Initializable {
     public int getCurrentEventCode(){
         return this.eventCode;
     }
+
+    public void stopUpdates(){
+        serverUtils.stop();
+    }
 }
 

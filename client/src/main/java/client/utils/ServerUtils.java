@@ -19,6 +19,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.*;
 
@@ -633,5 +635,24 @@ public class ServerUtils {
                 "Failed to retrieve participant. Status code: " + response.getStatus());
         }
 
+    }
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    public void registerForParticipantUpdates(Consumer<Participant> consumer){
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()){
+                Response res = client.target(server).path("api/participants/updates")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+
+                if(res.getStatus() == 200) consumer.accept(res.readEntity(Participant.class));
+            }
+        });
+    }
+
+    public void stop(){
+        EXEC.shutdownNow();
     }
 }

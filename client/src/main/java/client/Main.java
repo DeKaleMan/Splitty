@@ -66,10 +66,12 @@ public class Main extends Application {
             mainCtrl.initialize(primaryStage, invitation,splittyOverview,
                     startScreen, contactDetails, eventPropGrouper, userEventList,
                     createEvent, adminWindows, settings, server);
+            primaryStage.setOnCloseRequest((event) -> mainCtrl.stopLongPolling());
 
         } catch (Exception e) {
             var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
             mainCtrl.initialize(primaryStage, server, settings);
+            primaryStage.setOnCloseRequest((event) -> mainCtrl.stopLongPolling());
         }
 
     }

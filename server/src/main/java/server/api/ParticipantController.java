@@ -8,10 +8,14 @@ import commons.dto.ParticipantDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 import server.database.ParticipantRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 
 @RestController
@@ -20,6 +24,8 @@ public class ParticipantController {
 
     private final ParticipantRepository participantRepository;
     private final EventRepository eventRepository;
+
+    private Map<Object, Consumer<Participant>> listeners = new HashMap<>();
     @Autowired
     public ParticipantController(ParticipantRepository participantRepository, EventRepository eventRepository) {
         this.participantRepository = participantRepository;
@@ -29,6 +35,23 @@ public class ParticipantController {
     @GetMapping(path = {"/all"})
     public List<Participant> getAllParticipants() {
         return participantRepository.findAll();
+    }
+
+    @GetMapping("/updates")
+    public DeferredResult<ResponseEntity<Participant>> getUpdates(){
+        var noContent = ResponseEntity.noContent().build();
+        var res = new DeferredResult<ResponseEntity<Participant>>(5000L,noContent);
+
+        Object key = new Object();
+        listeners.put(key, (p) ->{
+            res.setResult(ResponseEntity.ok(p));
+        });
+
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return res;
     }
 
 
@@ -71,6 +94,9 @@ public class ParticipantController {
         );
 
         Participant savedParticipant = participantRepository.save(participant);
+
+        listeners.forEach((k,l) -> {l.accept(savedParticipant);});
+
         return ResponseEntity.ok(savedParticipant);
     }
 
@@ -95,8 +121,10 @@ public class ParticipantController {
         existingParticipant.setAccountHolder(participantDTO.getAccountHolder());
         existingParticipant.setUuid(participantDTO.getUuid());
 
-
         Participant updatedParticipant = participantRepository.save(existingParticipant);
+
+        listeners.forEach((k,l) -> {l.accept(updatedParticipant);});
+
         return ResponseEntity.ok(updatedParticipant);
     }
 
