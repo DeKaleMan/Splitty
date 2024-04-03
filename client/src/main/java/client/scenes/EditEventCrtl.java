@@ -14,11 +14,9 @@ import javafx.scene.control.*;
 import java.util.NoSuchElementException;
 
 public class EditEventCrtl {
-
+    int eventId;
     @FXML
     private TextField nameChange;
-    @FXML
-    private TextField eventId;
 
     @FXML
     private Button submitButton;
@@ -37,34 +35,25 @@ public class EditEventCrtl {
         this.mainCtrl = mainCtrl;
     }
 
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
     public void initialize() {
         mainCtrl.setButtonGreenProperty(submitButton);
     }
-    private void setUp(Button submitButton){
-        submitButton.setVisible(true);
-    }
-
     public void back(){
         mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
     }
-
-    public void changeName(ActionEvent actionEvent) {
+    @FXML
+    public void changeValues() {
         String newName = nameChange.getText();
-        String idTemp = eventId.getText();
-        int eventIdd;
-        try{
-            eventIdd = Integer.parseInt(idTemp);
-        } catch (NumberFormatException ex){
-            eventIdd = -1;
-            eventId.setText("Event ID must be an integer");
-            return;
-        }
         if(newName == null || newName.isEmpty()){
             nameChange.setText("please provide a name");
             throw new NoSuchElementException();
         }
         try{
-            Event event = serverUtils.getEventById(eventIdd);
+            Event event = serverUtils.getEventById(eventId);
             Event updatedEvent = serverUtils.updateEvent(event, newName);
             if (updatedEvent == null){
                 throw new RuntimeException();
@@ -74,8 +63,8 @@ public class EditEventCrtl {
         }
         succesFullyChangeName();
         nameChange.setText("");
-        eventId.setText("");
     }
+
 
     public void succesFullyChangeName(){
         succesFullyChanged.setVisible(true);

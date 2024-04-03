@@ -411,7 +411,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void editEvent() {
-        mainCtrl.editEvent();
+        mainCtrl.showEditEvent(this.eventCode);
     }
 
     @FXML
