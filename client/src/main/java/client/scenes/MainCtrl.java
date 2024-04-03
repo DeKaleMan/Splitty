@@ -323,7 +323,7 @@ public class MainCtrl {
 
     /**
      * Shows the participants manager
-     * @param title the title of the current event
+     * @param eventID the title of the current event
      */
     public void showParticipantManager(int eventID){
         try {
@@ -387,8 +387,9 @@ public class MainCtrl {
     }
 
 
-    public void editEvent(){
+    public void showEditEvent(int eventID){
         primaryStage.setTitle("EditEvent");
+        editEventCrtl.setEventId(eventID);
         primaryStage.setScene(editEvent);
     }
 
