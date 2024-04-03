@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -102,21 +101,11 @@ public class AddParticipantCtrl implements Initializable {
             return;
         }
         Event event = serverUtils.getEventById(eventId);
-
         // generate a random uuid
         String uuid = java.util.UUID.randomUUID().toString();
 
-        ParticipantDTO participantDTO = new ParticipantDTO(
-                name,
-                0,
-                iban,
-                bic,
-                email,
-                accountHolder,
-                eventId,
-                uuid,
-                event.getInviteCode()
-        );
+        ParticipantDTO participantDTO = new ParticipantDTO(name, 0, iban, bic, email,
+                accountHolder, eventId, uuid, event.getInviteCode());
         participantDTO.setGhostStatus(true);
         try {
             serverUtils.createParticipant(participantDTO);

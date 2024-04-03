@@ -59,7 +59,7 @@ class ServerUtilsTest {
         List<Event> events = serverUtils.getAllEvents();
 
         // Verifying the results
-        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/all");
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
@@ -86,7 +86,7 @@ class ServerUtilsTest {
         List<Expense> expenses = serverUtils.getExpense(1);
 
         // Verifying the results
-        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/expenses");
         verify(mockWebTarget).queryParam("eventCode", 1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
@@ -112,7 +112,7 @@ class ServerUtilsTest {
         Event event = serverUtils.getEventById(1);
 
         // Verifying the results
-        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event");
         verify(mockWebTarget).queryParam("id", 1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
@@ -134,7 +134,7 @@ class ServerUtilsTest {
         // Verifying the results
         assertThrows(RuntimeException.class, () ->
                 serverUtils.getEventById(1));
-        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event");
         verify(mockWebTarget).queryParam("id", 1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
@@ -158,7 +158,7 @@ class ServerUtilsTest {
         double[] statistics = serverUtils.getStatisticsByEventID(1);
 
         // Verifying the interactions
-        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("/api/statistics");
         verify(mockWebTarget).queryParam("eventID", 1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
@@ -185,7 +185,7 @@ class ServerUtilsTest {
         double statistics = serverUtils.getTotalCostEvent(1);
 
         // Verifying the interactions
-        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("/api/statistics/totalCost");
         verify(mockWebTarget).queryParam("eventID", 1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);

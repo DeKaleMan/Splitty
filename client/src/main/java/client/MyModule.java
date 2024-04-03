@@ -44,5 +44,6 @@ public class MyModule implements Module {
         binder.bind(UserEventListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditEventCrtl.class).in(Scopes.SINGLETON);
         binder.bind(EditExpenseCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerCtrl.class).in(Scopes.SINGLETON);
     }
 }

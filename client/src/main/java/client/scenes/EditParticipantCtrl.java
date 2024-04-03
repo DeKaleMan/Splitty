@@ -5,7 +5,6 @@ import client.utils.ServerUtils;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -96,7 +95,7 @@ public class EditParticipantCtrl implements Initializable {
     public void editParticipant() {
         boolean error = false;
         String name = nameField.getText();
-        if(name==null || name.isEmpty()){
+        if (name == null || name.isEmpty()){
             // maybe make this more explicit like alert the user using an
             // alertbox that his name will be "unknown name"
             name = "Unknown";
@@ -105,7 +104,6 @@ public class EditParticipantCtrl implements Initializable {
         String iban = ibanField.getText();
         String bic = bicField.getText();
         String accountHolder = accountHolderField.getText();
-
         // email validation
         if(!email.contains("@") || !email.contains(".")){
             showErrorBriefly(invalidEmailLabel);
@@ -136,9 +134,7 @@ public class EditParticipantCtrl implements Initializable {
         );
         try {
             serverUtils.updateParticipant(editedParticipant.getUuid(), participant);
-            if (host) {
-                mainCtrl.setConfirmationEditParticipant();
-            }
+            mainCtrl.setConfirmationEditParticipant();
             cancel();
         } catch (RuntimeException e) {
             showErrorBriefly(unknownError);

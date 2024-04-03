@@ -3,8 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.animation.PauseTransition;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
