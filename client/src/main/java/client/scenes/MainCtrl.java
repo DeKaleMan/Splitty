@@ -25,6 +25,7 @@ import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -167,10 +168,10 @@ public class MainCtrl {
         ServerUtils.resetServer();
     }
 
-    public void showServerStartup(boolean startup) {
+    public void showServerStartup(boolean connectionDown) {
         primaryStage.setScene(server);
         primaryStage.setTitle("Server");
-        serverCtrl.setField(startup);
+        serverCtrl.setFields(connectionDown);
     }
     private void setLanguage(){
         languages = new ArrayList<>();
@@ -187,14 +188,18 @@ public class MainCtrl {
     }
 
     public void showSplittyOverview(int id){
-        primaryStage.setTitle("Event overview");
-        primaryStage.setScene(splittyOverview);
-        splittyOverview.getStylesheets().add(css);
-        Event event = serverUtils.getEventById(id);
-        splittyOverviewCtrl.setTitle(event.getName());
-        splittyOverviewCtrl.setEventCode(id);
-        splittyOverviewCtrl.fetchParticipants();
-        splittyOverviewCtrl.fetchExpenses();
+        try {
+            primaryStage.setTitle("Event overview");
+            primaryStage.setScene(splittyOverview);
+            splittyOverview.getStylesheets().add(css);
+            Event event = serverUtils.getEventById(id);
+            splittyOverviewCtrl.setTitle(event.getName());
+            splittyOverviewCtrl.setEventCode(id);
+            splittyOverviewCtrl.fetchParticipants();
+            splittyOverviewCtrl.fetchExpenses();
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
     }
 
     public void setAdmin(Boolean admin) {
@@ -235,13 +240,21 @@ public class MainCtrl {
 
 
     public void showAddExpense(String title, int eventCode) {
-        primaryStage.setTitle("Add expense");
-        addExpenseCtrl.refresh(eventCode);
-        addExpenseCtrl.setTitle(title);
-        primaryStage.setScene(addExpense);
+        try {
+            primaryStage.setTitle("Add expense");
+            addExpenseCtrl.refresh(eventCode);
+            addExpenseCtrl.setTitle(title);
+            primaryStage.setScene(addExpense);
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
     }
 
     public void showInvitation(String title){
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
         invitationCtrl.showInviteCode();
@@ -249,11 +262,19 @@ public class MainCtrl {
     }
 
     public void showAdminLogin() {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
         primaryStage.setTitle("Server management login");
         primaryStage.setScene(adminLogin);
     }
 
     public void showAdminOverview() {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
         primaryStage.setTitle("Admin management overview");
         primaryStage.setScene(adminOverview);
     }
@@ -263,18 +284,31 @@ public class MainCtrl {
      */
     public void showStartScreen(){
         primaryStage.setTitle("Splitty");
-        startScreenCtrl.fetchList();
         primaryStage.setScene(startScreen);
+        try {
+            startScreenCtrl.fetchList();
+            startScreenCtrl.setNoEventsError(false);
+        } catch (RuntimeException e) {
+            startScreenCtrl.setNoEventsError(true);
+        }
     }
 
 
     public void showUserEventList() {
-        userEventListCtrl.initialize();
-        primaryStage.setScene(userEventList);
-        primaryStage.setTitle("Event List");
+        try {
+            userEventListCtrl.initialize();
+            primaryStage.setScene(userEventList);
+            primaryStage.setTitle("Event List");
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
     }
 
-    public void showCreateEvent (String name) {
+    public void showCreateEvent(String name) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
         primaryStage.setTitle("Create Event");
         primaryStage.setScene(createEvent);
         createEventCtrl.setTitle(name);
@@ -285,9 +319,13 @@ public class MainCtrl {
      * @param title the title of the current event
      */
     public void showParticipantManager(String title){
-        primaryStage.setTitle("ManageParticipants");
-        primaryStage.setScene(manageParticipants);
-        manageParticipantsCtrl.setTitle(title);
+        try {
+            primaryStage.setTitle("ManageParticipants");
+            primaryStage.setScene(manageParticipants);
+            manageParticipantsCtrl.setTitle(title);
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
     }
 
     /**
@@ -297,22 +335,23 @@ public class MainCtrl {
      * @param eventCode
      */
     public void showStatistics(String title, int eventCode){
-        primaryStage.setTitle("Statistics");
-        primaryStage.setScene(statistics);
-        statisticsCtrl.setTitle(title);
-        //this sets the statistics, eventually this should be linked to the statistics class
-//        statisticsCtrl.setFood(2);
-//        statisticsCtrl.setDrinks(2);
-//        statisticsCtrl.setTransport(2);
-//        statisticsCtrl.setOther(2);
-        statisticsCtrl.setEventCode(eventCode);
-        statisticsCtrl.fetchStat();
-        //set the pieChart
-        statisticsCtrl.setPieChart();
+        try {
+            primaryStage.setTitle("Statistics");
+            primaryStage.setScene(statistics);
+            statisticsCtrl.setTitle(title);
+            //this sets the statistics, eventually this should be linked to the statistics class
+            statisticsCtrl.setEventCode(eventCode);
+            statisticsCtrl.fetchStat();
+            //set the pieChart
+            statisticsCtrl.setPieChart();
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
+
     }
 
     public int getCurrentEventCode(){
-        if(splittyOverviewCtrl==null){
+        if (splittyOverviewCtrl == null){
             throw new RuntimeException("Splitty overview controller is null," +
                     " exception thrown in MainCtrl getCurrentEventCode()");
         }
@@ -323,9 +362,13 @@ public class MainCtrl {
      * this shows the statistics window
      */
     public void viewDeptsPerEvent(int eventCode){
-        primaryStage.setTitle("Debts per event");
-        primaryStage.setScene(debts);
-        debtCtrl.refresh(eventCode);
+        try {
+            primaryStage.setTitle("Debts per event");
+            primaryStage.setScene(debts);
+            debtCtrl.refresh(eventCode);
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
     }
 
     public void showSettings(boolean startup) {
@@ -334,9 +377,6 @@ public class MainCtrl {
         settingCtrl.initializeFields(startup);
     }
 
-//    public String getMyUuid(){
-//        return settingCtrl.getId();
-//    }
 
     public void editEvent(){
         primaryStage.setTitle("EditEvent");
@@ -378,10 +418,37 @@ public class MainCtrl {
         });
     }
 
-    public void showEditExpense(Expense expense){
-        primaryStage.setTitle("Edit expense");
-        editExpenseCtrl.refresh(expense);
-        primaryStage.setScene(editExpense);
+    public void showEditExpense(Expense expense) {
+        try {
+            primaryStage.setTitle("Edit expense");
+            editExpenseCtrl.refresh(expense);
+            primaryStage.setScene(editExpense);
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
+    }
+
+    public boolean getConnection() {
+        try {
+            serverUtils.getAllEvents();
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    public void checkConnection() {
+        if (!getConnection()) {
+            startScreenCtrl.setNoEventsError(true);
+            primaryStage.setScene(startScreen);
+        } else {
+            //something went wrong...
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Something went wrong");
+            error.setContentText("We are sorry for the inconvenience but something went wrong, " +
+                    "you can try to restart the server and app");
+            error.showAndWait();
+        }
     }
 
     public void closeStage() {

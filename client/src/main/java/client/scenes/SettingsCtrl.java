@@ -19,7 +19,7 @@ public class SettingsCtrl {
     private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
-    private boolean startup = false;
+    private boolean noConnection = false;
     @FXML
     public Button cancelButton;
     @FXML
@@ -54,13 +54,8 @@ public class SettingsCtrl {
     /**
      * sets all the fields to the values obtained by the config file
      */
-    public void initializeFields(boolean startup) {
-        this.startup = startup;
-        if (startup) {
-            cancelButton.setVisible(false);
-        } else {
-            cancelButton.setVisible(true);
-        }
+    public void initializeFields(boolean noConnection) {
+        this.noConnection = noConnection;
         if (config.getEmail() != null) {
             emailField.setText(config.getEmail());
         } else {
@@ -113,7 +108,7 @@ public class SettingsCtrl {
         config.setIban(iban);
         config.setBic(bic);
         config.write();
-        if (startup) {
+        if (noConnection) {
             mainCtrl.showServerStartup(true);
         } else {
             back();
@@ -193,6 +188,6 @@ public class SettingsCtrl {
     }
 
     public void changeServer() {
-        mainCtrl.showServerStartup(false);
+        mainCtrl.showServerStartup(noConnection);
     }
 }

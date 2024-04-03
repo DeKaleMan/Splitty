@@ -27,7 +27,7 @@ public class ServerCtrl {
     private ServerUtils serverUtils;
     private Config config;
 
-    boolean startup = false;
+    boolean noConnection = false;
     @FXML
     public Label startupNotification;
     @FXML
@@ -48,12 +48,12 @@ public class ServerCtrl {
     }
 
 
-    public void setField(boolean startup) {
-        this.startup = startup;
+    public void setFields(boolean noConnection) {
+        this.noConnection = noConnection;
         if (config.getConnection() != null) {
             serverField.setText(config.getConnection());
         }
-        if (startup) {
+        if (noConnection) {
             startupNotification.setVisible(true);
             imageView.setImage(new Image("no-connection.png"));
             backButton.setText("Settings");
@@ -74,9 +74,11 @@ public class ServerCtrl {
             config.write();
             relaunch();
             mainCtrl.closeStage();
-            startup = false;
+            noConnection = false;
         } catch (RuntimeException e) {
             notConnectedError.setVisible(true);
+            noConnection = true;
+            setFields(true);
         }
     }
 
@@ -112,7 +114,7 @@ public class ServerCtrl {
     }
 
     public void back() {
-        mainCtrl.showSettings(startup);
+        mainCtrl.showSettings(noConnection);
     }
     public void resetError(KeyEvent keyEvent) {
         notConnectedError.setVisible(false);

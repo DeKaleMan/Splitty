@@ -26,6 +26,8 @@ public class StartScreenCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final Config config;
 
+
+
     private String currentLang;
 
     @FXML
@@ -59,6 +61,10 @@ public class StartScreenCtrl implements Initializable {
 
     @FXML
     private ListView<Event> eventListView;
+    @FXML
+    public Label myEventsNotFoundError;
+    @FXML
+    public Label noConnectionError;
     private List<Event> events;
     @FXML
     public Label settingsSavedLabel;
@@ -276,7 +282,7 @@ public class StartScreenCtrl implements Initializable {
     }
 
     public void showSettings() {
-        mainCtrl.showSettings(false);
+        mainCtrl.showSettings(noConnectionError.visibleProperty().get());
     }
 
 
@@ -341,5 +347,9 @@ public class StartScreenCtrl implements Initializable {
                 event1 -> settingsSavedLabel.setVisible(false)
         );
         visiblePause.play();
+    }
+    public void setNoEventsError(boolean b) {
+        myEventsNotFoundError.setVisible(b);
+        noConnectionError.setVisible(b);
     }
 }

@@ -90,8 +90,6 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Button leaveButton;
     @FXML
-    public Label confirmationLabel;
-    @FXML
     public Label joinedEventLabel;
 
 //    private Config config;
