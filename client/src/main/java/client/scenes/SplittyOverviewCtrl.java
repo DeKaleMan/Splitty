@@ -94,10 +94,6 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Button leaveButton;
     @FXML
-    public Button leaveConfirmationButton;
-    @FXML
-    public Button cancelLeaveButton;
-    @FXML
     public Label confirmationLabel;
     @FXML
     public Label joinedEventLabel;
@@ -130,8 +126,6 @@ public class SplittyOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         mainCtrl.setButtonRedProperty(deleteExpenseButton);
         mainCtrl.setButtonRedProperty(leaveButton);
-        mainCtrl.setButtonRedProperty(leaveConfirmationButton);
-        mainCtrl.setButtonGreenProperty(cancelLeaveButton);
         participantListView.setCellFactory(param -> new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
@@ -423,8 +417,6 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.deleteParticipant(config.getId(), eventId);
         mainCtrl.showStartScreen();
         confirmationLabel.setVisible(false);
-        cancelLeaveButton.setVisible(false);
-        leaveConfirmationButton.setVisible(false);
     }
 
 
@@ -467,24 +459,12 @@ public class SplittyOverviewCtrl implements Initializable {
         visiblePause.play();
     }
 
-    public void setConfirmation(ActionEvent actionEvent) {
-        confirmationLabel.setVisible(true);
-        cancelLeaveButton.setVisible(true);
-        leaveConfirmationButton.setVisible(true);
-    }
-
-    public void cancelLeave(ActionEvent actionEvent) {
-        confirmationLabel.setVisible(false);
-        cancelLeaveButton.setVisible(false);
-        leaveConfirmationButton.setVisible(false);
-    }
-
     public int getCurrentEventId(){
         return this.eventId;
     }
 
-    public void editMyDetails(ActionEvent actionEvent) {
-        mainCtrl.showMyDetails(eventId);
+    public void editMyDetails() {
+        mainCtrl.showEditParticipant(eventId);
     }
 }
 

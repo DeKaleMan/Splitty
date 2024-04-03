@@ -47,7 +47,7 @@ public class ParticipantController {
 
     @PostMapping
     public ResponseEntity<Participant> createParticipant(@RequestBody ParticipantDTO participantDTO) {
-        Event event = eventRepository.findByInviteCode(participantDTO.getEventInviteCode());
+        Event event = eventRepository.findEventById(participantDTO.getEventId());
         if (event == null) {
             return ResponseEntity.notFound().build();
         }

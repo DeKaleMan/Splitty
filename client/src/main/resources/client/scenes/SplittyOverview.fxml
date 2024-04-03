@@ -75,12 +75,12 @@
          <children>
             <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" prefHeight="26.0" prefWidth="88.0" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
             <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="85.0" text="Statistics" />
-            <Button mnemonicParsing="false" onAction="#editMyDetails" prefHeight="25.0" prefWidth="86.0" text="My details" />
+            <Button mnemonicParsing="false" onAction="#editMyDetails" prefHeight="25.0" prefWidth="86.0"  text="My details" />
             <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
             <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
          </children>
       </VBox>
-      <Button fx:id="leaveButton" layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#setConfirmation" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Leave" textFill="white" />
+      <Button fx:id="leaveButton" layoutX="451.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Leave" textFill="white" />
       <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
@@ -91,8 +91,6 @@
             <Font size="10.0" />
          </font>
       </Label>
-      <Button fx:id="leaveConfirmationButton" layoutX="261.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Leave" textFill="white" visible="false" />
-      <Button fx:id="cancelLeaveButton" layoutX="329.0" layoutY="26.0" mnemonicParsing="false" onAction="#cancelLeave" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Stay" textFill="white" visible="false" />
       <Label fx:id="confirmationLabel" layoutX="218.0" layoutY="58.0" text="Are you sure you want to leave the event?" visible="false" />
    </children>
 </AnchorPane>

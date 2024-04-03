@@ -26,6 +26,8 @@ public class AddParticipantCtrl implements Initializable {
     public Label invalidIbanLabel;
     @FXML
     public Label invalidBicLabel;
+    @FXML
+    public Label unknownError;
 
 
     @FXML
@@ -62,13 +64,13 @@ public class AddParticipantCtrl implements Initializable {
         pause.play();
     }
 
-
     public void addParticipant(){
         String name = nameField.getText();
+        boolean error = false;
         if(name==null || name.isEmpty()){
             // maybe make this more explicit like alert the user using an
             // alertbox that his name will be "unknown name"
-            name = "Unknown name";
+            name = "Unknown";
         }
         String email = emailField.getText();
         String iban = ibanField.getText();
@@ -78,19 +80,21 @@ public class AddParticipantCtrl implements Initializable {
         // email validation
         if(!email.contains("@") || !email.contains(".")){
             showErrorBriefly(invalidEmailLabel);
-            return;
+            error = true;
         }
         // iban validation
         if(!iban.isEmpty() && iban.length() < 15){
             showErrorBriefly(invalidIbanLabel);
-            return;
+            error = true;
         }
         // bic validation
         if(!bic.isEmpty() && bic.length() < 8){
             showErrorBriefly(invalidBicLabel);
+            error = true;
+        }
+        if (error) {
             return;
         }
-
         Event event = serverUtils.getEventById(eventId);
 
         // generate a random uuid
@@ -108,13 +112,14 @@ public class AddParticipantCtrl implements Initializable {
                 event.getInviteCode()
         );
         participantDTO.setGhostStatus(true);
-
-        serverUtils.createParticipant(participantDTO); // Maybe some error handling?
-        mainCtrl.showSplittyOverview(eventId);
+        try {
+            serverUtils.createParticipant(participantDTO);
+            mainCtrl.showSplittyOverview(eventId);
+        } catch (RuntimeException e) {
+            showErrorBriefly(unknownError);
+        }
     }
-
-
-    public void cancel(ActionEvent actionEvent) {
-        mainCtrl.showSplittyOverview(eventId);
+    public void cancel() {
+        mainCtrl.showParticipantManager(eventId);
     }
 }

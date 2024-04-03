@@ -21,12 +21,17 @@ public class EditParticipantCtrl implements Initializable {
     private final Config config;
     private final MainCtrl mainCtrl;
 
+    private boolean host = false;
+    private Participant editedParticipant;
+
     @FXML
     public Label invalidEmailLabel;
     @FXML
     public Label invalidIbanLabel;
     @FXML
     public Label invalidBicLabel;
+    @FXML
+    public Label unknownError;
 
     @FXML
     private Label title;
@@ -69,24 +74,26 @@ public class EditParticipantCtrl implements Initializable {
         pause.play();
     }
 
-    public void autoFillWithMyData(){ // autofill the fields with the current participant's data
-
-        // make sure to get my information from the server since i might have modified my profile before
-        Participant me = serverUtils.getParticipant(config.getId(), eventId);
-        nameField.setText(me.getName());
-        emailField.setText(me.getEmail());
-        ibanField.setText(me.getIBan());
-        bicField.setText(me.getBIC());
-        accountHolderField.setText(me.getAccountHolder());
+    public void autoFillWithMyData() {
+        autoFillWithMyData(config.getId());
     }
-    public void editParticipant(ActionEvent actionEvent) {
-        Participant me = serverUtils.getParticipant(config.getId(), eventId);
 
+    public void autoFillWithMyData(String participantId){ // autofill the fields with the current participant's data
+        editedParticipant = serverUtils.getParticipant(participantId, eventId);
+        // make sure to get my information from the server since I might have modified my profile before
+        nameField.setText(editedParticipant.getName());
+        emailField.setText(editedParticipant.getEmail());
+        ibanField.setText(editedParticipant.getIBan());
+        bicField.setText(editedParticipant.getBIC());
+        accountHolderField.setText(editedParticipant.getAccountHolder());
+    }
+    public void editParticipant() {
+        boolean error = false;
         String name = nameField.getText();
         if(name==null || name.isEmpty()){
             // maybe make this more explicit like alert the user using an
             // alertbox that his name will be "unknown name"
-            name = "Unknown name";
+            name = "Unknown";
         }
         String email = emailField.getText();
         String iban = ibanField.getText();
@@ -96,23 +103,25 @@ public class EditParticipantCtrl implements Initializable {
         // email validation
         if(!email.contains("@") || !email.contains(".")){
             showErrorBriefly(invalidEmailLabel);
-            return;
+            error = true;
         }
         // iban validation
         if(!iban.isEmpty() && iban.length() < 15){
             showErrorBriefly(invalidIbanLabel);
-            return;
+            error = true;
         }
 
         // bic validation
         if(!bic.isEmpty() && bic.length() < 8){
             showErrorBriefly(invalidBicLabel);
+            error = true;
+        }
+        if (error) {
             return;
         }
-
         ParticipantDTO participant = new ParticipantDTO(
                 name,
-                me.getBalance(), // make sure to keep the balance the same
+                editedParticipant.getBalance(), // make sure to keep the balance the same
                 iban,
                 bic,
                 email,
@@ -120,14 +129,23 @@ public class EditParticipantCtrl implements Initializable {
                 eventId,
                 config.getId()
         );
-        participant.setGhostStatus(false); // make sure to set the ghost property ghost to true in case
-                                           // you want to edit a ghost participant
-
-        serverUtils.updateParticipant(config.getId(), participant);
-        mainCtrl.showSplittyOverview(eventId);
+        try {
+            serverUtils.updateParticipant(config.getId(), participant);
+            mainCtrl.showSplittyOverview(eventId);
+        } catch (RuntimeException e) {
+            showErrorBriefly(unknownError);
+        }
     }
 
-    public void cancel(ActionEvent actionEvent) {
-        mainCtrl.showSplittyOverview(eventId);
+    public void cancel() {
+        if (host) {
+            mainCtrl.showParticipantManager(eventId);
+        } else {
+            mainCtrl.showSplittyOverview(eventId);
+        }
+    }
+
+    public void setHost(boolean host) {
+        this.host = host;
     }
 }

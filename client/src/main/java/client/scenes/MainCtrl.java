@@ -370,16 +370,36 @@ public class MainCtrl {
     }
 
     public void showAddParticipant(int eventId) {
+//        if (!getConnection()) {
+//            showStartScreen();
+//            return;
+//        }
         primaryStage.setScene(addParticipant);
-
+        primaryStage.setTitle("Add participant");
         this.addParticipantCtrl.setEventId(eventId);
     }
-
-    public void showMyDetails(int eventId) {
-        this.editParticipantCtrl.setTitle("My details");
+    public void showEditParticipant(int eventId, String participantId) {
+//        if (!getConnection()) {
+//            showStartScreen();
+//            return;
+//        }
+        primaryStage.setScene(editParticipant);
+        primaryStage.setTitle("Edit participant");
+        this.editParticipantCtrl.setEventId(eventId);
+        this.editParticipantCtrl.autoFillWithMyData(participantId);
+        this.editParticipantCtrl.setHost(true);
+    }
+    // one is accessed through the participant manager and the other through Splitty overview
+    public void showEditParticipant(int eventId) {
+//        if (!getConnection()) {
+//            showStartScreen();
+//            return;
+//        }
+        primaryStage.setScene(editParticipant);
+        primaryStage.setTitle("Edit participant");
         this.editParticipantCtrl.setEventId(eventId);
         this.editParticipantCtrl.autoFillWithMyData();
-        primaryStage.setScene(editParticipant);
+        this.editParticipantCtrl.setHost(false);
     }
 
 }

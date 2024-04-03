@@ -2,7 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Participant;
+import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,6 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -23,21 +26,29 @@ public class ManageParticipantsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     @FXML
     public Button removeButton;
+
     @FXML
     private Label titleLabel;
 
     private int eventId;
 
     @FXML
-    private ListView participantsList;
+    private ListView<Participant> participantsList;
 
     @FXML
     private Button undo;
     private Participant undone;
-    @FXML
-    private Button sendInvites;
 
     private List<Participant> list;
+
+    @FXML
+    public Label noParticipantSelectedError;
+    @FXML
+    public Label unknownError;
+    @FXML
+    public Label participantAddedConfirmation;
+    @FXML
+    public Label participantEditedConfirmation;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         mainCtrl.setButtonRedProperty(removeButton);
@@ -75,16 +86,20 @@ public class ManageParticipantsCtrl implements Initializable {
      * removes the participant from the list
      */
     @FXML
-    public void removeParticipantFromList(){
-        if(participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
-        else{
-            ObservableList selected = participantsList.getSelectionModel().getSelectedItems();
-            if(selected.isEmpty()) {
-                System.out.println("none selected");
-                return;
+    public void removeParticipant() {
+        try {
+            if (participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
+            else {
+                Participant selected = participantsList.getSelectionModel().getSelectedItem();
+                if (selected == null) {
+                    setPauseTransition(noParticipantSelectedError);
+                    return;
+                }
+                System.out.println("remove" + selected);
+                remove(selected);
             }
-            System.out.println("remove" + selected);
-            remove((String) selected.getFirst());
+        } catch (RuntimeException e) {
+            setPauseTransition(unknownError);
         }
     }
 
@@ -93,7 +108,8 @@ public class ManageParticipantsCtrl implements Initializable {
         titleLabel.setText(serverUtils.getEventById(id).getName());
         participantsList.getItems().clear();
         try{
-            list = serverUtils.getParticipants(eventId);
+            list = serverUtils.getParticipants(eventId); // only the ghost participants can be edited
+            list = list.stream().filter(Participant::isGhost).toList();
         } catch (RuntimeException e){
             list = new ArrayList<>();
             System.out.println(e);
@@ -101,18 +117,24 @@ public class ManageParticipantsCtrl implements Initializable {
         participantsList.getItems().addAll(list);
     }
 
-    public void remove(String p){
+    public void remove(Participant p) {
         //make get the person linked to this name and delete from db
-        participantsList.getItems().remove(p);
+        try {
+            serverUtils.deleteParticipant(p.getUuid(), eventId);
+            participantsList.getItems().remove(p);
+        } catch (RuntimeException e) {
+            setPauseTransition(unknownError);
+        }
     }
 
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
 
-    @FXML
-    public void showInvitation(){
-        mainCtrl.showInvitation(titleLabel.getText());
+    public void addToList(Participant p) {
+        list.add(p);
+        participantsList.getItems().add(p);
+        setPauseTransition(participantAddedConfirmation);
     }
 
     @FXML
@@ -120,5 +142,29 @@ public class ManageParticipantsCtrl implements Initializable {
         if (press.getCode() == KeyCode.ESCAPE) {
             backEventOverview();
         }
+    }
+
+    public void editParticipant() {
+        if (participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
+        else {
+            Participant selected = participantsList.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                setPauseTransition(noParticipantSelectedError);
+                return;
+            }
+            mainCtrl.showEditParticipant(eventId, selected.getUuid());
+        }
+    }
+
+    public void addParticipant() {
+        mainCtrl.showAddParticipant(eventId);
+    }
+
+    public void setPauseTransition(Label l) {
+        if (l == null) return;
+        l.setVisible(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event1 -> l.setVisible(false));
+        pause.play();
     }
 }
