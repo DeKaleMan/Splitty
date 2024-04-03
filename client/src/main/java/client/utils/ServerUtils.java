@@ -26,7 +26,6 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
-import jakarta.servlet.http.Part;
 import jakarta.ws.rs.client.Client;
 import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
@@ -196,22 +195,22 @@ public class ServerUtils {
     public Expense deleteExpense(Expense expense) {
         ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
 
-         Response response = client
-            .target(SERVER)
-            .path("api/expenses")
-            .queryParam("eventID", expense.getEvent().id)
-            .queryParam("expenseID", expenseId)
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .delete();
-         if (response.getStatus() == Response.Status.OK.getStatusCode()){
-             Expense e = response.readEntity(Expense.class);
-             response.close();
-             return e;
-         } else{
-             response.close();
-             throw new RuntimeException("failed to delete an expense " + response.getStatus());
-         }
+        Response response = client
+                .target(SERVER)
+             .path("api/expenses")
+             .queryParam("eventID", expense.getEvent().id)
+             .queryParam("expenseID", expenseId)
+             .request(APPLICATION_JSON)
+             .accept(APPLICATION_JSON)
+             .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()){
+            Expense e = response.readEntity(Expense.class);
+            response.close();
+            return e;
+        } else{
+            response.close();
+            throw new RuntimeException("failed to delete an expense " + response.getStatus());
+        }
     }
 
 
@@ -408,7 +407,7 @@ public class ServerUtils {
     }
 
     public Participant deleteParticipant(String uuid, int eventId) {
-         Response response = client
+        Response response = client
                 .target(SERVER).path("api/participants/{uuid}/{eventId}")
                 .resolveTemplate("uuid", uuid)
                 .resolveTemplate("eventId", eventId)

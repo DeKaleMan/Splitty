@@ -99,7 +99,7 @@ class ServerUtilsTest {
         verify(mockBuilder).get(new GenericType<List<Expense>>() {});
         assertEquals(mockExpenses, expenses);
     }
-        @Test
+    @Test
     public void getExpenseByEmailTest(){
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
