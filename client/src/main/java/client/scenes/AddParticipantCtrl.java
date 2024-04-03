@@ -68,7 +68,6 @@ public class AddParticipantCtrl implements Initializable {
         if(name==null || name.isEmpty()){
             // maybe make this more explicit like alert the user using an
             // alertbox that his name will be "unknown name"
-
             name = "Unknown name";
         }
         String email = emailField.getText();
@@ -86,7 +85,6 @@ public class AddParticipantCtrl implements Initializable {
             showErrorBriefly(invalidIbanLabel);
             return;
         }
-
         // bic validation
         if(!bic.isEmpty() && bic.length() < 8){
             showErrorBriefly(invalidBicLabel);

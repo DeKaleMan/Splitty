@@ -120,7 +120,8 @@ public class EditParticipantCtrl implements Initializable {
                 eventId,
                 config.getId()
         );
-        participant.setGhostStatus(false); // make sure to set the ghost property ghost to true in case you want to edit a ghost participant
+        participant.setGhostStatus(false); // make sure to set the ghost property ghost to true in case
+                                           // you want to edit a ghost participant
 
         serverUtils.updateParticipant(config.getId(), participant);
         mainCtrl.showSplittyOverview(eventId);
