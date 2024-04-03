@@ -390,6 +390,7 @@ public class MainCtrl {
     public void showEditEvent(int eventID){
         primaryStage.setTitle("EditEvent");
         editEventCrtl.setEventId(eventID);
+        editEventCrtl.reset();
         primaryStage.setScene(editEvent);
     }
 
