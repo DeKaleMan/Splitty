@@ -273,6 +273,7 @@ public class MainCtrl {
             return;
         }
         primaryStage.setTitle("Server management login");
+        adminLoginCtrl.reset();
         primaryStage.setScene(adminLogin);
     }
 
@@ -304,6 +305,7 @@ public class MainCtrl {
         try {
             userEventListCtrl.initialize();
             primaryStage.setScene(userEventList);
+            userEventListCtrl.reset();
             primaryStage.setTitle("Event List");
         } catch (RuntimeException e) {
             checkConnection();
