@@ -43,15 +43,26 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <Button layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#editParticipant" text="Apply changes" />
-      <Label fx:id="invalidEmailLabel" layoutX="401.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address" textAlignment="CENTER" textFill="RED" visible="false" />
-      <Label fx:id="invalidIbanLabel" layoutX="401.0" layoutY="195.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid IBAN" textAlignment="CENTER" textFill="RED" visible="false" />
-      <Label fx:id="invalidBicLabel" layoutX="401.0" layoutY="238.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid BIC" textAlignment="CENTER" textFill="RED" visible="false" />
-        <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="true">
+
+        <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font></Label>
+        <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font></Label>
+        <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font></Label>
+        <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+        <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+        <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#editParticipant" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
+
 
     </children>
 </AnchorPane>

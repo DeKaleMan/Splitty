@@ -8,6 +8,7 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
@@ -21,9 +22,13 @@ public class EditParticipantCtrl implements Initializable {
     private final Config config;
     private final MainCtrl mainCtrl;
 
+
     private boolean host = false;
     private Participant editedParticipant;
-
+    @FXML
+    public Button cancelButton;
+    @FXML
+    public Button applyChangesButton;
     @FXML
     public Label invalidEmailLabel;
     @FXML
@@ -58,7 +63,8 @@ public class EditParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        mainCtrl.setButtonRedProperty(cancelButton);
+        mainCtrl.setButtonGreenProperty(applyChangesButton);
     }
     public void setEventId(int eventId) {
         this.eventId = eventId;
@@ -69,7 +75,7 @@ public class EditParticipantCtrl implements Initializable {
     }
     public void showErrorBriefly(Label errorLabel) {
         errorLabel.setVisible(true);
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
         pause.setOnFinished(event -> errorLabel.setVisible(false));
         pause.play();
     }
@@ -106,13 +112,12 @@ public class EditParticipantCtrl implements Initializable {
             error = true;
         }
         // iban validation
-        if(!iban.isEmpty() && iban.length() < 15){
+        if((!iban.isEmpty() && iban.length() < 15 ) || iban.length() > 34){
             showErrorBriefly(invalidIbanLabel);
             error = true;
         }
-
         // bic validation
-        if(!bic.isEmpty() && bic.length() < 8){
+        if((!bic.isEmpty() && bic.length() < 8) || bic.length() > 11){
             showErrorBriefly(invalidBicLabel);
             error = true;
         }
@@ -127,11 +132,14 @@ public class EditParticipantCtrl implements Initializable {
                 email,
                 accountHolder,
                 eventId,
-                config.getId()
+                editedParticipant.getUuid()
         );
         try {
-            serverUtils.updateParticipant(config.getId(), participant);
-            mainCtrl.showSplittyOverview(eventId);
+            serverUtils.updateParticipant(editedParticipant.getUuid(), participant);
+            if (host) {
+                mainCtrl.setConfirmationEditParticipant();
+            }
+            cancel();
         } catch (RuntimeException e) {
             showErrorBriefly(unknownError);
         }

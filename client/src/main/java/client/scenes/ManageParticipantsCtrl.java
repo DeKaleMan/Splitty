@@ -70,7 +70,6 @@ public class ManageParticipantsCtrl implements Initializable {
             }
         });
     }
-
     @Inject
     public ManageParticipantsCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
@@ -88,16 +87,14 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     public void removeParticipant() {
         try {
-            if (participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
-            else {
-                Participant selected = participantsList.getSelectionModel().getSelectedItem();
-                if (selected == null) {
-                    setPauseTransition(noParticipantSelectedError);
-                    return;
-                }
-                System.out.println("remove" + selected);
-                remove(selected);
+            Participant selected = participantsList.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                setPauseTransition(noParticipantSelectedError);
+                return;
             }
+            System.out.println("remove" + selected);
+            remove(selected);
+
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
@@ -145,15 +142,14 @@ public class ManageParticipantsCtrl implements Initializable {
     }
 
     public void editParticipant() {
-        if (participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
-        else {
-            Participant selected = participantsList.getSelectionModel().getSelectedItem();
-            if (selected == null) {
-                setPauseTransition(noParticipantSelectedError);
-                return;
-            }
-            mainCtrl.showEditParticipant(eventId, selected.getUuid());
+
+        Participant selected = participantsList.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            setPauseTransition(noParticipantSelectedError);
+            return;
         }
+        mainCtrl.showEditParticipant(eventId, selected.getUuid());
+
     }
 
     public void addParticipant() {
@@ -166,5 +162,12 @@ public class ManageParticipantsCtrl implements Initializable {
         PauseTransition pause = new PauseTransition(Duration.seconds(3));
         pause.setOnFinished(event1 -> l.setVisible(false));
         pause.play();
+    }
+
+    public void setParticipantAddedConfirmation() {
+        setPauseTransition(participantEditedConfirmation);
+    }
+    public void setParticipantEditedConfirmation() {
+        setPauseTransition(participantEditedConfirmation);
     }
 }

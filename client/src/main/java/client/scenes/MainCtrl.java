@@ -402,4 +402,13 @@ public class MainCtrl {
         this.editParticipantCtrl.setHost(false);
     }
 
+    public void setConfirmationEditParticipant() {
+        manageParticipantsCtrl.setParticipantEditedConfirmation();
+    }
+
+    public void setConfirmationAddParticipant() {
+        manageParticipantsCtrl.setParticipantAddedConfirmation();
+    }
+
+
 }

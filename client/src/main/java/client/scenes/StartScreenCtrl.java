@@ -156,19 +156,20 @@ public class StartScreenCtrl implements Initializable {
         String eventInviteCode = joinEventTextField.getText();
         if (eventInviteCode == null || eventInviteCode.isEmpty()) {
             invalidCodeError.setVisible(true);
-            invalidCodeError.setVisible(false);
+            alreadyParticipantError.setVisible(false);
+            codeNotFoundError.setVisible(false);
             return;
         }
         // already a participant of this event?
         if (mainCtrl.getMyEvents().stream().anyMatch(e ->
                 e.getInviteCode().equals(eventInviteCode))) {
-            alreadyParticipantError.setVisible(false);
+            invalidCodeError.setVisible(false);
+            codeNotFoundError.setVisible(false);
             alreadyParticipantError.setVisible(true);
             return;
         }
 
         try {
-
             Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
                 // show error message
@@ -311,6 +312,7 @@ public class StartScreenCtrl implements Initializable {
     public void resetErrors(KeyEvent actionEvent) {
         codeNotFoundError.setVisible(false);
         invalidCodeError.setVisible(false);
+        alreadyParticipantError.setVisible(false);
     }
 
     public void setFlag(Image image) {

@@ -7,6 +7,7 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
@@ -28,6 +29,10 @@ public class AddParticipantCtrl implements Initializable {
     public Label invalidBicLabel;
     @FXML
     public Label unknownError;
+    @FXML
+    public Button cancelButton;
+    @FXML
+    public Button applyChangesButton;
 
 
     @FXML
@@ -51,7 +56,8 @@ public class AddParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        mainCtrl.setButtonRedProperty(cancelButton);
+        mainCtrl.setButtonGreenProperty(applyChangesButton);
     }
     public void setEventId(int eventId) {
         this.eventId = eventId;
@@ -83,12 +89,12 @@ public class AddParticipantCtrl implements Initializable {
             error = true;
         }
         // iban validation
-        if(!iban.isEmpty() && iban.length() < 15){
+        if((!iban.isEmpty() && iban.length() < 15 ) || iban.length() > 34){
             showErrorBriefly(invalidIbanLabel);
             error = true;
         }
         // bic validation
-        if(!bic.isEmpty() && bic.length() < 8){
+        if((!bic.isEmpty() && bic.length() < 8) || bic.length() > 11){
             showErrorBriefly(invalidBicLabel);
             error = true;
         }
@@ -114,7 +120,8 @@ public class AddParticipantCtrl implements Initializable {
         participantDTO.setGhostStatus(true);
         try {
             serverUtils.createParticipant(participantDTO);
-            mainCtrl.showSplittyOverview(eventId);
+            mainCtrl.setConfirmationAddParticipant();
+            mainCtrl.showParticipantManager(eventId);
         } catch (RuntimeException e) {
             showErrorBriefly(unknownError);
         }
