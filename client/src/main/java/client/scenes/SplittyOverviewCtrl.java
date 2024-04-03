@@ -315,27 +315,25 @@ public class SplittyOverviewCtrl implements Initializable {
                                 Text mainInfo = new Text();
                                 double totalExpense = expense.getTotalExpense();
                                 try {
-                                    if (config.getCurrency() != Currency.EUR)
-                                        totalExpense = getAmountInDifferentCurrency(Currency.EUR,
-                                            config.getCurrency(), getDateString(date),
+                                    totalExpense =
+                                        mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                                            config.getCurrency(), date,
                                             totalExpense);
                                 }catch (RuntimeException e){
                                     grid.add(new Text(e.getMessage()),0,0);
                                     setGraphic(grid);
                                     return;
                                 }
-                                DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                                decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
                                 if (expense.isSharedExpense()) {
                                     mainInfo.setText(expense.getPayer().getName()
                                         + " paid "
-                                        + decimalFormat.format(totalExpense)
+                                        + mainCtrl.getFormattedDoubleString(totalExpense)
                                         + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
                                         + " for " + expense.getType());
                                 } else {
                                     mainInfo.setText(expense.getPayer().getName()
                                         + " gave "
-                                        + decimalFormat.format(totalExpense)
+                                        + mainCtrl.getFormattedDoubleString(totalExpense)
                                         + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
                                         + " to "
                                         + involved
@@ -366,21 +364,6 @@ public class SplittyOverviewCtrl implements Initializable {
         participantListView.setItems(FXCollections.observableArrayList(participants));
     }
 
-    private double getAmountInDifferentCurrency(commons.Currency from, Currency to,
-                                                  String date, double amount){
-        Conversion conversion = serverUtils.getConversion(from, to, date);
-        if(conversion == null) throw new RuntimeException("Failed to convert amount");
-        return amount * conversion.conversionRate();
-    }
-
-    private static String getDateString(Date date) {
-        String dateString = ((date.getDate() < 10) ? "0" : "")
-            + date.getDate() + "-"
-            + ((date.getMonth() < 9) ? "0" : "")
-            + (date.getMonth()+1)
-            + "-" + (1900 + date.getYear());
-        return dateString;
-    }
 
 
     public void setExpensesText(String text) {

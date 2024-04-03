@@ -199,12 +199,10 @@ public class EditExpenseCtrl extends ExpenseCtrl {
         whatFor.setText(expense.getDescription());
         category.setValue(expense.getType());
         double totalExpense = expense.getTotalExpense();
-        if(config.getCurrency() != commons.Currency.EUR) totalExpense = getAmountInDifferentCurrency(
+        if(config.getCurrency() != commons.Currency.EUR) totalExpense = mainCtrl.getAmountInDifferentCurrency(
             Currency.EUR,
-            config.getCurrency(), getDateString(expense.getDate()), totalExpense);
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
-        amount.setText(decimalFormat.format(totalExpense));
+            config.getCurrency(), expense.getDate(), totalExpense);
+        amount.setText(mainCtrl.getFormattedDoubleString(totalExpense));
         payer = expense.getPayer();
         rest.clear();
         rest.addAll(allparticipants);

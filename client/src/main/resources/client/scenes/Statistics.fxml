@@ -25,9 +25,9 @@
                <children>
                   <Label fx:id="totalCostText" text="Total cost of event:" />
                   <Label fx:id="totalCost" text="100$" />
-                  <Label fx:id="currency" text="CURERCY" />
                </children>
             </HBox>
          </children></VBox>
+      <Label fx:id="errorLabel" layoutX="26.0" layoutY="120.0" text="Failed to convert currency" textFill="RED" visible="false" />
    </children>
 </AnchorPane>

@@ -135,21 +135,18 @@ public class DebtCtrl implements Initializable {
     private GridPane getGrid(Payment payment) {
         double amount = payment.getAmount();
         try {
-            if (config.getCurrency() != Currency.EUR)
-                amount = getAmountInDifferentCurrency(Currency.EUR,
-                    config.getCurrency(), getDateString(new Date()), amount);
+            amount = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                config.getCurrency(), new Date(), amount);
         }catch (RuntimeException e){
             GridPane errorGrid = new GridPane();
             errorGrid.add(new Text(e.getMessage()),0,0);
             return errorGrid;
         }
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
         String title = payment.getPayer().getName()
             + " pays "
             + payment.getPayee().getName()
             + " "
-            + decimalFormat.format(amount)
+            + mainCtrl.getFormattedDoubleString(amount)
             + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
         Button received = new Button("Mark received");
         received.setOnAction(new EventHandler<ActionEvent>() {
@@ -224,21 +221,6 @@ public class DebtCtrl implements Initializable {
         titlelabel.setText((title));
     }
 
-    private double getAmountInDifferentCurrency(commons.Currency from, Currency to,
-                                                  String date, double amount){
-        Conversion conversion = serverUtils.getConversion(from, to, date);
-        if(conversion == null) throw new RuntimeException("Failed to convert amount");
-        return amount * conversion.conversionRate();
-    }
-
-    private static String getDateString(Date date) {
-        String dateString = ((date.getDate() < 10) ? "0" : "")
-            + date.getDate() + "-"
-            + ((date.getMonth() < 9) ? "0" : "")
-            + (date.getMonth()+1)
-            + "-" + (1900 + date.getYear());
-        return dateString;
-    }
 
     /**
      * removes a Payment from the list and adds it to changed

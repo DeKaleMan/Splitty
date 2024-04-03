@@ -312,9 +312,8 @@ public abstract class ExpenseCtrl {
                 System.out.println("Select currency");
                 return null;
             }
-            String dateString = getDateString(date);
-            amountDouble = getAmountInDifferentCurrency(currencyComboBox.getValue(),
-                Currency.EUR,dateString,amountDouble);
+            amountDouble = mainCtrl.getAmountInDifferentCurrency(currencyComboBox.getValue(),
+                Currency.EUR,date,amountDouble);
         } catch (NumberFormatException e) {
             amountError.setVisible(true);
             amountError.setText("Not a number, format e.g 13.99");
@@ -325,15 +324,6 @@ public abstract class ExpenseCtrl {
             return null;
         }
         return amountDouble;
-    }
-
-    protected static String getDateString(Date date) {
-        String dateString = ((date.getDate() < 10) ? "0" : "")
-            + date.getDate() + "-"
-            + ((date.getMonth() < 9) ? "0" : "")
-            + (date.getMonth()+1)
-            + "-" + (1900 + date.getYear());
-        return dateString;
     }
 
     protected Type getType() {
@@ -397,13 +387,6 @@ public abstract class ExpenseCtrl {
                 }
             }
         });
-    }
-
-    protected double getAmountInDifferentCurrency(Currency from, Currency to,
-                                                  String date, double amount){
-        Conversion conversion = serverUtils.getConversion(from, to, date);
-        if(conversion == null) throw new RuntimeException("Failed to convert amount");
-        return amount * conversion.conversionRate();
     }
 
     @FXML

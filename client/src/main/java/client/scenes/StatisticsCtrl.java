@@ -3,6 +3,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Currency;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,8 +13,12 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Date;
 
 public class StatisticsCtrl {
     @FXML
@@ -32,7 +38,7 @@ public class StatisticsCtrl {
     @FXML
     private Label totalCostText;
     @FXML
-    private Label currency;
+    private Label errorLabel;
 
     private int eventCode;
 
@@ -56,7 +62,10 @@ public class StatisticsCtrl {
         if(this.other != 0.0) data.add(new PieChart.Data("Other", other));
 
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
-                                d.getName(), " amount ", d.pieValueProperty()
+                    d.getName(),
+                    ": ",
+                    mainCtrl.getFormattedDoubleString(d.pieValueProperty().getValue()),
+                    java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
                         )
                 )
 
@@ -79,24 +88,46 @@ public class StatisticsCtrl {
         setTransport();
         setOther();
         setTotalCost(serverUtils.getTotalCostEvent(eventCode));
-        currency.setText(String.valueOf(config.getCurrency()));
     }
     public void setFood() {
-        this.food = stat[0];
+        try {
+            this.food = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[0]);
+        } catch(RuntimeException e){
+            displayError();
+        }
     }
     public void setDrinks() {
-        this.drinks = stat[1];
+        try {
+            this.drinks = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[1]);
+        } catch(RuntimeException e){
+            displayError();
+        }
     }
 
     public void setTransport() {
-        this.transport = stat[2];
+        try {
+            this.transport = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[2]);
+        } catch(RuntimeException e){
+            displayError();
+        }
     }
 
     public void setOther() {
-        this.other = stat[3];
+        try {
+            this.other = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[3]);
+        } catch(RuntimeException e){
+            displayError();
+        }
     }
     public void setTotalCost(double totalCost){
-        this.totalCost.setText(String.valueOf(totalCost));
+        try{
+            this.totalCost.setText(mainCtrl.getFormattedDoubleString(
+                mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),totalCost))
+            + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol());
+        }catch(RuntimeException e){
+            this.totalCost.setText("-");
+            displayError();
+        }
     }
 
     @FXML
@@ -108,5 +139,12 @@ public class StatisticsCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             goBack();
         }
+    }
+
+    private void displayError(){
+        errorLabel.setVisible(true);
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+        visiblePause.setOnFinished(event1 -> errorLabel.setVisible(false));
+        visiblePause.play();
     }
 }
