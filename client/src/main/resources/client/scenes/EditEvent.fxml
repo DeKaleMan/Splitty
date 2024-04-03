@@ -26,7 +26,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" />
+            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" visible="false" />
             <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
             <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" />
          </children>
@@ -39,18 +39,19 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextArea fx:id="eventDescriptionArea" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." />
+            <TextArea fx:id="eventDescriptionArea" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." visible="false" />
          </children>
       </VBox>
-      <HBox alignment="CENTER" layoutX="176.0" layoutY="311.0" prefHeight="30.0" prefWidth="248.0">
+      <HBox alignment="CENTER" layoutX="176.0" layoutY="313.0" prefHeight="30.0" prefWidth="248.0">
          <children>
 
 
-            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="edit event" textFill="white">
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; : 6;" text="edit event" textFill="white">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
          </children></HBox>
+      <Label fx:id="succesFullyChanged" alignment="CENTER" layoutX="148.0" layoutY="266.0" prefHeight="30.0" prefWidth="304.0" text="succesfully updated the event" visible="false" />
    </children>
 </AnchorPane>

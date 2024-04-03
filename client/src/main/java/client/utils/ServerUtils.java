@@ -308,6 +308,7 @@ public class ServerUtils {
     public Event updateEvent(Event event, String newName){
         Response response = client.target(server).path("api/event/updateName")
                 .queryParam("newName", newName)
+                .queryParam("id", event.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(event, APPLICATION_JSON), Response.class);
