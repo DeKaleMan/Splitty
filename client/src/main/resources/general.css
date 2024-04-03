@@ -118,21 +118,19 @@ Text {
 /*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
 
 /*}*/
-ComboBox {
-    -fx-background-color: #1FC8C0; /* Turquoise button color */
-    -fx-text-fill: white; /* White text color */
-    -fx-font-size: 14px; /* Moderate font size */
-    -fx-border-radius: 20px; /* Rounded corners */
-    -fx-background-radius: 20px;
-    -fx-border-color: transparent; /* No border */
-    -fx-border-width: 0; /* No border */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); /* Subtle shadow effect */
-}
-
-
-ComboBox .text {
-    -fx-text-fill: white; /* White text color */
-}
+/*ComboBox {*/
+/*    -fx-background-color: #1FC8C0; !* Turquoise button color *!*/
+/*    -fx-text-fill: white; !* White text color *!*/
+/*    -fx-font-size: 14px; !* Moderate font size *!*/
+/*    -fx-border-radius: 20px; !* Rounded corners *!*/
+/*    -fx-background-radius: 20px;*/
+/*    -fx-border-color: transparent; !* No border *!*/
+/*    -fx-border-width: 0; !* No border *!*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
+/*}*/
+/*ComboBox .text {*/
+/*    -fx-text-fill: white; !* White text color *!*/
+/*}*/
 
 #allExpenses{
     -fx-background-color: #4CAF50;
