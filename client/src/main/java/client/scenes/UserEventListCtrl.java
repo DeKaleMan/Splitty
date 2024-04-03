@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -14,6 +15,9 @@ public class UserEventListCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+
+    @FXML
+    private TextField searchbar;
 
     private ObservableList<String> filters = FXCollections.observableArrayList(
             "Last activity", "Title", "Creation date");
@@ -31,6 +35,9 @@ public class UserEventListCtrl {
         choiceBox.setItems(filters);
     }
 
+    public void reset(){
+        this.searchbar.setText(null);
+    }
     @FXML
     public void back() {
         mainCtrl.showStartScreen();

@@ -38,16 +38,16 @@
         </Pane>
         <Pane layoutX="14.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
             <children>
-                <AnchorPane layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane layoutX="5.0" layoutY="21.0" prefHeight="235.0" prefWidth="200.0">
                     <children>
-                        <TabPane fx:id="expensesTabPane" layoutY="35.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="expensesTabPane" layoutX="10.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
                                 <Tab fx:id="allExpenses" text="All" />
                                 <Tab fx:id="paidByMe" text="Paid by me" />
                                 <Tab fx:id="involvingMe" text="Including me" />
                             </tabs>
                         </TabPane>
-                        <HBox alignment="CENTER" layoutX="-19.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
+                        <HBox alignment="CENTER" layoutX="-9.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
                             <children>
                                 <Label fx:id="expenses" styleClass="label" text="expenses">
                                     <font>
@@ -59,17 +59,12 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-                <VBox alignment="CENTER" layoutX="38.0" layoutY="260.0" prefHeight="35.0" prefWidth="156.0">
-                    <children>
-
-                        <HBox spacing="10.0">
-                            <children>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editExpense" text="Edit" HBox.hgrow="ALWAYS" />
-                                <Button fx:id="deleteExpenseButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteExpense" style="-fx-background-color: #c50000;" text="Delete" textFill="white" HBox.hgrow="ALWAYS" />
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
+            <HBox alignment="CENTER" layoutX="20.0" layoutY="256.0" prefHeight="35.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#editExpense" text="Edit" />
+                  <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" style="-fx-background-color: #c50000;" text="Delete" />
+               </children>
+            </HBox>
 
             </children>
         </Pane>
@@ -99,19 +94,19 @@
                 <Button fx:id="sendInvites" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send invites" />
             </children>
         </HBox>
-      <HBox alignment="CENTER" layoutX="200.0" layoutY="62.0" prefHeight="26.0" prefWidth="200.0" spacing="5.0">
-         <children>
-            <Label prefHeight="36.0" prefWidth="36.0" text="Code:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="inviteCode" text="Label">
-               <font>
-                  <Font name="System Bold Italic" size="14.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
+        <HBox alignment="CENTER" layoutX="200.0" layoutY="62.0" prefHeight="26.0" prefWidth="200.0" spacing="5.0">
+            <children>
+                <Label prefHeight="36.0" prefWidth="36.0" text="Code:">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="inviteCode" text="Label">
+                    <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
     </children>
 </AnchorPane>

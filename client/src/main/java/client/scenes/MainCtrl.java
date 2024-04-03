@@ -230,6 +230,7 @@ public class MainCtrl {
 
     public void showAdminLogin() {
         primaryStage.setTitle("Server management login");
+        adminLoginCtrl.reset();
         primaryStage.setScene(adminLogin);
     }
 
@@ -251,6 +252,7 @@ public class MainCtrl {
     public void showUserEventList() {
         userEventListCtrl.initialize();
         primaryStage.setScene(userEventList);
+        userEventListCtrl.reset();
         primaryStage.setTitle("Event List");
     }
 
