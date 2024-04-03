@@ -448,10 +448,10 @@ public class ServerUtils {
 
 
     // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
-    public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
+    public Participant updateParticipant(String uuid, ParticipantDTO participant) {
         Response response = ClientBuilder.newClient(new ClientConfig())
             .target(SERVER).path("api/participants/{uuid}/{eventId}")
-            .resolveTemplate("uuid", oldUuid)
+            .resolveTemplate("uuid", uuid)
             .resolveTemplate("eventId", participant.getEventId())
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -604,10 +604,10 @@ public class ServerUtils {
         return 1;
     }
 
-    public Participant getParticipant(String uuid, int eventCode) {
+    public Participant getParticipant(String uuid, int eventId) {
         Response response = client.target(SERVER).path("api/participants/{uuid}/{eventId}")
                 .resolveTemplate("uuid", uuid)
-                .resolveTemplate("eventId", eventCode)
+                .resolveTemplate("eventId", eventId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get();

@@ -7,11 +7,12 @@ import javafx.util.Pair;
 /**
  *
  * @param addExpense
- * @param manageParticipants
+ * @param addParticipant
  * @param statistics
  */
 public record EventPropGrouper(Pair<AddExpenseCtrl, Parent> addExpense,
-                               Pair<ManageParticipantsCtrl, Parent> manageParticipants,
+                               Pair<AddParticipantCtrl, Parent> addParticipant,
+                               Pair<EditParticipantCtrl, Parent> editParticipant,
                                Pair<StatisticsCtrl, Parent> statistics,
                                Pair<DebtCtrl, Parent> debts,
 

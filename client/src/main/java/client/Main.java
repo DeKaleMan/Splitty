@@ -41,6 +41,8 @@ public class Main extends Application {
     public void start(Stage primaryStage){
 
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+        var editParticipant = FXML.load(EditParticipantCtrl.class, "client", "scenes", "EditParticipant.fxml");
+        var addParticipant = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
         var splittyOverview = FXML.load(SplittyOverviewCtrl.class, "client", "scenes", "SplittyOverview.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
@@ -53,7 +55,7 @@ public class Main extends Application {
         var editEvent = FXML.load(EditEventCrtl.class, "client", "scenes", "EditEvent.fxml");
         var editExpense = FXML.load(EditExpenseCtrl.class,"client", "scenes", "EditExpense.fxml");
         // group these in the EventPropGrouper
-        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants,
+        var eventPropGrouper = new EventPropGrouper(addExpense, addParticipant, editParticipant,
             statistics, debts,editEvent, editExpense);
 
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");

@@ -64,8 +64,11 @@ public class MainCtrl {
     private Scene adminOverview;
     private AdminOverviewCtrl adminOverviewCtrl;
 
-    private Scene manageParticipants;
-    private ManageParticipantsCtrl manageParticipantsCtrl;
+    private Scene addParticipant;
+    private AddParticipantCtrl addParticipantCtrl;
+
+    private Scene editParticipant;
+    private EditParticipantCtrl editParticipantCtrl;
 
     private Scene statistics;
     private StatisticsCtrl statisticsCtrl;
@@ -77,7 +80,6 @@ public class MainCtrl {
     private Scene editEvent;
     private EditEventCrtl editEventCrtl;
     private CreateEventCtrl createEventCtrl;
-
     private Scene editExpense;
     private EditExpenseCtrl editExpenseCtrl;
     private ServerUtils serverUtils;
@@ -86,6 +88,8 @@ public class MainCtrl {
     //            startScreen, contactDetails, eventPropGrouper, addExpense, userEventList, createEvent);
     private Scene settings;
     private SettingsCtrl settingCtrl;
+
+
 
 
     // probably not the best place to put that here but works for now
@@ -121,8 +125,10 @@ public class MainCtrl {
         this.adminOverview = new Scene(adminWindows.adminOverview().getValue());
         this.addExpenseCtrl = eventPropGrouper.addExpense().getKey();
         this.addExpense = new Scene(eventPropGrouper.addExpense().getValue());
-        this.manageParticipantsCtrl = eventPropGrouper.manageParticipants().getKey();
-        this.manageParticipants = new Scene(eventPropGrouper.manageParticipants().getValue());
+        this.addParticipantCtrl = eventPropGrouper.addParticipant().getKey();
+        this.addParticipant = new Scene(eventPropGrouper.addParticipant().getValue());
+        this.editParticipantCtrl = eventPropGrouper.editParticipant().getKey();
+        this.editParticipant = new Scene(eventPropGrouper.editParticipant().getValue());
         this.statisticsCtrl = eventPropGrouper.statistics().getKey();
         this.statistics = new Scene(eventPropGrouper.statistics().getValue());
         this.debtCtrl = eventPropGrouper.debts().getKey();
@@ -169,7 +175,7 @@ public class MainCtrl {
         splittyOverview.getStylesheets().add(css);
         Event event = serverUtils.getEventById(id);
         splittyOverviewCtrl.setTitle(event.getName());
-        splittyOverviewCtrl.setEventCode(id);
+        splittyOverviewCtrl.setEventId(id);
         splittyOverviewCtrl.fetchParticipants();
         splittyOverviewCtrl.fetchExpenses();
     }
@@ -204,7 +210,7 @@ public class MainCtrl {
                         settingCtrl.getId(),
                         inviteCode
                 ));
-        if (participant != null) {
+        if (participant != null) {;
             events.add(serverUtils.getEventById(participant.getEvent().getId()));
         }
         return participant;
@@ -263,8 +269,8 @@ public class MainCtrl {
      */
     public void showParticipantManager(String title){
         primaryStage.setTitle("ManageParticipants");
-        primaryStage.setScene(manageParticipants);
-        manageParticipantsCtrl.setTitle(title);
+        primaryStage.setScene(addParticipant);
+//        manageParticipantsCtrl.setTitle(title);
     }
 
     /**
@@ -293,7 +299,7 @@ public class MainCtrl {
             throw new RuntimeException("Splitty overview controller is null," +
                     " exception thrown in MainCtrl getCurrentEventCode()");
         }
-        return splittyOverviewCtrl.getCurrentEventCode();
+        return splittyOverviewCtrl.getCurrentEventId();
     }
 
     /**
@@ -360,4 +366,18 @@ public class MainCtrl {
         editExpenseCtrl.refresh(expense);
         primaryStage.setScene(editExpense);
     }
+
+    public void showAddParticipant(int eventId) {
+        primaryStage.setScene(addParticipant);
+
+        this.addParticipantCtrl.setEventId(eventId);
+    }
+
+    public void showMyDetails(int eventId) {
+        this.editParticipantCtrl.setTitle("My details");
+        this.editParticipantCtrl.setEventId(eventId);
+        this.editParticipantCtrl.autoFillWithMyData();
+        primaryStage.setScene(editParticipant);
+    }
+
 }
