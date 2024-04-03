@@ -25,6 +25,10 @@ Button {
     -fx-text-fill: #ffffff;
     -fx-font-size: 12px;
     -fx-alignment: center;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 100, 0, 0.5), 10, 0.5, 5, 5); /* Darker green shadow with bigger offset */
+
     /* Preferred width and height */
     /* -fx-pref-width: 120px; */
     /* -fx-pref-height: 40px; */
@@ -37,7 +41,7 @@ Button {
     -fx-font-weight: bold; /* Font weight */
     -fx-text-fill: #333;
     -fx-padding: 5px;
-    -fx-background-color: #f0f0f0; /* Light Gray */
+    /*-fx-background-color: #f0f0f0; !* Light Gray *!*/
 }
 
 .headerLabel {
