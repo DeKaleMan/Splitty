@@ -3,6 +3,7 @@ package client.utils;
 import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
+import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -16,6 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -474,7 +478,6 @@ class ServerUtilsTest {
         Event mockEvent = new Event("event Name", date, "owner", "description");
         when(mockResponse.readEntity(any(GenericType.class))).thenReturn(mockEvent); // Correct stubbing
 
-        ServerUtils serverUtils = new ServerUtils(mockClient);
         EventDTO eventDTO = new EventDTO("name", date, "owner", "description");
         Event resultEvent = serverUtils.addEvent(eventDTO);
 
@@ -485,6 +488,94 @@ class ServerUtilsTest {
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
         assertEquals(mockEvent, resultEvent);
+    }
+
+    @Test
+    public void createParticipantTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+        when(mockBuilder.post(any(Entity.class))).thenReturn(mockResponse);
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+
+        when(mockResponse.readEntity(any(GenericType.class))).thenReturn(p);
+
+        ParticipantDTO partDTO = new ParticipantDTO("nane", 100.0, "123", "123", "email", "accountHolder", 123, "uuid");
+        Participant realPart = serverUtils.createParticipant(partDTO);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/participants");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(realPart, p);
+    }
+
+    @Test
+    public void deleteParticipantTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        String uuid = "uuid";
+        int eventId = 123;
+        when(mockResponse.readEntity(new GenericType<Participant>(){})).thenReturn(p);
+        when(mockBuilder.delete()).thenReturn(mockResponse);
+
+        Participant real = serverUtils.deleteParticipant(uuid, eventId);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/participants/{uuid}/{eventId}");
+        verify(mockWebTarget).resolveTemplate("uuid", "uuid");
+        verify(mockWebTarget).resolveTemplate("eventId", eventId);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        assertEquals(real, p);
+    }
+
+    @Test
+    public void updateParticipantTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant p = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        ParticipantDTO partDTO = new ParticipantDTO("nane", 100.0, "123", "123", "email", "accountHolder", 123, "uuid");
+        String uuid = "uuid";
+        int eventId = 123;
+
+        when(mockResponse.readEntity(new GenericType<Participant>(){
+        })).thenReturn(p);
+        when(mockBuilder.put(any(Entity.class))).thenReturn(mockResponse);
+
+        Participant part = serverUtils.updateParticipant(uuid, partDTO);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/participants/{uuid}/{eventId}");
+        verify(mockWebTarget).resolveTemplate("uuid", uuid);
+        verify(mockWebTarget).resolveTemplate("eventId", eventId);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        assertEquals(part, p);
+
     }
 
 }

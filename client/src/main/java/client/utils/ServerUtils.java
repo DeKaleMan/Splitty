@@ -26,6 +26,7 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import jakarta.servlet.http.Part;
 import jakarta.ws.rs.client.Client;
 import commons.dto.PaymentDTO;
 import jakarta.ws.rs.core.Response;
@@ -389,7 +390,7 @@ public class ServerUtils {
 
 
     public Participant createParticipant(ParticipantDTO p) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
                 .target(SERVER).path("api/participants")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -406,8 +407,8 @@ public class ServerUtils {
         }
     }
 
-    public void deleteParticipant(String uuid, int eventId) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+    public Participant deleteParticipant(String uuid, int eventId) {
+         Response response = client
                 .target(SERVER).path("api/participants/{uuid}/{eventId}")
                 .resolveTemplate("uuid", uuid)
                 .resolveTemplate("eventId", eventId)
@@ -417,13 +418,17 @@ public class ServerUtils {
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             response.close();
             throw new RuntimeException("Failed to delete participant. Status code: " + response.getStatus());
+        }else {
+            Participant p = response.readEntity(new GenericType<>(){
+            });
+            response.close();
+            return p;
         }
     }
 
-
     // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
     public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
             .target(SERVER).path("api/participants/{uuid}/{eventId}")
             .resolveTemplate("uuid", oldUuid)
             .resolveTemplate("eventId", participant.getEventId())
