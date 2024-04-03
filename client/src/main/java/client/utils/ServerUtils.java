@@ -642,7 +642,7 @@ public class ServerUtils {
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
     public Conversion getConversion(Currency from, Currency to, String date){
-         Response response = ClientBuilder.newClient(new ClientConfig())
+         Response response = client
             .target(server).path("api/currency")
             .queryParam("from", from.toString())
             .queryParam("to", to.toString())

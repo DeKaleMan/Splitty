@@ -1,10 +1,15 @@
 package client.utils;
 
+
 import commons.*;
+import commons.Currency;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -16,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
@@ -965,5 +971,63 @@ class ServerUtilsTest {
         verify(mockBuilder).get(double.class);
 
     }
+    @Test
+    void getConversionTestSuccessful(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
 
+        ObjectMapper om = new ObjectMapper();
+        Conversion conversion = new Conversion("EUR", "USD", 0.927, "12-03-2024");
+        ObjectNode objectNode = om.createObjectNode();
+        objectNode.put("conversion", om.convertValue(conversion, JsonNode.class));
+        objectNode.put("message", "The conversion was successful");
+        JsonNode jsonNode = om.valueToTree(objectNode);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+        when(mockResponse.readEntity(JsonNode.class)).thenReturn(jsonNode);
+
+        Conversion actual = serverUtils.getConversion(Currency.EUR, Currency.USD,"12-03-2024");
+
+        verify(mockClient).target(ServerUtils.server);
+        verify(mockWebTarget).path("api/currency");
+        verify(mockWebTarget).queryParam("from", Currency.EUR.toString());
+        verify(mockWebTarget).queryParam("to", Currency.USD.toString());
+        verify(mockWebTarget).queryParam("date", "12-03-2024");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(); // Ensure that get method is invoked
+
+        assertEquals(conversion,actual);
+    }
+
+    @Test
+    void getConversionTestUnsuccessful(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode objectNode = om.createObjectNode();
+        objectNode.put("message", "Something unexpected happened on the server side");
+        JsonNode jsonNode = om.valueToTree(objectNode);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+        when(mockResponse.readEntity(JsonNode.class)).thenReturn(jsonNode);
+
+        assertNull(serverUtils.getConversion(Currency.EUR, Currency.USD,"12-03-2024"));
+
+        verify(mockClient).target(ServerUtils.server);
+        verify(mockWebTarget).path("api/currency");
+        verify(mockWebTarget).queryParam("from", Currency.EUR.toString());
+        verify(mockWebTarget).queryParam("to", Currency.USD.toString());
+        verify(mockWebTarget).queryParam("date", "12-03-2024");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(); // Ensure that get method is invoked
+    }
+
+    
 }
