@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
@@ -73,6 +74,8 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     private Button deleteExpenseButton;
+    @FXML
+    public Button hostOptionsButton;
 
 
     @FXML
@@ -99,7 +102,6 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Label joinedEventLabel;
 
-//    private Config config;
 
     @FXML
     private ListView<Participant> participantListView;
@@ -110,6 +112,18 @@ public class SplittyOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.config = config;
         admin = false;
+    }
+
+    public void initializeAll(Event event) {
+        if (admin || event.getHost().equals(config.getId())) {
+            hostOptionsButton.setVisible(true);
+        } else {
+            hostOptionsButton.setVisible(false);
+        }
+        setTitle(event.getName());
+        setEventId(event.getId());
+        fetchParticipants();
+        fetchExpenses();
     }
 
     @FXML
@@ -126,7 +140,11 @@ public class SplittyOverviewCtrl implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getName());
+                    if (item.getName() == null) {
+                        setText("unknown");
+                    } else {
+                        setText(item.getName());
+                    }
                 }
             }
         });
@@ -160,8 +178,8 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     @FXML
-    public void viewParticipantManager() {
-        mainCtrl.showParticipantManager(titleLabel.getText());
+    public void showParticipantManager() {
+        mainCtrl.showParticipantManager(eventId);
     }
 
 
@@ -409,12 +427,6 @@ public class SplittyOverviewCtrl implements Initializable {
         leaveConfirmationButton.setVisible(false);
     }
 
-
-    public void addGhostParticipant() {
-
-        mainCtrl.showAddParticipant(eventId);
-
-    }
 
     public void editEvent() {
         mainCtrl.editEvent();

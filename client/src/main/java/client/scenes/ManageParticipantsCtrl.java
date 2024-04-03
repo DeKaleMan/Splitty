@@ -26,7 +26,7 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     private Label titleLabel;
 
-    private final int eventCode = 1;
+    private int eventId;
 
     @FXML
     private ListView participantsList;
@@ -47,21 +47,17 @@ public class ManageParticipantsCtrl implements Initializable {
             @Override
             protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getName());
+                    if (item.getName() == null) {
+                        setText("unknown");
+                    } else {
+                        setText(item.getName());
+                    }
                 }
             }
         });
-        try{
-            list = serverUtils.getParticipants(eventCode);
-        }catch (Exception e){
-            list = new ArrayList<>();
-            System.out.println(e);
-        }
-        participantsList.getItems().addAll(list);
     }
 
     @Inject
@@ -72,7 +68,7 @@ public class ManageParticipantsCtrl implements Initializable {
 
     @FXML
     public void backEventOverview(){
-        mainCtrl.showSplittyOverview(eventCode);
+        mainCtrl.showSplittyOverview(eventId);
     }
 
     /**
@@ -90,7 +86,19 @@ public class ManageParticipantsCtrl implements Initializable {
             System.out.println("remove" + selected);
             remove((String) selected.getFirst());
         }
+    }
 
+    public void setupParticipants(int id) {
+        this.eventId = id;
+        titleLabel.setText(serverUtils.getEventById(id).getName());
+        participantsList.getItems().clear();
+        try{
+            list = serverUtils.getParticipants(eventId);
+        } catch (RuntimeException e){
+            list = new ArrayList<>();
+            System.out.println(e);
+        }
+        participantsList.getItems().addAll(list);
     }
 
     public void remove(String p){
@@ -101,7 +109,6 @@ public class ManageParticipantsCtrl implements Initializable {
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
-
 
     @FXML
     public void showInvitation(){

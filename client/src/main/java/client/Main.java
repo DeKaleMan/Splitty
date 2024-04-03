@@ -56,7 +56,7 @@ public class Main extends Application {
         var editExpense = FXML.load(EditExpenseCtrl.class,"client", "scenes", "EditExpense.fxml");
         // group these in the EventPropGrouper
         var eventPropGrouper = new EventPropGrouper(addExpense, addParticipant, editParticipant,
-            statistics, debts,editEvent, editExpense);
+            statistics, debts,editEvent, editExpense, manageParticipants);
 
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
 
