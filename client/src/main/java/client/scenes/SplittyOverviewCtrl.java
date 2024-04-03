@@ -98,6 +98,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label confirmationLabel;
     @FXML
     public Label joinedEventLabel;
+    @FXML
+    public Label inviteCode;
 
 //    private Config config;
 
@@ -134,6 +136,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setEventCode(int eventCode) {
         this.eventCode = eventCode;
+        this.inviteCode.setText(serverUtils.getEventById(eventCode).getInviteCode());
     }
 
     /**

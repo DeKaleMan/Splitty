@@ -41,6 +41,11 @@ public class EditEventCrtl {
 
     public void initialize() {
         mainCtrl.setButtonGreenProperty(submitButton);
+
+    }
+    public void reset(){
+        this.succesFullyChanged.setVisible(false);
+        this.nameChange.setText("");
     }
     public void back(){
         mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
@@ -63,8 +68,6 @@ public class EditEventCrtl {
             throw new RuntimeException();
         }
         succesFullyChangeName();
-        nameChange.setText("");
-
     }
 
 
