@@ -307,7 +307,7 @@ public class SplittyOverviewCtrl implements Initializable {
                                     date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
                                         + (date.getMonth() + 1) + "."
                                         + (date.getYear() + 1900));
-                                dateLabel.setStyle("-fx-font-size: 12px");
+                                dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
                                 dateLabel.setPrefWidth(70);
                                 List<String> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
