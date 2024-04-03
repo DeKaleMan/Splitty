@@ -186,6 +186,7 @@ class ServerUtilsTest {
 
         // Verifying the interactions
         verify(mockClient).target(ServerUtils.server);
+
         verify(mockWebTarget).path("/api/statistics/totalCost");
         verify(mockWebTarget).queryParam("eventID", 1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
