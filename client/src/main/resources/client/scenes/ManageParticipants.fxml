@@ -45,6 +45,10 @@
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
+      <Label fx:id="participantDeletedConfirmation" layoutX="106.0" layoutY="306.0" text="Participant successfully edited*" textFill="#3700ff" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
 
    </children>
 </AnchorPane>

@@ -5,10 +5,7 @@ import commons.Participant;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -25,6 +22,7 @@ public class ManageParticipantsCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     @FXML
     public Button removeButton;
+
 
     @FXML
     private Label titleLabel;
@@ -48,6 +46,8 @@ public class ManageParticipantsCtrl implements Initializable {
     public Label participantAddedConfirmation;
     @FXML
     public Label participantEditedConfirmation;
+    @FXML
+    public Label participantDeletedConfirmation;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         mainCtrl.setButtonRedProperty(removeButton);
@@ -91,9 +91,17 @@ public class ManageParticipantsCtrl implements Initializable {
                 setPauseTransition(noParticipantSelectedError);
                 return;
             }
-            System.out.println("remove" + selected);
-            remove(selected);
-
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Deleting Participant");
+            confirmation.setContentText("Are you sure you want to delete " + selected.getName()+
+                    " from " + titleLabel.getText() + "?");
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    System.out.println("remove" + selected);
+                    remove(selected);
+                    setPauseTransition(participantDeletedConfirmation);
+                }
+            });
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
