@@ -414,5 +414,77 @@ class ServerUtilsTest {
         assertEquals(updatedEvent.getName(), newName);
 
     }
+    @Test
+    public void deleteEventByIdTestFailure() {
+        // Mock setup
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.BAD_REQUEST.getStatusCode());
+        when(mockBuilder.delete()).thenReturn(mockResponse);
+
+        // Verifying the results
+        assertThrows(RuntimeException.class, () ->
+                serverUtils.deleteEventById(123));
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/event");
+        verify(mockWebTarget).queryParam("id", 123);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+    }
+
+    @Test
+    public void deleteEventByIdTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+
+        int eventId = 123;
+        Date date = new Date(2004, Calendar.APRIL, 15);
+        Event mockEvent = new Event("event Name", date, "owner", "description");
+        when(mockResponse.readEntity(new GenericType<Event>(){})).thenReturn(mockEvent);
+        when(mockBuilder.delete()).thenReturn(mockResponse);
+
+        Event serverUtilsEvent = serverUtils.deleteEventById(eventId);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/event");
+        verify(mockWebTarget).queryParam("id", eventId);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        assertEquals(serverUtilsEvent, mockEvent);
+    }
+
+    @Test
+    public void addEventTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+        when(mockBuilder.post(any(Entity.class))).thenReturn(mockResponse);
+
+
+        Date date = new Date(2004, Calendar.APRIL, 15);
+        Event mockEvent = new Event("event Name", date, "owner", "description");
+        when(mockResponse.readEntity(any(GenericType.class))).thenReturn(mockEvent); // Correct stubbing
+
+        ServerUtils serverUtils = new ServerUtils(mockClient);
+        EventDTO eventDTO = new EventDTO("name", date, "owner", "description");
+        Event resultEvent = serverUtils.addEvent(eventDTO);
+
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/event");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(mockEvent, resultEvent);
+    }
 
 }

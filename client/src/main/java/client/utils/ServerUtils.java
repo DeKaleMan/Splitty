@@ -297,7 +297,7 @@ public class ServerUtils {
      * @return the event
      */
     public Event deleteEventById(int id) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
             .target(SERVER).path("api/event")
             .queryParam("id", id)
             .request(APPLICATION_JSON)
@@ -317,7 +317,7 @@ public class ServerUtils {
     }
 
     public Event addEvent(EventDTO newEvent) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
             .target(SERVER).path("api/event")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
