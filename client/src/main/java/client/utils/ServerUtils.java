@@ -450,7 +450,7 @@ public class ServerUtils {
 
     public List<Event> getEventsByParticipant(String id) {
 
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
                 .target(SERVER).path("api/participants/{uuid}/events")
                 .resolveTemplate("uuid", id)
                 .request(APPLICATION_JSON)
@@ -471,7 +471,7 @@ public class ServerUtils {
 
 
     public List<Payment> getPaymentsOfEvent(int eventId){
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(SERVER).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
@@ -481,7 +481,7 @@ public class ServerUtils {
     }
 
     public Payment savePayment(PaymentDTO paymentDTO) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(SERVER).path("api/payments")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -489,7 +489,7 @@ public class ServerUtils {
     }
 
     public Payment updatePayment(PaymentDTO paymentDTO, long paymentId) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(SERVER).path("api/payments/{id}")
             .resolveTemplate("id", paymentId)
             .request(APPLICATION_JSON)

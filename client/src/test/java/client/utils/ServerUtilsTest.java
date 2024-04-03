@@ -4,6 +4,7 @@ import commons.*;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import commons.dto.PaymentDTO;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -575,6 +576,120 @@ class ServerUtilsTest {
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
         assertEquals(part, p);
+
+    }
+
+    @Test
+    public void getEventByParticipantTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        String uuid = "uuid";
+        List<Event> eventList = List.of(e);
+
+        when(mockResponse.readEntity(new GenericType<List<Event>>(){
+        })).thenReturn(eventList);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+
+        List<Event> ev = serverUtils.getEventsByParticipant(uuid);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/participants/{uuid}/events");
+        verify(mockWebTarget).resolveTemplate("uuid", uuid);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(ev, eventList);
+    }
+
+    @Test
+    public void getPaymentOfEventTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant payer = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Participant payee = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        int eventId = 123;
+        Payment payment = new Payment(payer, payee, 100.0, false);
+        List<Payment> mockPaymentList = List.of(payment);
+
+        when(mockBuilder.get(new GenericType<List<Payment>>(){})).thenReturn(mockPaymentList);
+
+        List<Payment> real = serverUtils.getPaymentsOfEvent(eventId);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/payments/{id}");
+        verify(mockWebTarget).resolveTemplate("id", eventId);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(real, mockPaymentList);
+    }
+
+    @Test
+    public void savePaymentTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        PaymentDTO payDTO = new PaymentDTO("payerUUID", "payeeUUID", 123, 100.0, true);
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant payer = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Participant payee = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        int eventId = 123;
+        Payment payment = new Payment(payer, payee, 100.0, false);
+        when(mockBuilder.post(any(Entity.class), eq(Payment.class))).thenReturn(payment);
+
+        Payment paymentt = serverUtils.savePayment(payDTO);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/payments");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(paymentt, payment);
+    }
+
+    @Test
+    public void updatePayment(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyLong())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        PaymentDTO payDTO = new PaymentDTO("payerUUID", "payeeUUID", 123, 100.0, true);
+        long paymentId = 123;
+        Date d = new Date(2020, Calendar.AUGUST, 23);
+        Event e = new Event("test", d, "stijn", "this is an event");
+        Participant payer = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Participant payee = new Participant("jaap", 56.0, "123", "123", "qwer@gmail.com", "", "uuid", e);
+        Payment payment = new Payment(payer, payee, 100.0, false);
+
+        when(mockBuilder.put(any(Entity.class), eq(Payment.class))).thenReturn(payment);
+
+        Payment p = serverUtils.updatePayment(payDTO, paymentId);
+
+        verify(mockClient).target(ServerUtils.SERVER);
+        verify(mockWebTarget).path("api/payments/{id}");
+        verify(mockWebTarget).resolveTemplate("id", paymentId);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+
+        assertEquals(payment, p);
 
     }
 
