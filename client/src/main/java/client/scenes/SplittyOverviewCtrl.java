@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
@@ -33,8 +34,9 @@ import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
 
+
     //We need to store the eventCode right here
-    private int eventCode;
+    private int eventId;
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -74,6 +76,8 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     private Button deleteExpenseButton;
+    @FXML
+    public Button hostOptionsButton;
 
 
     @FXML
@@ -96,7 +100,6 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Label inviteCode;
 
-//    private Config config;
 
     @FXML
     private ListView<Participant> participantListView;
@@ -110,6 +113,18 @@ public class SplittyOverviewCtrl implements Initializable {
         this.config = config;
         admin = false;
         participantsList = FXCollections.observableArrayList();
+    }
+
+    public void initializeAll(Event event) {
+        if (admin || event.getHost().equals(config.getId())) {
+            hostOptionsButton.setVisible(true);
+        } else {
+            hostOptionsButton.setVisible(false);
+        }
+        setTitle(event.getName());
+        this.eventId = event.getId();
+        fetchParticipants();
+        fetchExpenses();
     }
 
     @FXML
@@ -129,7 +144,11 @@ public class SplittyOverviewCtrl implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getName());
+                    if (item.getName() == null) {
+                        setText("unknown");
+                    } else {
+                        setText(item.getName());
+                    }
                 }
             }
         });
@@ -137,7 +156,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void handleUpdate(Participant p){
-        if(p.getEvent().getId() != eventCode) return;
+        if(p.getEvent().getId() != eventId) return;
         Platform.runLater(() -> {
             if(!participantsList.contains(p)) {
                 participantsList.add(p);
@@ -149,15 +168,16 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void handleDeletion(Participant p){
-        if(p.getEvent().getId() != eventCode) return;
+        if(p.getEvent().getId() != eventId) return;
         Platform.runLater(() -> {
             participantsList.remove(p);
         });
     }
 
-    public void setEventCode(int eventCode) {
-        this.eventCode = eventCode;
-        this.inviteCode.setText(serverUtils.getEventById(eventCode).getInviteCode());
+
+    public void setEventCode(int eventId) {
+        this.eventId = eventId;
+        this.inviteCode.setText(serverUtils.getEventById(eventId).getInviteCode());
     }
 
     /**
@@ -165,7 +185,7 @@ public class SplittyOverviewCtrl implements Initializable {
      */
     @FXML
     public void sendInvitesOnClick() {
-        mainCtrl.showInvitation(this.eventCode);
+        mainCtrl.showInvitation(this.eventId);
     }
 
     /**
@@ -180,18 +200,18 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText(),eventCode);
+        mainCtrl.showAddExpense(titleLabel.getText(), eventId);
     }
 
     @FXML
-    public void viewParticipantManager() {
-        mainCtrl.showParticipantManager(this.eventCode);
+    public void showParticipantManager() {
+        mainCtrl.showParticipantManager(eventId);
     }
 
 
     @FXML
     public void showStatistics() {
-        mainCtrl.showStatistics(titleLabel.getText(), this.eventCode);
+        mainCtrl.showStatistics(titleLabel.getText(), this.eventId);
     }
 
     /**
@@ -208,18 +228,18 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     private void viewDebts() {
-        mainCtrl.viewDeptsPerEvent(eventCode);
+        mainCtrl.viewDeptsPerEvent(eventId);
     }
 
 
     public void addExpense(String description, Type type, Date date,
                            Double totalExpense, String payerEmail) {
         try {
-            ExpenseDTO exp = new ExpenseDTO(eventCode, description, type,
+            ExpenseDTO exp = new ExpenseDTO(eventId, description, type,
                 date, totalExpense, payerEmail, true);
             serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventCode);
+            serverUtils.generatePaymentsForEvent(eventId);
         } catch (NotFoundException ep) {
             // Handle 404 Not Found error
             // Display an error message or log the error
@@ -232,11 +252,21 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void editExpense() {
-        Expense toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel()
-            .getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
-
+        Expense toEdit;
+        try {
+            toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel()
+                    .getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
+        } catch (NoSuchElementException e) {
+            toEdit = null;
+        }
         if (toEdit == null) {
-            throw new NoSuchElementException("No element selected");
+            expenseNotDeletedError.setVisible(false);
+            noExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> noExpenseError.setVisible(false)
+            );
+            return;
         }
         mainCtrl.showEditExpense(toEdit);
     }
@@ -274,7 +304,7 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         System.out.println("OK");
         fetchExpenses();
-        serverUtils.generatePaymentsForEvent(eventCode);
+        serverUtils.generatePaymentsForEvent(eventId);
         return toDelete;
     }
 
@@ -287,7 +317,7 @@ public class SplittyOverviewCtrl implements Initializable {
             cellFactory = getExpenseListCellFactory();
         List<Expense> expenses = new ArrayList<>();
         try {
-            expenses = serverUtils.getExpense(eventCode);
+            expenses = serverUtils.getExpense(eventId);
         } catch (BadRequestException e) {
             System.out.println(e);
         }
@@ -365,7 +395,7 @@ public class SplittyOverviewCtrl implements Initializable {
         participantsList.clear();
         List<Participant> participants = new ArrayList<>();
         try {
-            participants = serverUtils.getParticipants(eventCode);
+            participants = serverUtils.getParticipants(eventId);
         } catch (BadRequestException | NotFoundException e) {
             System.out.println(e);
         }
@@ -414,6 +444,7 @@ public class SplittyOverviewCtrl implements Initializable {
         this.allExpenses.setText(text);
     }
 
+
     public void leaveEvent() {
         if (admin) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -425,11 +456,12 @@ public class SplittyOverviewCtrl implements Initializable {
 //        can only leave if balance is 0
         Participant me;
         try {
-            me = serverUtils.getParticipant(config.getId(), eventCode);
+            me = serverUtils.getParticipant(config.getId(), eventId);
         } catch (RuntimeException e) {
             // label or error?
             return;
         }
+
         if (me.getBalance() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -444,7 +476,7 @@ public class SplittyOverviewCtrl implements Initializable {
         confirmation.setContentText("Are you sure you want to leave the event?");
         confirmation.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                serverUtils.deleteParticipant(config.getId(), eventCode);
+                serverUtils.deleteParticipant(config.getId(), eventId);
                 mainCtrl.showStartScreen();
             }
         });
@@ -452,7 +484,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void editEvent() {
-        mainCtrl.showEditEvent(this.eventCode);
+        mainCtrl.showEditEvent(this.eventId);
     }
 
     @FXML
@@ -491,8 +523,16 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
 
-    public int getCurrentEventCode(){
-        return this.eventCode;
+    public int getCurrentEventId(){
+        return this.eventId;
+    }
+
+    public void editMyDetails() {
+        mainCtrl.showEditParticipant(eventId);
+    }
+
+    public int getCurrentEventCode() {
+        return this.eventId;
     }
 
     public void stopUpdates(){

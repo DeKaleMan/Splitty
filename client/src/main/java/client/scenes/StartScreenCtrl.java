@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class StartScreenCtrl implements Initializable {
@@ -43,6 +44,8 @@ public class StartScreenCtrl implements Initializable {
     public Label invalidCodeError;
     @FXML
     public Label codeNotFoundError;
+    @FXML
+    public Label alreadyParticipantError;
 
     @FXML
     private Button adminLogin;
@@ -69,12 +72,10 @@ public class StartScreenCtrl implements Initializable {
     @FXML
     public Label settingsSavedLabel;
     @FXML
-    public Label eventCreatedLabel;
-    @FXML
     public Button settingsButton;
     @FXML
     private ProgressIndicator progress;
-    private int eventCode;
+
     @FXML
     private ImageView flag;
 
@@ -112,11 +113,11 @@ public class StartScreenCtrl implements Initializable {
         });
     }
 
-    public void fetchList(){
+    public void fetchList() {
         eventListView.getItems().clear();
 
         events = mainCtrl.getMyEvents();
-        if(events!=null) {
+        if (events != null) {
             ObservableList<Event> newEventList = FXCollections.observableArrayList();
             ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
             currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
@@ -124,7 +125,6 @@ public class StartScreenCtrl implements Initializable {
             eventListView.setItems(newEventList);
         }
     }
-
 
 
     private void setup(Event event, Button button, Label label) {
@@ -159,17 +159,37 @@ public class StartScreenCtrl implements Initializable {
     }
 
 
-
     /**
      * Join an event with the title specified in the joinEventTextField
      * TO DO - join an event by the event id/URL
      */
     public void joinEvent() {
+        String eventInviteCode = joinEventTextField.getText();
+        if (eventInviteCode == null || eventInviteCode.isEmpty()) {
+            invalidCodeError.setVisible(true);
+            alreadyParticipantError.setVisible(false);
+            codeNotFoundError.setVisible(false);
+            return;
+        }
+        // already a participant of this event?
+        if (mainCtrl.getMyEvents().stream().anyMatch(e ->
+                e.getInviteCode().equals(eventInviteCode))) {
+            invalidCodeError.setVisible(false);
+            codeNotFoundError.setVisible(false);
+            alreadyParticipantError.setVisible(true);
+            return;
+        }
+        if (config.getName() == null || config.getName().isEmpty()) {
+            if (!setConfirmationJoin()) {
+                return;
+            }
+        }
         try {
-            String eventInviteCode = joinEventTextField.getText();
             Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
-                // show error message
+                invalidCodeError.setVisible(false);
+                codeNotFoundError.setVisible(true);
+                alreadyParticipantError.setVisible(false);
                 return;
             }
             mainCtrl.showSplittyOverview(p.getEvent().getId());
@@ -183,6 +203,24 @@ public class StartScreenCtrl implements Initializable {
         }
         mainCtrl.setConfirmationJoinedEvent();
     }
+
+    public boolean setConfirmationJoin() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Joining Event");
+        alert.setContentText("You are about to join an event without having a name, " +
+                "you can set your name in the settings. If you wish to continue," +
+                " your name will be set to 'Unknown'");
+        AtomicBoolean ok = new AtomicBoolean(true);
+        alert.showAndWait().ifPresent(action -> {
+            if (action != ButtonType.OK) {
+                ok.set(false);
+            }
+        });
+        return ok.get();
+    }
+
+
+
 
     @FXML
     public void showAllEvents() {
@@ -304,9 +342,10 @@ public class StartScreenCtrl implements Initializable {
         }
     }
 
-    public void resetErrors(KeyEvent actionEvent) {
+    public void resetErrors() {
         codeNotFoundError.setVisible(false);
         invalidCodeError.setVisible(false);
+        alreadyParticipantError.setVisible(false);
     }
 
     public void setFlag(Image image) {
@@ -321,7 +360,7 @@ public class StartScreenCtrl implements Initializable {
 
         imageView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
-                // Clicked outside of the choice box, hide it
+                // Clicked outside the choice box, hide it
                 languageSelect.setVisible(false);
             }
         });
@@ -351,5 +390,14 @@ public class StartScreenCtrl implements Initializable {
     public void setNoEventsError(boolean b) {
         myEventsNotFoundError.setVisible(b);
         noConnectionError.setVisible(b);
+    }
+
+    public void handleKeyPress(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            Event event = eventListView.getSelectionModel().getSelectedItem();
+            if (event != null) {
+                mainCtrl.showSplittyOverview(event.getId());
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
+
     <children>
         <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="58.0" layoutY="3.0" prefHeight="99.0" prefWidth="381.0" text="Title" wrapText="true">
             <font>
@@ -12,6 +13,7 @@
             </font>
         </Label>
         <Button fx:id="backButton" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.leftAnchor="10" />
+
         <Pane layoutX="347.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
             <children>
                 <ListView fx:id="participantListView" layoutX="46.0" layoutY="51.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="148.0" />
@@ -66,6 +68,7 @@
                </children>
             </HBox>
 
+
             </children>
         </Pane>
         <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="161.0" prefHeight="151.0" prefWidth="100.0" spacing="10.0">
@@ -73,6 +76,8 @@
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" prefHeight="26.0" prefWidth="88.0" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="85.0" text="Statistics" />
                 <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
+                <Button mnemonicParsing="false" onAction="#editMyDetails" prefHeight="25.0" prefWidth="85.0" text="My details" />
+                <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
             </children>
         </VBox>
         <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
@@ -85,12 +90,10 @@
                 <Font size="10.0" />
             </font>
         </Label>
-        <Button fx:id="leaveConfirmationButton" layoutX="261.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Leave" textFill="white" visible="false" />
-        <Button fx:id="cancelLeaveButton" layoutX="329.0" layoutY="26.0" mnemonicParsing="false" style="-fx-background-color: #2a8000; " text="Stay" textFill="white" visible="false" />
-        <Label fx:id="confirmationLabel" layoutX="218.0" layoutY="58.0" text="Are you sure you want to leave the event?" visible="false" />
+
         <HBox alignment="CENTER_RIGHT" layoutX="390.0" layoutY="26.0" prefHeight="25.0" prefWidth="200.0" spacing="5.0">
             <children>
-                <Button fx:id="leaveButton" mnemonicParsing="false" style="-fx-background-color: #c50000; " text="Leave" textFill="white" />
+                <Button fx:id="leaveButton" mnemonicParsing="false" onAction="#leaveEvent" style="-fx-background-color: #c50000; " text="Leave" textFill="white" />
                 <Button fx:id="sendInvites" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send invites" />
             </children>
         </HBox>

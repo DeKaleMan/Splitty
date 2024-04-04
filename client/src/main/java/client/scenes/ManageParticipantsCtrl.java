@@ -2,15 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Participant;
-import javafx.collections.ObservableList;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -21,23 +20,31 @@ import java.util.ResourceBundle;
 public class ManageParticipantsCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private int eventId;
     @FXML
     public Button removeButton;
     @FXML
     private Label titleLabel;
 
-    private int eventCode;
-
     @FXML
-    private ListView participantsList;
+    private ListView<Participant> participantsList;
 
     @FXML
     private Button undo;
     private Participant undone;
-    @FXML
-    private Button sendInvites;
 
     private List<Participant> list;
+
+    @FXML
+    public Label noParticipantSelectedError;
+    @FXML
+    public Label unknownError;
+    @FXML
+    public Label participantAddedConfirmation;
+    @FXML
+    public Label participantEditedConfirmation;
+    @FXML
+    public Label participantDeletedConfirmation;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         mainCtrl.setButtonRedProperty(removeButton);
@@ -47,23 +54,18 @@ public class ManageParticipantsCtrl implements Initializable {
             @Override
             protected void updateItem(Participant item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getName());
+                    if (item.getName() == null) {
+                        setText("unknown");
+                    } else {
+                        setText(item.getName());
+                    }
                 }
             }
         });
-        try{
-            list = serverUtils.getParticipants(eventCode);
-        }catch (Exception e){
-            list = new ArrayList<>();
-            System.out.println(e);
-        }
-        participantsList.getItems().addAll(list);
     }
-
     @Inject
     public ManageParticipantsCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
@@ -72,30 +74,58 @@ public class ManageParticipantsCtrl implements Initializable {
 
     @FXML
     public void backEventOverview(){
-        mainCtrl.showSplittyOverview(eventCode);
+        mainCtrl.showSplittyOverview(eventId);
     }
 
     /**
      * removes the participant from the list
      */
     @FXML
-    public void removeParticipantFromList(){
-        if(participantsList == null || participantsList.getItems().isEmpty()) System.out.println("empty list");
-        else{
-            ObservableList selected = participantsList.getSelectionModel().getSelectedItems();
-            if(selected.isEmpty()) {
-                System.out.println("none selected");
+    public void removeParticipant() {
+        try {
+            Participant selected = participantsList.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                setPauseTransition(noParticipantSelectedError);
                 return;
             }
-            System.out.println("remove" + selected);
-            remove((String) selected.getFirst());
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Deleting Participant");
+            confirmation.setContentText("Are you sure you want to delete " + selected.getName()+
+                    " from " + titleLabel.getText() + "?");
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    System.out.println("remove" + selected);
+                    remove(selected);
+                    setPauseTransition(participantDeletedConfirmation);
+                }
+            });
+        } catch (RuntimeException e) {
+            setPauseTransition(unknownError);
         }
-
     }
 
-    public void remove(String p){
+    public void setupParticipants(int id) {
+        this.eventId = id;
+        titleLabel.setText(serverUtils.getEventById(id).getName());
+        participantsList.getItems().clear();
+        try{
+            list = serverUtils.getParticipants(eventId); // only the ghost participants can be edited
+            list = list.stream().filter(Participant::isGhost).toList();
+        } catch (RuntimeException e){
+            list = new ArrayList<>();
+            System.out.println(e);
+        }
+        participantsList.getItems().addAll(list);
+    }
+
+    public void remove(Participant p) {
         //make get the person linked to this name and delete from db
-        participantsList.getItems().remove(p);
+        try {
+            serverUtils.deleteParticipant(p.getUuid(), eventId);
+            participantsList.getItems().remove(p);
+        } catch (RuntimeException e) {
+            setPauseTransition(unknownError);
+        }
     }
 
     public void setTitle(String title) {
@@ -103,9 +133,15 @@ public class ManageParticipantsCtrl implements Initializable {
     }
 
 
+    public void addToList(Participant p) {
+        list.add(p);
+        participantsList.getItems().add(p);
+        setPauseTransition(participantAddedConfirmation);
+    }
+
     @FXML
     public void showInvitation(){
-        mainCtrl.showInvitation(this.eventCode);
+        mainCtrl.showInvitation(this.eventId);
     }
 
     @FXML
@@ -114,7 +150,40 @@ public class ManageParticipantsCtrl implements Initializable {
             backEventOverview();
         }
     }
-    public void setEventCode(int eventCode) {
-        this.eventCode = eventCode;
+
+    public void editParticipant() {
+
+        Participant selected = participantsList.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            setPauseTransition(noParticipantSelectedError);
+            return;
+        }
+        mainCtrl.showEditParticipant(eventId, selected.getUuid());
+
+    }
+
+    public void addParticipant() {
+        mainCtrl.showAddParticipant(eventId);
+    }
+
+    public void setPauseTransition(Label l) {
+        if (l == null) return;
+        l.setVisible(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event1 -> l.setVisible(false));
+        pause.play();
+    }
+
+    public void setParticipantAddedConfirmation() {
+        setPauseTransition(participantEditedConfirmation);
+    }
+    public void setParticipantEditedConfirmation() {
+        setPauseTransition(participantEditedConfirmation);
+    }
+
+    public void editOnClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() >= 2) {
+            editParticipant();
+        }
     }
 }

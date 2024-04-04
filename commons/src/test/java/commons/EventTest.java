@@ -34,8 +34,8 @@ public class EventTest {
     }
 
     @Test
-    public void getOwnerTest(){
-        assertEquals("owner", e.getOwner());
+    public void getHostTest(){
+        assertEquals("owner", e.getHost());
     }
 
     @Test
@@ -53,11 +53,11 @@ public class EventTest {
     }
 
     @Test
-    public void setOwnerTest(){
+    public void setHostTest(){
         Event eventT = new Event();
         String owner = "stijn";
         eventT.setOwner(owner);
-        String ownerCheck = eventT.getOwner();
+        String ownerCheck = eventT.getHost();
         assertEquals(owner, ownerCheck);
     }
 
