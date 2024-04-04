@@ -27,12 +27,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
@@ -225,8 +227,13 @@ public class MainCtrl {
     }
 
     public Participant joinEvent(String inviteCode) throws RuntimeException {
+        String name = settingCtrl.getName();
+        if (name == null || name.isEmpty()) {
+            name = "Unknown";
+        }
+
         ParticipantDTO participantDTO =  new ParticipantDTO(
-                settingCtrl.getName(),
+                name,
                 0,
                 settingCtrl.getIban(),
                 settingCtrl.getBic(),

@@ -23,13 +23,13 @@
 
         <AnchorPane layoutX="44.0" layoutY="233.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="132.0" prefWidth="214.0">
             <children>
-                <Button fx:id="join" contentDisplay="RIGHT" layoutX="144.0" layoutY="93.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" AnchorPane.leftAnchor="50.0" />
+                <Button fx:id="join" contentDisplay="RIGHT" layoutX="144.0" layoutY="93.0" mnemonicParsing="false"  onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" AnchorPane.leftAnchor="50.0" />
                 <Label fx:id="joinEventText" layoutX="50.0" layoutY="1.0" text="Join Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
 
-                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
+                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onMouseClicked="#resetErrors" onKeyPressed="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
                 <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="79.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
                 <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="70.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
             <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="70.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" />

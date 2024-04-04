@@ -72,7 +72,7 @@ public class AddParticipantCtrl implements Initializable {
     public void addParticipant(){
         String name = nameField.getText();
         boolean error = false;
-        if(name==null || name.isEmpty()){
+        if(name == null || name.isEmpty()){
             // maybe make this more explicit like alert the user using an
             // alertbox that his name will be "unknown name"
             name = "Unknown";

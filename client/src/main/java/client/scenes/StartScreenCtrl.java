@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class StartScreenCtrl implements Initializable {
@@ -180,6 +181,22 @@ public class StartScreenCtrl implements Initializable {
             alreadyParticipantError.setVisible(true);
             return;
         }
+        if (config.getName() == null || config.getName().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Joining Event");
+            alert.setContentText("You are about to join an event without having a name, " +
+                    "you can set your name in the settings. If you wish to continue," +
+                    " your name will be set to 'Unknown'");
+            AtomicBoolean ok = new AtomicBoolean(true);
+            alert.showAndWait().ifPresent(action -> {
+                if (action != ButtonType.OK) {
+                    ok.set(false);
+                }
+            });
+            if (!ok.get()) {
+                return;
+            }
+        }
         try {
             Participant p = mainCtrl.joinEvent(eventInviteCode);
             if (p == null) {
@@ -322,7 +339,7 @@ public class StartScreenCtrl implements Initializable {
         }
     }
 
-    public void resetErrors(KeyEvent actionEvent) {
+    public void resetErrors() {
         codeNotFoundError.setVisible(false);
         invalidCodeError.setVisible(false);
         alreadyParticipantError.setVisible(false);
@@ -340,7 +357,7 @@ public class StartScreenCtrl implements Initializable {
 
         imageView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
-                // Clicked outside of the choice box, hide it
+                // Clicked outside the choice box, hide it
                 languageSelect.setVisible(false);
             }
         });

@@ -105,17 +105,17 @@ public class EditParticipantCtrl implements Initializable {
         String bic = bicField.getText();
         String accountHolder = accountHolderField.getText();
         // email validation
-        if(!email.contains("@") || !email.contains(".")){
+        if(email == null || !email.contains("@") || !email.contains(".")){
             showErrorBriefly(invalidEmailLabel);
             error = true;
         }
         // iban validation
-        if((!iban.isEmpty() && iban.length() < 15 ) || iban.length() > 34){
+        if((iban == null || !iban.isEmpty() && iban.length() < 15 ) || iban.length() > 34){
             showErrorBriefly(invalidIbanLabel);
             error = true;
         }
         // bic validation
-        if((!bic.isEmpty() && bic.length() < 8) || bic.length() > 11){
+        if((bic == null || !bic.isEmpty() && bic.length() < 8) || bic.length() > 11){
             showErrorBriefly(invalidBicLabel);
             error = true;
         }

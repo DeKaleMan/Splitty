@@ -32,6 +32,8 @@ import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
 
+    @FXML
+    public Label eventCodeLabel;
     //We need to store the eventCode right here
     private int eventId;
 
@@ -115,6 +117,7 @@ public class SplittyOverviewCtrl implements Initializable {
         } else {
             hostOptionsButton.setVisible(false);
         }
+        eventCodeLabel.setText(event.getInviteCode());
         setTitle(event.getName());
         setEventId(event.getId());
         fetchParticipants();
