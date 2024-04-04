@@ -9,7 +9,9 @@ import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -99,12 +101,15 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private ListView<Participant> participantListView;
 
+    ObservableList<Participant> participantsList;
+
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
         admin = false;
+        participantsList = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -115,6 +120,7 @@ public class SplittyOverviewCtrl implements Initializable {
         statisticsButton.setGraphic(stats);
         mainCtrl.setButtonRedProperty(deleteExpenseButton);
         mainCtrl.setButtonRedProperty(leaveButton);
+        participantListView.setItems(participantsList);
         participantListView.setCellFactory(param -> new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
@@ -126,6 +132,19 @@ public class SplittyOverviewCtrl implements Initializable {
                     setText(item.getName());
                 }
             }
+        });
+        serverUtils.registerForParticipantUpdates(this::handleUpdate);
+    }
+
+    private void handleUpdate(Participant p){
+        if(p.getEvent().getId() != eventCode) return;
+        Platform.runLater(() -> {
+            if(!participantsList.contains(p)) {
+                participantsList.add(p);
+                return;
+            }
+            participantsList.remove(p);
+            participantsList.add(p);
         });
     }
 
@@ -336,14 +355,14 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void fetchParticipants() {
-        participantListView.getItems().clear();
+        participantsList.clear();
         List<Participant> participants = new ArrayList<>();
         try {
             participants = serverUtils.getParticipants(eventCode);
         } catch (BadRequestException | NotFoundException e) {
             System.out.println(e);
         }
-        participantListView.setItems(FXCollections.observableArrayList(participants));
+        participantsList.addAll(participants);
     }
 
 
