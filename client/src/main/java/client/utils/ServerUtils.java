@@ -100,7 +100,7 @@ public class ServerUtils {
      * @return the expense by email
      */
     public List<Expense> getExpenseByEmail(int eventCode, String email) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/expenses/{payerEmail}")
             .resolveTemplate("payerEmail", email)
             .queryParam("eventCode", eventCode)
@@ -118,8 +118,8 @@ public class ServerUtils {
      * @return the expense
      */
     public Expense addExpense(ExpenseDTO expenseDTO) {
-        return ClientBuilder.newClient(new ClientConfig())
-            .target(server).path("api/expenses")
+        return client
+            .target(server).path("api/expenses/addExp")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
@@ -151,7 +151,7 @@ public class ServerUtils {
      * @return the debt by event code
      */
     public List<Debt> getDebtByEventCode(int eventCode) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/debts/{eventId}")
             .resolveTemplate("eventId", eventCode)
             .request(APPLICATION_JSON)
@@ -168,7 +168,7 @@ public class ServerUtils {
      * @return the debt by participant
      */
     public List<Debt> getDebtByParticipant(int eventCode, String email) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/debts/{eventId}/participant/{email}")
             .resolveTemplate("eventId", eventCode)
             .resolveTemplate("email", email)
@@ -186,7 +186,7 @@ public class ServerUtils {
      * @return the debt by expense
      */
     public List<Debt> getDebtByExpense(int eventCode, int expenseId) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/debts/{eventId}/expense/{expenseId}")
             .resolveTemplate("eventId", eventCode)
             .resolveTemplate("expenseId", expenseId)
@@ -203,7 +203,7 @@ public class ServerUtils {
      * @return the debt
      */
     public Debt saveDebt(DebtDTO debtDTO) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/debts")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -227,23 +227,24 @@ public class ServerUtils {
      * @param expense the expense
      */
     public Expense deleteExpense(Expense expense) {
-        List<Debt> debts = getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId());
-        for(Debt d : debts){
-            Participant p = d.getParticipant();
-            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
-                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
-                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
-        }
-        deleteDebtsOfExpense(expense.getEvent().getId(), expense.getExpenseId());
+        ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
 
-        return ClientBuilder.newClient(new ClientConfig())
-            .target(server)
-            .path("api/expenses")
-            .queryParam("eventID", expense.getEvent().id)
-            .queryParam("expenseID", expense.getExpenseId())
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .delete(Expense.class);
+        Response response = client
+                .target(server)
+             .path("api/expenses")
+             .queryParam("eventID", expense.getEvent().id)
+             .queryParam("expenseID", expenseId)
+             .request(APPLICATION_JSON)
+             .accept(APPLICATION_JSON)
+             .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()){
+            Expense e = response.readEntity(Expense.class);
+            response.close();
+            return e;
+        } else{
+            response.close();
+            throw new RuntimeException("failed to delete an expense " + response.getStatus());
+        }
     }
 
 
@@ -256,7 +257,7 @@ public class ServerUtils {
      */
 
     public List<Participant> getParticipants(int eventCode) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
                 .target(server).path("api/participants")
                 .queryParam("eventID", eventCode)
                 .request(APPLICATION_JSON)
@@ -330,7 +331,7 @@ public class ServerUtils {
      * @return the event
      */
     public Event deleteEventById(int id) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
             .target(server).path("api/event")
             .queryParam("id", id)
             .request(APPLICATION_JSON)
@@ -350,7 +351,7 @@ public class ServerUtils {
     }
 
     public Event addEvent(EventDTO newEvent) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
             .target(server).path("api/event")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -420,7 +421,7 @@ public class ServerUtils {
     }
 
     public Participant createParticipant(ParticipantDTO p) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
                 .target(server).path("api/participants")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -437,8 +438,8 @@ public class ServerUtils {
         }
     }
 
-    public void deleteParticipant(String uuid, int eventId) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+    public Participant deleteParticipant(String uuid, int eventId) {
+        Response response = client
                 .target(server).path("api/participants/{uuid}/{eventId}")
                 .resolveTemplate("uuid", uuid)
                 .resolveTemplate("eventId", eventId)
@@ -448,13 +449,17 @@ public class ServerUtils {
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             response.close();
             throw new RuntimeException("Failed to delete participant. Status code: " + response.getStatus());
+        }else {
+            Participant p = response.readEntity(new GenericType<>(){
+            });
+            response.close();
+            return p;
         }
     }
 
-
     // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
     public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
             .target(server).path("api/participants/{uuid}/{eventId}")
             .resolveTemplate("uuid", oldUuid)
             .resolveTemplate("eventId", participant.getEventId())
@@ -475,8 +480,7 @@ public class ServerUtils {
     }
 
     public List<Event> getEventsByParticipant(String id) {
-
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
                 .target(server).path("api/participants/{uuid}/events")
                 .resolveTemplate("uuid", id)
                 .request(APPLICATION_JSON)
@@ -497,7 +501,7 @@ public class ServerUtils {
 
 
     public List<Payment> getPaymentsOfEvent(int eventId){
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
@@ -507,7 +511,7 @@ public class ServerUtils {
     }
 
     public Payment savePayment(PaymentDTO paymentDTO) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/payments")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -515,7 +519,7 @@ public class ServerUtils {
     }
 
     public Payment updatePayment(PaymentDTO paymentDTO, long paymentId) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/payments/{id}")
             .resolveTemplate("id", paymentId)
             .request(APPLICATION_JSON)
@@ -524,7 +528,7 @@ public class ServerUtils {
     }
 
     public Payment deletePaymentsOfEvent(int eventId) {
-        return ClientBuilder.newClient(new ClientConfig())
+        return client
             .target(server).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
