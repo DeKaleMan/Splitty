@@ -9,7 +9,7 @@
    <children>
       <PieChart fx:id="pieChart" layoutX="48.0" layoutY="138.0" prefHeight="254.0" prefWidth="504.0" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
-      <VBox alignment="TOP_CENTER" layoutX="171.0" layoutY="14.0" prefHeight="200.0" prefWidth="258.0">
+      <VBox alignment="TOP_CENTER" layoutX="62.0" layoutY="14.0" prefHeight="200.0" prefWidth="258.0">
          <children>
             <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="258.0" text="Title" textAlignment="CENTER">
                <font>
@@ -25,9 +25,15 @@
                <children>
                   <Label fx:id="totalCostText" text="Total cost of event:" />
                   <Label fx:id="totalCost" text="100$" />
-                  <Label fx:id="currency" text="CURERCY" />
                </children>
             </HBox>
          </children></VBox>
+      <VBox layoutX="368.0" layoutY="18.0">
+         <children>
+            <Label fx:id="shareOfExpensesLabel" text="Share of expenses" />
+            <ListView fx:id="shareListView" prefHeight="102.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+      <Label fx:id="errorLabel" layoutX="399.0" layoutY="140.0" text="Failed to convert currency" textFill="RED" visible="false" />
    </children>
 </AnchorPane>

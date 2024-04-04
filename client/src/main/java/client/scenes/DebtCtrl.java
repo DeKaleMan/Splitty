@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.Currency;
 import commons.Participant;
 import commons.Payment;
 import commons.dto.ParticipantDTO;
@@ -13,10 +14,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -79,6 +83,8 @@ public class DebtCtrl implements Initializable {
                                 GridPane headerGrid = getGrid(payment);
                                 VBox info = generateInfo(payment);
                                 TitledPane pane = new TitledPane("", info);
+                                headerGrid.minWidthProperty().bind(pane.widthProperty());
+                                headerGrid.setPadding(new Insets(0,10,0,35));
                                 pane.setGraphic(headerGrid);
                                 pane.getStyleClass().add("paymentInstruction");
                                 pane.setExpanded(false);
@@ -124,9 +130,21 @@ public class DebtCtrl implements Initializable {
     }
 
     private GridPane getGrid(Payment payment) {
-        String title = payment.getPayer().getName() + " pays " +
-            payment.getPayee().getName() + " " +
-            payment.getAmount();
+        double amount = payment.getAmount();
+        try {
+            amount = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                config.getCurrency(), new Date(), amount);
+        }catch (RuntimeException e){
+            GridPane errorGrid = new GridPane();
+            errorGrid.add(new Text(e.getMessage()),0,0);
+            return errorGrid;
+        }
+        String title = payment.getPayer().getName()
+            + " pays "
+            + payment.getPayee().getName()
+            + " "
+            + mainCtrl.getFormattedDoubleString(amount)
+            + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
         Button received = new Button("Mark received");
         received.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -135,10 +153,15 @@ public class DebtCtrl implements Initializable {
             }
         });
         received.getStyleClass().add("receivedButton");
-        Text titleNode = new Text(title);
+        Label titleNode = new Label(title);
+        titleNode.setStyle("-fx-text-fill: white; -fx-font-size: 12px");
         GridPane grid = new GridPane();
         grid.add(titleNode, 0, 0);
-        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 1, 0);
+        Region fillRegion = new Region();
+        fillRegion.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(fillRegion, Priority.ALWAYS);
+        grid.add(fillRegion,1,0);
+        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 2, 0);
         grid.getStyleClass().add("headerGrid");
         grid.setHgap(10.0);
         return grid;
@@ -194,6 +217,7 @@ public class DebtCtrl implements Initializable {
     public void setTitlelabel(String title) {
         titlelabel.setText((title));
     }
+
 
     /**
      * removes a Payment from the list and adds it to changed

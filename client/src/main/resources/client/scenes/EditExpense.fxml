@@ -10,7 +10,7 @@
         <VBox layoutX="335.0" layoutY="84.0" prefHeight="232.0" prefWidth="244.0" spacing="5.0">
             <children>
                 <Label fx:id="description" text="Description" />
-                <TextArea fx:id="whatFor" prefHeight="82.0" prefWidth="200.0" promptText="What is the exepense about...." />
+                <TextArea fx:id="whatFor" prefHeight="82.0" prefWidth="200.0" promptText="What is the expense about...." />
                 <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="267.0" spacing="10.0">
                     <children>
                         <Label fx:id="expenseTypetext" text="Expense Type" wrapText="true" />
@@ -25,12 +25,7 @@
                 </HBox>
             </children>
         </VBox>
-        <Label fx:id="titleLabel" layoutX="88.0" layoutY="31.0" text="Title">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-        </Label>
-        <Label fx:id="editExpenseLabel" layoutX="376.0" layoutY="31.0" text="Edit Expense" AnchorPane.rightAnchor="20">
+        <Label fx:id="sceneTypeText" layoutX="376.0" layoutY="31.0" text="Edit Expense" AnchorPane.rightAnchor="20">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
@@ -39,7 +34,12 @@
             <children>
                 <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" />
                 <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" />
-                <TextField fx:id="amount" onKeyPressed="#resetAmountErrors" prefHeight="25.0" prefWidth="150.0" />
+                <HBox>
+                    <children>
+                        <TextField fx:id="amount" onKeyPressed="#resetAmountErrors" prefHeight="25.0" prefWidth="185.0" />
+                        <ComboBox fx:id="currencyComboBox" prefWidth="150.0" />
+                    </children>
+                </HBox>
                 <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" textFill="RED" visible="false" />
                 <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" />
                 <Label fx:id="dateInvalidError" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
@@ -69,8 +69,8 @@
 
 
         <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-        <Button fx:id="edit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" />
-        <Label fx:id="editExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false">
+        <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" />
+        <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false">
             <font>
                 <Font size="10.0" />
             </font></Label>

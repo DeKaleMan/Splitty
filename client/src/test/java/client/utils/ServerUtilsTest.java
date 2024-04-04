@@ -1,10 +1,15 @@
 package client.utils;
 
+
 import commons.*;
+import commons.Currency;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -117,11 +122,11 @@ class ServerUtilsTest {
 
         when(mockBuilder.get(new GenericType<List<Expense>>() {})).thenReturn(expListMock);
 
-        List<Expense> withServerUtils = serverUtils.getExpenseByEmail(1, "bal.gmail.com");
+        List<Expense> withServerUtils = serverUtils.getExpenseByUuid(1, "uuidtest");
 
         verify(mockClient).target(ServerUtils.server);
-        verify(mockWebTarget).path("api/expenses/{payerEmail}");
-        verify(mockWebTarget).resolveTemplate("payerEmail", "bal.gmail.com");
+        verify(mockWebTarget).path("api/expenses/{uuid}");
+        verify(mockWebTarget).resolveTemplate("uuid", "uuidtest");
         verify(mockWebTarget).queryParam("eventCode" ,1);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
@@ -343,7 +348,6 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
-        when(mockWebTarget.queryParam(anyString(), any(ExpenseId.class))).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
@@ -354,7 +358,6 @@ class ServerUtilsTest {
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
                 , Type.Drinks, d, 100.0, p, true);
-        ExpenseId expenseId = new ExpenseId(e, mockExp.getExpenseId());
 
         when(mockResponse.readEntity((Class<Object>) any())).thenReturn(mockExp);
         when(mockBuilder.delete()).thenReturn(mockResponse);
@@ -364,7 +367,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/expenses");
         verify(mockWebTarget).queryParam("eventID", e.getId());
-        verify(mockWebTarget).queryParam("expenseID", expenseId);
+        verify(mockWebTarget).queryParam("expenseID", mockExp.getExpenseId());
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
         verify(mockBuilder).delete();
@@ -378,7 +381,6 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
-        when(mockWebTarget.queryParam(anyString(), any(ExpenseId.class))).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockResponse.getStatus()).thenReturn(Response.Status.BAD_REQUEST.getStatusCode());
@@ -390,7 +392,6 @@ class ServerUtilsTest {
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
                 , Type.Drinks, d, 100.0, p, true);
-        ExpenseId expenseId = new ExpenseId(e, mockExp.getExpenseId());
 
         // Verifying the results
         assertThrows(RuntimeException.class, () ->
@@ -398,7 +399,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/expenses");
         verify(mockWebTarget).queryParam("eventID", mockExp.getEvent().getId());
-        verify(mockWebTarget).queryParam("expenseID", expenseId);
+        verify(mockWebTarget).queryParam("expenseID", mockExp.getExpenseId());
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
@@ -904,10 +905,12 @@ class ServerUtilsTest {
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Payment paymentmock = new Payment(payer, payee, 100.0, false);
 
-        when(mockBuilder.delete(Payment.class)).thenReturn(paymentmock);
+        List<Payment> expected = List.of(paymentmock);
+
+        when(mockBuilder.delete(new GenericType<List<Payment>>(){})).thenReturn(expected);
 
         int eventId = 123;
-        Payment payment = serverUtils.deletePaymentsOfEvent(eventId);
+        List<Payment> payments = serverUtils.deletePaymentsOfEvent(eventId);
 
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/payments/{id}");
@@ -915,7 +918,7 @@ class ServerUtilsTest {
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
-        assertEquals(payment, paymentmock);
+        assertEquals(expected, payments);
     }
 
     @Test
@@ -965,5 +968,63 @@ class ServerUtilsTest {
         verify(mockBuilder).get(double.class);
 
     }
+    @Test
+    void getConversionTestSuccessful(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        ObjectMapper om = new ObjectMapper();
+        Conversion conversion = new Conversion("EUR", "USD", 0.927, "12-03-2024");
+        ObjectNode objectNode = om.createObjectNode();
+        objectNode.put("conversion", om.convertValue(conversion, JsonNode.class));
+        objectNode.put("message", "The conversion was successful");
+        JsonNode jsonNode = om.valueToTree(objectNode);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+        when(mockResponse.readEntity(JsonNode.class)).thenReturn(jsonNode);
+
+        Conversion actual = serverUtils.getConversion(Currency.EUR, Currency.USD,"12-03-2024");
+
+        verify(mockClient).target(ServerUtils.server);
+        verify(mockWebTarget).path("api/currency");
+        verify(mockWebTarget).queryParam("from", Currency.EUR.toString());
+        verify(mockWebTarget).queryParam("to", Currency.USD.toString());
+        verify(mockWebTarget).queryParam("date", "12-03-2024");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(); // Ensure that get method is invoked
+
+        assertEquals(conversion,actual);
+    }
+
+    @Test
+    void getConversionTestUnsuccessful(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode objectNode = om.createObjectNode();
+        objectNode.put("message", "Something unexpected happened on the server side");
+        JsonNode jsonNode = om.valueToTree(objectNode);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+        when(mockResponse.readEntity(JsonNode.class)).thenReturn(jsonNode);
+
+        assertNull(serverUtils.getConversion(Currency.EUR, Currency.USD,"12-03-2024"));
+
+        verify(mockClient).target(ServerUtils.server);
+        verify(mockWebTarget).path("api/currency");
+        verify(mockWebTarget).queryParam("from", Currency.EUR.toString());
+        verify(mockWebTarget).queryParam("to", Currency.USD.toString());
+        verify(mockWebTarget).queryParam("date", "12-03-2024");
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(); // Ensure that get method is invoked
+    }
+
 
 }

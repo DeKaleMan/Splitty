@@ -98,7 +98,7 @@ public class PaymentController {
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<Payment> deletePaymentsOfEvent(@PathVariable("eventId") int id){
+    public ResponseEntity<List<Payment>> deletePaymentsOfEvent(@PathVariable("eventId") int id){
         Optional<Event> optionalEvent = eventRepository.findById(id);
         if(optionalEvent.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -109,7 +109,7 @@ public class PaymentController {
         List<Payment> payments = paymentRepository.findByEvent(event);
         paymentRepository.deleteAll(payments);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(payments);
     }
 
 }

@@ -65,14 +65,14 @@ public class SetLanguage {
     }
 
     public void setAddExpense(String lang){
-        addExpenseCtrl.setAddExpenseText(translate("Add Expense", "en", lang));
+        addExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
         addExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         addExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
         addExpenseCtrl.setWhen(translate("When?", "en", lang));
         addExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
         addExpenseCtrl.setDescription(translate("Description", "en", lang));
         addExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
-        addExpenseCtrl.setAdd(translate("Add expense", "en", lang));
+        addExpenseCtrl.setCommit(translate("Add expense", "en", lang));
         addExpenseCtrl.setAbort(translate("Cancel", "en", lang));
         addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));

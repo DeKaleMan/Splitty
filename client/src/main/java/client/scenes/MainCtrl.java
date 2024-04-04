@@ -19,9 +19,7 @@ import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
 import client.utils.ServerUtils;
 import client.utils.SetLanguage;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,7 +29,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainCtrl {
@@ -256,7 +257,7 @@ public class MainCtrl {
         try {
             primaryStage.setTitle("Add expense");
             addExpenseCtrl.refresh(eventCode);
-            addExpenseCtrl.setTitle(title);
+//            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
             checkConnection();
@@ -360,13 +361,13 @@ public class MainCtrl {
             statisticsCtrl.setTitle(title);
             //this sets the statistics, eventually this should be linked to the statistics class
             statisticsCtrl.setEventCode(eventCode);
+            statisticsCtrl.refresh();
             statisticsCtrl.fetchStat();
             //set the pieChart
             statisticsCtrl.setPieChart();
         } catch (RuntimeException e) {
             checkConnection();
         }
-
     }
 
     public int getCurrentEventCode(){
@@ -474,6 +475,31 @@ public class MainCtrl {
 
     public void closeStage() {
         primaryStage.close();
+    }
+
+
+    public double getAmountInDifferentCurrency(commons.Currency from, Currency to,
+                                                Date date, double amount){
+        if(from == to) return amount;
+        String dateString = getDateString(date);
+        Conversion conversion = serverUtils.getConversion(from, to, dateString);
+        if(conversion == null) throw new RuntimeException("Failed to convert amount");
+        return amount * conversion.conversionRate();
+    }
+
+    public String getDateString(Date date) {
+        String dateString = ((date.getDate() < 10) ? "0" : "")
+            + date.getDate() + "-"
+            + ((date.getMonth() < 9) ? "0" : "")
+            + (date.getMonth()+1)
+            + "-" + (1900 + date.getYear());
+        return dateString;
+    }
+
+    public String getFormattedDoubleString(double d) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+        return decimalFormat.format(d);
     }
 
     public void showAddParticipant(int eventId) {

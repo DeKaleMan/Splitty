@@ -2,11 +2,14 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.*;
+import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
 import commons.dto.ExpenseDTO;
+import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.PauseTransition;
@@ -292,6 +295,14 @@ public class SplittyOverviewCtrl implements Initializable {
 
         }
         try {
+            List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+            for(Debt d : debts){
+                Participant p = d.getParticipant();
+                serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                    p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                    p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+            }
+            serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
             serverUtils.deleteExpense(toDelete);
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
@@ -357,31 +368,28 @@ public class SplittyOverviewCtrl implements Initializable {
                             else {
                                 GridPane grid = new GridPane();
                                 Date date = expense.getDate();
-                                Label dateLabel = new Label(
-                                    date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
-                                        + (date.getMonth() + 1) + "."
-                                        + (date.getYear() + 1900));
-                                dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
-                                dateLabel.setPrefWidth(70);
-                                List<String> involved =
+                                Label dateLabel = getDateLabel(date);
+                                List<Participant> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                             expense.getExpenseId()).stream()
-                                        .map(x -> x.getParticipant().getName()).toList();
-                                Text mainInfo = new Text();
-                                if (expense.isSharedExpense()) {
-                                    mainInfo.setText(expense.getPayer().getName() + " paid " +
-                                        expense.getTotalExpense() + " for " + expense.getType());
-                                } else {
-                                    mainInfo.setText(expense.getPayer().getName() + " gave " +
-                                        expense.getTotalExpense() + " to " +
-                                        involved
-                                            .stream()
-                                            .filter(x -> !x.equals(expense.getPayer().getName()))
-                                            .findFirst().get());
+                                        .map(x -> x.getParticipant()).toList();
+                                double totalExpense = expense.getTotalExpense();
+                                try {
+                                    totalExpense =
+                                        mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                                            config.getCurrency(), date,
+                                            totalExpense);
+                                }catch (RuntimeException e){
+                                    grid.add(new Text(e.getMessage()),0,0);
+                                    setGraphic(grid);
+                                    return;
                                 }
+                                Text mainInfo = getMainInfo(expense, totalExpense,
+                                        involved);
                                 grid.add(dateLabel, 0, 0);
                                 grid.add(mainInfo, 1, 0);
-                                grid.add(new Text(involved.toString()), 1, 1);
+                                grid.add(new Text(involved.stream().map(x -> x.getName())
+                                    .toList().toString()), 1, 1);
                                 setGraphic(grid);
                             }
                         }
@@ -389,6 +397,39 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             };
         return cellFactory;
+    }
+
+    private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
+        Text mainInfo = new Text();
+        if (expense.isSharedExpense()) {
+            mainInfo.setText(expense.getPayer().getName()
+                + " paid "
+                + mainCtrl.getFormattedDoubleString(totalExpense)
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
+                + " for " + expense.getType());
+        } else {
+            mainInfo.setText(expense.getPayer().getName()
+                + " gave "
+                + mainCtrl.getFormattedDoubleString(totalExpense)
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
+                + " to "
+                + involved
+                    .stream()
+                    .filter(x -> !x.equals(expense.getPayer()))
+                    .map(x -> x.getName())
+                    .findFirst().get());
+        }
+        return mainInfo;
+    }
+
+    private static Label getDateLabel(Date date) {
+        Label dateLabel = new Label(
+            date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
+                + (date.getMonth() + 1) + "."
+                + (date.getYear() + 1900));
+        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
+        dateLabel.setPrefWidth(70);
+        return dateLabel;
     }
 
     public void fetchParticipants() {
@@ -401,6 +442,7 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         participantsList.addAll(participants);
     }
+
 
 
     public void setExpensesText(String text) {
