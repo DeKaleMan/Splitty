@@ -7,14 +7,15 @@ import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditParticipantCtrl implements Initializable {
     private final ServerUtils serverUtils;
@@ -96,8 +97,7 @@ public class EditParticipantCtrl implements Initializable {
         boolean error = false;
         String name = nameField.getText();
         if (name == null || name.isEmpty()){
-            // maybe make this more explicit like alert the user using an
-            // alertbox that his name will be "unknown name"
+            error = !setConfirmationNoName();
             name = "Unknown";
         }
         String email = emailField.getText();
@@ -105,17 +105,17 @@ public class EditParticipantCtrl implements Initializable {
         String bic = bicField.getText();
         String accountHolder = accountHolderField.getText();
         // email validation
-        if(email == null || !email.contains("@") || !email.contains(".")){
+        if(email != null && !email.isEmpty() && (!email.contains("@") || !email.contains("."))){
             showErrorBriefly(invalidEmailLabel);
             error = true;
         }
         // iban validation
-        if((iban == null || !iban.isEmpty() && iban.length() < 15 ) || iban.length() > 34){
+        if (iban != null && !iban.isEmpty() && (iban.length() < 15 || iban.length() > 34)){
             showErrorBriefly(invalidIbanLabel);
             error = true;
         }
         // bic validation
-        if((bic == null || !bic.isEmpty() && bic.length() < 8) || bic.length() > 11){
+        if(bic != null && !bic.isEmpty() && (bic.length() < 8 || bic.length() > 11)){
             showErrorBriefly(invalidBicLabel);
             error = true;
         }
@@ -141,6 +141,19 @@ public class EditParticipantCtrl implements Initializable {
         }
     }
 
+    public boolean setConfirmationNoName() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Editing Participant");
+        alert.setContentText("You did not enter a name, if you wish to continue the name will be set to 'Unknown'");
+        AtomicBoolean ok = new AtomicBoolean(true);
+        alert.showAndWait().ifPresent(action -> {
+            if (action != ButtonType.OK) {
+                ok.set(false);
+            }
+        });
+        return ok.get();
+    }
+
     public void cancel() {
         if (host) {
             mainCtrl.showParticipantManager(eventId);
@@ -151,5 +164,11 @@ public class EditParticipantCtrl implements Initializable {
 
     public void setHost(boolean host) {
         this.host = host;
+    }
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            cancel();
+        }
     }
 }

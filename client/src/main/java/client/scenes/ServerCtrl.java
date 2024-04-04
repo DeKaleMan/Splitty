@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
@@ -120,5 +121,12 @@ public class ServerCtrl {
     }
     public void resetError(KeyEvent keyEvent) {
         notConnectedError.setVisible(false);
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 }

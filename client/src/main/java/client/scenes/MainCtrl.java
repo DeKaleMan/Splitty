@@ -194,7 +194,6 @@ public class MainCtrl {
     }
 
     public void showSplittyOverview(int id){
-
         try {
             primaryStage.setTitle("Event overview");
             primaryStage.setScene(splittyOverview);

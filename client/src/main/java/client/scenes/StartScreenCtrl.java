@@ -393,4 +393,13 @@ public class StartScreenCtrl implements Initializable {
         myEventsNotFoundError.setVisible(b);
         noConnectionError.setVisible(b);
     }
+
+    public void handleKeyPress(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            Event event = eventListView.getSelectionModel().getSelectedItem();
+            if (event != null) {
+                mainCtrl.showSplittyOverview(event.getId());
+            }
+        }
+    }
 }
