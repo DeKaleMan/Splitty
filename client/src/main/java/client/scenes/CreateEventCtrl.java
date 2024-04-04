@@ -82,7 +82,7 @@ public class CreateEventCtrl {
     }
     @FXML
     public void showSettings(){
-        mainCtrl.showSettings();
+        mainCtrl.showSettings(false);
     }
 
     @FXML

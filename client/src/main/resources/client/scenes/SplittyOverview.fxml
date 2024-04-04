@@ -86,11 +86,11 @@
             </font>
         </Label>
         <Button fx:id="leaveConfirmationButton" layoutX="261.0" layoutY="26.0" mnemonicParsing="false" onAction="#leaveEvent" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Leave" textFill="white" visible="false" />
-        <Button fx:id="cancelLeaveButton" layoutX="329.0" layoutY="26.0" mnemonicParsing="false" onAction="#cancelLeave" style="-fx-background-color: #2a8000; " text="Stay" textFill="white" visible="false" />
+        <Button fx:id="cancelLeaveButton" layoutX="329.0" layoutY="26.0" mnemonicParsing="false" style="-fx-background-color: #2a8000; " text="Stay" textFill="white" visible="false" />
         <Label fx:id="confirmationLabel" layoutX="218.0" layoutY="58.0" text="Are you sure you want to leave the event?" visible="false" />
         <HBox alignment="CENTER_RIGHT" layoutX="390.0" layoutY="26.0" prefHeight="25.0" prefWidth="200.0" spacing="5.0">
             <children>
-                <Button fx:id="leaveButton" mnemonicParsing="false" onAction="#setConfirmation" style="-fx-background-color: #c50000; " text="Leave" textFill="white" />
+                <Button fx:id="leaveButton" mnemonicParsing="false" style="-fx-background-color: #c50000; " text="Leave" textFill="white" />
                 <Button fx:id="sendInvites" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send invites" />
             </children>
         </HBox>

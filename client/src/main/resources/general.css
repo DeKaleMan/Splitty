@@ -68,6 +68,13 @@ ListView {
     -fx-text-fill: #333;
 }
 
+.date-picker .label {
+    /* Your styling for the labels */
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    /* Add any other styling properties as needed */
+}
+
 .blueBox {
     -fx-background-color: #4479FD; /* Blue background for VBox */
 
