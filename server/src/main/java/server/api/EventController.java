@@ -55,7 +55,7 @@ public class EventController {
     }
 
     @PutMapping("/updateName")
-    public ResponseEntity<Event> updateNameEvent(@RequestParam Integer id, @RequestParam String newName) {
+    public ResponseEntity<Event> updateNameEvent(@RequestParam int id, @RequestParam String newName) {
         Event updatedEvent = eventService.updateEventName(id, newName);
         if (updatedEvent == null) {
             return ResponseEntity.notFound().build();

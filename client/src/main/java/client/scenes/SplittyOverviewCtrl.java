@@ -91,6 +91,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Button leaveButton;
     @FXML
     public Label joinedEventLabel;
+    @FXML
+    public Label inviteCode;
 
 //    private Config config;
 
@@ -129,6 +131,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setEventCode(int eventCode) {
         this.eventCode = eventCode;
+        this.inviteCode.setText(serverUtils.getEventById(eventCode).getInviteCode());
     }
 
     /**
@@ -136,7 +139,7 @@ public class SplittyOverviewCtrl implements Initializable {
      */
     @FXML
     public void sendInvitesOnClick() {
-        mainCtrl.showInvitation(titleLabel.getText());
+        mainCtrl.showInvitation(this.eventCode);
     }
 
     /**
@@ -156,7 +159,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void viewParticipantManager() {
-        mainCtrl.showParticipantManager(titleLabel.getText());
+        mainCtrl.showParticipantManager(this.eventCode);
     }
 
 
@@ -302,7 +305,7 @@ public class SplittyOverviewCtrl implements Initializable {
                                     date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
                                         + (date.getMonth() + 1) + "."
                                         + (date.getYear() + 1900));
-                                dateLabel.setStyle("-fx-font-size: 12px");
+                                dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
                                 dateLabel.setPrefWidth(70);
                                 List<String> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
@@ -423,7 +426,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void editEvent() {
-        mainCtrl.editEvent();
+        mainCtrl.showEditEvent(this.eventCode);
     }
 
     @FXML

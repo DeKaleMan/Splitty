@@ -4,7 +4,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -14,11 +13,9 @@ import javafx.scene.control.*;
 import java.util.NoSuchElementException;
 
 public class EditEventCrtl {
-
+    int eventId;
     @FXML
     private TextField nameChange;
-    @FXML
-    private TextField eventId;
 
     @FXML
     private Button submitButton;
@@ -37,34 +34,31 @@ public class EditEventCrtl {
         this.mainCtrl = mainCtrl;
     }
 
-    public void initialize() {
-        mainCtrl.setButtonGreenProperty(submitButton);
-    }
-    private void setUp(Button submitButton){
-        submitButton.setVisible(true);
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
+    public void initialize() {
+        mainCtrl.setButtonGreenProperty(submitButton);
+
+    }
+    public void reset(){
+        this.succesFullyChanged.setVisible(false);
+        this.nameChange.setText("");
+    }
     public void back(){
         mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
     }
-
-    public void changeName(ActionEvent actionEvent) {
+    @FXML
+    public void changeValues() {
+        //possibly edit date and description
         String newName = nameChange.getText();
-        String idTemp = eventId.getText();
-        int eventIdd;
-        try{
-            eventIdd = Integer.parseInt(idTemp);
-        } catch (NumberFormatException ex){
-            eventIdd = -1;
-            eventId.setText("Event ID must be an integer");
-            return;
-        }
         if(newName == null || newName.isEmpty()){
-            nameChange.setText("please provide a name");
+            nameChange.setPromptText("please provide a name");
             throw new NoSuchElementException();
         }
         try{
-            Event event = serverUtils.getEventById(eventIdd);
+            Event event = serverUtils.getEventById(eventId);
             Event updatedEvent = serverUtils.updateEvent(event, newName);
             if (updatedEvent == null){
                 throw new RuntimeException();
@@ -73,9 +67,8 @@ public class EditEventCrtl {
             throw new RuntimeException();
         }
         succesFullyChangeName();
-        nameChange.setText("");
-        eventId.setText("");
     }
+
 
     public void succesFullyChangeName(){
         succesFullyChanged.setVisible(true);

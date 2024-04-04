@@ -73,7 +73,12 @@ public class AdminLoginCtrl {
         }
 
     }
-
+    public void reset(){
+        this.urlField.setText(null);
+        this.passwordField.setText(null);
+        this.incorrectPasswordError.setVisible(false);
+        this.serverNotFoundError.setVisible(false);
+    }
     @FXML
     public void showPasswordInstructions(MouseEvent mouseEvent) {
         passwordInstructionsText.setVisible(true);

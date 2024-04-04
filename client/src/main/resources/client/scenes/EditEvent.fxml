@@ -4,21 +4,54 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditEventCrtl">
+<AnchorPane fx:id="background" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditEventCrtl">
    <children>
-      <Button fx:id="submitButton" layoutX="274.0" layoutY="257.0" mnemonicParsing="false" onAction="#changeName" text="submit" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6"/>
-      <TextField fx:id="nameChange" layoutX="217.0" layoutY="200.0" prefHeight="38.0" prefWidth="166.0" promptText="new name">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </TextField>
-      <Label layoutX="192.0" layoutY="39.0" prefHeight="73.0" prefWidth="217.0" text="Change name">
-         <font>
-            <Font size="35.0" />
-         </font>
-      </Label>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <TextField fx:id="eventId" layoutX="217.0" layoutY="137.0" prefHeight="38.0" prefWidth="166.0" promptText="Event ID" />
-      <Label fx:id="succesFullyChanged" layoutX="210.0" layoutY="289.0" prefHeight="38.0" prefWidth="180.0" text="event name succesFully changed" visible="false" />
+
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+      <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
+         <children>
+
+            <Label text="Event Name">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+
+            <TextField fx:id="nameChange" prefHeight="25.0" prefWidth="181.0" promptText="required" />
+            <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
+
+
+            <Label text="Date">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" visible="false" />
+            <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
+            <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" />
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" layoutX="321.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
+         <children>
+
+            <Label text="Event Description">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="eventDescriptionArea" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." visible="false" />
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" layoutX="176.0" layoutY="313.0" prefHeight="30.0" prefWidth="248.0">
+         <children>
+
+
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; : 6;" text="edit event" textFill="white">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children></HBox>
+      <Label fx:id="succesFullyChanged" alignment="CENTER" layoutX="148.0" layoutY="266.0" prefHeight="30.0" prefWidth="304.0" text="succesfully updated the event" visible="false" />
    </children>
 </AnchorPane>
