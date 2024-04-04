@@ -29,7 +29,7 @@ public class SetLanguage {
         this.adminLoginCtrl = adminLoginCtrl;
         this.adminOverviewCtrl = adminOverviewCtrl;
         this.createEventCtrl = createEventCtrl;
-        //this.language = Language.en;
+                //this.language = Language.en;
     }
 
     public void changeTo(String lang){
@@ -52,6 +52,7 @@ public class SetLanguage {
         startScreenCtrl.setCreateButtonText(translate("Create", "en", lang));
         startScreenCtrl.setNoEventLabel(translate("You do not have any events to list still", "en", lang));
         startScreenCtrl.setSettings(translate("Settings", "en", lang));
+        System.out.println("mainscreen translated");
     }
     public void setSpittyoverview(String lang){
         splittyOverviewCtrl.setExpensesText(translate("Expenses", "en", lang));
@@ -65,6 +66,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
+        System.out.println("event overview translated");
     }
     public void setAddExpense(String lang){
         addExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
@@ -79,6 +81,7 @@ public class SetLanguage {
         addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
+        System.out.println("addExpense translated");
     }
     public void setAdminLogin(String lang){
         adminLoginCtrl.setSignIn(translate("Sign in", "en", lang));
@@ -89,6 +92,7 @@ public class SetLanguage {
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
         adminLoginCtrl.setPasswordInstructionsText(translate(
                 "You can find your password in the console of your server instance", "en", lang));
+        System.out.println("admin login translated");
     }
     public void setAdminOverview(String lang){
         adminOverviewCtrl.setAdminManagementOverviewText(translate("Admin management overview", "en", lang));
@@ -100,16 +104,18 @@ public class SetLanguage {
         adminOverviewCtrl.setJsonImportTextAreaPromptText(translate("Paste your exported JSON dump here", "en", lang));
         adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
+        System.out.println("admin overview translated");
     }
     public void setCreateEvent(String lang){
         createEventCtrl.setEventNameText(translate("Event name", "en", lang));
         createEventCtrl.setDateText(translate("Date", "en", lang));
         createEventCtrl.setEventDescriptionText(translate("Event description", "en", lang));
         createEventCtrl.setEventDescriptionArea(translate("What is the event about...", "en", lang));
-        createEventCtrl.setNameText(translate("Name", "en", lang));
+        //createEventCtrl.setNameText(translate("Name", "en", lang));
         createEventCtrl.setCreateButton(translate("Create event", "en", lang));
         createEventCtrl.setCancelButton(translate("Cancel", "en", lang));
         createEventCtrl.setRequired(translate("required", "en", lang));
+        System.out.println("setCreateEvent translated");
     }
 
 

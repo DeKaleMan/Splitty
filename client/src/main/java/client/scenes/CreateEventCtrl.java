@@ -55,6 +55,8 @@ public class CreateEventCtrl {
 
 
 
+
+
     @FXML
     private Button goToSettings;
     // participant text fields
@@ -195,7 +197,7 @@ public class CreateEventCtrl {
         this.cancelButton.setText(txt);
     }
     public void setRequired(String txt){
-        this.nameField.setPromptText(txt);
+        //this.nameField.setPromptText(txt);
         this.titleField.setPromptText(txt);
     }
 }
