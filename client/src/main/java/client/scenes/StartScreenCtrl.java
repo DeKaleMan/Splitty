@@ -182,18 +182,7 @@ public class StartScreenCtrl implements Initializable {
             return;
         }
         if (config.getName() == null || config.getName().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Joining Event");
-            alert.setContentText("You are about to join an event without having a name, " +
-                    "you can set your name in the settings. If you wish to continue," +
-                    " your name will be set to 'Unknown'");
-            AtomicBoolean ok = new AtomicBoolean(true);
-            alert.showAndWait().ifPresent(action -> {
-                if (action != ButtonType.OK) {
-                    ok.set(false);
-                }
-            });
-            if (!ok.get()) {
+            if (!setConfirmationJoin()) {
                 return;
             }
         }
@@ -216,6 +205,22 @@ public class StartScreenCtrl implements Initializable {
         }
         mainCtrl.setConfirmationJoinedEvent();
     }
+
+    public boolean setConfirmationJoin() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Joining Event");
+        alert.setContentText("You are about to join an event without having a name, " +
+                "you can set your name in the settings. If you wish to continue," +
+                " your name will be set to 'Unknown'");
+        AtomicBoolean ok = new AtomicBoolean(true);
+        alert.showAndWait().ifPresent(action -> {
+            if (action != ButtonType.OK) {
+                ok.set(false);
+            }
+        });
+        return ok.get();
+    }
+
 
 
 
