@@ -34,8 +34,8 @@ public abstract class ExpenseCtrl {
     protected final Config config;
 
 
-    @FXML
-    protected Label titleLabel;
+//    @FXML
+//    protected Label titleLabel;
 
 
 
@@ -393,9 +393,9 @@ public abstract class ExpenseCtrl {
         mainCtrl.showSplittyOverview(eventCode);
     }
 
-    public void setTitle(String title) {
-        titleLabel.setText(title);
-    }
+//    public void setTitle(String title) {
+//        titleLabel.setText(title);
+//    }
 
     public void setSceneTypeText(String text) {
         this.sceneTypeText.setText(text);

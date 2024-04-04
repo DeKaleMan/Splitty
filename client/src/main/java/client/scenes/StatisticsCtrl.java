@@ -43,6 +43,8 @@ public class StatisticsCtrl {
     private Label errorLabel;
     @FXML
     private ListView<Participant> shareListView;
+    @FXML
+    private Label shareOfExpensesLabel;
 
     private double total;
 
@@ -53,8 +55,9 @@ public class StatisticsCtrl {
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
     private Config config;
+
     @Inject
-    public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config){
+    public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
         this.mainCtrl = mainCtrl;
         this.serverUtils = serverUtils;
         this.config = config;
@@ -62,21 +65,24 @@ public class StatisticsCtrl {
     }
 
     private void setListViewUp() {
+        shareListView.setVisible(!(total < 0.001));
+        shareOfExpensesLabel.setVisible(!(total < 0.001));
+
         shareListView.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
             @Override
             public ListCell<Participant> call(ListView<Participant> participantListView) {
-                return new ListCell<>(){
+                return new ListCell<>() {
                     @Override
                     protected void updateItem(Participant participant, boolean b) {
                         super.updateItem(participant, b);
-                        if(participant == null || b){
+                        if (participant == null || b) {
                             setText(null);
-                        }else{
+                        } else {
                             double share = serverUtils.getExpenseByUuid(eventCode,
-                                participant.getUuid())
+                                    participant.getUuid())
                                 .stream()
                                 .mapToDouble(x -> x.getTotalExpense() * 100)
-                                .sum()/total;
+                                .sum() / total;
                             setText(participant.getName()
                                 + ": "
                                 + mainCtrl.getFormattedDoubleString(share)
@@ -93,32 +99,35 @@ public class StatisticsCtrl {
      */
     public void setPieChart() {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        if(this.food != 0.0) data.add(new PieChart.Data("Food", food));
-        if(this.drinks != 0.0) data.add(new PieChart.Data("Drinks", drinks));
-        if(this.transport != 0.0) data.add(new PieChart.Data("Transport", transport));
-        if(this.other != 0.0) data.add(new PieChart.Data("Other", other));
+        if (this.food != 0.0) data.add(new PieChart.Data("Food", food));
+        if (this.drinks != 0.0) data.add(new PieChart.Data("Drinks", drinks));
+        if (this.transport != 0.0) data.add(new PieChart.Data("Transport", transport));
+        if (this.other != 0.0) data.add(new PieChart.Data("Other", other));
 
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                     d.getName(),
                     ": ",
                     mainCtrl.getFormattedDoubleString(d.pieValueProperty().getValue()),
                     java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                        )
                 )
+            )
 
         );
 
         pieChart.setData(data);
     }
+
     //these all set the things for the diagram, theoretically they could all
     // be done in one method but I wasn't sure how we were going to implement this
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
+
     public void setEventCode(int eventCode) {
         this.eventCode = eventCode;
     }
-    public void fetchStat(){
+
+    public void fetchStat() {
         this.stat = serverUtils.getStatisticsByEventID(eventCode);
         setFood();
         setDrinks();
@@ -126,17 +135,21 @@ public class StatisticsCtrl {
         setOther();
         setTotalCost(total);
     }
+
     public void setFood() {
         try {
-            this.food = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[0]);
-        } catch(RuntimeException e){
+            this.food = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
+                new Date(), stat[0]);
+        } catch (RuntimeException e) {
             displayError();
         }
     }
+
     public void setDrinks() {
         try {
-            this.drinks = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[1]);
-        } catch(RuntimeException e){
+            this.drinks = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
+                new Date(), stat[1]);
+        } catch (RuntimeException e) {
             displayError();
         }
     }
@@ -144,8 +157,8 @@ public class StatisticsCtrl {
     public void setTransport() {
         try {
             this.transport = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
-                config.getCurrency(),new Date(),stat[2]);
-        } catch(RuntimeException e){
+                config.getCurrency(), new Date(), stat[2]);
+        } catch (RuntimeException e) {
             displayError();
         }
     }
@@ -153,26 +166,27 @@ public class StatisticsCtrl {
     public void setOther() {
         try {
             this.other = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
-                config.getCurrency(),new Date(),stat[3]);
-        } catch(RuntimeException e){
+                config.getCurrency(), new Date(), stat[3]);
+        } catch (RuntimeException e) {
             displayError();
         }
     }
-    public void setTotalCost(double totalCost){
-        try{
-            this.totalCost.setText(mainCtrl.getFormattedDoubleString(
-                mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),totalCost))
+
+    public void setTotalCost(double totalCost) {
+        try {
+            this.totalCost.setText(mainCtrl.getFormattedDoubleString(totalCost)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol());
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             this.totalCost.setText("-");
             displayError();
         }
     }
 
     @FXML
-    public void goBack(){
+    public void goBack() {
         mainCtrl.showSplittyOverview(eventCode);
     }
+
     @FXML
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
@@ -180,18 +194,25 @@ public class StatisticsCtrl {
         }
     }
 
-    private void displayError(){
+    private void displayError() {
         errorLabel.setVisible(true);
         PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
         visiblePause.setOnFinished(event1 -> errorLabel.setVisible(false));
         visiblePause.play();
     }
 
-    public void refresh(){
+    public void refresh() {
         listViewData.clear();
         listViewData.addAll(serverUtils.getParticipants(eventCode));
         total = serverUtils.getTotalCostEvent(eventCode);
-        shareListView.setItems(listViewData);
-        setListViewUp();
+        try {
+            total = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
+                new Date(), total);
+            shareListView.setItems(listViewData);
+            setListViewUp();
+        } catch (RuntimeException e) {
+            this.totalCost.setText("-");
+            displayError();
+        }
     }
 }

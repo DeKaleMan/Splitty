@@ -30,7 +30,7 @@
          </children></VBox>
       <VBox layoutX="368.0" layoutY="18.0">
          <children>
-            <Label text="Share of expenses" />
+            <Label fx:id="shareOfExpensesLabel" text="Share of expenses" />
             <ListView fx:id="shareListView" prefHeight="102.0" prefWidth="200.0" />
          </children>
       </VBox>

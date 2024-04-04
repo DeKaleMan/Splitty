@@ -247,7 +247,7 @@ public class MainCtrl {
         try {
             primaryStage.setTitle("Add expense");
             addExpenseCtrl.refresh(eventCode);
-            addExpenseCtrl.setTitle(title);
+//            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
             checkConnection();

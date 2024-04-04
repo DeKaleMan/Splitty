@@ -25,11 +25,6 @@
             </HBox>
          </children>
       </VBox>
-      <Label fx:id="titleLabel" layoutX="88.0" layoutY="31.0" text="Title">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Label>
       <Label fx:id="sceneTypeText" layoutX="376.0" layoutY="31.0" text="Add Expense" AnchorPane.rightAnchor="20">
          <font>
             <Font name="System Bold" size="24.0" />
