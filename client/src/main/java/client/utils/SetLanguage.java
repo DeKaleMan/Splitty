@@ -52,6 +52,7 @@ public class SetLanguage {
         startScreenCtrl.setCreateButtonText(translate("Create", "en", lang));
         startScreenCtrl.setNoEventLabel(translate("You do not have any events to list still", "en", lang));
         startScreenCtrl.setSettings(translate("Settings", "en", lang));
+        startScreenCtrl.setmyEventsText(translate("My events", "en", lang));
         System.out.println("mainscreen translated");
     }
     public void setSpittyoverview(String lang){
@@ -66,6 +67,9 @@ public class SetLanguage {
         splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
+        splittyOverviewCtrl.setEditExpense(translate("Edit expense", "en",lang));
+        splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
+        splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
         System.out.println("event overview translated");
     }
     public void setAddExpense(String lang){
@@ -81,6 +85,8 @@ public class SetLanguage {
         addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
+        addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
+        addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
         System.out.println("addExpense translated");
     }
     public void setAdminLogin(String lang){

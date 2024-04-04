@@ -80,6 +80,10 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private Button deleteExpenseButton;
     @FXML
+    private Button editExpenseButton;
+
+
+    @FXML
     public Button hostOptionsButton;
 
 
@@ -484,6 +488,15 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setAllExpenses(String text) {
         this.allExpenses.setText(text);
+    }
+    public void setEditEvent(String text) {
+        this.editEvent.setText(text);
+    }
+    public void setEditExpense(String text) {
+        this.editExpenseButton.setText(text);
+    }
+    public void setLeaveButton(String text) {
+        this.leaveButton.setText(text);
     }
 
 

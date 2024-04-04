@@ -30,7 +30,8 @@ public class StartScreenCtrl implements Initializable {
 
 
     private String currentLang;
-
+    @FXML
+    private Label myEventsText;
     @FXML
     private Label createEventText;
     @FXML
@@ -230,6 +231,10 @@ public class StartScreenCtrl implements Initializable {
 
     public void setTitle(String eventTitle) {
         createEventTextField.setText(eventTitle);
+    }
+
+    public void setmyEventsText(String txt){
+        this.myEventsText.setText(txt);
     }
 
 

@@ -61,9 +61,9 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-            <HBox alignment="CENTER" layoutX="20.0" layoutY="256.0" prefHeight="35.0" prefWidth="200.0" spacing="5.0">
+            <HBox alignment="CENTER" layoutX="-16.0" layoutY="256.0" prefHeight="35.0" prefWidth="272.0" spacing="5.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#editExpense" text="Edit" />
+                  <Button fx:id="editExpenseButton" mnemonicParsing="false" onAction="#editExpense" text="Edit" />
                   <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" style="-fx-background-color: #c50000;" text="Delete" />
                </children>
             </HBox>
@@ -71,13 +71,13 @@
 
             </children>
         </Pane>
-        <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="161.0" prefHeight="151.0" prefWidth="100.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" layoutX="238.0" layoutY="157.0" prefHeight="151.0" prefWidth="124.0" spacing="10.0">
             <children>
-                <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" prefHeight="26.0" prefWidth="88.0" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
-                <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="85.0" text="Statistics" />
-                <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
-                <Button mnemonicParsing="false" onAction="#editMyDetails" prefHeight="25.0" prefWidth="85.0" text="My details" />
-                <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
+                <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
+                <Button fx:id="editEvent" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" />
+                <Button mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
+                <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
             </children>
         </VBox>
         <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
