@@ -15,7 +15,7 @@ public class ParticipantDTO {
 
     private String eventInviteCode;
     private int eventId;
-
+    private boolean ghost;
     private String uuid;
 
     public ParticipantDTO() {
@@ -23,6 +23,7 @@ public class ParticipantDTO {
 
     public ParticipantDTO(String name, double balance, String iBan, String bIC,
                           String email, String accountHolder, int eventId, String uuid) {
+        // DELETE THIS CONSTRUCTOR
         this.name = name;
         this.balance = balance;
         this.iBan = iBan;
@@ -31,6 +32,7 @@ public class ParticipantDTO {
         this.accountHolder = accountHolder;
         this.eventId = eventId;
         this.uuid = uuid;
+        this.ghost = false;
     }
     public ParticipantDTO(String name, double balance, String iBan, String bIC,
                           String email, String accountHolder, int eventId, String uuid, String eventInviteCode) {
@@ -43,6 +45,7 @@ public class ParticipantDTO {
         this.eventId = eventId;
         this.uuid = uuid;
         this.eventInviteCode = eventInviteCode;
+        this.ghost = false;
     }
 
     public String getName() {
@@ -115,5 +118,13 @@ public class ParticipantDTO {
 
     public void setEventInviteCode(String eventInviteCode) {
         this.eventInviteCode = eventInviteCode;
+    }
+
+    public boolean isGhost() {
+        return ghost;
+    }
+
+    public void setGhostStatus(boolean ghost) {
+        this.ghost = ghost;
     }
 }

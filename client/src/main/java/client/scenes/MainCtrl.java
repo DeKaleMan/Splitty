@@ -69,6 +69,12 @@ public class MainCtrl {
     private Scene manageParticipants;
     private ManageParticipantsCtrl manageParticipantsCtrl;
 
+    private Scene addParticipant;
+    private AddParticipantCtrl addParticipantCtrl;
+
+    private Scene editParticipant;
+    private EditParticipantCtrl editParticipantCtrl;
+
     private Scene statistics;
     private StatisticsCtrl statisticsCtrl;
     private Scene debts;
@@ -79,7 +85,6 @@ public class MainCtrl {
     private Scene editEvent;
     private EditEventCrtl editEventCrtl;
     private CreateEventCtrl createEventCtrl;
-
     private Scene editExpense;
     private EditExpenseCtrl editExpenseCtrl;
     private ServerUtils serverUtils;
@@ -89,6 +94,8 @@ public class MainCtrl {
 
     private Scene server;
     private ServerCtrl serverCtrl;
+
+
 
     // probably not the best place to put that here but works for now
     // maybe in the future isolate it into an eventctrl?
@@ -120,25 +127,24 @@ public class MainCtrl {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
-
         this.splittyOverviewCtrl = splittyOverview.getKey();
         this.splittyOverview = new Scene(splittyOverview.getValue());
-
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
-
         this.contactDetailsCtrl = contactDetails.getKey();
         this.contactDetails = new Scene(contactDetails.getValue());
-
         this.adminLoginCtrl = adminWindows.adminLogin().getKey();
         this.adminLogin = new Scene(adminWindows.adminLogin().getValue());
-
         this.adminOverviewCtrl = adminWindows.adminOverview().getKey();
         this.adminOverview = new Scene(adminWindows.adminOverview().getValue());
         this.addExpenseCtrl = eventPropGrouper.addExpense().getKey();
         this.addExpense = new Scene(eventPropGrouper.addExpense().getValue());
         this.manageParticipantsCtrl = eventPropGrouper.manageParticipants().getKey();
         this.manageParticipants = new Scene(eventPropGrouper.manageParticipants().getValue());
+        this.addParticipantCtrl = eventPropGrouper.addParticipant().getKey();
+        this.addParticipant = new Scene(eventPropGrouper.addParticipant().getValue());
+        this.editParticipantCtrl = eventPropGrouper.editParticipant().getKey();
+        this.editParticipant = new Scene(eventPropGrouper.editParticipant().getValue());
         this.statisticsCtrl = eventPropGrouper.statistics().getKey();
         this.statistics = new Scene(eventPropGrouper.statistics().getValue());
         this.debtCtrl = eventPropGrouper.debts().getKey();
@@ -197,13 +203,11 @@ public class MainCtrl {
             primaryStage.setScene(splittyOverview);
             splittyOverview.getStylesheets().add(css);
             Event event = serverUtils.getEventById(id);
-            splittyOverviewCtrl.setTitle(event.getName());
-            splittyOverviewCtrl.setEventCode(id);
-            splittyOverviewCtrl.fetchParticipants();
-            splittyOverviewCtrl.fetchExpenses();
+            splittyOverviewCtrl.initializeAll(event);
         } catch (RuntimeException e) {
             checkConnection();
         }
+
     }
 
     public void setAdmin(Boolean admin) {
@@ -223,19 +227,25 @@ public class MainCtrl {
         return null;
     }
 
-    public Participant joinEvent(String inviteCode) throws RuntimeException{ // needs some more error handling
-        Participant participant = serverUtils.createParticipant(
-                new ParticipantDTO(
-                        settingCtrl.getName(),
-                        0,
-                        settingCtrl.getIban(),
-                        settingCtrl.getBic(),
-                        settingCtrl.getEmail(),
-                        settingCtrl.getName(),
-                        -1,
-                        settingCtrl.getId(),
-                        inviteCode
-                ));
+    public Participant joinEvent(String inviteCode) throws RuntimeException {
+        String name = settingCtrl.getName();
+        if (name == null || name.isEmpty()) {
+            name = "Unknown";
+        }
+
+        ParticipantDTO participantDTO =  new ParticipantDTO(
+                name,
+                0,
+                settingCtrl.getIban(),
+                settingCtrl.getBic(),
+                settingCtrl.getEmail(),
+                settingCtrl.getName(),
+                -1,
+                settingCtrl.getId(),
+                inviteCode
+        );
+        participantDTO.setGhostStatus(false);
+        Participant participant = serverUtils.createParticipant(participantDTO);
         if (participant != null) {
             events.add(serverUtils.getEventById(participant.getEvent().getId()));
         }
@@ -332,11 +342,9 @@ public class MainCtrl {
         try {
             primaryStage.setTitle("ManageParticipants");
             primaryStage.setScene(manageParticipants);
-            Event event = serverUtils.getEventById(eventID);
-            manageParticipantsCtrl.setEventCode(eventID);
-            manageParticipantsCtrl.setTitle(event.getName());
+            manageParticipantsCtrl.setupParticipants(eventID);
         } catch (RuntimeException e) {
-            checkConnection();
+            //checkConnection();
         }
     }
 
@@ -367,7 +375,7 @@ public class MainCtrl {
             throw new RuntimeException("Splitty overview controller is null," +
                     " exception thrown in MainCtrl getCurrentEventCode()");
         }
-        return splittyOverviewCtrl.getCurrentEventCode();
+        return splittyOverviewCtrl.getCurrentEventId();
     }
 
     /**
@@ -469,6 +477,7 @@ public class MainCtrl {
         primaryStage.close();
     }
 
+
     public double getAmountInDifferentCurrency(commons.Currency from, Currency to,
                                                 Date date, double amount){
         if(from == to) return amount;
@@ -492,7 +501,50 @@ public class MainCtrl {
         decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
         return decimalFormat.format(d);
     }
+
+    public void showAddParticipant(int eventId) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(addParticipant);
+        primaryStage.setTitle("Add participant");
+        this.addParticipantCtrl.setEventId(eventId);
+    }
+    public void showEditParticipant(int eventId, String participantId) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(editParticipant);
+        primaryStage.setTitle("Edit participant");
+        this.editParticipantCtrl.setEventId(eventId);
+        this.editParticipantCtrl.autoFillWithMyData(participantId);
+        this.editParticipantCtrl.setHost(true);
+    }
+    // one is accessed through the participant manager and the other through Splitty overview
+    public void showEditParticipant(int eventId) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(editParticipant);
+        primaryStage.setTitle("Edit participant");
+        this.editParticipantCtrl.setEventId(eventId);
+        this.editParticipantCtrl.autoFillWithMyData();
+        this.editParticipantCtrl.setHost(false);
+    }
+
+    public void setConfirmationEditParticipant() {
+        manageParticipantsCtrl.setParticipantEditedConfirmation();
+    }
+
+    public void setConfirmationAddParticipant() {
+        manageParticipantsCtrl.setParticipantAddedConfirmation();
+    }
+
     public void stopLongPolling(){
         if(splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
     }
 }
+

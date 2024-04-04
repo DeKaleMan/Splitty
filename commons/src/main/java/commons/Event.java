@@ -14,18 +14,18 @@ public class Event {
     public int id;
     private String name;
     private Date date;
-    private String owner;
+    private String host;
     private String description;
     private Date lastActivity;
 
     @Column(unique = true)
     private String inviteCode;
     public Event(String name, Date date,
-                 String owner,
+                 String host,
                  String description) {
         this.name = name; // name of the event
         this.date = date; // date of when the event occured/was created
-        this.owner = owner; // the person that created the event
+        this.host = host; // the person that created the event
         this.description = description;//description of the event
         lastActivity = new Date();
     }
@@ -42,8 +42,8 @@ public class Event {
         return date;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getHost() {
+        return host;
     }
 
     public String getDescription() {
@@ -58,8 +58,8 @@ public class Event {
         this.date = date;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwner(String host) {
+        this.host = host;
     }
 
 
@@ -99,13 +99,13 @@ public class Event {
         return id == event.id
                 && Objects.equals(name, event.name)
                 && Objects.equals(date, event.date)
-                && Objects.equals(owner, event.owner)
+                && Objects.equals(host, event.host)
                 && Objects.equals(description, event.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, owner, description);
+        return Objects.hash(id, name, date, host, description);
     }
 
 
@@ -117,7 +117,7 @@ public class Event {
                 + " that is created on "
                 + date
                 + " the person that created is: "
-                + owner
+                + host
                 + " the description is: "
                 + description;
         return res;

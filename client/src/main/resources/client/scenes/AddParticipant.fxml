@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane onKeyPressed="#onKeyPressed" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
+   <children>
+      <Label layoutX="228.0" layoutY="14.0" prefHeight="44.0" prefWidth="164.0" text="Add Participant">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Text layoutX="185.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="59.85107421875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="190.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" wrappingWidth="50.13677978515625">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+
+      <TextField fx:id="nameField" layoutX="249.0" layoutY="101.0" />
+      <TextField fx:id="emailField" layoutX="249.0" layoutY="148.0" />
+      <TextField fx:id="ibanField" layoutX="249.0" layoutY="192.0" />
+      <TextField fx:id="bicField" layoutX="249.0" layoutY="234.0" />
+      <TextField fx:id="accountHolderField" layoutX="249.0" layoutY="274.0" />
+
+      <Text layoutX="189.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN" wrappingWidth="50.13677978515625">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="198.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIC" wrappingWidth="32.4224853515625">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="96.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" wrappingWidth="148.57142857142856">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+
+      <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+      <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#addParticipant" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
+   </children>
+</AnchorPane>

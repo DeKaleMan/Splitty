@@ -474,10 +474,10 @@ public class ServerUtils {
     }
 
     // Uuid in this method wouldn't be passed as an argument but rather fetched from the config?
-    public Participant updateParticipant(String oldUuid, ParticipantDTO participant) {
+    public Participant updateParticipant(String uuid, ParticipantDTO participant) {
         Response response = client
             .target(server).path("api/participants/{uuid}/{eventId}")
-            .resolveTemplate("uuid", oldUuid)
+            .resolveTemplate("uuid", uuid)
             .resolveTemplate("eventId", participant.getEventId())
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
@@ -635,10 +635,11 @@ public class ServerUtils {
         return 1;
     }
 
-    public Participant getParticipant(String uuid, int eventCode) {
+
+    public Participant getParticipant(String uuid, int eventId) {
         Response response = client.target(server).path("api/participants/{uuid}/{eventId}")
             .resolveTemplate("uuid", uuid)
-            .resolveTemplate("eventId", eventCode)
+            .resolveTemplate("eventId", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get();
@@ -687,30 +688,31 @@ public class ServerUtils {
 
     private static final ExecutorService EXEC = Executors.newFixedThreadPool(2);
 
-    public void registerForParticipantLongPolling(Consumer<Participant> updates, Consumer<Participant> deletions){
+    public void registerForParticipantLongPolling(Consumer<Participant> updates,
+                                                  Consumer<Participant> deletions) {
         EXEC.submit(() -> {
-            while(!Thread.interrupted()){
+            while (!Thread.interrupted()) {
                 Response res = client.target(server).path("api/participants/updates")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
 
-                if(res.getStatus() == 200) updates.accept(res.readEntity(Participant.class));
+                if (res.getStatus() == 200) updates.accept(res.readEntity(Participant.class));
             }
         });
         EXEC.submit(() -> {
-            while(!Thread.interrupted()){
+            while (!Thread.interrupted()) {
                 Response res = client.target(server).path("api/participants/deletions")
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
 
-                if(res.getStatus() == 200) deletions.accept(res.readEntity(Participant.class));
+                if (res.getStatus() == 200) deletions.accept(res.readEntity(Participant.class));
             }
         });
     }
 
-    public void stop(){
+    public void stop() {
         EXEC.shutdownNow();
     }
 }

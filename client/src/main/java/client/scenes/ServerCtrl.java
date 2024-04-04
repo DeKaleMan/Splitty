@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
@@ -85,6 +86,8 @@ public class ServerCtrl {
     private void relaunch() throws RuntimeException {
         Injector injector = createInjector(new MyModule());
         MyFXML fxml = new MyFXML(injector);
+        var editParticipant = fxml.load(EditParticipantCtrl.class, "client", "scenes", "EditParticipant.fxml");
+        var addParticipant = fxml.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
         var server = fxml.load(ServerCtrl.class, "client", "scenes", "Server.fxml");
         var settings = fxml.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
         var invitation = fxml.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
@@ -100,8 +103,8 @@ public class ServerCtrl {
         var editEvent = fxml.load(EditEventCrtl.class, "client", "scenes", "EditEvent.fxml");
         var editExpense = fxml.load(EditExpenseCtrl.class, "client", "scenes", "EditExpense.fxml");
         // group these in the EventPropGrouper
-        var eventPropGrouper = new EventPropGrouper(addExpense, manageParticipants,
-                statistics, debts, editEvent, editExpense);
+        var eventPropGrouper = new EventPropGrouper(addExpense, addParticipant, editParticipant,
+                statistics, debts,editEvent, editExpense, manageParticipants);
 
         var adminLogin = fxml.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
         var adminOverview = fxml.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
@@ -118,5 +121,12 @@ public class ServerCtrl {
     }
     public void resetError(KeyEvent keyEvent) {
         notConnectedError.setVisible(false);
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        if (press.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 }

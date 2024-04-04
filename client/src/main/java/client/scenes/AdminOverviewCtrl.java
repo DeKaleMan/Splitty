@@ -94,7 +94,6 @@ public class AdminOverviewCtrl {
                 };
             }
         });
-
         ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
         eventList.setItems(events);
     }
@@ -270,5 +269,10 @@ public class AdminOverviewCtrl {
         jsonImportTextArea.setVisible(false);
         jsonImportButton.setVisible(false);
         jsonImportPane.setVisible(false);
+    }
+
+    public void refreshEvents() {
+        ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
+        eventList.setItems(events);
     }
 }

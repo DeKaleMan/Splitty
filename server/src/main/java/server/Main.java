@@ -15,16 +15,11 @@
  */
 package server;
 
-import commons.Event;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
 import server.api.depinjectionUtils.ServerIOUtilActual;
-import server.database.EventRepository;
 
-import java.util.Date;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -40,20 +35,20 @@ public class Main {
         System.out.println("The new password for the admin panel is: " + password);
     }
 
-    @Bean
-    public CommandLineRunner run(EventRepository eventDB){
-        return (args -> {
-            insertEvent(eventDB);
-            System.out.println(eventDB.findAll());
-        });
-    }
+//    @Bean
+//    public CommandLineRunner run(EventRepository eventDB){
+//        return (args -> {
+//            insertEvent(eventDB);
+//            System.out.println(eventDB.findAll());
+//        });
+//    }
 
-    private void insertEvent(EventRepository eventDB){
-        eventDB.save(new Event("jesse"
-                , new Date(10, 10, 2005)
-                , "group 31"
-                , "this is a test is the database works"));
-    }
+//    private void insertEvent(EventRepository eventDB){
+//        eventDB.save(new Event("jesse"
+//                , new Date(10, 10, 2005)
+//                , "group 31"
+//                , "this is a test is the database works"));
+//    }
 
     private static String generatePassword(int passwordSize) {
         UUID uuid = UUID.randomUUID();
