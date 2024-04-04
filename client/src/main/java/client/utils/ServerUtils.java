@@ -60,6 +60,7 @@ public class ServerUtils {
     /**
      * ONLY USE THIS CONSTRUCTOR FOR TESTING PURPOSES
      * Because the server will not be running during testing websockets won't work if using this constructor
+     *
      * @param client You're client mock
      */
     public ServerUtils(Client client) {
@@ -72,12 +73,13 @@ public class ServerUtils {
     public ServerUtils() {
         this.client = ClientBuilder.newClient(new ClientConfig());
         // This is only called if the serverutils class was constructed from the actual program and not a test
-        session = connect("ws://"+ serverDomain + "/websocket");
+        session = connect("ws://" + serverDomain + "/websocket");
     }
 
     public static void resetServer() {
         server = "http://" + serverDomain + "/";
     }
+
     public static String serverDomain = "localhost:8080";
     public static String server = "http://localhost:8080/";
 
@@ -100,7 +102,7 @@ public class ServerUtils {
      * Gets expense by email.
      *
      * @param eventCode the event code
-     * @param uuid     the uuid
+     * @param uuid      the uuid
      * @return the expense by email
      */
     public List<Expense> getExpenseByUuid(int eventCode, String uuid) {
@@ -129,13 +131,13 @@ public class ServerUtils {
             .post(Entity.entity(expenseDTO, APPLICATION_JSON), Expense.class);
     }
 
-    public Expense updateExpense(int expenseId, ExpenseDTO expenseDTO){
+    public Expense updateExpense(int expenseId, ExpenseDTO expenseDTO) {
         List<Debt> debts = getDebtByExpense(expenseDTO.getEventId(), expenseId);
-        for(Debt d : debts){
+        for (Debt d : debts) {
             Participant p = d.getParticipant();
-            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
-                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
-                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+            updateParticipant(p.getUuid(), new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(), p.getBIC(), p.getEmail(),
+                p.getAccountHolder(), p.getEvent().getId(), p.getUuid()));
         }
 
         deleteDebtsOfExpense(expenseDTO.getEventId(), expenseId);
@@ -214,14 +216,15 @@ public class ServerUtils {
             .post(Entity.entity(debtDTO, APPLICATION_JSON), Debt.class);
     }
 
-    public List<Debt> deleteDebtsOfExpense(int eventId, int expenseId){
+    public List<Debt> deleteDebtsOfExpense(int eventId, int expenseId) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(server).path("api/debts/{eventId}/{expenseId}")
             .resolveTemplate("eventId", eventId)
-            .resolveTemplate("expenseId",expenseId)
+            .resolveTemplate("expenseId", expenseId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .delete(new GenericType<List<Debt>>(){});
+            .delete(new GenericType<List<Debt>>() {
+            });
     }
 
 
@@ -234,23 +237,22 @@ public class ServerUtils {
         ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
 
         Response response = client
-                .target(server)
-             .path("api/expenses")
-             .queryParam("eventID", expense.getEvent().id)
-             .queryParam("expenseID", expenseId)
-             .request(APPLICATION_JSON)
-             .accept(APPLICATION_JSON)
-             .delete();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()){
+            .target(server)
+            .path("api/expenses")
+            .queryParam("eventID", expense.getEvent().id)
+            .queryParam("expenseID", expenseId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Expense e = response.readEntity(Expense.class);
             response.close();
             return e;
-        } else{
+        } else {
             response.close();
             throw new RuntimeException("failed to delete an expense " + response.getStatus());
         }
     }
-
 
 
     /**
@@ -262,12 +264,12 @@ public class ServerUtils {
 
     public List<Participant> getParticipants(int eventCode) {
         return client
-                .target(server).path("api/participants")
-                .queryParam("eventID", eventCode)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Participant>>() {
-                });
+            .target(server).path("api/participants")
+            .queryParam("eventID", eventCode)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Participant>>() {
+            });
     }
 
 
@@ -279,10 +281,11 @@ public class ServerUtils {
 
     public List<Event> getAllEvents() {
         var response = client
-                .target(server).path("api/event/all")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Event>>(){});
+            .target(server).path("api/event/all")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Event>>() {
+            });
         return response;
     }
 
@@ -294,13 +297,15 @@ public class ServerUtils {
      */
     public Event getEventById(int id) {
         Response response = client.target(server).path("api/event")
-                .queryParam("id", id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<Response>(){});
+            .queryParam("id", id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<Response>() {
+            });
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Event event = response.readEntity(new GenericType<Event>() {});
+            Event event = response.readEntity(new GenericType<Event>() {
+            });
             response.close();
             return event;
         } else {
@@ -310,13 +315,13 @@ public class ServerUtils {
         }
     }
 
-    public Event updateEvent(Event event, String newName){
+    public Event updateEvent(Event event, String newName) {
         Response response = client.target(server).path("api/event/updateName")
-                .queryParam("newName", newName)
-                .queryParam("id", event.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(Entity.entity(event, APPLICATION_JSON), Response.class);
+            .queryParam("newName", newName)
+            .queryParam("id", event.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .put(Entity.entity(event, APPLICATION_JSON), Response.class);
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Event updatedEvent = response.readEntity(Event.class);
@@ -325,7 +330,7 @@ public class ServerUtils {
         } else {
             response.close();
             throw new RuntimeException(
-                    "Failed to update event. Status code: " + response.getStatus());
+                "Failed to update event. Status code: " + response.getStatus());
         }
     }
 
@@ -382,32 +387,36 @@ public class ServerUtils {
 
     /**
      * This method creates the websocket connection
+     *
      * @param url this is the url you want to connect to
      * @return StompSession
      */
-    StompSession connect(String url){
+    StompSession connect(String url) {
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
-        try{
-            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
-        } catch (InterruptedException e){
+        try {
+            return stomp.connect(url, new StompSessionHandlerAdapter() {
+            }).get();
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        } catch (ExecutionException e){
+        } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
         throw new IllegalStateException();
     }
 
-    /** This is the method to register for updates
+    /**
+     * This is the method to register for updates
      * the StompFrameHandler() needs two methods. the getPayloadType
      * which type is the message we receive (in this case an expense)
      * The handleFrame you can cast Object payload to an expense since
      * you have the MappingJackson2MessageConverter() in the connect method
+     *
      * @param destination this is for example /topic/expense
      * @param consumer
      */
-    public <T> void registerForExpenseWS(String destination, Class<T> type, Consumer<T> consumer){
+    public <T> void registerForExpenseWS(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -421,16 +430,16 @@ public class ServerUtils {
         });
     }
 
-    public void send(String destination, Object o){
+    public void send(String destination, Object o) {
         session.send(destination, o);
     }
 
     public Participant createParticipant(ParticipantDTO p) {
         Response response = client
-                .target(server).path("api/participants")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(p, APPLICATION_JSON));
+            .target(server).path("api/participants")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(p, APPLICATION_JSON));
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Participant participant = response.readEntity(new GenericType<>() {
@@ -439,23 +448,25 @@ public class ServerUtils {
             return participant;
         } else {
             response.close();
-            throw new RuntimeException("Failed to create participant. Status code: " + response.getStatus());
+            throw new RuntimeException(
+                "Failed to create participant. Status code: " + response.getStatus());
         }
     }
 
     public Participant deleteParticipant(String uuid, int eventId) {
         Response response = client
-                .target(server).path("api/participants/{uuid}/{eventId}")
-                .resolveTemplate("uuid", uuid)
-                .resolveTemplate("eventId", eventId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
+            .target(server).path("api/participants/{uuid}/{eventId}")
+            .resolveTemplate("uuid", uuid)
+            .resolveTemplate("eventId", eventId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             response.close();
-            throw new RuntimeException("Failed to delete participant. Status code: " + response.getStatus());
-        }else {
-            Participant p = response.readEntity(new GenericType<>(){
+            throw new RuntimeException(
+                "Failed to delete participant. Status code: " + response.getStatus());
+        } else {
+            Participant p = response.readEntity(new GenericType<>() {
             });
             response.close();
             return p;
@@ -486,11 +497,11 @@ public class ServerUtils {
 
     public List<Event> getEventsByParticipant(String id) {
         Response response = client
-                .target(server).path("api/participants/{uuid}/events")
-                .resolveTemplate("uuid", id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
+            .target(server).path("api/participants/{uuid}/events")
+            .resolveTemplate("uuid", id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             List<Event> events = response.readEntity(new GenericType<>() {
@@ -499,13 +510,14 @@ public class ServerUtils {
             return events;
         } else {
             response.close();
-            throw new RuntimeException("Failed to retrieve events. Status code: " + response.getStatus());
+            throw new RuntimeException(
+                "Failed to retrieve events. Status code: " + response.getStatus());
         }
 
     }
 
 
-    public List<Payment> getPaymentsOfEvent(int eventId){
+    public List<Payment> getPaymentsOfEvent(int eventId) {
         return client
             .target(server).path("api/payments/{id}")
             .resolveTemplate("id", eventId)
@@ -539,7 +551,8 @@ public class ServerUtils {
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .delete(new GenericType<List<Payment>>(){});
+            .delete(new GenericType<List<Payment>>() {
+            });
     }
 
     public List<Payment> generatePaymentsForEvent(int eventCode) {
@@ -549,8 +562,10 @@ public class ServerUtils {
         Stack<Pair<String, Double>> rest = new Stack<>();
         List<PaymentDTO> payments = new ArrayList<>();
         for (Participant p : participants) {
-            if (compareDouble(p.getBalance(),0,0.001) > 0) banks.add(new Pair<>(p.getUuid(), p.getBalance()));
-            else if (compareDouble(p.getBalance(),0,0.001) < 0) rest.add(new Pair<>(p.getUuid(), p.getBalance()));
+            if (compareDouble(p.getBalance(), 0, 0.001) > 0)
+                banks.add(new Pair<>(p.getUuid(), p.getBalance()));
+            else if (compareDouble(p.getBalance(), 0, 0.001) < 0)
+                rest.add(new Pair<>(p.getUuid(), p.getBalance()));
         }
         generateDTOs(eventCode, rest, banks, payments);
         if (!rest.isEmpty() || !banks.isEmpty())
@@ -564,13 +579,14 @@ public class ServerUtils {
 
     /**
      * This exists just to overcome checkstyle's cyclomatic complexity warning
+     *
      * @param eventCode
      * @param rest
      * @param banks
      * @param payments
      */
     private void generateDTOs(int eventCode, Stack<Pair<String, Double>> rest,
-                           Stack<Pair<String, Double>> banks, List<PaymentDTO> payments) {
+                              Stack<Pair<String, Double>> banks, List<PaymentDTO> payments) {
         while (!rest.isEmpty() && !banks.isEmpty()) {
             Pair<String, Double> payee = banks.pop();
             Pair<String, Double> payer = rest.pop();
@@ -592,24 +608,24 @@ public class ServerUtils {
         }
     }
 
-    public double[] getStatisticsByEventID(int eventID){
+    public double[] getStatisticsByEventID(int eventID) {
         return client
-                .target(server)
-                .path("/api/statistics")
-                .queryParam("eventID", eventID)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(double[].class);
+            .target(server)
+            .path("/api/statistics")
+            .queryParam("eventID", eventID)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(double[].class);
     }
 
-    public double getTotalCostEvent(int eventID){
+    public double getTotalCostEvent(int eventID) {
         return client
-                .target(server)
-                .path("/api/statistics/totalCost")
-                .queryParam("eventID", eventID)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(double.class);
+            .target(server)
+            .path("/api/statistics/totalCost")
+            .queryParam("eventID", eventID)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(double.class);
     }
 
 
@@ -621,11 +637,11 @@ public class ServerUtils {
 
     public Participant getParticipant(String uuid, int eventCode) {
         Response response = client.target(server).path("api/participants/{uuid}/{eventId}")
-                .resolveTemplate("uuid", uuid)
-                .resolveTemplate("eventId", eventCode)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
+            .resolveTemplate("uuid", uuid)
+            .resolveTemplate("eventId", eventCode)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Participant participant = response.readEntity(new GenericType<>() {
@@ -641,30 +657,30 @@ public class ServerUtils {
     }
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
-    public Conversion getConversion(Currency from, Currency to, String date){
-         Response response = client
+    public Conversion getConversion(Currency from, Currency to, String date) {
+        Response response = client
             .target(server).path("api/currency")
             .queryParam("from", from.toString())
             .queryParam("to", to.toString())
-            .queryParam("date",date)
+            .queryParam("date", date)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get();
 
-         try {
-             ObjectMapper objectMapper = new ObjectMapper();
-             JsonNode jsonNode = response.readEntity(JsonNode.class);
-             Conversion conversion =
-                 objectMapper.treeToValue(jsonNode.get("conversion"), Conversion.class);
-             if(conversion == null) throw new RuntimeException("Failed to retrieve conversion");
-             return conversion;
-         }catch (JsonProcessingException e){
-             System.out.println("Error while parsing JSON");
-             return null;
-         }catch (RuntimeException e){
-             System.out.println(e.getMessage());
-             return null;
-         }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = response.readEntity(JsonNode.class);
+            Conversion conversion =
+                objectMapper.treeToValue(jsonNode.get("conversion"), Conversion.class);
+            if (conversion == null) throw new RuntimeException("Failed to retrieve conversion");
+            return conversion;
+        } catch (JsonProcessingException e) {
+            System.out.println("Error while parsing JSON");
+            return null;
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
 
     }
 }

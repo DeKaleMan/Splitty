@@ -20,9 +20,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
-import java.net.URL;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 public class StatisticsCtrl {
     @FXML
@@ -145,7 +143,8 @@ public class StatisticsCtrl {
 
     public void setTransport() {
         try {
-            this.transport = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[2]);
+            this.transport = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                config.getCurrency(),new Date(),stat[2]);
         } catch(RuntimeException e){
             displayError();
         }
@@ -153,7 +152,8 @@ public class StatisticsCtrl {
 
     public void setOther() {
         try {
-            this.other = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),stat[3]);
+            this.other = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                config.getCurrency(),new Date(),stat[3]);
         } catch(RuntimeException e){
             displayError();
         }
@@ -162,7 +162,7 @@ public class StatisticsCtrl {
         try{
             this.totalCost.setText(mainCtrl.getFormattedDoubleString(
                 mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),new Date(),totalCost))
-            + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol());
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol());
         }catch(RuntimeException e){
             this.totalCost.setText("-");
             displayError();

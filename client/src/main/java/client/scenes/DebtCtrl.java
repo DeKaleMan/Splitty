@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
-import commons.Conversion;
 import commons.Currency;
 import commons.Participant;
 import commons.Payment;
@@ -27,9 +26,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import javax.inject.Inject;
-import java.math.RoundingMode;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class DebtCtrl implements Initializable {

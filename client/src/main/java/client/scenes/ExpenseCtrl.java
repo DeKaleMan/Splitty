@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.Conversion;
 import commons.Currency;
 import commons.Participant;
 import commons.Type;

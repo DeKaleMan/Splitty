@@ -25,9 +25,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
-import java.math.RoundingMode;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
@@ -302,17 +300,11 @@ public class SplittyOverviewCtrl implements Initializable {
                             else {
                                 GridPane grid = new GridPane();
                                 Date date = expense.getDate();
-                                Label dateLabel = new Label(
-                                    date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
-                                        + (date.getMonth() + 1) + "."
-                                        + (date.getYear() + 1900));
-                                dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
-                                dateLabel.setPrefWidth(70);
+                                Label dateLabel = getDateLabel(date);
                                 List<String> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                             expense.getExpenseId()).stream()
                                         .map(x -> x.getParticipant().getName()).toList();
-                                Text mainInfo = new Text();
                                 double totalExpense = expense.getTotalExpense();
                                 try {
                                     totalExpense =
@@ -324,23 +316,8 @@ public class SplittyOverviewCtrl implements Initializable {
                                     setGraphic(grid);
                                     return;
                                 }
-                                if (expense.isSharedExpense()) {
-                                    mainInfo.setText(expense.getPayer().getName()
-                                        + " paid "
-                                        + mainCtrl.getFormattedDoubleString(totalExpense)
-                                        + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                                        + " for " + expense.getType());
-                                } else {
-                                    mainInfo.setText(expense.getPayer().getName()
-                                        + " gave "
-                                        + mainCtrl.getFormattedDoubleString(totalExpense)
-                                        + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                                        + " to "
-                                        + involved
-                                            .stream()
-                                            .filter(x -> !x.equals(expense.getPayer().getName()))
-                                            .findFirst().get());
-                                }
+                                Text mainInfo = getMainInfo(expense, totalExpense,
+                                        involved);
                                 grid.add(dateLabel, 0, 0);
                                 grid.add(mainInfo, 1, 0);
                                 grid.add(new Text(involved.toString()), 1, 1);
@@ -351,6 +328,38 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             };
         return cellFactory;
+    }
+
+    private Text getMainInfo(Expense expense, double totalExpense, List<String> involved) {
+        Text mainInfo = new Text();
+        if (expense.isSharedExpense()) {
+            mainInfo.setText(expense.getPayer().getName()
+                + " paid "
+                + mainCtrl.getFormattedDoubleString(totalExpense)
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
+                + " for " + expense.getType());
+        } else {
+            mainInfo.setText(expense.getPayer().getName()
+                + " gave "
+                + mainCtrl.getFormattedDoubleString(totalExpense)
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
+                + " to "
+                + involved
+                    .stream()
+                    .filter(x -> !x.equals(expense.getPayer().getName()))
+                    .findFirst().get());
+        }
+        return mainInfo;
+    }
+
+    private static Label getDateLabel(Date date) {
+        Label dateLabel = new Label(
+            date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
+                + (date.getMonth() + 1) + "."
+                + (date.getYear() + 1900));
+        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
+        dateLabel.setPrefWidth(70);
+        return dateLabel;
     }
 
     public void fetchParticipants() {

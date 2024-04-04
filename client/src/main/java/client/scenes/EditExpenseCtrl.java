@@ -179,11 +179,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             allparticipants = new ArrayList<>();
         }
         list.addAll(allparticipants);
-        setCategoriesUp();
-        setCurrencyUp();
-        setComboboxUp(list);
-        setListViewsUp();
-        setTogglesUp();
+        setup(list);
         this.expense = expense;
         owing.clear();
         List<Participant> owingFromDb = serverUtils.getDebtByExpense(expense.getEvent().getId(),
@@ -218,5 +214,13 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             Participant receiver = owingFromDb.getFirst();
             receiverListView.getSelectionModel().select(receiver);
         }
+    }
+
+    private void setup(ObservableList<Participant> list) {
+        setCategoriesUp();
+        setCurrencyUp();
+        setComboboxUp(list);
+        setListViewsUp();
+        setTogglesUp();
     }
 }
