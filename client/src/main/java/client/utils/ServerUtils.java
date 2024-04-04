@@ -234,13 +234,20 @@ public class ServerUtils {
      * @param expense the expense
      */
     public Expense deleteExpense(Expense expense) {
-        ExpenseId expenseId = new ExpenseId(expense.getEvent(), expense.getExpenseId());
+        List<Debt> debts = getDebtByExpense(expense.getEvent().getId(), expense.getExpenseId());
+        for(Debt d : debts){
+            Participant p = d.getParticipant();
+            updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+        deleteDebtsOfExpense(expense.getEvent().getId(), expense.getExpenseId());
 
         Response response = client
             .target(server)
             .path("api/expenses")
             .queryParam("eventID", expense.getEvent().id)
-            .queryParam("expenseID", expenseId)
+            .queryParam("expenseID", expense.getExpenseId())
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .delete();

@@ -301,10 +301,10 @@ public class SplittyOverviewCtrl implements Initializable {
                                 GridPane grid = new GridPane();
                                 Date date = expense.getDate();
                                 Label dateLabel = getDateLabel(date);
-                                List<String> involved =
+                                List<Participant> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                             expense.getExpenseId()).stream()
-                                        .map(x -> x.getParticipant().getName()).toList();
+                                        .map(x -> x.getParticipant()).toList();
                                 double totalExpense = expense.getTotalExpense();
                                 try {
                                     totalExpense =
@@ -320,7 +320,8 @@ public class SplittyOverviewCtrl implements Initializable {
                                         involved);
                                 grid.add(dateLabel, 0, 0);
                                 grid.add(mainInfo, 1, 0);
-                                grid.add(new Text(involved.toString()), 1, 1);
+                                grid.add(new Text(involved.stream().map(x -> x.getName())
+                                    .toList().toString()), 1, 1);
                                 setGraphic(grid);
                             }
                         }
@@ -330,7 +331,7 @@ public class SplittyOverviewCtrl implements Initializable {
         return cellFactory;
     }
 
-    private Text getMainInfo(Expense expense, double totalExpense, List<String> involved) {
+    private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
         Text mainInfo = new Text();
         if (expense.isSharedExpense()) {
             mainInfo.setText(expense.getPayer().getName()
@@ -346,7 +347,8 @@ public class SplittyOverviewCtrl implements Initializable {
                 + " to "
                 + involved
                     .stream()
-                    .filter(x -> !x.equals(expense.getPayer().getName()))
+                    .filter(x -> !x.equals(expense.getPayer()))
+                    .map(x -> x.getName())
                     .findFirst().get());
         }
         return mainInfo;
