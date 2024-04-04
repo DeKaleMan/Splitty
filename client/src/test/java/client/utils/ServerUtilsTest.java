@@ -348,7 +348,6 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
-        when(mockWebTarget.queryParam(anyString(), any(ExpenseId.class))).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockResponse.getStatus()).thenReturn(Response.Status.OK.getStatusCode());
@@ -359,7 +358,6 @@ class ServerUtilsTest {
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
                 , Type.Drinks, d, 100.0, p, true);
-        ExpenseId expenseId = new ExpenseId(e, mockExp.getExpenseId());
 
         when(mockResponse.readEntity((Class<Object>) any())).thenReturn(mockExp);
         when(mockBuilder.delete()).thenReturn(mockResponse);
@@ -369,7 +367,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/expenses");
         verify(mockWebTarget).queryParam("eventID", e.getId());
-        verify(mockWebTarget).queryParam("expenseID", expenseId);
+        verify(mockWebTarget).queryParam("expenseID", mockExp.getExpenseId());
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
         verify(mockBuilder).delete();
@@ -383,7 +381,6 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
-        when(mockWebTarget.queryParam(anyString(), any(ExpenseId.class))).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockResponse.getStatus()).thenReturn(Response.Status.BAD_REQUEST.getStatusCode());
@@ -395,7 +392,6 @@ class ServerUtilsTest {
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
                 , Type.Drinks, d, 100.0, p, true);
-        ExpenseId expenseId = new ExpenseId(e, mockExp.getExpenseId());
 
         // Verifying the results
         assertThrows(RuntimeException.class, () ->
@@ -403,7 +399,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/expenses");
         verify(mockWebTarget).queryParam("eventID", mockExp.getEvent().getId());
-        verify(mockWebTarget).queryParam("expenseID", expenseId);
+        verify(mockWebTarget).queryParam("expenseID", mockExp.getExpenseId());
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
@@ -440,6 +436,7 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
 
@@ -458,7 +455,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/updateName");
         verify(mockWebTarget).queryParam("newName", newName);
-        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockWebTarget).queryParam("id",e.getId());
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
         assertEquals(updatedEvent.getName(), newName);
@@ -469,6 +466,7 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockResponse.getStatus()).thenReturn(Response.Status.BAD_REQUEST.getStatusCode());
@@ -483,7 +481,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/updateName");
         verify(mockWebTarget).queryParam("newName", newName);
-        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockWebTarget).queryParam("id",e.getId());
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
 

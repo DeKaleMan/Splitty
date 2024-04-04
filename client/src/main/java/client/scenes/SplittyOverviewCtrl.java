@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.*;
 import commons.Currency;
 import commons.dto.ExpenseDTO;
+import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.PauseTransition;
@@ -235,6 +236,14 @@ public class SplittyOverviewCtrl implements Initializable {
 
         }
         try {
+            List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+            for(Debt d : debts){
+                Participant p = d.getParticipant();
+                serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                    p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                    p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+            }
+            serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
             serverUtils.deleteExpense(toDelete);
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
