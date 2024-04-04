@@ -76,6 +76,7 @@
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" prefHeight="26.0" prefWidth="88.0" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="85.0" text="Statistics" />
                 <Button mnemonicParsing="false" onAction="#editEvent" prefHeight="26.0" prefWidth="85.0" text="Edit Event" />
+                <Button mnemonicParsing="false" onAction="#editMyDetails" prefHeight="25.0" prefWidth="85.0" text="My details" />
                 <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
             </children>
         </VBox>
@@ -92,7 +93,7 @@
 
         <HBox alignment="CENTER_RIGHT" layoutX="390.0" layoutY="26.0" prefHeight="25.0" prefWidth="200.0" spacing="5.0">
             <children>
-                <Button fx:id="leaveButton" mnemonicParsing="false" style="-fx-background-color: #c50000; " text="Leave" textFill="white" />
+                <Button fx:id="leaveButton" mnemonicParsing="false" onAction="#leaveEvent" style="-fx-background-color: #c50000; " text="Leave" textFill="white" />
                 <Button fx:id="sendInvites" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send invites" />
             </children>
         </HBox>

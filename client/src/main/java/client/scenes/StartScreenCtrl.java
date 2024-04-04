@@ -72,12 +72,10 @@ public class StartScreenCtrl implements Initializable {
     @FXML
     public Label settingsSavedLabel;
     @FXML
-    public Label eventCreatedLabel;
-    @FXML
     public Button settingsButton;
     @FXML
     private ProgressIndicator progress;
-    private int eventCode;
+
     @FXML
     private ImageView flag;
 
