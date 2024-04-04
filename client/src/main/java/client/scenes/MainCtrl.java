@@ -487,9 +487,12 @@ public class MainCtrl {
         return dateString;
     }
 
-    public String getFormattedDoubleString(double d){
+    public String getFormattedDoubleString(double d) {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
         return decimalFormat.format(d);
+    }
+    public void stopLongPolling(){
+        if(splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
     }
 }

@@ -19,6 +19,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.*;
 
@@ -654,6 +656,7 @@ public class ServerUtils {
 
     }
 
+
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
     public Conversion getConversion(Currency from, Currency to, String date) {
         Response response = client
@@ -679,6 +682,35 @@ public class ServerUtils {
             System.out.println(e.getMessage());
             return null;
         }
+    }
 
+
+    private static final ExecutorService EXEC = Executors.newFixedThreadPool(2);
+
+    public void registerForParticipantLongPolling(Consumer<Participant> updates, Consumer<Participant> deletions){
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()){
+                Response res = client.target(server).path("api/participants/updates")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+
+                if(res.getStatus() == 200) updates.accept(res.readEntity(Participant.class));
+            }
+        });
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()){
+                Response res = client.target(server).path("api/participants/deletions")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+
+                if(res.getStatus() == 200) deletions.accept(res.readEntity(Participant.class));
+            }
+        });
+    }
+
+    public void stop(){
+        EXEC.shutdownNow();
     }
 }

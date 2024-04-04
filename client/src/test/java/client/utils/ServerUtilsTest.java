@@ -455,7 +455,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/updateName");
         verify(mockWebTarget).queryParam("newName", newName);
-        verify(mockWebTarget).queryParam("id",e.getId());
+        verify(mockWebTarget).queryParam("id", e.getId());
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
         assertEquals(updatedEvent.getName(), newName);
@@ -481,7 +481,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/updateName");
         verify(mockWebTarget).queryParam("newName", newName);
-        verify(mockWebTarget).queryParam("id",e.getId());
+        verify(mockWebTarget).queryParam("id", e.getId());
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
 
