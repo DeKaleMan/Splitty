@@ -517,4 +517,8 @@ public class MainCtrl {
         manageParticipantsCtrl.setParticipantAddedConfirmation();
     }
 
+    public void stopLongPolling(){
+        if(splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
+    }
 }
+

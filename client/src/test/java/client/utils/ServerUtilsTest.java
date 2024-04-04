@@ -435,6 +435,7 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
 
@@ -453,7 +454,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/updateName");
         verify(mockWebTarget).queryParam("newName", newName);
-        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockWebTarget).queryParam("id", e.getId());
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
 
         assertEquals(updatedEvent.getName(), newName);
@@ -464,6 +465,7 @@ class ServerUtilsTest {
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockResponse.getStatus()).thenReturn(Response.Status.BAD_REQUEST.getStatusCode());
@@ -478,7 +480,7 @@ class ServerUtilsTest {
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("api/event/updateName");
         verify(mockWebTarget).queryParam("newName", newName);
-        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockWebTarget).queryParam("id", e.getId());
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
     }
 

@@ -10,7 +10,9 @@ import commons.dto.ExpenseDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -102,12 +104,15 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private ListView<Participant> participantListView;
 
+    ObservableList<Participant> participantsList;
+
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
         admin = false;
+        participantsList = FXCollections.observableArrayList();
     }
 
     public void initializeAll(Event event) {
@@ -130,6 +135,7 @@ public class SplittyOverviewCtrl implements Initializable {
         statisticsButton.setGraphic(stats);
         mainCtrl.setButtonRedProperty(deleteExpenseButton);
         mainCtrl.setButtonRedProperty(leaveButton);
+        participantListView.setItems(participantsList);
         participantListView.setCellFactory(param -> new ListCell<Participant>() {
             @Override
             protected void updateItem(Participant item, boolean empty) {
@@ -145,6 +151,26 @@ public class SplittyOverviewCtrl implements Initializable {
                     }
                 }
             }
+        });
+        serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
+    }
+
+    private void handleUpdate(Participant p){
+        if(p.getEvent().getId() != eventId) return;
+        Platform.runLater(() -> {
+            if(!participantsList.contains(p)) {
+                participantsList.add(p);
+                return;
+            }
+            participantsList.remove(p);
+            participantsList.add(p);
+        });
+    }
+
+    private void handleDeletion(Participant p){
+        if(p.getEvent().getId() != eventId) return;
+        Platform.runLater(() -> {
+            participantsList.remove(p);
         });
     }
 
@@ -226,11 +252,21 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void editExpense() {
-        Expense toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel()
-            .getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
-
+        Expense toEdit;
+        try {
+            toEdit = ((ListView<Expense>) expensesTabPane.getSelectionModel()
+                    .getSelectedItem().getContent()).getSelectionModel().getSelectedItems().getFirst();
+        } catch (NoSuchElementException e) {
+            toEdit = null;
+        }
         if (toEdit == null) {
-            throw new NoSuchElementException("No element selected");
+            expenseNotDeletedError.setVisible(false);
+            noExpenseError.setVisible(true);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(
+                    event -> noExpenseError.setVisible(false)
+            );
+            return;
         }
         mainCtrl.showEditExpense(toEdit);
     }
@@ -356,14 +392,14 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void fetchParticipants() {
-        participantListView.getItems().clear();
+        participantsList.clear();
         List<Participant> participants = new ArrayList<>();
         try {
             participants = serverUtils.getParticipants(eventId);
         } catch (BadRequestException | NotFoundException e) {
             System.out.println(e);
         }
-        participantListView.setItems(FXCollections.observableArrayList(participants));
+        participantsList.addAll(participants);
     }
 
 
@@ -497,6 +533,10 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public int getCurrentEventCode() {
         return this.eventId;
+    }
+
+    public void stopUpdates(){
+        serverUtils.stop();
     }
 }
 
