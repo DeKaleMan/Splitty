@@ -469,6 +469,6 @@ public class MainCtrl {
     }
 
     public void stopLongPolling(){
-        splittyOverviewCtrl.stopUpdates();
+        if(splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
     }
 }
