@@ -44,20 +44,13 @@ public class CreateEventCtrl {
     private TextArea eventDescriptionArea;
 
 
+    @FXML
+    private Button goToSettings;
     // participant text fields
 
     @FXML
-    private TextField nameField;
-    @FXML
     public Label hostNameError;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private TextField iBanField;
-    @FXML
-    private TextField bICField;
-    @FXML
-    private TextField accountHolderField;
+
 
     // this list will store all added participants until
     // the create event button is clicked, then it will be added to the database
@@ -87,6 +80,10 @@ public class CreateEventCtrl {
     public void cancel() {
         mainCtrl.showStartScreen();
     }
+    @FXML
+    public void showSettings(){
+        mainCtrl.showSettings(false);
+    }
 
     @FXML
     public ParticipantDTO addHost(int id, String inviteID) {
@@ -98,34 +95,30 @@ public class CreateEventCtrl {
     public void createEvent() {
         String name = titleField.getText();
         String dateString = datePicker.getEditor().getText();
-        LocalDate localDate = datePicker.getValue();
         String description = eventDescriptionArea.getText();
         Date date = null;
         boolean error = false;
+        if(config.getName() == null){
+            noNameError();
+            error = true;
+        }
         try {
+            LocalDate localDate = datePicker.getValue();
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
             dateEmptyError.setVisible(true);
             error = true;
+            return;
         } catch (Exception e) {
             dateEmptyError.setVisible(false);
             dateIncorrectError.setVisible(true);
             error = true;
-        }
-        if (name == null || name.isEmpty() || error){
-            if (name == null || name.isEmpty()) {
-                titleError.setVisible(true);
-            }
-            if (nameField.getText() == null || nameField.getText().isEmpty()) {
-                hostNameError.setVisible(true);
-            }
             return;
         }
-
         //fetch owner
         String owner = config.getId();
         // create new event and add to database, go to that event overview and add participants via database.
@@ -153,5 +146,18 @@ public class CreateEventCtrl {
     public void resetDateFieldError() {
         dateIncorrectError.setVisible(false);
         dateEmptyError.setVisible(false);
+    }
+    public void noNameError(){
+        hostNameError.setVisible(true);
+        goToSettings.setVisible(true);
+    }
+    public void resetValues(){
+        titleField.setText(null);
+        datePicker.setValue(null);
+        eventDescriptionArea.setText(null);
+        resetDateFieldError();
+        resetTitleFieldError();
+        hostNameError.setVisible(false);
+        goToSettings.setVisible(false);
     }
 }

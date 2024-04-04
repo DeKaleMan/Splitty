@@ -20,14 +20,11 @@ import java.util.ResourceBundle;
 public class ManageParticipantsCtrl implements Initializable {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private int eventId;
     @FXML
     public Button removeButton;
-
-
     @FXML
     private Label titleLabel;
-
-    private int eventId;
 
     @FXML
     private ListView<Participant> participantsList;
@@ -135,10 +132,16 @@ public class ManageParticipantsCtrl implements Initializable {
         titleLabel.setText(title);
     }
 
+
     public void addToList(Participant p) {
         list.add(p);
         participantsList.getItems().add(p);
         setPauseTransition(participantAddedConfirmation);
+    }
+
+    @FXML
+    public void showInvitation(){
+        mainCtrl.showInvitation(this.eventId);
     }
 
     @FXML

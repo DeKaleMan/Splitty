@@ -57,7 +57,7 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseRepo.findByEventAndPayer(event.get(), payer));
     }
 
-    @PostMapping(path = {"", "/"})
+    @PostMapping("addExp")
     public ResponseEntity<Expense> saveExpense(@RequestBody ExpenseDTO expenseDTO) {
         if (expenseDTO == null || isNullOrEmpty(expenseDTO.getPayerUuid()) ||
                 expenseDTO.getTotalExpense() < 0.0 || expenseDTO.getDate() == null)

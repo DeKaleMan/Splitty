@@ -154,8 +154,11 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
+
         this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
         this.editEventCrtl = eventPropGrouper.editEvent().getKey();
+
+
         this.editExpense = new Scene(eventPropGrouper.editExpense().getValue());
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
         this.serverCtrl = server.getKey();
@@ -260,15 +263,18 @@ public class MainCtrl {
         }
     }
 
-    public void showInvitation(String title){
+    public void showInvitation(int eventID){
         if (!getConnection()) {
             showStartScreen();
             return;
         }
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
+        Event event = serverUtils.getEventById(eventID);
+        invitationCtrl.setEventCode(eventID);
+        invitationCtrl.setInviteCode(event.getInviteCode());
         invitationCtrl.showInviteCode();
-        invitationCtrl.setTitle(title);
+        invitationCtrl.setTitle(event.getName());
     }
 
     public void showAdminLogin() {
@@ -277,6 +283,7 @@ public class MainCtrl {
             return;
         }
         primaryStage.setTitle("Server management login");
+        adminLoginCtrl.reset();
         primaryStage.setScene(adminLogin);
     }
 
@@ -308,6 +315,7 @@ public class MainCtrl {
         try {
             userEventListCtrl.initialize();
             primaryStage.setScene(userEventList);
+            userEventListCtrl.reset();
             primaryStage.setTitle("Event List");
         } catch (RuntimeException e) {
             checkConnection();
@@ -321,18 +329,19 @@ public class MainCtrl {
         }
         primaryStage.setTitle("Create Event");
         primaryStage.setScene(createEvent);
+        createEventCtrl.resetValues();
         createEventCtrl.setTitle(name);
     }
 
     /**
      * Shows the participants manager
-     * @param id the id of the current event
+     * @param eventID the title of the current event
      */
-    public void showParticipantManager(int id){
+    public void showParticipantManager(int eventID){
         try {
             primaryStage.setTitle("ManageParticipants");
             primaryStage.setScene(manageParticipants);
-            manageParticipantsCtrl.setupParticipants(id);
+            manageParticipantsCtrl.setupParticipants(eventID);
         } catch (RuntimeException e) {
             //checkConnection();
         }
@@ -388,8 +397,10 @@ public class MainCtrl {
     }
 
 
-    public void editEvent(){
+    public void showEditEvent(int eventID){
         primaryStage.setTitle("EditEvent");
+        editEventCrtl.setEventId(eventID);
+        editEventCrtl.reset();
         primaryStage.setScene(editEvent);
     }
 

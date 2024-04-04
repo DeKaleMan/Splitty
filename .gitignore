@@ -5,7 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-Config.json
+SplittyClientData/Config.json
+SplittyServerData/Languages/en.json
 CurrencyCache.json
 
 **/*.mv.db

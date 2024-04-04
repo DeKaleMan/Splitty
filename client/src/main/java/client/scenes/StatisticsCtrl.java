@@ -7,7 +7,6 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -50,22 +49,20 @@ public class StatisticsCtrl {
      * initialize the chart with the current values for food, drinks, transport and other
      */
     public void setPieChart() {
-        ObservableList<PieChart.Data> data =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Food", food),
-                        new PieChart.Data("Drinks", drinks),
-                        new PieChart.Data("Transport", transport),
-                        new PieChart.Data("other", other)
-                );
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        if(this.food != 0.0) data.add(new PieChart.Data("Food", food));
+        if(this.drinks != 0.0) data.add(new PieChart.Data("Drinks", drinks));
+        if(this.transport != 0.0) data.add(new PieChart.Data("Transport", transport));
+        if(this.other != 0.0) data.add(new PieChart.Data("Other", other));
 
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                                 d.getName(), " amount ", d.pieValueProperty()
                         )
                 )
+
         );
 
         pieChart.setData(data);
-
     }
     //these all set the things for the diagram, theoretically they could all
     // be done in one method but I wasn't sure how we were going to implement this

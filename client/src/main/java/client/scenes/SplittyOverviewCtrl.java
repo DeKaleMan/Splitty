@@ -94,9 +94,9 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     public Button leaveButton;
     @FXML
-    public Label confirmationLabel;
-    @FXML
     public Label joinedEventLabel;
+    @FXML
+    public Label inviteCode;
 
 
     @FXML
@@ -117,7 +117,7 @@ public class SplittyOverviewCtrl implements Initializable {
             hostOptionsButton.setVisible(false);
         }
         setTitle(event.getName());
-        setEventId(event.getId());
+        this.eventId = event.getId();
         fetchParticipants();
         fetchExpenses();
     }
@@ -148,8 +148,10 @@ public class SplittyOverviewCtrl implements Initializable {
         });
     }
 
-    public void setEventId(int eventId) {
+
+    public void setEventCode(int eventId) {
         this.eventId = eventId;
+        this.inviteCode.setText(serverUtils.getEventById(eventId).getInviteCode());
     }
 
     /**
@@ -157,7 +159,7 @@ public class SplittyOverviewCtrl implements Initializable {
      */
     @FXML
     public void sendInvitesOnClick() {
-        mainCtrl.showInvitation(titleLabel.getText());
+        mainCtrl.showInvitation(this.eventId);
     }
 
     /**
@@ -323,7 +325,7 @@ public class SplittyOverviewCtrl implements Initializable {
                                     date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
                                         + (date.getMonth() + 1) + "."
                                         + (date.getYear() + 1900));
-                                dateLabel.setStyle("-fx-font-size: 12px");
+                                dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
                                 dateLabel.setPrefWidth(70);
                                 List<String> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
@@ -446,7 +448,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void editEvent() {
-        mainCtrl.editEvent();
+        mainCtrl.showEditEvent(this.eventId);
     }
 
     @FXML

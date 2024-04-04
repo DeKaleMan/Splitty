@@ -4,84 +4,56 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
+<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
     <children>
 
-        <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" textFill="white" style="-fx-background-color: #c50000; -fx-background-radius: 6"/>
-
-        <Label layoutX="40.0" layoutY="63.0" text="Event Name">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-
-        <TextField fx:id="titleField" layoutX="40.0" layoutY="88.0" onKeyPressed="#resetTitleFieldError" prefHeight="25.0" prefWidth="248.0" promptText="required" />
-        <Label fx:id="titleError" layoutX="42.0" layoutY="111.0" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
-
-
-      <Label layoutX="40.0" layoutY="127.0" text="Date">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-        <DatePicker fx:id="datePicker" layoutX="40.0" layoutY="153.0" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="248.0" promptText="mm/dd/yyyy" />
-        <Label fx:id="dateEmptyError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
-        <Label fx:id="dateIncorrectError" layoutX="40.0" layoutY="181.0" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
-
-        <Label layoutX="40.0" layoutY="200.0" text="Event Description">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-      <TextArea fx:id="eventDescriptionArea" layoutX="40.0" layoutY="227.0" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." />
-
-
-        <Label layoutX="369.0" layoutY="27.0" prefHeight="35.0" prefWidth="149.0" text="Host">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-
-      <Label layoutX="369.0" layoutY="67.0" text="Name">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-
-      <Label layoutX="369.0" layoutY="119.0" text="email">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-        <Label layoutX="369.0" layoutY="177.0" text="iBan">
-        <font>
-            <Font name="System Bold" size="16.0" />
-        </font>
-        </Label>
-        <Label layoutX="369.0" layoutY="234.0" text="BIC">
-        <font>
-            <Font name="System Bold" size="16.0" />
-        </font>
-        </Label>
-        <Label layoutX="369.0" layoutY="293.0" text="Account Holder">
-        <font>
-            <Font name="System Bold" size="16.0" />
-        </font>
-        </Label>
-
-        <TextField fx:id="nameField" layoutX="369.0" layoutY="88.0" promptText="required" />
-        <TextField fx:id="emailField" layoutX="369.0" layoutY="144.0" />
-        <TextField fx:id="iBanField" layoutX="369.0" layoutY="200.0" />
-        <TextField fx:id="bICField" layoutX="369.0" layoutY="257.0" />
-        <TextField fx:id="accountHolderField" layoutX="369.0" layoutY="320.0" />
-
-
-        <Button fx:id="createButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#createEvent" text="Create Event" textFill="white" style="-fx-background-color: #2a8000; -fx-background-radius: 6" />
-      <Label fx:id="hostNameError" layoutX="372.0" layoutY="112.0" text="name is required*" textFill="RED" visible="false">
-         <font>
-            <Font size="10.0" />
-         </font>
-      </Label>
+        <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+      <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
+         <children>
+      
+              <Label text="Event Name">
+                  <font>
+                      <Font name="System Bold" size="16.0" />
+                  </font>
+              </Label>
+      
+              <TextField fx:id="titleField" onKeyPressed="#resetTitleFieldError" prefHeight="25.0" prefWidth="181.0" promptText="required" />
+              <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
+      
+      
+            <Label text="Date">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+              <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" />
+              <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
+              <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" />
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" layoutX="321.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
+         <children>
+      
+                    <Label text="Event Description">
+                  <font>
+                      <Font name="System Bold" size="16.0" />
+                  </font>
+              </Label>
+            <TextArea fx:id="eventDescriptionArea" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." />
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" layoutX="176.0" layoutY="311.0" prefHeight="30.0" prefWidth="248.0">
+         <children>
+      
+                        
+                                <Button fx:id="createButton" mnemonicParsing="false" onAction="#createEvent" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Create Event" textFill="white">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children></HBox>
+      <Button fx:id="goToSettings" layoutX="196.0" layoutY="158.0" mnemonicParsing="false" onAction="#showSettings" prefHeight="85.0" prefWidth="209.0" text="Go to settings" visible="false" />
+      <Label fx:id="hostNameError" layoutX="88.0" layoutY="-14.0" prefHeight="106.0" prefWidth="424.0" text="No name was found in your configuration. Go to settings to add a name" visible="false" wrapText="true" />
 
 
     </children>
