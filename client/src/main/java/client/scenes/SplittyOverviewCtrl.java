@@ -133,7 +133,7 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
-        serverUtils.registerForParticipantUpdates(this::handleUpdate);
+        serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
     }
 
     private void handleUpdate(Participant p){
@@ -145,6 +145,13 @@ public class SplittyOverviewCtrl implements Initializable {
             }
             participantsList.remove(p);
             participantsList.add(p);
+        });
+    }
+
+    private void handleDeletion(Participant p){
+        if(p.getEvent().getId() != eventCode) return;
+        Platform.runLater(() -> {
+            participantsList.remove(p);
         });
     }
 

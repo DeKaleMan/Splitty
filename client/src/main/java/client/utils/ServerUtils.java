@@ -637,9 +637,9 @@ public class ServerUtils {
 
     }
 
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    private static final ExecutorService EXEC = Executors.newFixedThreadPool(2);
 
-    public void registerForParticipantUpdates(Consumer<Participant> consumer){
+    public void registerForParticipantLongPolling(Consumer<Participant> updates, Consumer<Participant> deletions){
         EXEC.submit(() -> {
             while(!Thread.interrupted()){
                 Response res = client.target(server).path("api/participants/updates")
@@ -647,7 +647,17 @@ public class ServerUtils {
                     .accept(APPLICATION_JSON)
                     .get();
 
-                if(res.getStatus() == 200) consumer.accept(res.readEntity(Participant.class));
+                if(res.getStatus() == 200) updates.accept(res.readEntity(Participant.class));
+            }
+        });
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()){
+                Response res = client.target(server).path("api/participants/deletions")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+
+                if(res.getStatus() == 200) deletions.accept(res.readEntity(Participant.class));
             }
         });
     }

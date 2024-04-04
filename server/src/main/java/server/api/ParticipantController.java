@@ -25,7 +25,8 @@ public class ParticipantController {
     private final ParticipantRepository participantRepository;
     private final EventRepository eventRepository;
 
-    private Map<Object, Consumer<Participant>> listeners = new HashMap<>();
+    private Map<Object, Consumer<Participant>> updateListeners = new HashMap<>();
+    private Map<Object, Consumer<Participant>> deletionListeners = new HashMap<>();
     @Autowired
     public ParticipantController(ParticipantRepository participantRepository, EventRepository eventRepository) {
         this.participantRepository = participantRepository;
@@ -39,11 +40,16 @@ public class ParticipantController {
 
     @GetMapping("/updates")
     public DeferredResult<ResponseEntity<Participant>> getUpdates(){
+        return getResponseEntityDeferredResult(updateListeners);
+    }
+
+    private DeferredResult<ResponseEntity<Participant>> getResponseEntityDeferredResult(
+        Map<Object, Consumer<Participant>> listeners) {
         var noContent = ResponseEntity.noContent().build();
-        var res = new DeferredResult<ResponseEntity<Participant>>(5000L,noContent);
+        var res = new DeferredResult<ResponseEntity<Participant>>(5000L, noContent);
 
         Object key = new Object();
-        listeners.put(key, (p) ->{
+        listeners.put(key, (p) -> {
             res.setResult(ResponseEntity.ok(p));
         });
 
@@ -52,6 +58,11 @@ public class ParticipantController {
         });
 
         return res;
+    }
+
+    @GetMapping("/deletions")
+    public DeferredResult<ResponseEntity<Participant>> getDeletions(){
+        return getResponseEntityDeferredResult(deletionListeners);
     }
 
 
@@ -95,7 +106,7 @@ public class ParticipantController {
 
         Participant savedParticipant = participantRepository.save(participant);
 
-        listeners.forEach((k,l) -> {l.accept(savedParticipant);});
+        updateListeners.forEach((k, l) -> {l.accept(savedParticipant);});
 
         return ResponseEntity.ok(savedParticipant);
     }
@@ -123,7 +134,7 @@ public class ParticipantController {
 
         Participant updatedParticipant = participantRepository.save(existingParticipant);
 
-        listeners.forEach((k,l) -> {l.accept(updatedParticipant);});
+        updateListeners.forEach((k, l) -> {l.accept(updatedParticipant);});
 
         return ResponseEntity.ok(updatedParticipant);
     }
@@ -139,6 +150,9 @@ public class ParticipantController {
             return ResponseEntity.notFound().build();
         }
         participantRepository.delete(participant);
+
+        deletionListeners.forEach((k, l) -> {l.accept(participant);});
+
         return ResponseEntity.ok(participant);
     }
 
