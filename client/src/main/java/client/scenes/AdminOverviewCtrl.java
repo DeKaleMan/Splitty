@@ -94,8 +94,7 @@ public class AdminOverviewCtrl {
                 };
             }
         });
-        ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
-        eventList.setItems(events);
+        refreshEvents();
     }
 
     @FXML
@@ -176,6 +175,9 @@ public class AdminOverviewCtrl {
         String selectedOption = sortComboBox.getValue();
         ObservableList<Event> newEventList = FXCollections.observableArrayList();
         // Update the event sorting based on the new selected option
+        if (selectedOption == null) {
+            selectedOption = "Title";
+        }
         switch(selectedOption) {
             case "Title":
                 System.out.println("Title sorting selected");
@@ -188,12 +190,14 @@ public class AdminOverviewCtrl {
                 currentEventList = eventList.getItems();
                 currentEventList.stream().sorted(Comparator.comparing(Event::getDate))
                         .forEach(newEventList::add);
+                newEventList = FXCollections.observableArrayList(newEventList.reversed());
                 break;
             case "Last activity":
                 System.out.println("Last activity sorting selected");
                 currentEventList = eventList.getItems();
                 currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
                         .forEach(newEventList::add);
+                newEventList = FXCollections.observableArrayList(newEventList.reversed());
                 break;
         }
         eventList.setItems(newEventList);
@@ -271,8 +275,10 @@ public class AdminOverviewCtrl {
         jsonImportPane.setVisible(false);
     }
 
+    @FXML
     public void refreshEvents() {
         ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
         eventList.setItems(events);
+        updateEventSorting();
     }
 }

@@ -34,6 +34,12 @@ public class Event {
 
     }
 
+    @PreUpdate
+    @PrePersist
+    public void updateActivityDate() {
+        lastActivity = new Date();
+    }
+
     public String getName() {
         return name;
     }
@@ -77,10 +83,6 @@ public class Event {
 
     public Date getLastActivity() {
         return lastActivity;
-    }
-
-    public void updateActivityDate() {
-        lastActivity = new Date();
     }
 
     public String getInviteCode() {

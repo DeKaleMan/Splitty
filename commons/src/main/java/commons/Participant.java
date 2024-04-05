@@ -46,6 +46,12 @@ public class Participant implements Serializable {
         this.accountHolder = accountHolder;
     }
 
+    @PreUpdate
+    @PrePersist
+    @PreRemove
+    public void updateLastActivity(){
+        getEvent().updateActivityDate();
+    }
     // Getters and setters
 
     public String getName() {
