@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -30,6 +31,9 @@ public class StatisticsCtrl {
     private double transport = 0;
     private double other = 0;
     private double[] stat;
+
+    @FXML
+    private Button back;
 
     @FXML
     private Label titleLabel;
@@ -214,5 +218,16 @@ public class StatisticsCtrl {
             this.totalCost.setText("-");
             displayError();
         }
+    }
+
+    public void setStatisticsText(String txt) {
+        this.statisticsText.setText(txt);
+    }
+
+    public void setTotalCostText(String txt) {
+        this.totalCostText.setText(txt);
+    }
+    public void setBackButton(String txt){
+        this.back.setText(txt);
     }
 }

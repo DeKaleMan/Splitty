@@ -16,12 +16,12 @@
                   <Font size="48.0" />
                </font>
             </Label>
-            <Label fx:id="statisticsText" prefHeight="35.0" prefWidth="93.0" text="Statistics">
+            <Label fx:id="statisticsText"  text="Statistics">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <HBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="200.0" spacing="10.0">
+            <HBox alignment="TOP_CENTER" spacing="10.0">
                <children>
                   <Label fx:id="totalCostText" text="Total cost of event:" />
                   <Label fx:id="totalCost" text="100$" />

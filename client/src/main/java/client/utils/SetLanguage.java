@@ -20,10 +20,11 @@ public class SetLanguage {
     private AdminOverviewCtrl adminOverviewCtrl;
     private CreateEventCtrl createEventCtrl;
     private SettingsCtrl settingsCtrl;
+    private StatisticsCtrl statisticsCtrl;
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
                        AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
-                       SettingsCtrl settingsCtrl){
+                       SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -32,6 +33,7 @@ public class SetLanguage {
         this.adminOverviewCtrl = adminOverviewCtrl;
         this.createEventCtrl = createEventCtrl;
         this.settingsCtrl = settingsCtrl;
+        this.statisticsCtrl = statisticsCtrl;
                 //this.language = Language.en;
     }
 
@@ -43,6 +45,7 @@ public class SetLanguage {
         setAdminOverview(lang);
         setCreateEvent(lang);
         setSettings(lang);
+        setStatistics(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -127,6 +130,12 @@ public class SetLanguage {
         createEventCtrl.setRequired(translate("required", "en", lang));
         System.out.println("setCreateEvent translated");
     }
+    public void setStatistics(String lang){
+        statisticsCtrl.setTotalCostText(translate("Total cost of event: ",
+                "en", lang));
+        statisticsCtrl.setStatisticsText(translate("Statistics", "en", lang));
+        statisticsCtrl.setBackButton(translate("Back", "en", lang));
+    }
 
     private void setSettings(String lang){
         settingsCtrl.setSettingsText(translate("settings", "en", lang));
@@ -138,7 +147,7 @@ public class SetLanguage {
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
         settingsCtrl.setLangInstructions(translate("Enter the languagecode " +
                 "and an image for the flag of the language you want to add", "en", lang));
-
+        System.out.println("settings translated");
     }
 
 
