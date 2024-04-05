@@ -202,6 +202,7 @@ public class MainCtrl {
             primaryStage.setTitle("Event overview");
             primaryStage.setScene(splittyOverview);
             splittyOverview.getStylesheets().add(css);
+            splittyOverviewCtrl.setEventCode(id);
             Event event = serverUtils.getEventById(id);
             splittyOverviewCtrl.initializeAll(event);
         } catch (RuntimeException e) {
