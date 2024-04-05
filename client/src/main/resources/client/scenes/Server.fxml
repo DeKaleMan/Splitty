@@ -19,7 +19,7 @@
       </Label>
       <TextField fx:id="serverField" layoutX="191.0" layoutY="247.0" onKeyPressed="#resetError" prefHeight="26.0" prefWidth="240.0" />
       <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="103.0" layoutX="249.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefHeight="54.0" prefWidth="302.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url or try again by repressing connect*" textFill="#949494" visible="false" wrapText="true">
+      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefWidth="377.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url or try again by repressing connect*" textFill="#949494" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="12.0" />
          </font></Label>

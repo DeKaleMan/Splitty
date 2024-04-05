@@ -150,6 +150,7 @@ public class SetLanguage {
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
         settingsCtrl.setLangInstructions(translate("Enter the languagecode " +
                 "and an image for the flag of the language you want to add", "en", lang));
+        settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         System.out.println("settings translated");
     }
 

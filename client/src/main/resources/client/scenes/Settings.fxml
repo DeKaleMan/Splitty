@@ -62,7 +62,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#changeServer" prefHeight="26.0" prefWidth="188.0" text="Change server" />
+            <Button fx:id="changServerButton" mnemonicParsing="false" onAction="#changeServer" prefHeight="26.0" prefWidth="188.0" text="Change server" />
          </children>
       </VBox>
       <Label fx:id="language" layoutX="346.0" layoutY="54.0" prefHeight="27.0" prefWidth="188.0" text="Language">

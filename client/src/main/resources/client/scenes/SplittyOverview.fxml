@@ -75,9 +75,9 @@
             <children>
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
-                <Button fx:id="editEvent" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" />
                 <Button mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
                 <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
+                <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />
             </children>
         </VBox>
         <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">

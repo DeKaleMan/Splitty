@@ -31,6 +31,8 @@ public class SettingsCtrl {
     @FXML
     private TextField langTextfield;
     @FXML
+    private Button changServerButton;
+    @FXML
     private Label language;
     @FXML
     private Label languageText;
@@ -237,5 +239,8 @@ public class SettingsCtrl {
 
     public void setSettingsText(String txt) {
         this.settingsText.setText(txt);
+    }
+    public void setChangServerButton(String txt){
+        this.changServerButton.setText(txt);
     }
 }
