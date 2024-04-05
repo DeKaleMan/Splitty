@@ -1,8 +1,10 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +28,15 @@ public class Participant implements Serializable {
 
     @Column(nullable = false)
     private boolean ghost;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "payer", cascade = CascadeType.REMOVE)
+    private List<Payment> paymentPayerList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "payee", cascade = CascadeType.REMOVE)
+    private List<Payment> paymentPayeeList;
+
 
     @EmbeddedId
     private ParticipantId id;
