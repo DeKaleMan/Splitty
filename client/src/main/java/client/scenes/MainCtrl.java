@@ -198,6 +198,11 @@ public class MainCtrl {
         setLanguage.changeTo(toLang.toString());
     }
 
+    public String translate(String query){
+        if(this.language.equals("en")) return query;
+            return setLanguage.translate(query, "en", this.language);
+    }
+
     public void showSplittyOverview(int id){
         try {
             primaryStage.setTitle("Event overview");
