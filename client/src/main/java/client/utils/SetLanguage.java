@@ -19,9 +19,11 @@ public class SetLanguage {
     private AddExpenseCtrl addExpenseCtrl;
     private AdminOverviewCtrl adminOverviewCtrl;
     private CreateEventCtrl createEventCtrl;
+    private SettingsCtrl settingsCtrl;
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
-                       AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl){
+                       AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
+                       SettingsCtrl settingsCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -29,6 +31,7 @@ public class SetLanguage {
         this.adminLoginCtrl = adminLoginCtrl;
         this.adminOverviewCtrl = adminOverviewCtrl;
         this.createEventCtrl = createEventCtrl;
+        this.settingsCtrl = settingsCtrl;
                 //this.language = Language.en;
     }
 
@@ -39,6 +42,7 @@ public class SetLanguage {
         setAdminLogin(lang);
         setAdminOverview(lang);
         setCreateEvent(lang);
+        setSettings(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -122,6 +126,19 @@ public class SetLanguage {
         createEventCtrl.setCancelButton(translate("Cancel", "en", lang));
         createEventCtrl.setRequired(translate("required", "en", lang));
         System.out.println("setCreateEvent translated");
+    }
+
+    private void setSettings(String lang){
+        settingsCtrl.setSettingsText(translate("settings", "en", lang));
+        settingsCtrl.setAddLanguage(translate("Add language", "en", lang));
+        settingsCtrl.setAddLangText(translate("Add language", "en", lang));
+        settingsCtrl.setCurrency(translate("currency", "en", lang));
+        settingsCtrl.setLanguage(translate("Language", "en", lang));
+        settingsCtrl.setSaveButton(translate("Save", "en", lang));
+        settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
+        settingsCtrl.setLangInstructions(translate("Enter the languagecode " +
+                "and an image for the flag of the language you want to add", "en", lang));
+
     }
 
 

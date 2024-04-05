@@ -31,7 +31,19 @@ public class SettingsCtrl {
     @FXML
     private TextField langTextfield;
     @FXML
-    private Label languageTextField;
+    private Label language;
+    @FXML
+    private Label languageText;
+    @FXML
+    private Label langInstructions;
+    @FXML
+    private Label addLangText;
+    @FXML
+    private Button addLanguage;
+    @FXML
+    private Label currency;
+    @FXML
+    private Label settingsText;
     @FXML
     private ProgressBar progressBar;
     @FXML
@@ -77,7 +89,7 @@ public class SettingsCtrl {
             bicField.setText("");
         }
         currencyField.setText(config.getCurrency().toString());
-        languageTextField.setText(config.getLanguage());
+        languageText.setText(config.getLanguage());
     }
 
     /**
@@ -189,5 +201,41 @@ public class SettingsCtrl {
 
     public void changeServer() {
         mainCtrl.showServerStartup(noConnection);
+    }
+
+    public void setCancelButton(String txt) {
+        this.cancelButton.setText(txt);
+    }
+
+    public void setSaveButton(String txt) {
+        this.saveButton.setText(txt);
+    }
+
+    public void setLanguage(String txt) {
+        this.language.setText(txt);
+    }
+
+    public void setLanguageText(String txt) {
+        this.languageText.setText(txt);
+    }
+
+    public void setLangInstructions(String txt) {
+        this.langInstructions.setText(txt);
+    }
+
+    public void setAddLangText(String txt) {
+        this.addLangText.setText(txt);
+    }
+
+    public void setAddLanguage(String txt) {
+        this.addLanguage.setText(txt);
+    }
+
+    public void setCurrency(String txt) {
+        this.currency.setText(txt);
+    }
+
+    public void setSettingsText(String txt) {
+        this.settingsText.setText(txt);
     }
 }
