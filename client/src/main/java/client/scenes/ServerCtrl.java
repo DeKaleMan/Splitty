@@ -30,17 +30,21 @@ public class ServerCtrl {
 
     boolean noConnection = false;
     @FXML
-    public Label startupNotification;
+    private Label startupNotification;
     @FXML
-    public Label notConnectedError;
+    private Label title;
     @FXML
-    public ImageView imageView;
+    private Label serverText;
     @FXML
-    public TextField serverField;
+    private Label notConnectedError;
+    @FXML
+    private ImageView imageView;
+    @FXML
+    private TextField serverField;
     @FXML
     public Button connectButton;
     @FXML
-    public Button backButton;
+    private Button backButton;
 
     @Inject
     public ServerCtrl(MainCtrl mainCtrl, Config config) {
@@ -128,5 +132,21 @@ public class ServerCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
+    }
+
+    public void setTitle(String txt) {
+        this.title.setText(txt);
+    }
+    public void setConnectButton(String txt) {
+        this.connectButton.setText(txt);
+    }
+    public void setNotConnectedError(String txt){
+        this.notConnectedError.setText(txt);
+    }
+    public void setStartupNotification(String txt){
+        this.startupNotification.setText(txt);
+    }
+    public void setServerText(String txt){
+        this.serverText.setText(txt);
     }
 }

@@ -21,10 +21,11 @@ public class SetLanguage {
     private CreateEventCtrl createEventCtrl;
     private SettingsCtrl settingsCtrl;
     private StatisticsCtrl statisticsCtrl;
+    private ServerCtrl serverCtrl;
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
                        AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
-                       SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl){
+                       SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -34,6 +35,7 @@ public class SetLanguage {
         this.createEventCtrl = createEventCtrl;
         this.settingsCtrl = settingsCtrl;
         this.statisticsCtrl = statisticsCtrl;
+        this.serverCtrl = serverCtrl;
                 //this.language = Language.en;
     }
 
@@ -46,6 +48,7 @@ public class SetLanguage {
         setCreateEvent(lang);
         setSettings(lang);
         setStatistics(lang);
+        setServer(lang);
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -148,6 +151,18 @@ public class SetLanguage {
         settingsCtrl.setLangInstructions(translate("Enter the languagecode " +
                 "and an image for the flag of the language you want to add", "en", lang));
         System.out.println("settings translated");
+    }
+
+    private void setServer(String lang){
+        serverCtrl.setServerText(translate("Server", "en", lang));
+        serverCtrl.setConnectButton(translate("Connect", "en", lang));
+        serverCtrl.setStartupNotification(translate("No server has been found," +
+                " type here the server you want to connect to", "en", lang));
+        serverCtrl.setNotConnectedError(translate("Could not connect to the server " +
+                "make sure the server is properly turned on and there are no typos in the " +
+                "url or try again by repressing connect*", "en", lang));
+        serverCtrl.setTitle(translate("Change splitty server", "en", lang));
+
     }
 
 
