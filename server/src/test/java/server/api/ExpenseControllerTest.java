@@ -4,6 +4,7 @@ import commons.*;
 import commons.dto.ExpenseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.service.ExpenseService;
 
 import java.util.Date;
 import java.util.List;
@@ -32,7 +33,8 @@ class ExpenseControllerTest {
         eventRepository = new TestEventRepository();
         expenseRepository = new TestExpenseRepository();
         participantRepository = new TestParticipantRepository();
-        sut = new ExpenseController(expenseRepository, eventRepository, participantRepository);
+        ExpenseService expenseService = new ExpenseService(expenseRepository,eventRepository,participantRepository);
+        sut = new ExpenseController(expenseService);
         event1.id = 1;
         event2.id = 2;
         eventRepository.events.add(event1);

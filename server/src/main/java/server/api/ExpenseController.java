@@ -2,6 +2,7 @@ package server.api;
 
 import commons.*;
 import commons.dto.ExpenseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
+import server.service.ExpenseService;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,16 +18,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
-    private final ExpenseRepository expenseRepo;
-    private final EventRepository eventRepo;
+    private final ExpenseService expenseService;
 
-    private final ParticipantRepository participantRepo;
-
-    public ExpenseController(ExpenseRepository expenseRepo, EventRepository eventRepo,
-                             ParticipantRepository participantRepo) {
-        this.expenseRepo = expenseRepo;
-        this.eventRepo = eventRepo;
-        this.participantRepo = participantRepo;
+    @Autowired
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
     }
 
     @MessageMapping("/addExpense") // -> /app/addExpense
@@ -37,92 +34,47 @@ public class ExpenseController {
 
     @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Expense>> findByEventCode(@RequestParam int eventCode) {
-        Optional<Event> event = eventRepo.findById(eventCode);
-        if (event.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(expenseRepo.findByEvent(event.get()));
+        List<Expense> expenses = expenseService.getByEventCode(eventCode);
+        return (expenses == null) ?
+            ResponseEntity.badRequest().build() :
+            ResponseEntity.ok(expenses);
     }
 
     @GetMapping("/{payerUuid}")
     public ResponseEntity<List<Expense>> findByEventCodeAndPayerUuid(@RequestParam int eventCode,
                                                                       @PathVariable("payerUuid")
                                                                       String uuid) {
-        Optional<Event> event = eventRepo.findById(eventCode);
-        if (event.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        Participant payer = participantRepo.findById(new ParticipantId(uuid,event.get()));
-        if(payer == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(expenseRepo.findByEventAndPayer(event.get(), payer));
+        List<Expense> expenses = expenseService.getByEventCodeAndPayerUuid(eventCode,uuid);
+        return (expenses == null) ?
+            ResponseEntity.badRequest().build() :
+            ResponseEntity.ok(expenses);
     }
 
     @PostMapping("addExp")
     public ResponseEntity<Expense> saveExpense(@RequestBody ExpenseDTO expenseDTO) {
-        if (expenseDTO == null || isNullOrEmpty(expenseDTO.getPayerUuid()) ||
-                expenseDTO.getTotalExpense() < 0.0 || expenseDTO.getDate() == null)
-            return ResponseEntity.badRequest().build();
-        Optional<Event> event = eventRepo.findById(expenseDTO.getEventId());
-        if (event.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Participant payer = participantRepo.findById(new ParticipantId(expenseDTO.getPayerUuid(), event.get()));
-        if(payer == null) return ResponseEntity.notFound().build();
-        Expense expense =
-                new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
-                        expenseDTO.getDate(), expenseDTO.getTotalExpense(),
-                        payer, expenseDTO.isSharedExpense());
-        return ResponseEntity.ok(expenseRepo.save(expense));
+        Expense expense = expenseService.saveExpense(expenseDTO);
+        return (expense == null) ?
+            ResponseEntity.badRequest().build() :
+            ResponseEntity.ok(expense);
     }
 
     @PutMapping("/{eventId}/{expenseId}")
     public ResponseEntity<Expense> updateExpense(@PathVariable("eventId") int eventId,
                                                  @PathVariable("expenseId") int expenseId,
                                                  @RequestBody ExpenseDTO expenseDTO){
-        Optional<Event> optionalEvent = eventRepo.findById(eventId);
-        if (optionalEvent.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Event event = optionalEvent.get();
-        Optional<Expense> optionalExpense = expenseRepo.findById(new ExpenseId(event,expenseId));
-        if (optionalExpense.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Participant payer = participantRepo.findById(new ParticipantId(expenseDTO.getPayerUuid(), event));
-        if(payer == null) return ResponseEntity.notFound().build();
-        Expense expense = optionalExpense.get();
-        expense.setTotalExpense(expenseDTO.getTotalExpense());
-        expense.setDate(expenseDTO.getDate());
-        expense.setDescription(expenseDTO.getDescription());
-        expense.setPayer(payer);
-        expense.setType(expenseDTO.getType());
-        expense.setSharedExpense(expenseDTO.isSharedExpense());
-
-        return ResponseEntity.ok(expenseRepo.save(expense));
+        Expense expense = expenseService.updateExpense(eventId,expenseId,expenseDTO);
+        return (expense == null) ?
+            ResponseEntity.badRequest().build() :
+            ResponseEntity.ok(expense);
     }
 
 
     @DeleteMapping(path = {"", "/"})
     public ResponseEntity<Expense> deleteExpenseByEventIdAndExpenseId(@RequestParam int eventID,
                                                                       @RequestParam int expenseID) {
-        Optional<Event> event = eventRepo.findById(eventID);
-        if (event.isEmpty()) return ResponseEntity.notFound().build();
-        ExpenseId expenseId = new ExpenseId(event.get(), expenseID);
-
-        Optional<Expense> expense = expenseRepo.findById(expenseId);
-
-        if (expense.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Expense res = expense.get();
-        expenseRepo.delete(res);
-
-        System.out.println("Deleted\n" + res);
-        return ResponseEntity.ok(res);
-    }
-
-    private boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+        Expense expense = expenseService.deleteExpense(eventID,expenseID);
+        return (expense == null) ?
+            ResponseEntity.badRequest().build() :
+            ResponseEntity.ok(expense);
     }
 }
