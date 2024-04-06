@@ -106,6 +106,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label joinedEventLabel;
     @FXML
     public Label inviteCode;
+    @FXML
+    private Button myDetails;
 
 
     @FXML
@@ -596,6 +598,9 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void stopUpdates(){
         serverUtils.stop();
+    }
+    public void setmyDetails(String txt){
+        this.myDetails.setText(txt);
     }
 }
 

@@ -24,12 +24,14 @@ public class SetLanguage {
     private ServerCtrl serverCtrl;
     private InvitationCtrl invitationCtrl;
     private ManageParticipantsCtrl manageParticipantsCtrl;
+    private EditParticipantCtrl editParticipantCtrl;
 
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
                        AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
                        SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl,
-                       InvitationCtrl invitationCtrl, ManageParticipantsCtrl manageParticipantsCtrl){
+                       InvitationCtrl invitationCtrl, ManageParticipantsCtrl manageParticipantsCtrl,
+                       EditParticipantCtrl editParticipantCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -42,6 +44,7 @@ public class SetLanguage {
         this.serverCtrl = serverCtrl;
         this.invitationCtrl = invitationCtrl;
         this.manageParticipantsCtrl = manageParticipantsCtrl;
+        this.editParticipantCtrl = editParticipantCtrl;
                 //this.language = Language.en;
     }
     public void changeTo(String lang){
@@ -57,6 +60,7 @@ public class SetLanguage {
         setServer(lang);
         setInvite(lang);
         setManageParticipants(lang);
+        setEditParticipant(lang);
         System.out.println("\nFINISHED\n");
     }
 
@@ -89,6 +93,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setEditExpense(translate("Edit expense", "en",lang));
         splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
+        splittyOverviewCtrl.setmyDetails(translate("My details", "en",lang));
         System.out.println("event overview translated");
     }
     public void setAddExpense(String lang){
@@ -188,11 +193,20 @@ public class SetLanguage {
         manageParticipantsCtrl.setRemoveButton(translate("Remove participants", "en", lang));
         manageParticipantsCtrl.setEditButton(translate("Edit participants", "en", lang));
         manageParticipantsCtrl.setParticipantsText(translate("Participants", "en", lang));
-        //TODO errors:
         manageParticipantsCtrl.setNoParticipantSelectedError(translate("No participant selected*", "en", lang));
         manageParticipantsCtrl.setParticipantAddedConfirmation(translate("Participant successfully added*", "en", lang));
         manageParticipantsCtrl.setParticipantDeletedConfirmation(translate("Participant successfully deleted*", "en", lang));
-
+        System.out.println("participant manager translated");
+    }
+    private void setEditParticipant(String lang){
+        editParticipantCtrl.setApplyChangesButton(translate("Apply change", "en", lang));
+        editParticipantCtrl.setTitle(translate("Edit participant", "en", lang));
+        editParticipantCtrl.setName(translate("Name", "en", lang));
+        editParticipantCtrl.setCancelButton(translate("Cancel", "en", lang));
+        editParticipantCtrl.setUnknownError(translate("An unexpected error happened*", "en", lang));
+        editParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*", "en", lang));
+        editParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*", "en", lang));
+        editParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
