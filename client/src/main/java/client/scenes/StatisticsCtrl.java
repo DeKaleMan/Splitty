@@ -103,10 +103,14 @@ public class StatisticsCtrl {
      */
     public void setPieChart() {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        if (this.food != 0.0) data.add(new PieChart.Data("Food", food));
-        if (this.drinks != 0.0) data.add(new PieChart.Data("Drinks", drinks));
-        if (this.transport != 0.0) data.add(new PieChart.Data("Transport", transport));
-        if (this.other != 0.0) data.add(new PieChart.Data("Other", other));
+        String foodName = mainCtrl.translate("Food");
+        String drinkName = mainCtrl.translate("Drinks");
+        String transportName = mainCtrl.translate("Transport");
+        String otherName = mainCtrl.translate("Other");
+        if(this.food != 0.0) data.add(new PieChart.Data(foodName, food));
+        if(this.drinks != 0.0) data.add(new PieChart.Data(drinkName, drinks));
+        if(this.transport != 0.0) data.add(new PieChart.Data(transportName, transport));
+        if(this.other != 0.0) data.add(new PieChart.Data(otherName, other));
 
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                     d.getName(),

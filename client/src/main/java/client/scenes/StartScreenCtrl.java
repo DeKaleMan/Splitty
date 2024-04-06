@@ -29,7 +29,7 @@ public class StartScreenCtrl implements Initializable {
 
 
 
-    private String currentLang;
+    private String currentLang = "en";
     @FXML
     private Label myEventsText;
     @FXML

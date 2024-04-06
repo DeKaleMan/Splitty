@@ -195,7 +195,7 @@ public class MainCtrl {
 
     public void changeLanguage(String toLang){
         this.language = toLang;
-        setLanguage.changeTo(toLang.toString());
+        setLanguage.changeTo(toLang);
     }
 
     public String translate(String query){
