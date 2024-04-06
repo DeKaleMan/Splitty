@@ -406,16 +406,16 @@ public class SplittyOverviewCtrl implements Initializable {
     private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
         Text mainInfo = new Text();
         if (expense.isSharedExpense()) {
-            String paid = mainCtrl.translate("paid");
-            String forT = mainCtrl.translate("for");
+            String paid =  " " + mainCtrl.translate("paid") + " ";
+            String forT =  " " + mainCtrl.translate("for") + " " ;
             mainInfo.setText(expense.getPayer().getName()
                 + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + forT + expense.getType());
+                + "\n" + forT +  expense.getType());
         } else {
-            String gave = mainCtrl.translate("gave");
-            String to = mainCtrl.translate("to");
+            String gave = " " + mainCtrl.translate("gave") + " " ;
+            String to = " " + mainCtrl.translate("to") + " " ;
             mainInfo.setText(expense.getPayer().getName()
                 + gave
                 + mainCtrl.getFormattedDoubleString(totalExpense)

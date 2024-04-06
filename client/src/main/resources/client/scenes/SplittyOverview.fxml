@@ -71,12 +71,12 @@
 
             </children>
         </Pane>
-        <VBox alignment="TOP_CENTER" layoutX="238.0" layoutY="157.0" prefHeight="151.0" prefWidth="124.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" layoutX="238.0" layoutY="157.0" prefHeight="200.0" prefWidth="124.0" spacing="10.0">
             <children>
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
                 <Button mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
-                <Button fx:id="hostOptionsButton" mnemonicParsing="false" prefWidth="85.0" onAction="#showParticipantManager" text="Host options" />
+                <Button fx:id="hostOptionsButton" mnemonicParsing="false" onAction="#showParticipantManager" prefWidth="85.0" text="Host options" />
                 <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />
             </children>
         </VBox>
