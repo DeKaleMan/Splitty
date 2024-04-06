@@ -95,8 +95,8 @@ public class SetLanguage {
         addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
-        addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
-        addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        //addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
+        //addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
         System.out.println("addExpense translated");
     }
     public void setAdminLogin(String lang){

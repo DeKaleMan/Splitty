@@ -1,1 +1,1 @@
-{"connection":"localhost:8080","language":"en","currency":"EUR","email":null,"id":null,"name":"Test Name","iban":null,"bic":null}
+{"connection":"localhost:8080","language":"nl","currency":"EUR","email":null,"id":"noId","name":"Test Name","iban":null,"bic":null}
