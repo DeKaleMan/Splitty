@@ -22,10 +22,14 @@ public class SetLanguage {
     private SettingsCtrl settingsCtrl;
     private StatisticsCtrl statisticsCtrl;
     private ServerCtrl serverCtrl;
+    private InvitationCtrl invitationCtrl;
+    private ManageParticipantsCtrl manageParticipantsCtrl;
+
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
                        AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
-                       SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl){
+                       SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl,
+                       InvitationCtrl invitationCtrl, ManageParticipantsCtrl manageParticipantsCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -36,10 +40,12 @@ public class SetLanguage {
         this.settingsCtrl = settingsCtrl;
         this.statisticsCtrl = statisticsCtrl;
         this.serverCtrl = serverCtrl;
+        this.invitationCtrl = invitationCtrl;
+        this.manageParticipantsCtrl = manageParticipantsCtrl;
                 //this.language = Language.en;
     }
-
     public void changeTo(String lang){
+        System.out.println("Translate to: " + lang + "::\n");
         setMainScreen(lang);
         setSpittyoverview(lang);
         setAddExpense(lang);
@@ -49,6 +55,9 @@ public class SetLanguage {
         setSettings(lang);
         setStatistics(lang);
         setServer(lang);
+        setInvite(lang);
+        setManageParticipants(lang);
+        System.out.println("\nFINISHED\n");
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
@@ -139,7 +148,6 @@ public class SetLanguage {
         statisticsCtrl.setStatisticsText(translate("Statistics", "en", lang));
         statisticsCtrl.setBackButton(translate("Back", "en", lang));
     }
-
     private void setSettings(String lang){
         settingsCtrl.setSettingsText(translate("settings", "en", lang));
         settingsCtrl.setAddLanguage(translate("Add language", "en", lang));
@@ -153,7 +161,6 @@ public class SetLanguage {
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         System.out.println("settings translated");
     }
-
     private void setServer(String lang){
         serverCtrl.setServerText(translate("Server", "en", lang));
         serverCtrl.setConnectButton(translate("Connect", "en", lang));
@@ -165,7 +172,28 @@ public class SetLanguage {
         serverCtrl.setTitle(translate("Change splitty server", "en", lang));
 
     }
+    private void setInvite(String lang){
+        invitationCtrl.setBack(translate("Back", "en", lang));
+        invitationCtrl.setInviteCodeText(translate("Invite Code:", "en", lang));
+        invitationCtrl.setSendEmailInvitesText(translate("Send email invites:", "en", lang));
+        invitationCtrl.setInviteCodeInstructions(translate("Invite people by passing " +
+                "the invite code:", "en", lang));
+        invitationCtrl.setEmailArea(translate("Add your emails to send an invite to", "en", lang));
+        invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
+        System.out.println("invitation translated");
+    }
+    private void setManageParticipants(String lang){
+        manageParticipantsCtrl.setAddButton(translate("Add participants", "en", lang));
+        manageParticipantsCtrl.setBackButton(translate("Back", "en", lang));
+        manageParticipantsCtrl.setRemoveButton(translate("Remove participants", "en", lang));
+        manageParticipantsCtrl.setEditButton(translate("Edit participants", "en", lang));
+        manageParticipantsCtrl.setParticipantsText(translate("Participants", "en", lang));
+        //TODO errors:
+        manageParticipantsCtrl.setNoParticipantSelectedError(translate("No participant selected*", "en", lang));
+        manageParticipantsCtrl.setParticipantAddedConfirmation(translate("Participant successfully added*", "en", lang));
+        manageParticipantsCtrl.setParticipantDeletedConfirmation(translate("Participant successfully deleted*", "en", lang));
 
+    }
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 

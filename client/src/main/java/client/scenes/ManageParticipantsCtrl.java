@@ -24,7 +24,15 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     public Button removeButton;
     @FXML
+    public Button back;
+    @FXML
+    public Button editButton;
+    @FXML
+    public Button addButton;
+    @FXML
     private Label titleLabel;
+    @FXML
+    private Label participantsText;
 
     @FXML
     private ListView<Participant> participantsList;
@@ -89,9 +97,9 @@ public class ManageParticipantsCtrl implements Initializable {
                 return;
             }
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Deleting Participant");
-            confirmation.setContentText("Are you sure you want to delete " + selected.getName()+
-                    " from " + titleLabel.getText() + "?");
+            confirmation.setTitle(mainCtrl.translate("Deleting Participant"));
+            confirmation.setContentText(mainCtrl.translate("Are you sure you want to delete ") + selected.getName()+
+                    mainCtrl.translate(" from ") + titleLabel.getText() + "?");
             confirmation.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     System.out.println("remove" + selected);
@@ -185,5 +193,51 @@ public class ManageParticipantsCtrl implements Initializable {
         if (mouseEvent.getClickCount() >= 2) {
             editParticipant();
         }
+    }
+
+    public void setEditButton(String txt){
+        this.editButton.setText(txt);
+    }
+    public void setRemoveButton(String txt) {
+        this.removeButton.setText(txt);
+    }
+
+    public void setAddButton(String txt) {
+        this.addButton.setText(txt);
+    }
+
+    public void setTitleLabel(String txt) {
+        this.titleLabel.setText(txt);
+    }
+
+    public void setParticipantsText(String txt) {
+        this.participantsText.setText(txt);
+    }
+
+    public void setUndo(String txt) {
+        this.undo.setText(txt);
+    }
+
+    public void setNoParticipantSelectedError(String txt) {
+        this.noParticipantSelectedError.setText(txt);
+    }
+
+    public void setUnknownError(String txt) {
+        this.unknownError.setText(txt);
+    }
+
+    public void setParticipantAddedConfirmation(String txt) {
+        this.participantAddedConfirmation.setText(txt);
+    }
+
+    public void setParticipantEditedConfirmation(String txt) {
+        this.participantEditedConfirmation.setText(txt);
+    }
+
+    public void setParticipantDeletedConfirmation(String txt) {
+        this.participantDeletedConfirmation.setText(txt);
+    }
+    public void setBackButton(String txt) {
+        this.back.setText(txt);
     }
 }

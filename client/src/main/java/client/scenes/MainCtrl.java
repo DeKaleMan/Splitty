@@ -189,7 +189,7 @@ public class MainCtrl {
         languages.addAll(List.of("en", "nl", "is", "zh", "es"));
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
-                settingCtrl, statisticsCtrl, serverCtrl);
+                settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl);
     }
 
 

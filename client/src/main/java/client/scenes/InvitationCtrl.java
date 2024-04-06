@@ -23,6 +23,15 @@ public class InvitationCtrl {
     private Label inviteCodeLabel;
 
     @FXML
+    private Label inviteCodeText;
+    @FXML
+    private Label inviteCodeInstructions;
+    @FXML
+    private Label sendEmailInvitesText;
+    @FXML
+    private Button back;
+
+    @FXML
     private Button sendInvites;
 
     @FXML
@@ -109,4 +118,29 @@ public class InvitationCtrl {
 //        this.eventTitle = eventTitle;
 //    }
 
+
+
+    public void setInviteCodeText(String txt) {
+        this.inviteCodeText.setText(txt);
+    }
+
+    public void setInviteCodeInstructions(String txt) {
+        this.inviteCodeInstructions.setText(txt);
+    }
+
+    public void setSendEmailInvitesText(String txt) {
+        this.sendEmailInvitesText.setText(txt);
+    }
+
+    public void setBack(String txt) {
+        this.back.setText(txt);
+    }
+
+    public void setSendInvites(String txt) {
+        this.sendInvites.setText(txt);
+    }
+
+    public void setEmailArea(String txt) {
+        this.emailArea.setPromptText(txt);
+    }
 }

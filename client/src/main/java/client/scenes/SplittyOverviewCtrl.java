@@ -412,7 +412,7 @@ public class SplittyOverviewCtrl implements Initializable {
                 + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + "\n" + forT +  expense.getType());
+                + "\n" + forT +  mainCtrl.translate(expense.getType().toString()));
         } else {
             String gave = " " + mainCtrl.translate("gave") + " " ;
             String to = " " + mainCtrl.translate("to") + " " ;

@@ -4,48 +4,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageParticipantsCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageParticipantsCtrl">
    <children>
       <Label fx:id="titleLabel" layoutX="102.0" layoutY="27.0" prefHeight="53.0" prefWidth="368.0" text="Title" textAlignment="CENTER">
       <font>
          <Font name="System Bold" size="36.0" />
       </font>
    </Label>
-      <ListView fx:id="participantsList" onMouseClicked="#editOnClick" onKeyPressed="#onKeyPressed" layoutX="271.0" layoutY="115.0" prefHeight="255.0" prefWidth="246.0" />
-      <Label  layoutX="326.0" layoutY="80.0" prefHeight="35.0" prefWidth="136.0" text="Participants">
+      <ListView fx:id="participantsList" layoutX="271.0" layoutY="115.0" onKeyPressed="#onKeyPressed" onMouseClicked="#editOnClick" prefHeight="255.0" prefWidth="246.0" />
+      <Label fx:id="participantsText" layoutX="326.0" layoutY="80.0" prefHeight="35.0" prefWidth="136.0" text="Participants">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backEventOverview" text="Back" />
-      <VBox alignment="CENTER" layoutX="117.0" layoutY="185.0" prefHeight="115.0" prefWidth="120.0" spacing="20">
+      <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backEventOverview" text="Back" />
+      <VBox alignment="CENTER" layoutX="14.0" layoutY="185.0" prefHeight="115.0" prefWidth="258.0" spacing="20">
          <children>
-            <Button mnemonicParsing="false" onAction="#editParticipant" prefHeight="25.0" prefWidth="122.0" text="Edit Participant" />
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#editParticipant" text="Edit Participant" wrapText="true" />
 
-            <Button mnemonicParsing="false" onAction="#addParticipant" prefHeight="25.0" prefWidth="122.0" text="Add participant" />
-      
-            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeParticipant" prefHeight="25.0" prefWidth="122.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Remove Participant" textFill="white" />
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addParticipant" text="Add participant" wrapText="true" />
+
+            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeParticipant" style="-fx-background-color: #c50000;" text="Remove Participant" textFill="white" wrapText="true" />
          </children>
       </VBox>
-      <Label fx:id="noParticipantSelectedError" layoutX="120.0" layoutY="314.0" text="No participant selected*" textFill="RED" visible="false">
+      <Label fx:id="noParticipantSelectedError" alignment="CENTER" layoutX="86.0" layoutY="314.0" text="No participant selected*" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
-      <Label fx:id="unknownError" layoutX="117.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false">
+      <Label fx:id="unknownError" alignment="CENTER" layoutX="83.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label fx:id="participantAddedConfirmation" layoutX="106.0" layoutY="306.0" text="Participant successfully added*" textFill="#3700ff" visible="false">
+      <Label fx:id="participantAddedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully added*" textFill="#3700ff" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="participantEditedConfirmation" layoutX="106.0" layoutY="306.0" text="Participant successfully edited*" textFill="#3700ff" visible="false">
+      <Label fx:id="participantEditedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully edited*" textFill="#3700ff" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="participantDeletedConfirmation" layoutX="106.0" layoutY="306.0" text="Participant successfully edited*" textFill="#3700ff" visible="false">
+      <Label fx:id="participantDeletedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully deleted*" textFill="#3700ff" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
