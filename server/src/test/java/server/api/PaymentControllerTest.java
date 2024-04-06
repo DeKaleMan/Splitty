@@ -6,7 +6,9 @@ import commons.Participant;
 import commons.dto.PaymentDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.service.PaymentService;
 
 import java.sql.Date;
 import java.util.List;
@@ -37,17 +39,18 @@ public class PaymentControllerTest {
         testParticipantRepository.save(participant1);
         testParticipantRepository.save(participant2);
 
-
-        paymentController = new PaymentController(testPaymentParticipantRepository,
-                testParticipantRepository, testEventRepository);
+        PaymentService paymentService = new PaymentService(testPaymentParticipantRepository,
+            testParticipantRepository, testEventRepository);
+        paymentController = new PaymentController(paymentService);
     }
 
     @Test
     void testGetAllPayments() {
         Payment payment = new Payment(participant1, participant2, 100, false);
         testPaymentParticipantRepository.payments.add(payment);
-        List<Payment> payments = paymentController.getAllPayments();
-        assertEquals(testPaymentParticipantRepository.payments, payments);
+        ResponseEntity<List<Payment>> payments = paymentController.getAllPayments();
+        assertEquals(testPaymentParticipantRepository.payments, payments.getBody());
+        assertEquals(HttpStatus.OK, payments.getStatusCode());
     }
 
     @Test
