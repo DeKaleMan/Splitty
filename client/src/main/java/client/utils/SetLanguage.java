@@ -25,13 +25,16 @@ public class SetLanguage {
     private InvitationCtrl invitationCtrl;
     private ManageParticipantsCtrl manageParticipantsCtrl;
     private EditParticipantCtrl editParticipantCtrl;
+    private AddParticipantCtrl addParticipantCtrl;
+    private EditExpenseCtrl editExpenseCtrl;
 
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
                        AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
                        SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl,
                        InvitationCtrl invitationCtrl, ManageParticipantsCtrl manageParticipantsCtrl,
-                       EditParticipantCtrl editParticipantCtrl){
+                       EditParticipantCtrl editParticipantCtrl, AddParticipantCtrl addParticipantCtrl,
+                       EditExpenseCtrl editExpenseCtrl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -45,6 +48,8 @@ public class SetLanguage {
         this.invitationCtrl = invitationCtrl;
         this.manageParticipantsCtrl = manageParticipantsCtrl;
         this.editParticipantCtrl = editParticipantCtrl;
+        this.addParticipantCtrl = addParticipantCtrl;
+        this.editExpenseCtrl = editExpenseCtrl;
                 //this.language = Language.en;
     }
     public void changeTo(String lang){
@@ -61,6 +66,8 @@ public class SetLanguage {
         setInvite(lang);
         setManageParticipants(lang);
         setEditParticipant(lang);
+        setAddPartiticipant(lang);
+        setEditExpense(lang);
         System.out.println("\nFINISHED\n");
     }
 
@@ -207,6 +214,33 @@ public class SetLanguage {
         editParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*", "en", lang));
         editParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*", "en", lang));
         editParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
+    }
+    private void setAddPartiticipant(String lang){
+        addParticipantCtrl.setApplyChangesButton(translate("Apply change", "en", lang));
+        addParticipantCtrl.setTitle(translate("Add participant", "en", lang));
+        addParticipantCtrl.setName(translate("Name", "en", lang));
+        addParticipantCtrl.setCancelButton(translate("Cancel", "en", lang));
+        addParticipantCtrl.setUnknownError(translate("An unexpected error happened*", "en", lang));
+        addParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*", "en", lang));
+        addParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*", "en", lang));
+        addParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
+    }
+    public void setEditExpense(String lang){
+        editExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
+        editExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
+        editExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
+        editExpenseCtrl.setWhen(translate("When?", "en", lang));
+        editExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
+        editExpenseCtrl.setDescription(translate("Description", "en", lang));
+        editExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
+        editExpenseCtrl.setCommit(translate("Add expense", "en", lang));
+        editExpenseCtrl.setAbort(translate("Cancel", "en", lang));
+        editExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
+        editExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
+        editExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
+        addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
+        addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        System.out.println("EditExpense translated");
     }
 
     private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";

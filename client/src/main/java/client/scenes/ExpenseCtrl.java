@@ -451,6 +451,13 @@ public abstract class ExpenseCtrl {
         }
     }
 
+    public void setSharedExpense(String txt){
+        this.sharedExpense.setText(txt);
+    }
+    public void setGivingMoneyToSomeone(String txt){
+        this.givingMoneyToSomeone.setText(txt);
+    }
+
     public void resetPayerErrors() {
         payerError.setVisible(false);
     }
