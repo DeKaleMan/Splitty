@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.service.DebtService;
 
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,9 @@ class DebtControllerTest {
 
     @BeforeEach
     void setup() {
-        sut = new DebtController(debtRepository, expenseRepository, participantRepository,
+        DebtService debtService = new DebtService(debtRepository, expenseRepository, participantRepository,
             eventRepository);
+        sut = new DebtController(debtService);
         e1.id = 1;
         e2.id = 2;
         eventRepository.events.add(e1);
