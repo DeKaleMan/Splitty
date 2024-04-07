@@ -30,6 +30,8 @@ public class AdminLoginCtrl {
     @FXML
     private Text signIn;
     @FXML
+    private Button back;
+    @FXML
     private Text instruction;
     @FXML
     private Text passwordInstructionLink;
@@ -110,6 +112,9 @@ public class AdminLoginCtrl {
 
     public void setPasswordInstructionsText(String txt) {
         this.passwordInstructionsText.setText(txt);
+    }
+    public void setBack(String txt){
+        this.back.setText(txt);
     }
 
     public void back() {

@@ -92,7 +92,6 @@ public class SetLanguage {
         splittyOverviewCtrl.setSettleDebtsButton(translate("Settle debts", "en", lang));
         splittyOverviewCtrl.setStatisticsButton(translate("Statistics", "en", lang));
         splittyOverviewCtrl.setAddExpenseButton(translate("Add expense", "en", lang));
-//        splittyOverviewCtrl.setEditParticipant(translate("Edit", "en", lang));
         splittyOverviewCtrl.setPaidByMe(translate("Paid by me", "en", lang));
         splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
@@ -101,6 +100,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
         splittyOverviewCtrl.setmyDetails(translate("My details", "en",lang));
+        splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
         System.out.println("event overview translated");
     }
     public void setAddExpense(String lang){
@@ -127,6 +127,7 @@ public class SetLanguage {
         adminLoginCtrl.setSignInButton(translate("Sign in", "en", lang));
         adminLoginCtrl.setUrlField(translate("Server Url e.g. 'localhost:8080'", "en", lang));
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
+        adminLoginCtrl.setBack(translate("Back", "en", lang));
         adminLoginCtrl.setPasswordInstructionsText(translate(
                 "You can find your password in the console of your server instance", "en", lang));
         System.out.println("admin login translated");
@@ -200,9 +201,12 @@ public class SetLanguage {
         manageParticipantsCtrl.setRemoveButton(translate("Remove participants", "en", lang));
         manageParticipantsCtrl.setEditButton(translate("Edit participants", "en", lang));
         manageParticipantsCtrl.setParticipantsText(translate("Participants", "en", lang));
-        manageParticipantsCtrl.setNoParticipantSelectedError(translate("No participant selected*", "en", lang));
-        manageParticipantsCtrl.setParticipantAddedConfirmation(translate("Participant successfully added*", "en", lang));
-        manageParticipantsCtrl.setParticipantDeletedConfirmation(translate("Participant successfully deleted*", "en", lang));
+        manageParticipantsCtrl.setNoParticipantSelectedError(translate("No participant selected*",
+                "en", lang));
+        manageParticipantsCtrl.setParticipantAddedConfirmation(translate("Participant successfully added*",
+                "en", lang));
+        manageParticipantsCtrl.setParticipantDeletedConfirmation(translate("Participant successfully deleted*",
+                "en", lang));
         System.out.println("participant manager translated");
     }
     private void setEditParticipant(String lang){
@@ -211,8 +215,10 @@ public class SetLanguage {
         editParticipantCtrl.setName(translate("Name", "en", lang));
         editParticipantCtrl.setCancelButton(translate("Cancel", "en", lang));
         editParticipantCtrl.setUnknownError(translate("An unexpected error happened*", "en", lang));
-        editParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*", "en", lang));
-        editParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*", "en", lang));
+        editParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*",
+                "en", lang));
+        editParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*",
+                "en", lang));
         editParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
     private void setAddPartiticipant(String lang){
@@ -221,8 +227,10 @@ public class SetLanguage {
         addParticipantCtrl.setName(translate("Name", "en", lang));
         addParticipantCtrl.setCancelButton(translate("Cancel", "en", lang));
         addParticipantCtrl.setUnknownError(translate("An unexpected error happened*", "en", lang));
-        addParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*", "en", lang));
-        addParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*", "en", lang));
+        addParticipantCtrl.setInvalidBicLabel(translate("Please enter a valid BIC* (between 8-11 characters)*",
+                "en", lang));
+        addParticipantCtrl.setInvalidIbanLabel(translate("Please enter a valid IBAN (between 15-34 characters)*",
+                "en", lang));
         addParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
     public void setEditExpense(String lang){

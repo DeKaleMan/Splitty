@@ -55,7 +55,7 @@ public class MainCtrl {
     private StartScreenCtrl startScreenCtrl;
 
     private Scene addExpense;
-    private AddExpenseCtrl addExpenseCtrl ;
+    private AddExpenseCtrl addExpenseCtrl;
 
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
@@ -94,7 +94,6 @@ public class MainCtrl {
 
     private Scene server;
     private ServerCtrl serverCtrl;
-
 
 
     // probably not the best place to put that here but works for now
@@ -183,7 +182,8 @@ public class MainCtrl {
         primaryStage.setTitle("Server");
         serverCtrl.setFields(connectionDown);
     }
-    private void setLanguage(){
+
+    private void setLanguage() {
         languages = new ArrayList<>();
         //TODO we should add the available languages perhaps to a file
         languages.addAll(List.of("en", "nl", "is", "zh", "es"));
@@ -194,17 +194,17 @@ public class MainCtrl {
     }
 
 
-    public void changeLanguage(String toLang){
+    public void changeLanguage(String toLang) {
         this.language = toLang;
         setLanguage.changeTo(toLang);
     }
 
-    public String translate(String query){
-        if(this.language.equals("en")) return query;
-            return setLanguage.translate(query, "en", this.language);
+    public String translate(String query) {
+        if (this.language.equals("en")) return query;
+        return setLanguage.translate(query, "en", this.language);
     }
 
-    public void showSplittyOverview(int id){
+    public void showSplittyOverview(int id) {
         try {
             primaryStage.setTitle("Event overview");
             primaryStage.setScene(splittyOverview);
@@ -222,13 +222,13 @@ public class MainCtrl {
         splittyOverviewCtrl.setAdmin(admin);
     }
 
-    public Image getFlag(){
+    public Image getFlag() {
         return setLanguage.getFlag(this.language);
 
     }
 
-    public List<Event> getMyEvents(){
-        if(settingCtrl!=null){
+    public List<Event> getMyEvents() {
+        if (settingCtrl != null) {
             events = serverUtils.getEventsByParticipant(settingCtrl.getId());
             return events;
         }
@@ -241,7 +241,7 @@ public class MainCtrl {
             name = "Unknown";
         }
 
-        ParticipantDTO participantDTO =  new ParticipantDTO(
+        ParticipantDTO participantDTO = new ParticipantDTO(
                 name,
                 0,
                 settingCtrl.getIban(),
@@ -272,7 +272,7 @@ public class MainCtrl {
         }
     }
 
-    public void showInvitation(int eventID){
+    public void showInvitation(int eventID) {
         if (!getConnection()) {
             showStartScreen();
             return;
@@ -308,7 +308,7 @@ public class MainCtrl {
     /**
      * show start screen normal
      */
-    public void showStartScreen(){
+    public void showStartScreen() {
         primaryStage.setTitle("Splitty");
         primaryStage.setScene(startScreen);
         try {
@@ -344,9 +344,10 @@ public class MainCtrl {
 
     /**
      * Shows the participants manager
+     *
      * @param eventID the title of the current event
      */
-    public void showParticipantManager(int eventID){
+    public void showParticipantManager(int eventID) {
         try {
             primaryStage.setTitle("ManageParticipants");
             primaryStage.setScene(manageParticipants);
@@ -362,7 +363,7 @@ public class MainCtrl {
      * @param title     the title of the current event
      * @param eventCode
      */
-    public void showStatistics(String title, int eventCode){
+    public void showStatistics(String title, int eventCode) {
         try {
             primaryStage.setTitle("Statistics");
             primaryStage.setScene(statistics);
@@ -378,8 +379,8 @@ public class MainCtrl {
         }
     }
 
-    public int getCurrentEventCode(){
-        if (splittyOverviewCtrl == null){
+    public int getCurrentEventCode() {
+        if (splittyOverviewCtrl == null) {
             throw new RuntimeException("Splitty overview controller is null," +
                     " exception thrown in MainCtrl getCurrentEventCode()");
         }
@@ -389,7 +390,7 @@ public class MainCtrl {
     /**
      * this shows the statistics window
      */
-    public void viewDeptsPerEvent(int eventCode){
+    public void viewDeptsPerEvent(int eventCode) {
         try {
             primaryStage.setTitle("Debts per event");
             primaryStage.setScene(debts);
@@ -406,7 +407,7 @@ public class MainCtrl {
     }
 
 
-    public void showEditEvent(int eventID){
+    public void showEditEvent(int eventID) {
         primaryStage.setTitle("EditEvent");
         editEventCrtl.setEventId(eventID);
         editEventCrtl.reset();
@@ -416,6 +417,7 @@ public class MainCtrl {
     public void setConfirmationSettings() {
         startScreenCtrl.setSettingsSavedLabel();
     }
+
     public void setConfirmationJoinedEvent() {
         splittyOverviewCtrl.setJoinedEventLabel();
     }
@@ -423,6 +425,7 @@ public class MainCtrl {
     public void setConfirmationEventCreated() {
         splittyOverviewCtrl.setEventCreatedLabel();
     }
+
     public void addEvent(Event event) {
         startScreenCtrl.addEvent(event);
     }
@@ -437,6 +440,7 @@ public class MainCtrl {
             }
         });
     }
+
     public void setButtonRedProperty(Button button) {
         button.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -487,20 +491,20 @@ public class MainCtrl {
 
 
     public double getAmountInDifferentCurrency(commons.Currency from, Currency to,
-                                                Date date, double amount){
-        if(from == to) return amount;
+                                               Date date, double amount) {
+        if (from == to) return amount;
         String dateString = getDateString(date);
         Conversion conversion = serverUtils.getConversion(from, to, dateString);
-        if(conversion == null) throw new RuntimeException("Failed to convert amount");
+        if (conversion == null) throw new RuntimeException("Failed to convert amount");
         return amount * conversion.conversionRate();
     }
 
     public String getDateString(Date date) {
         String dateString = ((date.getDate() < 10) ? "0" : "")
-            + date.getDate() + "-"
-            + ((date.getMonth() < 9) ? "0" : "")
-            + (date.getMonth()+1)
-            + "-" + (1900 + date.getYear());
+                + date.getDate() + "-"
+                + ((date.getMonth() < 9) ? "0" : "")
+                + (date.getMonth() + 1)
+                + "-" + (1900 + date.getYear());
         return dateString;
     }
 
@@ -519,6 +523,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add participant");
         this.addParticipantCtrl.setEventId(eventId);
     }
+
     public void showEditParticipant(int eventId, String participantId) {
         if (!getConnection()) {
             showStartScreen();
@@ -530,6 +535,7 @@ public class MainCtrl {
         this.editParticipantCtrl.autoFillWithMyData(participantId);
         this.editParticipantCtrl.setHost(true);
     }
+
     // one is accessed through the participant manager and the other through Splitty overview
     public void showEditParticipant(int eventId) {
         if (!getConnection()) {
@@ -551,8 +557,8 @@ public class MainCtrl {
         manageParticipantsCtrl.setParticipantAddedConfirmation();
     }
 
-    public void stopLongPolling(){
-        if(splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
+    public void stopLongPolling() {
+        if (splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
     }
 }
 

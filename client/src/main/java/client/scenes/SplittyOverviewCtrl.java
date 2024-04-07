@@ -602,5 +602,9 @@ public class SplittyOverviewCtrl implements Initializable {
     public void setmyDetails(String txt){
         this.myDetails.setText(txt);
     }
+
+    public void setHostOptionsButton(String txt){
+        this.hostOptionsButton.setText(txt);
+    }
 }
 

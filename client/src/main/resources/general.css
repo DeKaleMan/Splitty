@@ -76,7 +76,7 @@ ListView {
 }
 
 .blueBox {
-    -fx-background-color: #4479FD; /* Blue background for VBox */
+    -fx-background-color: #2F4F4F ; /* Blue background for VBox */
 
     -fx-border-radius: 20px; /* Rounded corners */
     -fx-background-radius: 20px;
