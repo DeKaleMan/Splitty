@@ -8,9 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.database.EventRepository;
-import server.database.ParticipantRepository;
-import server.database.PaymentRepository;
 import server.service.PaymentService;
 
 import java.sql.Date;

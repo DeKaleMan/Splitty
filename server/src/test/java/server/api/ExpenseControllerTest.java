@@ -145,12 +145,15 @@ class ExpenseControllerTest {
 
     @Test
     void testUpdate(){
-        Expense toUpdate = new Expense(event1,"d", Type.Drinks, new Date(), 1.0, p1, true);
+        Expense toUpdate = new Expense(event1,"d", Type.Drinks, new Date(), 1.0, p1,
+            true);
         toUpdate.expenseId = 4;
         expenseRepository.expenses.add(toUpdate);
-        Expense updated = new Expense(event1,"d2", Type.Food, new Date(1,1,1), 2.0, p2, false);
+        Expense updated = new Expense(event1,"d2", Type.Food, new Date(1,1,1), 2.0,
+            p2, false);
         updated.expenseId = 4;
-        ResponseEntity<Expense> response = sut.updateExpense(1,4,new ExpenseDTO(1,"d2", Type.Food, new Date(1,1,1), 2.0, "uuid2", false));
+        ResponseEntity<Expense> response = sut.updateExpense(1,4,new ExpenseDTO(1,"d2",
+            Type.Food, new Date(1,1,1), 2.0, "uuid2", false));
         assertEquals(updated,response.getBody());
         assertEquals(OK,response.getStatusCode());
         assertEquals("save", expenseRepository.methods.getLast());

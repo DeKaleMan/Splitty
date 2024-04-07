@@ -2,7 +2,6 @@ package server.service;
 
 import commons.*;
 import commons.dto.ExpenseDTO;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;

@@ -3,10 +3,7 @@ package server.service;
 import commons.Event;
 import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 
