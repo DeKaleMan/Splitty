@@ -112,6 +112,13 @@ public class ServerIOUtilActual implements ServerIOUtil {
             throw new RuntimeException("Error writing JSON object to file", e);
         }
     }
+    @Override
+    public boolean deleteFile(File file){
+        if(fileExists(file)){
+            file.delete();
+        }
+        return false;
+    }
 
     @Override
     public boolean createNewFile(File newfile){

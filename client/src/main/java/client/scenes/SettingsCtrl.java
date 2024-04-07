@@ -2,18 +2,22 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Currency;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class SettingsCtrl {
     private ServerUtils serverUtils;
@@ -55,10 +59,13 @@ public class SettingsCtrl {
     @FXML
     private TextField bicField;
 
+    private String newLang;
+
     @Inject
-    public SettingsCtrl(MainCtrl mainCtrl, Config config){
+    public SettingsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils,  Config config){
         this.mainCtrl = mainCtrl;
         this.config = config;
+        this.serverUtils = serverUtils;
     }
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
@@ -161,10 +168,15 @@ public class SettingsCtrl {
         return config.getBic();
     }
 
+
+    @FXML
+    private TextArea addedLang;
+    @FXML
+    private VBox confirmlangBox;
     @FXML
     public void addLang(){
         progressBar.setVisible(true);
-        String newLang = langTextfield.getText();
+        this.newLang = langTextfield.getText();
         if(newLang != null || !newLang.isBlank()){
             //setLanguage to new found language, we can no longer use an enum
             if(mainCtrl.languages.contains(newLang)){
@@ -181,9 +193,28 @@ public class SettingsCtrl {
                 progressBar.setVisible(false);
                 langTextfield.setText("no valid languageCode");
                 System.out.println(e);
+                progressBar.setVisible(false);
+                return;
             }
         }
         progressBar.setVisible(false);
+
+        //TODO get jsonfile here
+        confirmlangBox.setVisible(true);
+        String jsonString = serverUtils.getLanguageJSON(newLang);
+        jsonString = jsonString.replace(",", ",\n");
+         addedLang.setText(jsonString);
+
+    }
+
+    @FXML
+    public void confirmLang(){
+        confirmlangBox.setVisible(false);
+        String lang = addedLang.getText();
+        String stringForJson = lang.replace("\n", "");
+        JSONObject jsonObject = new JSONObject(stringForJson);
+        serverUtils.setNewLang(jsonObject, newLang);
+
     }
 
     public String getLanguage() {
