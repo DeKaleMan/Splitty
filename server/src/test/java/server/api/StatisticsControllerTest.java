@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.service.StatisticsService;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -37,7 +38,8 @@ public class StatisticsControllerTest {
     void setup() {
         eventRepository = new TestEventRepository();
         expenseRepository = new TestExpenseRepository();
-        sut = new StatisticsController(expenseRepository, eventRepository);
+        StatisticsService statisticsService = new StatisticsService(expenseRepository, eventRepository);
+        sut = new StatisticsController(statisticsService);
         event1.id = 1;
         event2.id = 2;
         expenseRepository.save(expense1);

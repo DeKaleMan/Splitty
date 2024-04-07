@@ -81,7 +81,7 @@ class DebtControllerTest {
     @Test
     void getAllDebtsOfEventInvalid() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfEvent(3);
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
@@ -96,13 +96,13 @@ class DebtControllerTest {
     @Test
     void getAllDebtsOfExpenseInvalidExpense() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfExpense(1,4);
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void getAllDebtsOfExpenseInvalidEvent() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfExpense(4,1);
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
@@ -117,19 +117,21 @@ class DebtControllerTest {
     @Test
     void getAllDebtsOfParticipantInvalidParticipant() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfParticipant(1,"test3");
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void getAllDebtsOfParticipantInvalidEvent() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfParticipant(4,"test1");
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void getALlDebts() {
         List<Debt> expected = List.of(d1,d2,d3);
-        assertEquals(expected,sut.getALlDebts());
+        ResponseEntity<List<Debt>> response = sut.getALlDebts();
+        assertEquals(expected,response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("findAll",debtRepository.methods.getLast());
     }
 
@@ -145,18 +147,18 @@ class DebtControllerTest {
     @Test
     void saveDebtInvalidExpense() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,1,4,"test1"));
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void saveDebtInvalidParticipant() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,1,1,"test3"));
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void saveDebtInvalidEvent() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,3,1,"test1"));
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 }

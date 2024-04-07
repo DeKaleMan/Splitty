@@ -129,12 +129,12 @@ class ExpenseControllerTest {
     @Test
     void testIncorrectDelete(){
         var actual = sut.deleteExpenseByEventIdAndExpenseId(0, 0);
-        assertEquals(NOT_FOUND, actual.getStatusCode());
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
         Date date = new Date();
         ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
                 date, 0.0, "uuid",true);
         var actual2 = sut.deleteExpenseByEventIdAndExpenseId(event1.id, -33);
-        assertEquals(NOT_FOUND, actual.getStatusCode());
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
         // TODO the one where you check whether the eventCode is incorrect and the expenseID is correct,
         // I just haven't figured out how to get the expenseID
 
