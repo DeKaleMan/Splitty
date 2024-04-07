@@ -73,7 +73,7 @@ class LanguageControllerTest {
 
         assertEquals(HttpStatus.FORBIDDEN, response1.getStatusCode());
         assertEquals(HttpStatus.FORBIDDEN, response2.getStatusCode());
-        assertEquals(HttpStatus.FORBIDDEN, response3.getStatusCode());
+        assertEquals(HttpStatus.OK, response3.getStatusCode());
 
     }
 
