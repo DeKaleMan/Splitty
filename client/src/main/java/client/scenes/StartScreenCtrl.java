@@ -265,6 +265,26 @@ public class StartScreenCtrl implements Initializable {
     public void setCreateButtonText(String text) {
         create.setText(text);
     }
+    public void setInvalidCodeError(String text) {
+        invalidCodeError.setText(text);
+    }
+    public void setCodeNotFoundError(String text) {
+        codeNotFoundError.setText(text);
+    }
+    public void setAlreadyParticipantError(String text) {
+        alreadyParticipantError.setText(text);
+    }
+    public void setNoConnectionError(String text) {
+        noConnectionError.setText(text);
+    }
+    public void setMyEventsNotFoundError(String text) {
+        noConnectionError.setText(text);
+    }
+    public void setSettingsSavedLabel(String text) {
+        settingsSavedLabel.setText(text);
+    }
+
+
 
     public void setNoEventLabel(String text) {
 //        noEventLabel.setText(text);
@@ -408,4 +428,6 @@ public class StartScreenCtrl implements Initializable {
             }
         }
     }
+
+
 }

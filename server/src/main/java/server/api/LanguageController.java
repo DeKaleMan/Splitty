@@ -37,6 +37,7 @@ public class LanguageController {
         if (query == null || query.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("empty query");
         }
+        if(sourceLang.equals(targetLang)) return ResponseEntity.ok(query);
         File newfile = new File(basepath + targetLang + ".json");
         //File mynewFile= new File("src/main/resources/Languages/" + targetLang + ".json");
         //TODO no newfile.exists

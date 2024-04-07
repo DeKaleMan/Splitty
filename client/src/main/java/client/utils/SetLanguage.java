@@ -83,6 +83,16 @@ public class SetLanguage {
         startScreenCtrl.setNoEventLabel(translate("You do not have any events to list still", "en", lang));
         startScreenCtrl.setSettings(translate("Settings", "en", lang));
         startScreenCtrl.setmyEventsText(translate("My events", "en", lang));
+        startScreenCtrl.setCodeNotFoundError(translate("Event code not found", "en", lang));
+        startScreenCtrl.setInvalidCodeError(translate("Event code is a number", "en", lang));
+        startScreenCtrl.setSettingsSavedLabel(translate("Settings saved succesfully*", "en", lang));
+        startScreenCtrl.setAlreadyParticipantError(translate("You already participate in this event",
+                "en", lang));
+        startScreenCtrl.setNoConnectionError(translate("Go to settings to check your connection to " +
+                "the server and try to refresh or change the server*", "en", lang));
+        startScreenCtrl.setMyEventsNotFoundError(translate("Could not fetch my events, " +
+                "check the server availability", "en", lang));
+
         System.out.println("mainscreen translated");
     }
     public void setSpittyoverview(String lang){

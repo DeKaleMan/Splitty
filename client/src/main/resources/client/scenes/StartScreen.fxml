@@ -33,9 +33,9 @@
                     </font></Label>
 
                 <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#resetErrors" onMouseClicked="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
-                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="79.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
-                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="70.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
-            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="70.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" />
+                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
+                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
+            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" />
             </children>
          <padding>
             <Insets right="5.0" />
@@ -54,6 +54,11 @@
                 </font>
             </Label>
             <ListView fx:id="eventListView" layoutX="34.0" layoutY="61.0" onKeyPressed="#handleKeyPress" onMouseClicked="#handleMouseClick" prefHeight="200.0" prefWidth="176.0" />
+         <Label fx:id="myEventsNotFoundError" layoutX="34.0" layoutY="208.0" prefHeight="53.0" prefWidth="176.0" text="Could not fetch my events, check the server availability" visible="false" wrapText="true">
+            <font>
+               <Font name="System Italic" size="11.0" />
+            </font>
+         </Label>
         </Pane>
         <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="275.0" layoutY="15.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
         <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" visible="false" />
@@ -63,10 +68,6 @@
                 <Font name="System Italic" size="10.0" />
             </font>
         </Label>
-      <Label fx:id="myEventsNotFoundError" layoutX="367.0" layoutY="320.0" prefHeight="53.0" prefWidth="114.0" text="Could not fetch my events, check the server availability" visible="false" wrapText="true">
-         <font>
-            <Font name="System Italic" size="11.0" />
-         </font></Label>
       <Label fx:id="noConnectionError" layoutX="205.0" layoutY="332.0" prefHeight="53.0" prefWidth="159.0" text="Go to settings to check your connection to the server and try to refresh or change the server*" textFill="RED" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="11.0" />
