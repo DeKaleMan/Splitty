@@ -103,7 +103,8 @@ public class ParticipantController {
         return ResponseEntity.ok(participants);
     }
 
-    private DeferredResult<ResponseEntity<Participant>> getResponseEntityDeferredResult(Map<Object, Consumer<Participant>> listeners) {
+    private DeferredResult<ResponseEntity<Participant>> getResponseEntityDeferredResult(
+            Map<Object, Consumer<Participant>> listeners) {
         var noContent = ResponseEntity.noContent().build();
         var result = new DeferredResult<ResponseEntity<Participant>>(5000L, noContent);
 
