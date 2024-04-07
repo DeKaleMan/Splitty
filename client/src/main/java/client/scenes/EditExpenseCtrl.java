@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,74 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class EditExpenseCtrl extends ExpenseCtrl {
+    @FXML
+    protected ComboBox<Participant> personComboBox;
+    @FXML
+    protected Label payerError;
+
+    //all the things needed for the addExpense
+    @FXML
+    protected TextArea whatFor;
+    @FXML
+    protected Label amountError;
+
+    @FXML
+    protected DatePicker dateSelect;
+    @FXML
+    protected Label dateInvalidError;
+
+    @FXML
+    protected ListView<Participant> splitList;
+
+    @FXML
+    protected TextField amount;
+
+    @FXML
+    protected ComboBox<Type> category;
+
+    @FXML
+    protected Label sceneTypeText;
+    @FXML
+    protected Label whoPaid;
+    @FXML
+    protected Label howMuch;
+    @FXML
+    protected Label when;
+    @FXML
+    protected Label howToSplit;
+    @FXML
+    protected Label description;
+    @FXML
+    protected Label expenseTypetext;
+
+    @FXML
+    protected Button commit;
+    @FXML
+    protected Label commitExpenseError;
+    @FXML
+    protected Button cancel;
+    @FXML
+    protected RadioButton selectAll;
+    @FXML
+    protected RadioButton selectSome;
+
+    @FXML
+    protected RadioButton sharedExpense;
+
+    @FXML
+    protected RadioButton givingMoneyToSomeone;
+
+    @FXML
+    protected ToggleGroup selectionToggles;
+
+    @FXML
+    protected HBox receiverHBox;
+
+    @FXML
+    protected ListView<Participant> receiverListView;
+
+    @FXML
+    protected ComboBox<Currency> currencyComboBox;
 
     private Expense expense;
 

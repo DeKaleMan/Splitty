@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -30,6 +31,9 @@ public class StatisticsCtrl {
     private double transport = 0;
     private double other = 0;
     private double[] stat;
+
+    @FXML
+    private Button back;
 
     @FXML
     private Label titleLabel;
@@ -99,10 +103,14 @@ public class StatisticsCtrl {
      */
     public void setPieChart() {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        if (this.food != 0.0) data.add(new PieChart.Data("Food", food));
-        if (this.drinks != 0.0) data.add(new PieChart.Data("Drinks", drinks));
-        if (this.transport != 0.0) data.add(new PieChart.Data("Transport", transport));
-        if (this.other != 0.0) data.add(new PieChart.Data("Other", other));
+        String foodName = mainCtrl.translate("Food");
+        String drinkName = mainCtrl.translate("Drinks");
+        String transportName = mainCtrl.translate("Transport");
+        String otherName = mainCtrl.translate("Other");
+        if(this.food != 0.0) data.add(new PieChart.Data(foodName, food));
+        if(this.drinks != 0.0) data.add(new PieChart.Data(drinkName, drinks));
+        if(this.transport != 0.0) data.add(new PieChart.Data(transportName, transport));
+        if(this.other != 0.0) data.add(new PieChart.Data(otherName, other));
 
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                     d.getName(),
@@ -214,5 +222,16 @@ public class StatisticsCtrl {
             this.totalCost.setText("-");
             displayError();
         }
+    }
+
+    public void setStatisticsText(String txt) {
+        this.statisticsText.setText(txt);
+    }
+
+    public void setTotalCostText(String txt) {
+        this.totalCostText.setText(txt);
+    }
+    public void setBackButton(String txt){
+        this.back.setText(txt);
     }
 }

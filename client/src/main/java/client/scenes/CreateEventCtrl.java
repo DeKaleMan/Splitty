@@ -42,6 +42,19 @@ public class CreateEventCtrl {
 
     @FXML
     private TextArea eventDescriptionArea;
+    @FXML
+    private Label eventNameText;
+    @FXML
+    private Label dateText;
+    @FXML
+    private Label eventDescriptionText;
+    @FXML
+    private Label nameText;
+    @FXML
+    private Label accountHolderText;
+
+
+
 
 
     @FXML
@@ -159,5 +172,32 @@ public class CreateEventCtrl {
         resetTitleFieldError();
         hostNameError.setVisible(false);
         goToSettings.setVisible(false);
+    }
+
+
+    public void setEventNameText(String txt){
+        this.eventNameText.setText(txt);
+    }
+    public void setDateText(String txt){
+        this.dateText.setText(txt);
+    }
+    public void setEventDescriptionText(String txt){
+        this.eventDescriptionText.setText(txt);
+    }
+    public void setEventDescriptionArea(String txt){
+        this.eventDescriptionArea.setPromptText(txt);
+    }
+    public void setNameText(String txt){
+        this.nameText.setText(txt);
+    }
+    public void setCreateButton(String txt){
+        this.createButton.setText(txt);
+    }
+    public void setCancelButton(String txt){
+        this.cancelButton.setText(txt);
+    }
+    public void setRequired(String txt){
+        //this.nameField.setPromptText(txt);
+        this.titleField.setPromptText(txt);
     }
 }

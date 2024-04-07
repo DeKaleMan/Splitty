@@ -102,28 +102,28 @@ public class DebtCtrl implements Initializable {
         VBox info = new VBox();
         GridPane emailInfo = new GridPane();
         if (payment.getPayee().getEmail() == null)
-            emailInfo.add(new Text("No email specified for this participant.\n"), 0, 0);
+            emailInfo.add(new Text(mainCtrl.translate("No email specified for this participant.") + "\n"), 0, 0);
         else {
-            Button sendMessage = new Button("Send reminder");
+            Button sendMessage = new Button(mainCtrl.translate("Send reminder"));
             sendMessage.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     sendMessage(payment);
                 }
             });
-            emailInfo.add(new Text("Email available: "), 0, 0);
+            emailInfo.add(new Text(mainCtrl.translate("Email available: ")), 0, 0);
             emailInfo.add(sendMessage, 1, 0);
             emailInfo.setHgap(10.0);
         }
         info.getChildren().add(emailInfo);
         if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null &&
             payment.getPayee().getAccountHolder() != null) {
-            info.getChildren().add(new Text("Banking info available" +
-                "\n\tAccount Holder: " + payment.getPayee().getAccountHolder() +
-                "\n\tIBAN: " + payment.getPayee().getIBan() +
-                "\n\tBIC: " + payment.getPayee().getBIC()));
+            info.getChildren().add(new Text(mainCtrl.translate("Banking info available") +
+                "\n\t" + mainCtrl.translate("Account Holder:") + " " + payment.getPayee().getAccountHolder() +
+                "\n\t" + mainCtrl.translate("IBAN:") + " " + payment.getPayee().getIBan() +
+                "\n\t" + mainCtrl.translate("BIC:") + " " + payment.getPayee().getBIC()));
         } else {
-            info.getChildren().add(new Text("Incomplete or no banking info available"));
+            info.getChildren().add(new Text(mainCtrl.translate("Incomplete or no banking info available")));
         }
         info.setSpacing(2);
         return info;
@@ -139,13 +139,15 @@ public class DebtCtrl implements Initializable {
             errorGrid.add(new Text(e.getMessage()),0,0);
             return errorGrid;
         }
-        String title = payment.getPayer().getName()
-            + " pays "
-            + payment.getPayee().getName()
-            + " "
-            + mainCtrl.getFormattedDoubleString(amount)
-            + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
-        Button received = new Button("Mark received");
+
+        String pays = " " + mainCtrl.translate("pays") + " ";
+        String markReceived = mainCtrl.translate("Mark received");
+        String title = payment.getPayer().getName() + pays
+                + payment.getPayee().getName()
+                + " "
+                + mainCtrl.getFormattedDoubleString(amount)
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
+        Button received = new Button(markReceived);
         received.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

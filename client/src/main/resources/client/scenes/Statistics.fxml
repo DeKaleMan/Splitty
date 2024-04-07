@@ -8,7 +8,7 @@
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
    <children>
       <PieChart fx:id="pieChart" layoutX="48.0" layoutY="138.0" prefHeight="254.0" prefWidth="504.0" />
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
       <VBox alignment="TOP_CENTER" layoutX="62.0" layoutY="14.0" prefHeight="200.0" prefWidth="258.0">
          <children>
             <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="258.0" text="Title" textAlignment="CENTER">
@@ -16,12 +16,12 @@
                   <Font size="48.0" />
                </font>
             </Label>
-            <Label fx:id="statisticsText" prefHeight="35.0" prefWidth="93.0" text="Statistics">
+            <Label fx:id="statisticsText" text="Statistics">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <HBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="200.0" spacing="10.0">
+            <HBox alignment="TOP_CENTER" spacing="10.0">
                <children>
                   <Label fx:id="totalCostText" text="Total cost of event:" />
                   <Label fx:id="totalCost" text="100$" />

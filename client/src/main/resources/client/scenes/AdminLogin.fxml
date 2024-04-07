@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminLoginCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminLoginCtrl">
    <children>
       <VBox alignment="CENTER" layoutX="162.0" layoutY="32.0" prefHeight="368.0" prefWidth="276.0" spacing="10.0">
          <children>
@@ -36,7 +36,7 @@
                </VBox.margin></Label>
          </children>
       </VBox>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label fx:id="serverNotFoundError" layoutX="438.0" layoutY="165.0" prefHeight="17.0" prefWidth="83.0" text="Server not found*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />

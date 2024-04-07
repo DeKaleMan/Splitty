@@ -4,14 +4,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditParticipantCtrl">
+<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditParticipantCtrl">
     <children>
-        <Label fx:id="title" layoutX="228.0" layoutY="20.0" prefHeight="38.0" prefWidth="164.0" text="Edit Participant">
+        <Label fx:id="title" layoutX="228.0" layoutY="20.0" text="Edit Participant">
             <font>
                 <Font name="System Bold" size="22.0" />
             </font>
         </Label>
-        <Text layoutX="184.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="59.85107421875">
+        <Text fx:id="name" layoutX="99.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="RIGHT" wrappingWidth="141.0">
             <font>
                 <Font size="20.0" />
             </font>
@@ -38,7 +38,7 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <Text layoutX="95.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" wrappingWidth="148.57142857142856">
+        <Text layoutX="14.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" textAlignment="RIGHT" wrappingWidth="225.57142857142856">
             <font>
                 <Font size="20.0" />
             </font>
@@ -60,8 +60,8 @@
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-        <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-        <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#editParticipant" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
+        <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+        <Button fx:id="applyChangesButton" alignment="CENTER" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#editParticipant" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" AnchorPane.rightAnchor="13.0" />
 
 
     </children>

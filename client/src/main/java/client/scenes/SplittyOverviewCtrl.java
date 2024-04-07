@@ -21,10 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -36,11 +33,9 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
-
-
     //We need to store the eventCode right here
     private int eventId;
-
+    boolean translating = false;
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
@@ -49,6 +44,10 @@ public class SplittyOverviewCtrl implements Initializable {
     //these are for the css:
     @FXML
     private AnchorPane background;
+    @FXML
+    private ComboBox<String> languageSelect;
+    @FXML
+    private ImageView flag;
     @FXML
     private Label expenses;
     @FXML
@@ -80,6 +79,10 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private Button deleteExpenseButton;
     @FXML
+    private Button editExpenseButton;
+
+
+    @FXML
     public Button hostOptionsButton;
 
 
@@ -102,6 +105,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label joinedEventLabel;
     @FXML
     public Label inviteCode;
+    @FXML
+    private Button myDetails;
 
 
     @FXML
@@ -402,17 +407,21 @@ public class SplittyOverviewCtrl implements Initializable {
     private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
         Text mainInfo = new Text();
         if (expense.isSharedExpense()) {
+            String paid =  " " + mainCtrl.translate("paid") + " ";
+            String forT =  " " + mainCtrl.translate("for") + " " ;
             mainInfo.setText(expense.getPayer().getName()
-                + " paid "
+                + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + " for " + expense.getType());
+                + "\n" + forT +  mainCtrl.translate(expense.getType().toString()));
         } else {
+            String gave = " " + mainCtrl.translate("gave") + " " ;
+            String to = " " + mainCtrl.translate("to") + " " ;
             mainInfo.setText(expense.getPayer().getName()
-                + " gave "
+                + gave
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + " to "
+                + to
                 + involved
                     .stream()
                     .filter(x -> !x.equals(expense.getPayer()))
@@ -484,6 +493,15 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setAllExpenses(String text) {
         this.allExpenses.setText(text);
+    }
+    public void setEditEvent(String text) {
+        this.editEvent.setText(text);
+    }
+    public void setEditExpense(String text) {
+        this.editExpenseButton.setText(text);
+    }
+    public void setLeaveButton(String text) {
+        this.leaveButton.setText(text);
     }
 
 
@@ -580,5 +598,67 @@ public class SplittyOverviewCtrl implements Initializable {
     public void stopUpdates(){
         serverUtils.stop();
     }
+    public void setmyDetails(String txt){
+        this.myDetails.setText(txt);
+    }
+    public void setHostOptionsButton(String txt){
+        this.hostOptionsButton.setText(txt);
+    }
+
+    @FXML
+    public void showLangOptions(){
+        languageSelect.show();
+        flag.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
+                // Clicked outside the choice box, hide it
+                languageSelect.setVisible(false);
+            }
+        });
+        flag.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Hide the choice box when any key is pressed
+            languageSelect.setVisible(false);
+        });
+    }
+
+    public void setFlag(Image image) {
+        flag.setImage(image);
+    }
+    @FXML
+    public void changeLanguage(){
+        if(translating) return;
+        try {
+            if (languageSelect.getSelectionModel().getSelectedItem() != null) {
+                String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
+                if(selected.equals(config.getLanguage())){
+                    return;
+                }
+                //Language toLang = Language.valueOf(selected);
+                if (mainCtrl.languages.contains(selected)) {
+                    config.setLanguage(selected);
+                    config.write();
+                    String toLang = selected;
+                    mainCtrl.changeLanguage(toLang);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void setLanguageSelect(){
+        translating = true;
+        ObservableList<String> languages = FXCollections.observableArrayList();
+        mainCtrl.language = config.getLanguage();
+        if (mainCtrl.language == null) {
+            mainCtrl.language = "en";
+        }
+        languages.addAll(mainCtrl.languages);
+        languageSelect.setItems(languages);
+        languageSelect.setValue(mainCtrl.language);
+        //languageSelect.setValue(flag);
+        Image flag = mainCtrl.getFlag();
+        setFlag(flag);
+        translating = false;
+    }
+
 }
 

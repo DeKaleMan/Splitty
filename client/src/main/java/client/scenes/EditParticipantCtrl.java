@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -26,18 +27,21 @@ public class EditParticipantCtrl implements Initializable {
     private boolean host = false;
     private Participant editedParticipant;
     @FXML
-    public Button cancelButton;
+    private Text name;
     @FXML
-    public Button applyChangesButton;
+    private Button cancelButton;
     @FXML
-    public Label invalidEmailLabel;
+    private Button applyChangesButton;
     @FXML
-    public Label invalidIbanLabel;
+    private Label invalidEmailLabel;
     @FXML
-    public Label invalidBicLabel;
+    private Label invalidIbanLabel;
     @FXML
-    public Label unknownError;
-
+    private Label invalidBicLabel;
+    @FXML
+    private Label unknownError;
+    @FXML
+    private Text accountHolder;
     @FXML
     private Label title;
 
@@ -170,5 +174,35 @@ public class EditParticipantCtrl implements Initializable {
         if (press.getCode() == KeyCode.ESCAPE) {
             cancel();
         }
+    }
+
+    public void setCancelButton(String txt) {
+        this.cancelButton.setText(txt);
+    }
+
+    public void setApplyChangesButton(String txt){
+        this.applyChangesButton.setText(txt);
+    }
+    public void setName(String txt){
+        this.name.setText(txt);
+    }
+
+    public void setInvalidEmailLabel(String txt){
+        this.invalidEmailLabel.setText(txt);
+    }
+
+    public void setInvalidIbanLabel(String txt){
+        this.invalidIbanLabel.setText(txt);
+    }
+
+    public void setInvalidBicLabel(String txt){
+        this.invalidBicLabel.setText(txt);
+    }
+
+    public void setUnknownError(String txt){
+        this.unknownError.setText(txt);
+    }
+    public void setAccountHolder(String txt){
+        this.accountHolder.setText(txt);
     }
 }

@@ -27,10 +27,11 @@ public class StartScreenCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final Config config;
 
+    boolean translating = false;
 
-
-    private String currentLang;
-
+    private String currentLang = "en";
+    @FXML
+    private Label myEventsText;
     @FXML
     private Label createEventText;
     @FXML
@@ -78,6 +79,7 @@ public class StartScreenCtrl implements Initializable {
 
     @FXML
     private ImageView flag;
+
 
 
     @Inject
@@ -232,6 +234,10 @@ public class StartScreenCtrl implements Initializable {
         createEventTextField.setText(eventTitle);
     }
 
+    public void setmyEventsText(String txt){
+        this.myEventsText.setText(txt);
+    }
+
 
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
@@ -260,13 +266,37 @@ public class StartScreenCtrl implements Initializable {
     public void setCreateButtonText(String text) {
         create.setText(text);
     }
+    public void setInvalidCodeError(String text) {
+        invalidCodeError.setText(text);
+    }
+    public void setCodeNotFoundError(String text) {
+        codeNotFoundError.setText(text);
+    }
+    public void setAlreadyParticipantError(String text) {
+        alreadyParticipantError.setText(text);
+    }
+    public void setNoConnectionError(String text) {
+        noConnectionError.setText(text);
+    }
+    public void setMyEventsNotFoundError(String text) {
+        noConnectionError.setText(text);
+    }
+    public void setSettingsSavedLabel(String text) {
+        settingsSavedLabel.setText(text);
+    }
+
+
 
     public void setNoEventLabel(String text) {
 //        noEventLabel.setText(text);
     }
+    public void setSettings(String text){
+        this.settingsButton.setText(text);
+    }
 
 
     public void setLanguageSelect() {
+        translating = true;
         //TODO add a check if this list is the same as the actual list otherwise
         // set it or find a way to initialize this once without the actual values because those are null before you init
         ObservableList<String> languages = FXCollections.observableArrayList();
@@ -283,16 +313,19 @@ public class StartScreenCtrl implements Initializable {
         if (!mainCtrl.language.equals(currentLang)) {
             changeLanguage();
         }
-//        languageSelect.setItems(FXCollections.observableList(mainCtrl.languages));
+        translating = false;
     }
 
     @FXML
     public void changeLanguage() {
         setProgress();
+        if(translating) return;
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-
+                if(selected.equals(currentLang)){
+                    return;
+                }
                 //Language toLang = Language.valueOf(selected);
                 if (mainCtrl.languages.contains(selected)) {
                     config.setLanguage(selected);
@@ -300,23 +333,34 @@ public class StartScreenCtrl implements Initializable {
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
                 }
-
                 currentLang = selected;
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-        setLanguageSelect();
         setProgress();
         languageSelect.setVisible(false);
-
+    }
+    @FXML
+    public void showLangOptions() {
+        languageSelect.show();
+        imageView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
+                // Clicked outside the choice box, hide it
+                languageSelect.setVisible(false);
+            }
+        });
+        imageView.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Hide the choice box when any key is pressed
+            languageSelect.setVisible(false);
+        });
     }
 
     public void setProgress() {
         if (this.progress.isVisible()) {
             this.progress.setVisible(false);
         } else {
-            this.progress.setVisible(true);
+            this.progress.setVisible(false);
         }
     }
 
@@ -353,23 +397,7 @@ public class StartScreenCtrl implements Initializable {
         flag.setImage(image);
     }
 
-    @FXML
-    public void showLangOptions() {
-//        this.languageSelect.setVisible(true);
-        //this.languageSelect.setValue(flag);
-        languageSelect.show();
 
-        imageView.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
-                // Clicked outside the choice box, hide it
-                languageSelect.setVisible(false);
-            }
-        });
-        imageView.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            // Hide the choice box when any key is pressed
-            languageSelect.setVisible(false);
-        });
-    }
 
     public void addEvent(Event event) {
         if (events == null) {
@@ -401,4 +429,6 @@ public class StartScreenCtrl implements Initializable {
             }
         }
     }
+
+
 }

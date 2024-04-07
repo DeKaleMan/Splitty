@@ -14,11 +14,23 @@ import java.util.NoSuchElementException;
 
 public class EditEventCrtl {
     int eventId;
+
     @FXML
     private TextField nameChange;
 
     @FXML
     private Button submitButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Label eventNameText;
+    @FXML
+    private Label titleError;
+    @FXML
+    private Label oldEventnameText;
+    @FXML
+    private Label oldEventname;
+
 
     @FXML
     private Label succesFullyChanged;
@@ -69,8 +81,31 @@ public class EditEventCrtl {
         succesFullyChangeName();
     }
 
+    public void setOldEventName(){
+        this.oldEventname.setText(serverUtils.getEventById(eventId).getName());
+    }
+
 
     public void succesFullyChangeName(){
         succesFullyChanged.setVisible(true);
+    }
+
+    public void setEventNameText(String txt){
+        this.eventNameText.setText(txt);
+    }
+    public void setCreateButton(String txt){
+        this.submitButton.setText(txt);
+    }
+    public void setCancelButton(String txt){
+        this.cancelButton.setText(txt);
+    }
+    public void setTitleError(String txt){
+        this.titleError.setText(txt);
+    }
+    public void setSuccesFullyChanged(String txt) {
+        this.succesFullyChanged.setText(txt);
+    }
+    public void setOldEventnameText(String txt) {
+        this.oldEventnameText.setText(txt);
     }
 }

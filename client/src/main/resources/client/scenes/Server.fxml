@@ -5,21 +5,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerCtrl">
+<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerCtrl">
    <children>
-      <Label layoutX="118.0" layoutY="57.0" text="Change Splitty Server">
+      <Label fx:id="title" layoutX="118.0" layoutY="57.0" text="Change Splitty Server">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
       </Label>
-      <Label layoutX="137.0" layoutY="246.0" text="Server:">
+      <Label fx:id="serverText" layoutX="137.0" layoutY="246.0" text="Server:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <TextField fx:id="serverField" layoutX="191.0" layoutY="247.0" onKeyPressed="#resetError" prefHeight="26.0" prefWidth="240.0" />
       <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="103.0" layoutX="249.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefHeight="54.0" prefWidth="302.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url or try again by repressing connect*" textFill="#949494" visible="false" wrapText="true">
+      <Label fx:id="notConnectedError" layoutX="191.0" layoutY="274.0" prefWidth="377.0" text="Could not connect to the server make sure the server is properly turned on and there are no typos in the url or try again by repressing connect*" textFill="#949494" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="12.0" />
          </font></Label>
