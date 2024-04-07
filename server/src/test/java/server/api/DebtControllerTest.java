@@ -175,4 +175,10 @@ class DebtControllerTest {
         assertEquals(expected,response.getBody());
         assertEquals(HttpStatus.OK,response.getStatusCode());
     }
+
+    @Test
+    void testDeleteDebtsInvalid(){
+        ResponseEntity<List<Debt>> response = sut.deleteDebtsOfExpense(-1,4);
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+    }
 }

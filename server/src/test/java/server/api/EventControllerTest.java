@@ -10,6 +10,7 @@ import java.util.*;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class EventControllerTest {
 
@@ -84,6 +85,12 @@ public class EventControllerTest {
     }
 
     @Test
+    void testFindByIdInvalid() {
+        ResponseEntity<Event> response = sut.getEventById(-1);
+        assertEquals(BAD_REQUEST,response.getStatusCode());
+    }
+
+    @Test
     void testFindAll() {
         List<Event> expected = List.of(event1, event2, event3);
         ResponseEntity<List<Event>> response = sut.getAllEvents();
@@ -106,6 +113,12 @@ public class EventControllerTest {
     }
 
     @Test
+    void testDeleteEventInvalid(){
+        ResponseEntity<Event> response = sut.removeEvent(-1);
+        assertEquals(NOT_FOUND,response.getStatusCode());
+    }
+
+    @Test
     void testUpdateEvent(){
         Event toUpdate = new Event("test", new Date(10, 10, 2005), "owner1", "desc1");
         toUpdate.id = 4;
@@ -118,6 +131,12 @@ public class EventControllerTest {
         assertEquals("save",eventRepository.methods.getLast());
         //cleanup
         eventRepository.events.removeLast();
+    }
+
+    @Test
+    void testUpdateEventInvalid(){
+        ResponseEntity<Event> response = sut.updateNameEvent(-1, "newName");
+        assertEquals(NOT_FOUND,response.getStatusCode());
     }
 
 

@@ -13,6 +13,7 @@ import server.database.ExpenseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -63,6 +64,7 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public <S extends Expense> S save(S entity) {
+        expenses.removeIf(x -> x.getExpenseId() == entity.getExpenseId() && x.getEvent().id == entity.getEvent().id);
         methods.add("save");
         expenses.add(entity);
         return entity;
@@ -190,7 +192,8 @@ public class TestExpenseRepository implements ExpenseRepository {
 
     @Override
     public void delete(Expense entity) {
-
+        expenses.removeIf(x -> Objects.equals(x,entity));
+        methods.add("delete");
     }
 
     @Override
