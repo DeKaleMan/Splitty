@@ -71,6 +71,12 @@ public class ServerIOUtilsTest implements ServerIOUtil {
         return true;
     }
 
+    @Override
+    public boolean deleteFile(File file) {
+        ioCalls.add("deleteFile");
+        return true;
+    }
+
     public ArrayList<String> clearCallList() {
         ArrayList<String> result = new ArrayList<>(ioCalls);
         ioCalls.clear();

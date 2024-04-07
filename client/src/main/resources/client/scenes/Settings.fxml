@@ -86,6 +86,17 @@
             </Label>
          </children>
       </HBox>
+      <VBox fx:id="confirmlangBox" alignment="CENTER" layoutX="143.0" layoutY="27.0" prefHeight="347.0" prefWidth="315.0" visible="false">
+         <ScrollPane>
+            <content>
 
+
+               <TextArea fx:id="addedLang" layoutY="14.0" />
+
+
+            </content>
+         </ScrollPane>
+         <Button mnemonicParsing="false" onAction="#confirmLang" text="Confirm" />
+      </VBox>
    </children>
 </AnchorPane>
