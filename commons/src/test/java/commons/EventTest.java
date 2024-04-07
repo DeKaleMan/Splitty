@@ -56,7 +56,7 @@ public class EventTest {
     public void setHostTest(){
         Event eventT = new Event();
         String owner = "stijn";
-        eventT.setOwner(owner);
+        eventT.setHost(owner);
         String ownerCheck = eventT.getHost();
         assertEquals(owner, ownerCheck);
     }
