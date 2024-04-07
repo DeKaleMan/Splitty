@@ -119,6 +119,7 @@ public class TestPaymentRepository implements PaymentRepository {
 
     @Override
     public <S extends Payment> S save(S entity) {
+        payments.removeIf(x -> x.getId() == entity.getId());
         methods.add("save");
         payments.add(entity);
         return entity;
@@ -131,7 +132,8 @@ public class TestPaymentRepository implements PaymentRepository {
 
     @Override
     public Optional<Payment> findById(Long aLong) {
-        return Optional.empty();
+        methods.add("findById");
+        return payments.stream().filter(x -> Objects.equals(x.getId(), aLong)).findFirst();
     }
 
     @Override
@@ -141,6 +143,7 @@ public class TestPaymentRepository implements PaymentRepository {
 
     @Override
     public List<Payment> findAll() {
+        methods.add("findAll");
         return payments;
     }
 
@@ -171,7 +174,10 @@ public class TestPaymentRepository implements PaymentRepository {
 
     @Override
     public void deleteAll(Iterable<? extends Payment> entities) {
-
+        List<Payment> toDelete = new ArrayList<>();
+        entities.forEach(toDelete::add);
+        payments.removeAll(toDelete);
+        methods.add("deleteAll");
     }
 
     @Override
