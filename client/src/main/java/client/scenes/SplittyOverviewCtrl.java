@@ -506,9 +506,9 @@ public class SplittyOverviewCtrl implements Initializable {
 
         if (me.getBalance() != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
+            alert.setTitle("Leaving an event");
             alert.setHeaderText("You can't leave the event");
-            alert.setContentText("You can only leave the event if your balance is 0");
+            alert.setContentText("You owe/are owed money.");
             alert.showAndWait();
             return;
         }

@@ -88,6 +88,16 @@ public class ManageParticipantsCtrl implements Initializable {
                 setPauseTransition(noParticipantSelectedError);
                 return;
             }
+            // only allow to delete if balance is 0
+            if(selected.getBalance() != 0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Deleting Participant");
+                alert.setHeaderText("Cannot delete a participant");
+                alert.setContentText("Participant owes/is owed money.");
+                alert.showAndWait();
+                return;
+            }
+
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
             confirmation.setTitle("Deleting Participant");
             confirmation.setContentText("Are you sure you want to delete " + selected.getName()+
