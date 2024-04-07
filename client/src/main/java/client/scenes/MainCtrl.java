@@ -39,6 +39,7 @@ public class MainCtrl {
     private final String css = this.getClass().getResource("/general.css").toExternalForm();
 
     protected String language = "en";
+    protected String currentLang = "en";
     protected List<String> languages;
 
 
@@ -154,22 +155,23 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
-
         this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
         this.editEventCrtl = eventPropGrouper.editEvent().getKey();
-
-
         this.editExpense = new Scene(eventPropGrouper.editExpense().getValue());
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
         this.serverCtrl = server.getKey();
         this.server = new Scene(server.getValue());
+
         settingCtrl.initializeConfig();
         serverUtils = new ServerUtils();
         setupConnection();
         setLanguage();
         showStartScreen();
-        startScreenCtrl.setLanguageSelect();
         primaryStage.show();
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     private void setupConnection() {
@@ -191,12 +193,17 @@ public class MainCtrl {
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
                 editParticipantCtrl, addParticipantCtrl, editExpenseCtrl);
-    }
+        startScreenCtrl.setLanguageSelect();
+        splittyOverviewCtrl.setLanguageSelect();
+        startScreenCtrl.changeLanguage();
 
+    }
 
     public void changeLanguage(String toLang) {
         this.language = toLang;
         setLanguage.changeTo(toLang);
+        splittyOverviewCtrl.setLanguageSelect();
+        startScreenCtrl.setLanguageSelect();
     }
 
     public String translate(String query) {

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SplittyOverviewCtrl">
-
     <children>
-        <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="58.0" layoutY="3.0" prefHeight="99.0" prefWidth="381.0" text="Title" wrapText="true">
+        <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="536.0" layoutY="63.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
+        <ComboBox fx:id="languageSelect" layoutX="536.0" layoutY="62.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" visible="false" />
+        <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="58.0" layoutY="3.0" prefHeight="57.0" prefWidth="395.0" text="Title" wrapText="true">
             <font>
                 <Font name="System Bold" size="48.0" />
             </font>
@@ -24,7 +26,7 @@
                                 <Font size="24.0" />
                             </font>
                         </Label>
-                        <Button fx:id="hostOptionsButton" mnemonicParsing="false" onAction="#showParticipantManager"  text="Host options" wrapText="true" />
+                        <Button fx:id="hostOptionsButton" mnemonicParsing="false" onAction="#showParticipantManager" text="Host options" wrapText="true" />
                     </children>
                 </HBox>
                 <Label fx:id="eventCreatedLabel" layoutX="120.0" layoutY="288.0" text="Event created successfully*" textFill="#3700ff" visible="false">
