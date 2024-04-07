@@ -10,6 +10,7 @@ import server.database.EventRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -20,6 +21,7 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public <S extends Event> S save(S entity) {
+        events.removeIf(x -> x.id == entity.id);
         events.add(entity);
         methods.add("save");
         return entity;
@@ -141,7 +143,8 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public void deleteById(Integer integer) {
-
+        events.removeIf(x -> x.id == integer);
+        methods.add("deleteById");
     }
 
     @Override
@@ -181,6 +184,6 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public Event findByInviteCode(String code) {
-        return events.stream().filter(x -> x.getInviteCode().equals(code)).findFirst().orElse(null);
+        return events.stream().filter(x -> Objects.equals(x.getInviteCode(),code)).findFirst().orElse(null);
     }
 }

@@ -142,6 +142,8 @@ class DebtControllerTest {
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(expected,response.getBody());
         assertEquals("save",debtRepository.methods.getLast());
+        //cleanup
+        debtRepository.debts.removeLast();
     }
 
     @Test
@@ -160,5 +162,17 @@ class DebtControllerTest {
     void saveDebtInvalidEvent() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,3,1,"test1"));
         assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteDebts(){
+        Expense expense4 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1,true);
+        expenseRepository.expenses.add(expense4);
+        expense4.expenseId = 4;
+        List<Debt> expected = List.of(new Debt(expense4,1,p1), new Debt(expense4,2,p1));
+        debtRepository.debts.addAll(expected);
+        ResponseEntity<List<Debt>> response = sut.deleteDebtsOfExpense(1,4);
+        assertEquals(expected,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
     }
 }
