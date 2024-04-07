@@ -2,99 +2,141 @@ package server.api;
 import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.service.EventService;
 
 import java.util.*;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class EventControllerTest {
 
-    EventController ctrl;
+    EventController sut;
     TestEventRepository eventRepository;
-    EventDTO event1 = new EventDTO("test1", new Date(10, 10, 2005), "owner1", "desc1");
-    EventDTO event2 = new EventDTO("test2", new Date(10, 10, 2005), "owner2", "desc2");
-    EventDTO event3 = new EventDTO("test3", new Date(10, 10, 2005), "owner3", "desc3");
+    Event event1 = new Event("test1", new Date(10, 10, 2005), "owner1", "desc1");
+    Event event2 = new Event("test2", new Date(10, 10, 2005), "owner2", "desc2");
+    Event event3 = new Event("test3", new Date(10, 10, 2005), "owner3", "desc3");
 
     @BeforeEach
     void setup() {
         eventRepository = new TestEventRepository();
-        ctrl = new EventController(new EventService(eventRepository));
+        sut = new EventController(new EventService(eventRepository));
         event1.id = 1;
         event2.id = 2;
         event3.id = 3;
+        eventRepository.events.addAll(List.of(event1,event2,event3));
     }
 
     // testing whether it works if one entry is null
     @Test
     void nullSave() {
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(null).getStatusCode());
+        assertEquals(BAD_REQUEST, sut.saveEvent(null).getStatusCode());
     }
     @Test
     void nullSaveName() {
-        event1.setName(null);
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+        EventDTO e = new EventDTO(null, new Date(10, 10, 2005), "owner1", "desc1");
+        assertEquals(BAD_REQUEST, sut.saveEvent(e).getStatusCode());
     }
     @Test
     void nullSaveDate() {
-        event1.setDate(null);
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+        EventDTO e = new EventDTO("test", null, "owner1", "desc1");
+        assertEquals(BAD_REQUEST, sut.saveEvent(e).getStatusCode());
     }
     @Test
     void nullSaveDescription() {
-        event1.setDescription(null);
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+        EventDTO e = new EventDTO("test", new Date(10, 10, 2005), "owner1", null);
+        assertEquals(BAD_REQUEST, sut.saveEvent(e).getStatusCode());
     }
     @Test
     void nullSaveOwner() {
-        event1.setOwner(null);
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+        EventDTO e = new EventDTO("test", new Date(10, 10, 2005), null, "desc1");
+        assertEquals(BAD_REQUEST, sut.saveEvent(e).getStatusCode());
     }
     @Test
     void emptyOwner() {
-        event1.setOwner("");
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+        EventDTO e = new EventDTO("test", new Date(10, 10, 2005), "", "desc1");
+        assertEquals(BAD_REQUEST, sut.saveEvent(e).getStatusCode());
     }
 
     @Test
     void emptyName() {
-        event1.setName("");
-        assertEquals(BAD_REQUEST, ctrl.saveEvent(event1).getStatusCode());
+        EventDTO e = new EventDTO("", new Date(10, 10, 2005), "owner1", "desc1");
+        assertEquals(BAD_REQUEST, sut.saveEvent(e).getStatusCode());
     }
     @Test
     void testSave() {
-        var actual = ctrl.saveEvent(event1);
-        // assert whether the saveEvent method returned the right event
-        Event newEvent = new Event(event1.getName(), event1.getDate(),
-                event1.getOwner(), event1.getDescription());
-        assertEquals(newEvent, actual.getBody());
-        // assert if the save method was called in the repository
+        EventDTO e = new EventDTO("test", new Date(10, 10, 2005), "owner1", "desc1");
+        ResponseEntity<Event> response = sut.saveEvent(e);
         assertEquals("save", eventRepository.methods.getLast());
-        assertEquals(newEvent, eventRepository.events.getLast());
+        Event expected = new Event("test", new Date(10, 10, 2005), "owner1", "desc1");
+        assertEquals(expected, response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        //cleanup
+        eventRepository.events.removeLast();
     }
     @Test
     void testFindById() {
-        Event actualEvent1 = ctrl.saveEvent(event1).getBody();
-        Event actualEvent2 = ctrl.saveEvent(event2).getBody();
-        Event actualEvent3 = ctrl.saveEvent(event3).getBody();
+        ResponseEntity<Event> response = sut.getEventById(1);
+        assertEquals(event1,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+    }
 
-        Optional<Event> newEvent1 = eventRepository.findById(actualEvent1.id);
-        if (newEvent1.isEmpty()) {
-            assertEquals("Test failed because no event was returned", "");
-        }
-        assertEquals("findById", eventRepository.methods.getLast());
-        assertEquals(actualEvent1, newEvent1.get());
+    @Test
+    void testFindByIdInvalid() {
+        ResponseEntity<Event> response = sut.getEventById(-1);
+        assertEquals(BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void testFindAll() {
-        Event actualEvent1 = ctrl.saveEvent(event1).getBody();
-        Event actualEvent2 = ctrl.saveEvent(event2).getBody();
-        Event actualEvent3 = ctrl.saveEvent(event3).getBody();
-        List<Event> events = Arrays.asList(actualEvent1, actualEvent2, actualEvent3);
-        assertArrayEquals(events.toArray(), eventRepository.findAll().toArray());
+        List<Event> expected = List.of(event1, event2, event3);
+        ResponseEntity<List<Event>> response = sut.getAllEvents();
+        assertEquals(expected,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals("findAll", eventRepository.methods.getLast());
+    }
+
+    @Test
+    void testDeleteEvent(){
+        Event toDelete = new Event("test", new Date(10, 10, 2005), "owner1", "desc1");
+        toDelete.id = 4;
+        eventRepository.events.add(toDelete);
+        ResponseEntity<Event> response = sut.removeEvent(4);
+        assertEquals(toDelete,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals("deleteById", eventRepository.methods.getLast());
+        //cleanup
+        eventRepository.events.remove(toDelete);
+    }
+
+    @Test
+    void testDeleteEventInvalid(){
+        ResponseEntity<Event> response = sut.removeEvent(-1);
+        assertEquals(NOT_FOUND,response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateEvent(){
+        Event toUpdate = new Event("test", new Date(10, 10, 2005), "owner1", "desc1");
+        toUpdate.id = 4;
+        eventRepository.events.add(toUpdate);
+        Event expected = new Event("newName", new Date(10, 10, 2005), "owner1", "desc1");
+        expected.id = 4;
+        ResponseEntity<Event> response = sut.updateNameEvent(4, "newName");
+        assertEquals(expected,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals("save",eventRepository.methods.getLast());
+        //cleanup
+        eventRepository.events.removeLast();
+    }
+
+    @Test
+    void testUpdateEventInvalid(){
+        ResponseEntity<Event> response = sut.updateNameEvent(-1, "newName");
+        assertEquals(NOT_FOUND,response.getStatusCode());
     }
 
 

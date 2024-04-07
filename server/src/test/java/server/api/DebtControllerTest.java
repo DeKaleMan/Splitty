@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.service.DebtService;
 
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,9 @@ class DebtControllerTest {
 
     @BeforeEach
     void setup() {
-        sut = new DebtController(debtRepository, expenseRepository, participantRepository,
+        DebtService debtService = new DebtService(debtRepository, expenseRepository, participantRepository,
             eventRepository);
+        sut = new DebtController(debtService);
         e1.id = 1;
         e2.id = 2;
         eventRepository.events.add(e1);
@@ -79,7 +81,7 @@ class DebtControllerTest {
     @Test
     void getAllDebtsOfEventInvalid() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfEvent(3);
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
@@ -94,13 +96,13 @@ class DebtControllerTest {
     @Test
     void getAllDebtsOfExpenseInvalidExpense() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfExpense(1,4);
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void getAllDebtsOfExpenseInvalidEvent() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfExpense(4,1);
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
@@ -115,19 +117,21 @@ class DebtControllerTest {
     @Test
     void getAllDebtsOfParticipantInvalidParticipant() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfParticipant(1,"test3");
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void getAllDebtsOfParticipantInvalidEvent() {
         ResponseEntity<List<Debt>> response = sut.getAllDebtsOfParticipant(4,"test1");
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void getALlDebts() {
         List<Debt> expected = List.of(d1,d2,d3);
-        assertEquals(expected,sut.getALlDebts());
+        ResponseEntity<List<Debt>> response = sut.getALlDebts();
+        assertEquals(expected,response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("findAll",debtRepository.methods.getLast());
     }
 
@@ -138,23 +142,43 @@ class DebtControllerTest {
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(expected,response.getBody());
         assertEquals("save",debtRepository.methods.getLast());
+        //cleanup
+        debtRepository.debts.removeLast();
     }
 
     @Test
     void saveDebtInvalidExpense() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,1,4,"test1"));
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void saveDebtInvalidParticipant() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,1,1,"test3"));
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
     @Test
     void saveDebtInvalidEvent() {
         ResponseEntity<Debt> response = sut.saveDebt(new DebtDTO(25.0,3,1,"test1"));
-        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteDebts(){
+        Expense expense4 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1,true);
+        expenseRepository.expenses.add(expense4);
+        expense4.expenseId = 4;
+        List<Debt> expected = List.of(new Debt(expense4,1,p1), new Debt(expense4,2,p1));
+        debtRepository.debts.addAll(expected);
+        ResponseEntity<List<Debt>> response = sut.deleteDebtsOfExpense(1,4);
+        assertEquals(expected,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteDebtsInvalid(){
+        ResponseEntity<List<Debt>> response = sut.deleteDebtsOfExpense(-1,4);
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 }
