@@ -27,6 +27,7 @@ public class SetLanguage {
     private EditParticipantCtrl editParticipantCtrl;
     private AddParticipantCtrl addParticipantCtrl;
     private EditExpenseCtrl editExpenseCtrl;
+    private EditEventCrtl editEventCrtl;
 
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
@@ -34,7 +35,7 @@ public class SetLanguage {
                        SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl,
                        InvitationCtrl invitationCtrl, ManageParticipantsCtrl manageParticipantsCtrl,
                        EditParticipantCtrl editParticipantCtrl, AddParticipantCtrl addParticipantCtrl,
-                       EditExpenseCtrl editExpenseCtrl){
+                       EditExpenseCtrl editExpenseCtrl, EditEventCrtl editEventCrtl){
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -50,6 +51,7 @@ public class SetLanguage {
         this.editParticipantCtrl = editParticipantCtrl;
         this.addParticipantCtrl = addParticipantCtrl;
         this.editExpenseCtrl = editExpenseCtrl;
+        this.editEventCrtl = editEventCrtl;
                 //this.language = Language.en;
     }
     public void changeTo(String lang){
@@ -68,6 +70,7 @@ public class SetLanguage {
         setEditParticipant(lang);
         setAddPartiticipant(lang);
         setEditExpense(lang);
+        setEditEvent(lang);
         System.out.println("\nFINISHED\n");
     }
 
@@ -164,6 +167,16 @@ public class SetLanguage {
         createEventCtrl.setCancelButton(translate("Cancel", "en", lang));
         createEventCtrl.setRequired(translate("required", "en", lang));
         System.out.println("setCreateEvent translated");
+    }
+    public void setEditEvent(String lang){
+        editEventCrtl.setEventNameText(translate("New event name", "en", lang));
+        editEventCrtl.setCreateButton(translate("Create event", "en", lang));
+        editEventCrtl.setCancelButton(translate("Cancel", "en", lang));
+        editEventCrtl.setTitleError(translate("New event name required", "en", lang));
+        editEventCrtl.setSuccesFullyChanged(translate("Successfully changed the name", "en", lang));
+        editEventCrtl.setOldEventnameText(translate("Old event name", "en", lang));
+
+        System.out.println("setEditEvent translated     ");
     }
     public void setStatistics(String lang){
         statisticsCtrl.setTotalCostText(translate("Total cost of event: ",

@@ -192,7 +192,7 @@ public class MainCtrl {
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
-                editParticipantCtrl, addParticipantCtrl, editExpenseCtrl);
+                editParticipantCtrl, addParticipantCtrl, editExpenseCtrl, editEventCrtl);
         startScreenCtrl.setLanguageSelect();
         splittyOverviewCtrl.setLanguageSelect();
         startScreenCtrl.changeLanguage();
@@ -417,6 +417,7 @@ public class MainCtrl {
     public void showEditEvent(int eventID) {
         primaryStage.setTitle("EditEvent");
         editEventCrtl.setEventId(eventID);
+        editEventCrtl.setOldEventName();
         editEventCrtl.reset();
         primaryStage.setScene(editEvent);
     }
