@@ -13,8 +13,7 @@ import server.service.StatisticsService;
 import java.util.Arrays;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StatisticsControllerTest {
     StatisticsController sut;
@@ -42,10 +41,14 @@ public class StatisticsControllerTest {
         sut = new StatisticsController(statisticsService);
         event1.id = 1;
         event2.id = 2;
-        expenseRepository.save(expense1);
-        expenseRepository.save(expense2);
-        expenseRepository.save(expense3);
-        expenseRepository.save(expense4);
+        expense1.expenseId = 1;
+        expense2.expenseId = 2;
+        expense3.expenseId = 3;
+        expense4.expenseId = 4;
+        expenseRepository.expenses.add(expense1);
+        expenseRepository.expenses.add(expense2);
+        expenseRepository.expenses.add(expense3);
+        expenseRepository.expenses.add(expense4);
         eventRepository.events.add(event1);
         eventRepository.events.add(event2);
     }
@@ -62,12 +65,12 @@ public class StatisticsControllerTest {
         ResponseEntity<double[]> res1 = sut.getPaymentsOfEvent(event1.id);
         //order = food, drinks, travel, other
         double[] expected1 = {0, 69.69, 0, 15.69};
-        assertTrue(Arrays.equals(expected1,res1.getBody()));
+        assertArrayEquals(expected1,res1.getBody());
 
         ResponseEntity<double[]> res2 = sut.getPaymentsOfEvent(event2.id);
         //order = food, drinks, travel, other
         double[] expected2 = {25.0, 0, 50.0, 0};
-        assertTrue(Arrays.equals(expected2,res2.getBody()));
+        assertArrayEquals(expected2,res2.getBody());
     }
     @Test
     public void nullEventStats(){
