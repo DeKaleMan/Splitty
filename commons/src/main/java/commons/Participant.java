@@ -41,7 +41,7 @@ public class Participant implements Serializable {
     @EmbeddedId
     private ParticipantId id;
 
-    protected Participant() {
+    public Participant() {
         id = new ParticipantId();
     }
 
