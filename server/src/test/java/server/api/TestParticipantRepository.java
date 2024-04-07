@@ -33,12 +33,19 @@ public class TestParticipantRepository implements ParticipantRepository {
 
     @Override
     public List<Participant> findByEventId(int eventId) {
-        return null;
+        methods.add("findByEventId");
+        return participants.stream().filter(
+                x -> x.getEvent().getId() == eventId)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Event> findEventsByParticipant(String uuid) {
-        return null;
+        methods.add("findEventsByParticipant");
+        return participants.stream().filter(
+                x -> x.getUuid().equals(uuid))
+                .map(Participant::getEvent)
+                .collect(Collectors.toList());
     }
 
     @Override
