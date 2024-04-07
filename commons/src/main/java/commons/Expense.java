@@ -1,8 +1,10 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +14,10 @@ public class Expense {
     @PrimaryKeyJoinColumn
     @ManyToOne
     private Event event;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.REMOVE)
+    private List<Debt> debts;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

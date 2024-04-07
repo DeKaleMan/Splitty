@@ -1,9 +1,11 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 @Entity
 @Builder
@@ -17,6 +19,14 @@ public class Event {
     private String host;
     private String description;
     private Date lastActivity;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    private List<Expense> expenseList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.event", cascade = CascadeType.REMOVE)
+    private List<Participant> participantList;
 
     @Column(unique = true)
     private String inviteCode;
