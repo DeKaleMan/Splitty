@@ -21,8 +21,8 @@ public class ParticipantController {
 
     private final ParticipantService participantService;
 
-    private Map<Object, Consumer<Participant>> updateListeners = new HashMap<>();
-    private Map<Object, Consumer<Participant>> deletionListeners = new HashMap<>();
+    protected Map<Object, Consumer<Participant>> updateListeners = new HashMap<>();
+    protected Map<Object, Consumer<Participant>> deletionListeners = new HashMap<>();
 
     @Autowired
     public ParticipantController(ParticipantService participantService) {
@@ -115,11 +115,11 @@ public class ParticipantController {
         return result;
     }
 
-    private void notifyUpdateListeners(Participant participant) {
+    protected void notifyUpdateListeners(Participant participant) {
         updateListeners.forEach((key, listener) -> listener.accept(participant));
     }
 
-    private void notifyDeletionListeners(Participant participant) {
+    protected void notifyDeletionListeners(Participant participant) {
         deletionListeners.forEach((key, listener) -> listener.accept(participant));
     }
 }
