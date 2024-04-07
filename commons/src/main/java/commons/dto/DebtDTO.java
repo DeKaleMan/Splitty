@@ -47,6 +47,14 @@ public class DebtDTO {
         return participantUuid;
     }
 
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setExpenseId(int expenseId) {
+        this.expenseId = expenseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

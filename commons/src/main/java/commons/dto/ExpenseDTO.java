@@ -91,6 +91,10 @@ public class ExpenseDTO {
         this.sharedExpense = sharedExpense;
     }
 
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
     public boolean isSharedExpense() {
         return sharedExpense;
     }

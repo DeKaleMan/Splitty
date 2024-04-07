@@ -1,9 +1,9 @@
 package client.scenes;
 
+import client.utils.EventDump;
 import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
-import commons.Participant;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +16,8 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.Comparator;
-import java.util.List;
 
 public class AdminOverviewCtrl {
 
@@ -111,7 +111,15 @@ public class AdminOverviewCtrl {
         String jsonDump = jsonImportTextArea.getText();
         jsonImportTextArea.clear();
 
-        // TODO: Add event, participants etc. to the database based on jsonDump (DB not fully done so can't do it yet)
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            EventDump eventDump = objectMapper.readValue(jsonDump, EventDump.class);
+            eventDump.setServerUtils(serverUtils);
+            eventDump.importEvent();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        refreshEvents();
         jsonImportPane.setVisible(false);
         jsonImportTextArea.setVisible(false);
         jsonImportButton.setVisible(false);
@@ -131,10 +139,7 @@ public class AdminOverviewCtrl {
             visiblePause.play();
             return;
         }
-        List<Participant> toExportParticipants = serverUtils.getParticipants(toExportEvent.getId());
-        // TODO: Convert event to json and display somehow (DB not fully done so can't do it yet)
-        ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println("Export: " + toExportEvent);
+        System.out.println(new EventDump(toExportEvent.getId(), serverUtils).exportEvent());
     }
 
     @FXML
