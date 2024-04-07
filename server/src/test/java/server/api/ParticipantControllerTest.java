@@ -15,8 +15,6 @@ import server.service.ParticipantService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -82,7 +80,10 @@ class ParticipantControllerTest {
         Participant participant = new Participant();
 
 
-        when(participantService.updateParticipant(any(String.class), any(Integer.class), any(ParticipantDTO.class))).thenReturn(participant);
+        when(participantService.updateParticipant(any(String.class),
+                any(Integer.class),
+                any(ParticipantDTO.class)))
+                .thenReturn(participant);
         ResponseEntity<Participant> result = participantController.updateParticipant("uuid", 1, new ParticipantDTO());
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
@@ -90,7 +91,10 @@ class ParticipantControllerTest {
 
     @Test
     void updateParticipantNotFound() {
-        when(participantService.updateParticipant(any(String.class), any(Integer.class), any(ParticipantDTO.class))).thenReturn(null);
+        when(participantService.updateParticipant(any(String.class),
+                any(Integer.class),
+                any(ParticipantDTO.class)))
+                .thenReturn(null);
         ResponseEntity<Participant> result = participantController.updateParticipant("uuid", 1, new ParticipantDTO());
 
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());

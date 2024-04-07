@@ -104,7 +104,8 @@ class ParticipantServiceTest {
 
     @Test
     void updateParticipantWithNoEvent() {
-        assertNull(participantService.updateParticipant(UUID.randomUUID().toString(), 1, new ParticipantDTO()));
+        assertNull(participantService.updateParticipant(UUID.randomUUID().toString(),
+                1, new ParticipantDTO()));
     }
 
     @Test
@@ -113,7 +114,8 @@ class ParticipantServiceTest {
         event.setId(1);
         testEventRepository.events.add(event);
 
-        assertNull(participantService.updateParticipant(UUID.randomUUID().toString(), event.getId(), new ParticipantDTO()));
+        assertNull(participantService.updateParticipant(UUID.randomUUID().toString(),
+                event.getId(), new ParticipantDTO()));
     }
 
     @Test
