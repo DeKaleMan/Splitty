@@ -12,10 +12,13 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
 
@@ -50,12 +53,6 @@ public class AdminOverviewCtrl {
     private ListView<Event> eventList;
     @FXML
     public AnchorPane jsonImportPane;
-
-    @FXML
-    private TextArea jsonImportTextArea;
-
-    @FXML
-    private Button jsonImportButton;
     @FXML
     private Text adminManagementOverviewText;
     @FXML
@@ -98,22 +95,18 @@ public class AdminOverviewCtrl {
     }
 
     @FXML
-    public void showImportFields() {
-        jsonImportPane.setVisible(true);
-        jsonImportTextArea.setVisible(true);
-        jsonImportButton.setVisible(true);
-        sortByText.setVisible(false);
-        sortComboBox.setVisible(false);
-    }
-
-    @FXML
     public void importEvent() {
-        String jsonDump = jsonImportTextArea.getText();
-        jsonImportTextArea.clear();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save JSON file");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        File file = fileChooser.showOpenDialog(null);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            EventDump eventDump = objectMapper.readValue(jsonDump, EventDump.class);
+            EventDump eventDump = objectMapper.readValue(file, EventDump.class);
             eventDump.setServerUtils(serverUtils);
             eventDump.importEvent();
         } catch (IOException e) {
@@ -121,8 +114,6 @@ public class AdminOverviewCtrl {
         }
         refreshEvents();
         jsonImportPane.setVisible(false);
-        jsonImportTextArea.setVisible(false);
-        jsonImportButton.setVisible(false);
         sortByText.setVisible(true);
         sortComboBox.setVisible(true);
     }
@@ -139,7 +130,30 @@ public class AdminOverviewCtrl {
             visiblePause.play();
             return;
         }
-        System.out.println(new EventDump(toExportEvent.getId(), serverUtils).exportEvent());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save JSON file");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            try {
+                EventDump eventDump = new EventDump(toExportEvent.getId(), serverUtils);
+                String jsonContent = eventDump.exportEvent();
+
+                // Write the JSON content to the selected file
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(jsonContent);
+                fileWriter.close();
+
+                System.out.println("Event exported to JSON file successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error occurred while exporting event to JSON file.");
+            }
+        }
     }
 
     @FXML
@@ -185,20 +199,17 @@ public class AdminOverviewCtrl {
         }
         switch(selectedOption) {
             case "Title":
-                System.out.println("Title sorting selected");
                 ObservableList<Event> currentEventList = eventList.getItems();
                 currentEventList.stream().sorted(Comparator.comparing(Event::getName))
                         .forEach(newEventList::add);
                 break;
             case "Creation date":
-                System.out.println("Creation date sorting selected");
                 currentEventList = eventList.getItems();
                 currentEventList.stream().sorted(Comparator.comparing(Event::getDate))
                         .forEach(newEventList::add);
                 newEventList = FXCollections.observableArrayList(newEventList.reversed());
                 break;
             case "Last activity":
-                System.out.println("Last activity sorting selected");
                 currentEventList = eventList.getItems();
                 currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
                         .forEach(newEventList::add);
@@ -243,11 +254,6 @@ public class AdminOverviewCtrl {
     }
 
     @FXML
-    public void setJsonImportTextAreaPromptText(String txt) {
-        jsonImportTextArea.setPromptText(txt);
-    }
-
-    @FXML
     public void setSortByText(String txt) {
         sortByText.setText(txt);
     }
@@ -275,8 +281,6 @@ public class AdminOverviewCtrl {
 
     @FXML
     public void abortImportMouse(MouseEvent press) {
-        jsonImportTextArea.setVisible(false);
-        jsonImportButton.setVisible(false);
         jsonImportPane.setVisible(false);
     }
 

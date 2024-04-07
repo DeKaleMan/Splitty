@@ -97,7 +97,6 @@ public class SetLanguage {
         adminOverviewCtrl.setDeleteEventButtonText(translate("Delete event", "en", lang));
         adminOverviewCtrl.setServerTagText(translate("Server: Localhost:8080", "en", lang));
         adminOverviewCtrl.setViewEventButtonText(translate("View Event", "en", lang));
-        adminOverviewCtrl.setJsonImportTextAreaPromptText(translate("Paste your exported JSON dump here", "en", lang));
         adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
     }
