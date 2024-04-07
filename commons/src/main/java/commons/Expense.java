@@ -41,8 +41,6 @@ public class Expense {
     @Column(nullable = false)
     private boolean sharedExpense;
 
-
-
     public Expense() {
 
     }
@@ -56,6 +54,13 @@ public class Expense {
         this.totalExpense = totalExpense;
         this.payer = payer;
         this.sharedExpense = sharedExpense;
+    }
+
+    @PreUpdate
+    @PrePersist
+    @PreRemove
+    public void updateLastActivity(){
+        payer.getEvent().updateActivityDate();
     }
 
     public void setSharedExpense(boolean sharedExpense) {

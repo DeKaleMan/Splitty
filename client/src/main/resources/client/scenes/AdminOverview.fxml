@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
    <children>
       <AnchorPane onMouseClicked="#abortImportMouse">
          <Text fx:id="adminManagementOverviewText" layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
@@ -13,7 +13,7 @@
             </font>
          </Text>
          <ListView fx:id="eventList" layoutX="170.0" layoutY="106.0" onKeyPressed="#onKeyPressed" onMouseClicked="#handleMouseClick" prefHeight="270.0" prefWidth="260.0" />
-         <Button fx:id="importEventButton" layoutX="58.0" layoutY="106.0" mnemonicParsing="false" onAction="#showImportFields" prefHeight="25.0" prefWidth="101.0" text="Import event" />
+         <Button fx:id="importEventButton" layoutX="58.0" layoutY="106.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="25.0" prefWidth="101.0" text="Import event" />
          <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" prefHeight="25.0" prefWidth="90.0" text="Export event" />
          <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Delete event" textFill="white" />
          <Text fx:id="serverTag" layoutX="20.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server: Localhost:8080" wrappingWidth="150.0">
@@ -40,7 +40,7 @@
                   <ComboBox fx:id="sortComboBox" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
               </children>
           </HBox>
-         <Button layoutX="58.0" layoutY="145.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" onAction="#refreshEvents" text="Refresh events" />
+         <Button layoutX="58.0" layoutY="145.0" mnemonicParsing="false" onAction="#refreshEvents" prefHeight="25.0" prefWidth="101.0" text="Refresh events" />
       </AnchorPane>
        <AnchorPane fx:id="jsonImportPane" visible="false">
        <TextArea fx:id="jsonImportTextArea" layoutX="125.0" layoutY="13.0" prefHeight="350.0" prefWidth="350.0" promptText="Paste your exported JSON dump here" visible="false" />

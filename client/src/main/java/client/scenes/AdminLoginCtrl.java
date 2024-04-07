@@ -16,8 +16,6 @@ import javafx.scene.text.Text;
 
 public class AdminLoginCtrl {
 
-
-
     private MainCtrl mainCtrl;
     private AdminServerUtils adminServerUtils;
 

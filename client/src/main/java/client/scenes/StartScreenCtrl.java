@@ -122,6 +122,7 @@ public class StartScreenCtrl implements Initializable {
             ObservableList<Event> currentEventList = FXCollections.observableArrayList(events);
             currentEventList.stream().sorted(Comparator.comparing(Event::getLastActivity))
                     .forEach(newEventList::add);
+            newEventList = FXCollections.observableArrayList(newEventList.reversed());
             eventListView.setItems(newEventList);
         }
     }

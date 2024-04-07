@@ -199,13 +199,14 @@ public class MainCtrl {
 
     public void showSplittyOverview(int id){
         try {
-            primaryStage.setTitle("Event overview");
-            primaryStage.setScene(splittyOverview);
-            splittyOverview.getStylesheets().add(css);
-            splittyOverviewCtrl.setEventCode(id);
             Event event = serverUtils.getEventById(id);
             splittyOverviewCtrl.initializeAll(event);
+            splittyOverview.getStylesheets().add(css);
+            splittyOverviewCtrl.setEventCode(id);
+            primaryStage.setTitle("Event overview");
+            primaryStage.setScene(splittyOverview);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             checkConnection();
         }
 
@@ -261,6 +262,7 @@ public class MainCtrl {
 //            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             checkConnection();
         }
     }
@@ -294,6 +296,7 @@ public class MainCtrl {
             showStartScreen();
             return;
         }
+        adminOverviewCtrl.refreshEvents();
         primaryStage.setTitle("Admin management overview");
         primaryStage.setScene(adminOverview);
     }
@@ -320,6 +323,7 @@ public class MainCtrl {
             userEventListCtrl.reset();
             primaryStage.setTitle("Event List");
         } catch (RuntimeException e) {
+            e.printStackTrace();
             checkConnection();
         }
     }
@@ -367,6 +371,7 @@ public class MainCtrl {
             //set the pieChart
             statisticsCtrl.setPieChart();
         } catch (RuntimeException e) {
+            e.printStackTrace();
             checkConnection();
         }
     }
@@ -388,6 +393,7 @@ public class MainCtrl {
             primaryStage.setScene(debts);
             debtCtrl.refresh(eventCode);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             checkConnection();
         }
     }
@@ -447,6 +453,7 @@ public class MainCtrl {
             editExpenseCtrl.refresh(expense);
             primaryStage.setScene(editExpense);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             checkConnection();
         }
     }
