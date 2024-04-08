@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -232,41 +233,71 @@ public class SettingsCtrl {
     }
 
     public void setCancelButton(String txt) {
-        this.cancelButton.setText(txt);
+        Platform.runLater(() -> {
+
+            this.cancelButton.setText(txt);
+        });
     }
 
     public void setSaveButton(String txt) {
-        this.saveButton.setText(txt);
+        Platform.runLater(() -> {
+            this.saveButton.setText(txt);
+
+        });
     }
 
     public void setLanguage(String txt) {
-        this.language.setText(txt);
+        Platform.runLater(() -> {
+            this.language.setText(txt);
+
+        });
     }
 
     public void setLanguageText(String txt) {
-        this.languageText.setText(txt);
+        Platform.runLater(() -> {
+
+            this.languageText.setText(txt);
+        });
     }
 
     public void setLangInstructions(String txt) {
-        this.langInstructions.setText(txt);
+        Platform.runLater(() -> {
+
+            this.langInstructions.setText(txt);
+        });
     }
 
     public void setAddLangText(String txt) {
-        this.addLangText.setText(txt);
+        Platform.runLater(() -> {
+
+            this.addLangText.setText(txt);
+        });
     }
 
     public void setAddLanguage(String txt) {
-        this.addLanguage.setText(txt);
+        Platform.runLater(() -> {
+
+            this.addLanguage.setText(txt);
+        });
     }
 
     public void setCurrency(String txt) {
-        this.currency.setText(txt);
+        Platform.runLater(() -> {
+
+            this.currency.setText(txt);
+        });
     }
 
     public void setSettingsText(String txt) {
-        this.settingsText.setText(txt);
+        Platform.runLater(() -> {
+
+            this.settingsText.setText(txt);
+        });
     }
     public void setChangServerButton(String txt){
-        this.changServerButton.setText(txt);
+        Platform.runLater(() -> {
+
+            this.changServerButton.setText(txt);
+        });
     }
 }
