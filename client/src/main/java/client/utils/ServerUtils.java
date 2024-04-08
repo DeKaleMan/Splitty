@@ -721,10 +721,9 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(String.class);
     }
-    public String setNewLang(JSONObject jsonObject, String lang){
+    public String setNewLang(String jsonObject, String lang){
         return client.target(server)
                 .path("api/translate/write")
-                .queryParam("jsonObject", jsonObject)
                 .queryParam("lang", lang)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)

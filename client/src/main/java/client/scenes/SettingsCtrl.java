@@ -203,7 +203,7 @@ public class SettingsCtrl {
         confirmlangBox.setVisible(true);
         String jsonString = serverUtils.getLanguageJSON(newLang);
         jsonString = jsonString.replace(",", ",\n");
-         addedLang.setText(jsonString);
+        addedLang.setText(jsonString);
 
     }
 
@@ -212,9 +212,8 @@ public class SettingsCtrl {
         confirmlangBox.setVisible(false);
         String lang = addedLang.getText();
         String stringForJson = lang.replace("\n", "");
-        JSONObject jsonObject = new JSONObject(stringForJson);
-        serverUtils.setNewLang(jsonObject, newLang);
-
+        serverUtils.setNewLang(stringForJson, newLang);
+        mainCtrl.changeLanguage(newLang);
     }
 
     public String getLanguage() {
