@@ -8,11 +8,13 @@ import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.api.depinjectionUtils.LanguageResponse;
+import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.testmocks.ServerIOUtilsTest;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,11 +32,13 @@ class LanguageControllerTest {
     @Test
     public void testJSONFile(){
         LanguageResponse responseMock = mock(LanguageResponse.class);
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("TestString", "TestStringResult");
-        when(responseMock.readJsonFile(any(File.class))).thenReturn(jsonObject);
-
-        LanguageController l = new LanguageController(new ServerIOUtilsTest(), responseMock);
+        String jsonObject = "{\"TestString\", \"TestStringResult\"}";
+        HashMap<String, String> res = new HashMap<>();
+        res.put("TestString", "TestStringResult");
+        ServerIOUtil io = mock(ServerIOUtil.class);
+        when(io.fileExists(any(File.class))).thenReturn(true);
+        when(io.readJson(any(File.class))).thenReturn(res);
+        LanguageController l = new LanguageController(io, responseMock);
 
         String test = "TestString";
         ResponseEntity<String> result = l.translate(test, "en", "de");
@@ -43,6 +47,7 @@ class LanguageControllerTest {
     }
     @Test
     public void testWithAPI(){
+        ServerIOUtil io = mock(ServerIOUtil.class);
         LanguageResponse responseMock = mock(LanguageResponse.class);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("TestString", "TestStringResult");
@@ -51,7 +56,7 @@ class LanguageControllerTest {
         when(responseMock.translateWithAPI(test, "en", "de"))
                 .thenReturn("TestStringResult2");
 
-        LanguageController l = new LanguageController(new ServerIOUtilsTest(), responseMock);
+        LanguageController l = new LanguageController(io, responseMock);
 
 
         ResponseEntity<String> result = l.translate(test, "en", "de");
@@ -63,7 +68,8 @@ class LanguageControllerTest {
     public void incorrectLanguage(){
         String test = "TestString";
         LanguageResponse responseMock = mock(LanguageResponse.class);
-        LanguageController l = new LanguageController(new ServerIOUtilsTest(), responseMock);
+        ServerIOUtil io = mock(ServerIOUtil.class);
+        LanguageController l = new LanguageController(io, responseMock);
         when(responseMock.translateWithAPI(any(String.class), any(String.class), any(String.class)))
                 .thenReturn(HttpStatus.FORBIDDEN.toString());
         when(responseMock.readJsonFile(any(File.class))).thenReturn(new JsonObject());

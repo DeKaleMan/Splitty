@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import commons.Conversion;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 public interface ServerIOUtil {
@@ -31,8 +32,9 @@ public interface ServerIOUtil {
     void writeConversionObjects(File file, List<Conversion> conversionList);
 
     List<Conversion> readConversionObjects(File file);
-    void writeJson(JsonObject object, File file);
     boolean createNewFile(File newfile);
 
-    boolean deleteFile(File file);
+    HashMap<String, String> readJson(File file);
+
+
 }
