@@ -7,9 +7,11 @@ import client.utils.Config;
 import client.utils.EventPropGrouper;
 import client.utils.ServerUtils;
 import com.google.inject.Injector;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,6 +47,8 @@ public class ServerCtrl {
     public Button connectButton;
     @FXML
     private Button backButton;
+    @FXML
+    private ProgressIndicator connectLoading;
 
     @Inject
     public ServerCtrl(MainCtrl mainCtrl, Config config) {
@@ -54,37 +58,47 @@ public class ServerCtrl {
 
 
     public void setFields(boolean noConnection) {
-        this.noConnection = noConnection;
-        if (config.getConnection() != null) {
-            serverField.setText(config.getConnection());
-        }
-        if (noConnection) {
-            startupNotification.setVisible(true);
-            imageView.setImage(new Image("no-connection.png"));
-            backButton.setText("Settings");
-        } else {
-            startupNotification.setVisible(false);
-            imageView.setImage(new Image("connection2.png"));
-            backButton.setText("Back");
-        }
+        Platform.runLater(() -> {
+            this.noConnection = noConnection;
+            if (config.getConnection() != null) {
+                serverField.setText(config.getConnection());
+            }
+            if (noConnection) {
+                startupNotification.setVisible(true);
+                imageView.setImage(new Image("no-connection.png"));
+                backButton.setText("Settings");
+            } else {
+                startupNotification.setVisible(false);
+                imageView.setImage(new Image("connection2.png"));
+                backButton.setText("Back");
+            }
+        });
     }
 
     public void connect() {
-        notConnectedError.setVisible(false);
-        try {
-            ServerUtils.serverDomain = serverField.getText();
-            ServerUtils.resetServer();
-            serverUtils = new ServerUtils();
-            config.setConnection(serverField.getText());
-            config.write();
-            relaunch();
-            mainCtrl.closeStage();
-            noConnection = false;
-        } catch (RuntimeException e) {
-            notConnectedError.setVisible(true);
-            noConnection = true;
-            setFields(true);
-        }
+        new Thread(() -> {
+            notConnectedError.setVisible(false);
+            try {
+                ServerUtils.serverDomain = serverField.getText();
+                ServerUtils.resetServer();
+                serverUtils = new ServerUtils();
+                config.setConnection(serverField.getText());
+                config.write();
+                Platform.runLater(() -> {
+                    relaunch();
+                    mainCtrl.closeStage();
+                });
+                noConnection = false;
+                connectLoading.setVisible(false);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                notConnectedError.setVisible(true);
+                noConnection = true;
+                connectLoading.setVisible(false);
+                setFields(true);
+            }
+        }).start();
+        connectLoading.setVisible(true);
     }
 
     private void relaunch() throws RuntimeException {

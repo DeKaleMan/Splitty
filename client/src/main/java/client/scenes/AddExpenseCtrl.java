@@ -97,6 +97,9 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     @FXML
     protected ComboBox<Currency> currencyComboBox;
 
+    @FXML
+    protected ProgressIndicator expenseLoading;
+
     @Inject
     public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         super(serverUtils, mainCtrl, config);
@@ -105,45 +108,54 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @FXML
     public void addExpense() {
-        Date date = getDate();
-        if(date == null) return;
+        expenseLoading.setVisible(true);
+        new Thread(() -> {
+            Date date = getDate();
+            if(date == null) {
+                expenseLoading.setVisible(false);
+                return;
+            }
 
-        Type type = getType();
-        Participant payer = personComboBox.getValue();
-        if (payer == null) {
-            payerError.setVisible(true);
-            return;
-        }
+            Type type = getType();
+            Participant payer = personComboBox.getValue();
+            if (payer == null) {
+                payerError.setVisible(true);
+                expenseLoading.setVisible(false);
+                return;
+            }
 
-        Double amountDouble = getAmountDouble(date);
-        if (amountDouble == null) return;
+            Double amountDouble = getAmountDouble(date);
+            if (amountDouble == null) {
+                expenseLoading.setVisible(false);
+                return;
+            }
 
-        Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
-        if(!isSharedExpense && receiver == null) {
-            //TODO handle invalid receiver
-            return;
-        }
-
-        String description = whatFor.getText();
-
-        try {
-
-            //add to database
-            ExpenseDTO
-                exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
-            Expense expense = serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            if(isSharedExpense) addSharedExpense(amountDouble, expense, payer);
-            else addGivingMoneyToSomeone(amountDouble, expense, payer, receiver);
-            serverUtils.generatePaymentsForEvent(eventCode);
-            back();
-        } catch (Exception e) {
-            commitExpenseError.setVisible(true);
-            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-            visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
-            visiblePause.play();
-        }
+            Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
+            if(!isSharedExpense && receiver == null) {
+                //TODO handle invalid receiver
+                expenseLoading.setVisible(false);
+                return;
+            }
+            String description = whatFor.getText();
+            try {
+                //add to database
+                ExpenseDTO exp =
+                        new ExpenseDTO(eventCode,description,type, date, amountDouble, payer.getUuid(),isSharedExpense);
+                Expense expense = serverUtils.addExpense(exp);
+                serverUtils.send("/app/addExpense", exp);
+                if(isSharedExpense) addSharedExpense(amountDouble, expense, payer);
+                else addGivingMoneyToSomeone(amountDouble, expense, payer, receiver);
+                serverUtils.generatePaymentsForEvent(eventCode);
+                expenseLoading.setVisible(false);
+                back();
+            } catch (Exception e) {
+                commitExpenseError.setVisible(true);
+                expenseLoading.setVisible(false);
+                PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+                visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
+                visiblePause.play();
+            }
+        }).start();
     }
 
 
