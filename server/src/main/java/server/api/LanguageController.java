@@ -2,13 +2,11 @@ package server.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
@@ -91,4 +89,41 @@ public class LanguageController {
             throw new RuntimeException("Error writing JSON object to file", e);
         }
     }
+
+
+
+
+    @GetMapping("json")
+    public ResponseEntity<String> getJSONLang(@RequestParam String lang){
+        try {
+            File file = new File(basepath + lang + ".json");
+            if (serverIoUtil.fileExists(file)) {
+                JsonObject jsonObject = translator.readJsonFile(file);
+                return ResponseEntity.ok(jsonObject.toString());
+            }
+            return ResponseEntity.notFound().build();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    @PutMapping("write")
+    public ResponseEntity<String> writeJSONLang(@RequestParam JSONObject jsonObject, @RequestParam String lang){
+        try{
+            File file = new File(basepath + lang + ".json");
+//            if(!serverIoUtil.deleteFile(file)){
+//                System.out.println("deletion failed");
+//            }
+//            serverIoUtil.createNewFile(file);
+            Gson gson = new Gson();
+            JsonObject convertedObject = gson.fromJson(jsonObject.toString(), JsonObject.class);
+            serverIoUtil.writeJson(convertedObject, file);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok("succes");
+    }
+
 }

@@ -34,4 +34,5 @@ public interface ServerIOUtil {
     void writeJson(JsonObject object, File file);
     boolean createNewFile(File newfile);
 
+    boolean deleteFile(File file);
 }
