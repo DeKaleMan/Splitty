@@ -9,6 +9,7 @@ import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
@@ -60,6 +62,9 @@ public class StatisticsCtrl {
     private ServerUtils serverUtils;
     private Config config;
 
+    @FXML
+    Label percentageLabel;
+
     @Inject
     public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
         this.mainCtrl = mainCtrl;
@@ -82,15 +87,26 @@ public class StatisticsCtrl {
                         if (participant == null || b) {
                             setText(null);
                         } else {
-                            double share = serverUtils.getExpenseByUuid(eventCode,
-                                    participant.getUuid())
-                                .stream()
-                                .mapToDouble(x -> x.getTotalExpense() * 100)
-                                .sum() / total;
+                            double amount = 0.0;
+                            try {
+                                amount = serverUtils.getExpenseByUuid(eventCode,
+                                        participant.getUuid())
+                                    .stream()
+                                    .mapToDouble(
+                                        x -> mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
+                                            config.getCurrency(), x.getDate(), x.getTotalExpense()))
+                                    .sum();
+                            } catch (RuntimeException e) {
+                                setText("-");
+                                displayError();
+                                return;
+                            }
                             setText(participant.getName()
                                 + ": "
-                                + mainCtrl.getFormattedDoubleString(share)
-                                + "%");
+                                + mainCtrl.getFormattedDoubleString(amount)
+                                + java.util.Currency.getInstance(config.getCurrency().toString())
+                                .getSymbol()
+                            );
                         }
                     }
                 };
@@ -107,10 +123,10 @@ public class StatisticsCtrl {
         String drinkName = mainCtrl.translate("Drinks");
         String transportName = mainCtrl.translate("Transport");
         String otherName = mainCtrl.translate("Other");
-        if(this.food != 0.0) data.add(new PieChart.Data(foodName, food));
-        if(this.drinks != 0.0) data.add(new PieChart.Data(drinkName, drinks));
-        if(this.transport != 0.0) data.add(new PieChart.Data(transportName, transport));
-        if(this.other != 0.0) data.add(new PieChart.Data(otherName, other));
+        if (this.food != 0.0) data.add(new PieChart.Data(foodName, food));
+        if (this.drinks != 0.0) data.add(new PieChart.Data(drinkName, drinks));
+        if (this.transport != 0.0) data.add(new PieChart.Data(transportName, transport));
+        if (this.other != 0.0) data.add(new PieChart.Data(otherName, other));
 
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                     d.getName(),
@@ -119,10 +135,22 @@ public class StatisticsCtrl {
                     java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
                 )
             )
-
         );
 
         pieChart.setData(data);
+
+        pieChart.getData().forEach(d -> {
+            d.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        percentageLabel.setTranslateX(mouseEvent.getSceneX());
+                        percentageLabel.setTranslateY(mouseEvent.getSceneY());
+                        percentageLabel.setText(mainCtrl.getFormattedDoubleString(100.0 * d.pieValueProperty().getValue() / total)+
+                            "%");
+                    }
+                });
+        });
     }
 
     //these all set the things for the diagram, theoretically they could all
@@ -231,7 +259,8 @@ public class StatisticsCtrl {
     public void setTotalCostText(String txt) {
         this.totalCostText.setText(txt);
     }
-    public void setBackButton(String txt){
+
+    public void setBackButton(String txt) {
         this.back.setText(txt);
     }
 }
