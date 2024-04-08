@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Participant;
 import commons.Type;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -397,53 +398,79 @@ public abstract class ExpenseCtrl {
 //        titleLabel.setText(title);
 //    }
 
+
     public void setSceneTypeText(String text) {
-        this.sceneTypeText.setText(text);
+        Platform.runLater(() -> {
+            this.sceneTypeText.setText(text);
+        });
     }
 
     public void setWhoPaid(String text) {
-        this.whoPaid.setText(text);
+        Platform.runLater(() -> {
+            this.whoPaid.setText(text);
+        });
     }
 
     public void setHowMuch(String text) {
-        this.howMuch.setText(text);
+        Platform.runLater(() -> {
+            this.howMuch.setText(text);
+        });
     }
 
     public void setWhen(String text) {
-        this.when.setText(text);
+        Platform.runLater(() -> {
+            this.when.setText(text);
+        });
     }
 
     public void setHowToSplit(String text) {
-        this.howToSplit.setText(text);
+        Platform.runLater(() -> {
+            this.howToSplit.setText(text);
+        });
     }
 
     public void setDescription(String text) {
-        this.description.setText(text);
+        Platform.runLater(() -> {
+            this.description.setText(text);
+        });
     }
 
     public void setExpenseTypetext(String text) {
-        this.expenseTypetext.setText(text);
+        Platform.runLater(() -> {
+            this.expenseTypetext.setText(text);
+        });
     }
 
     public void setCommit(String text) {
-        this.commit.setText(text);
+        Platform.runLater(() -> {
+            this.commit.setText(text);
+        });
     }
 
     public void setAbort(String text) {
-        this.cancel.setText(text);
+        Platform.runLater(() -> {
+            this.cancel.setText(text);
+        });
     }
 
     public void setSelectAll(String text) {
-        this.selectAll.setText(text);
+        Platform.runLater(() -> {
+            this.selectAll.setText(text);
+        });
     }
 
     public void setSelectWhoPaid(String text) {
-        this.personComboBox.setPromptText(text);
+        Platform.runLater(() -> {
+            this.personComboBox.setPromptText(text);
+        });
     }
 
     public void setExpenseTypeBox(String text) {
-        this.category.setPromptText(text);
+        Platform.runLater(() -> {
+            this.category.setPromptText(text);
+        });
     }
+
     @FXML
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
@@ -452,11 +479,17 @@ public abstract class ExpenseCtrl {
     }
 
     public void setSharedExpense(String txt){
-        this.sharedExpense.setText(txt);
+        Platform.runLater(() -> {
+            this.sharedExpense.setText(txt);
+        });
     }
+
     public void setGivingMoneyToSomeone(String txt){
-        this.givingMoneyToSomeone.setText(txt);
+        Platform.runLater(() -> {
+            this.givingMoneyToSomeone.setText(txt);
+        });
     }
+
 
     public void resetPayerErrors() {
         payerError.setVisible(false);

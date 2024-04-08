@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -223,42 +224,51 @@ public class AdminOverviewCtrl {
         mainCtrl.showStartScreen();
         mainCtrl.setAdmin(false);
     }
-
     public void setAdminManagementOverviewText(String txt) {
-        adminManagementOverviewText.setText(txt);
+        Platform.runLater(() -> {
+            adminManagementOverviewText.setText(txt);
+        });
     }
-
 
     public void setImportEventButtonText(String txt) {
-        importEventButton.setText(txt);
+        Platform.runLater(() -> {
+            importEventButton.setText(txt);
+        });
     }
 
-
     public void setExportEventButtonText(String txt) {
-        exportEventButton.setText(txt);
+        Platform.runLater(() -> {
+            exportEventButton.setText(txt);
+        });
     }
 
     @FXML
     public void setDeleteEventButtonText(String txt) {
-        deleteEventButton.setText(txt);
+        Platform.runLater(() -> {
+            deleteEventButton.setText(txt);
+        });
     }
 
     @FXML
     public void setServerTagText(String txt) {
-        serverTag.setText(txt);
+        Platform.runLater(() -> {
+            serverTag.setText(txt);
+        });
     }
 
     @FXML
     public void setViewEventButtonText(String txt) {
-        viewEventButton.setText(txt);
+        Platform.runLater(() -> {
+            viewEventButton.setText(txt);
+        });
     }
 
     @FXML
     public void setSortByText(String txt) {
-        sortByText.setText(txt);
+        Platform.runLater(() -> {
+            sortByText.setText(txt);
+        });
     }
-
-    @FXML
     public void setLogOutButtonText(String txt) {
         logOutButton.setText(txt);
     }
@@ -281,7 +291,7 @@ public class AdminOverviewCtrl {
 
     @FXML
     public void abortImportMouse(MouseEvent press) {
-        jsonImportPane.setVisible(false);
+        Platform.runLater(()-> jsonImportPane.setVisible(false));
     }
 
     @FXML

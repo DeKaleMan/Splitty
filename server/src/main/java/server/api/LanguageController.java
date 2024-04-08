@@ -1,5 +1,6 @@
 package server.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -47,8 +50,10 @@ public class LanguageController {
         if (serverIoUtil.fileExists(newfile)) {
             // Read JSON file
             try{
-                JsonObject object = translator.readJsonFile(newfile);
-                String translation = getTranslationFromJson(query, object);
+                //ObjectMapper objectMapper = new ObjectMapper();
+                //HashMap<String, String> object = objectMapper.readValue(newfile, HashMap.class);
+                HashMap<String, String> object = serverIoUtil.readJson(newfile);
+                String translation = object.get(query);
                 if (translation != null || translation.isEmpty()) {
                     return ResponseEntity.ok(translation);
                 }
@@ -69,10 +74,20 @@ public class LanguageController {
         // Translate using external API
 
         // Write translation to JSON file
-        JsonObject object = translator.readJsonFile(newfile);
-        object.addProperty(query, translation);
-        //writeJsonFile(object, newfile);
-        serverIoUtil.writeJson(object, newfile);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            HashMap<String, String> object = serverIoUtil.readJson(newfile);
+            object.put(query, translation);
+            serverIoUtil.write(objectMapper.writeValueAsString(object), newfile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //JsonObject object = translator.readJsonFile(newfile);
+//
+//        object.addProperty(query, translation);
+//        writeJsonFile(object, newfile);
+//        //serverIoUtil.writeJson(object, newfile);
         return ResponseEntity.ok(translation);
     }
 
@@ -102,8 +117,8 @@ public class LanguageController {
         try {
             File file = new File(basepath + lang + ".json");
             if (serverIoUtil.fileExists(file)) {
-                JsonObject jsonObject = translator.readJsonFile(file);
-                return ResponseEntity.ok(jsonObject.toString());
+                String jsonString = serverIoUtil.read(file);
+                return ResponseEntity.ok(jsonString);
             }
             return ResponseEntity.notFound().build();
         }catch (Exception e){
@@ -116,11 +131,6 @@ public class LanguageController {
     public ResponseEntity<String> writeJSONLang(@RequestBody String jsonObject, @RequestParam String lang){
         try{
             File file = new File(basepath + lang + ".json");
-//            if(!serverIoUtil.deleteFile(file)){
-//                System.out.println("deletion failed");
-//            }
-//            serverIoUtil.createNewFile(file);
-
             serverIoUtil.write(jsonObject, file);
         }catch (Exception e){
             return ResponseEntity.badRequest().build();

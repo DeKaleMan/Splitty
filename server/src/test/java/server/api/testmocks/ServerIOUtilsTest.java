@@ -6,6 +6,7 @@ import server.api.depinjectionUtils.ServerIOUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ServerIOUtilsTest implements ServerIOUtil {
@@ -58,12 +59,6 @@ public class ServerIOUtilsTest implements ServerIOUtil {
         return tmpConversionRead;
     }
 
-    @Override
-    public void writeJson(JsonObject object, File file) {
-        this.file = file;
-        ioCalls.add("writeJson");
-        lastWrite = String.valueOf(object);
-    }
 
     @Override
     public boolean createNewFile(File newfile) {
@@ -72,10 +67,11 @@ public class ServerIOUtilsTest implements ServerIOUtil {
     }
 
     @Override
-    public boolean deleteFile(File file) {
-        ioCalls.add("deleteFile");
-        return true;
+    public HashMap<String, String> readJson(File file) {
+        ioCalls.add("readJson");
+        return new HashMap<>();
     }
+
 
     public ArrayList<String> clearCallList() {
         ArrayList<String> result = new ArrayList<>(ioCalls);
