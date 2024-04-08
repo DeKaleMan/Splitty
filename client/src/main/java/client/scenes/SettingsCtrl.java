@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Currency;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,12 +10,9 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+
 
 public class SettingsCtrl {
     private ServerUtils serverUtils;
@@ -185,9 +180,10 @@ public class SettingsCtrl {
                 return;
             }
             try{
+                config.setLanguage(newLang);
+                config.write();
                 mainCtrl.changeLanguage(newLang);
                 mainCtrl.languages.add(newLang);
-                mainCtrl.language = newLang;
                 langTextfield.setText("");
             }catch (Exception e){
                 progressBar.setVisible(false);
