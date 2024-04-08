@@ -51,31 +51,38 @@ public class SetLanguage {
         this.addParticipantCtrl = addParticipantCtrl;
         this.editExpenseCtrl = editExpenseCtrl;
         this.editEventCrtl = editEventCrtl;
-                //this.language = Language.en;
+        //this.language = Language.en;
     }
-    public void changeTo(String lang){
-        System.out.println("Translate to: " + lang + "::\n");
-        setMainScreen(lang);
-        setSpittyoverview(lang);
-        setAddExpense(lang);
-        setAdminLogin(lang);
-        setAdminOverview(lang);
-        setCreateEvent(lang);
-        setSettings(lang);
-        setStatistics(lang);
-        setServer(lang);
-        setInvite(lang);
-        setManageParticipants(lang);
-        setEditParticipant(lang);
-        setAddPartiticipant(lang);
-        setEditExpense(lang);
-        setEditEvent(lang);
-        System.out.println("\nFINISHED\n");
+
+    public void changeTo(String lang) {
+
+        new Thread(() -> {
+            System.out.println("Translate to: " + lang + "::\n");
+            setMainScreen(lang);
+            setSpittyoverview(lang);
+            setAddExpense(lang);
+            setAdminLogin(lang);
+            setAdminOverview(lang);
+            setCreateEvent(lang);
+            setSettings(lang);
+            setStatistics(lang);
+            setServer(lang);
+            setInvite(lang);
+            setManageParticipants(lang);
+            setEditParticipant(lang);
+            setAddPartiticipant(lang);
+            setEditExpense(lang);
+            setEditEvent(lang);
+            System.out.println("\nFINISHED\n");
+        }).start();
+
+
+
     }
 
     //TODO probably read the values from a file but this way it is already possible to do it in every language
 
-    public void setMainScreen(String lang){
+    public void setMainScreen(String lang) {
         startScreenCtrl.setCreateEventText(translate("Create event", "en", lang));
         startScreenCtrl.setJoinEventText(translate("Join event", "en", lang));
         startScreenCtrl.setAdminLogin(translate("Admin Login", "en", lang));
@@ -97,7 +104,8 @@ public class SetLanguage {
 
         System.out.println("mainscreen translated");
     }
-    public void setSpittyoverview(String lang){
+
+    public void setSpittyoverview(String lang) {
         splittyOverviewCtrl.setExpensesText(translate("Expenses", "en", lang));
         splittyOverviewCtrl.setParticipants(translate("Participants", "en", lang));
         splittyOverviewCtrl.setBackButton(translate("back", "en", lang));
@@ -108,6 +116,11 @@ public class SetLanguage {
         splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
+        splittyOverviewCtrl.setEditExpense(translate("Edit expense", "en", lang));
+        splittyOverviewCtrl.setEditEvent(translate("Edit event", "en", lang));
+        splittyOverviewCtrl.setLeaveButton(translate("Leave", "en", lang));
+        splittyOverviewCtrl.setmyDetails(translate("My details", "en", lang));
+        splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en", lang));
         splittyOverviewCtrl.setEditExpense(translate("Edit", "en",lang));
         splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
@@ -116,7 +129,8 @@ public class SetLanguage {
         splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
         System.out.println("event overview translated");
     }
-    public void setAddExpense(String lang){
+
+    public void setAddExpense(String lang) {
         addExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
         addExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         addExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
@@ -133,7 +147,8 @@ public class SetLanguage {
         //addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
         System.out.println("addExpense translated");
     }
-    public void setAdminLogin(String lang){
+
+    public void setAdminLogin(String lang) {
         adminLoginCtrl.setSignIn(translate("Sign in", "en", lang));
         adminLoginCtrl.setInstruction(translate("Log into your server instance", "en", lang));
         adminLoginCtrl.setPasswordInstructionLink(translate("Don't know how to get a password?", "en", lang));
@@ -145,7 +160,8 @@ public class SetLanguage {
                 "You can find your password in the console of your server instance", "en", lang));
         System.out.println("admin login translated");
     }
-    public void setAdminOverview(String lang){
+
+    public void setAdminOverview(String lang) {
         adminOverviewCtrl.setAdminManagementOverviewText(translate("Admin management overview", "en", lang));
         adminOverviewCtrl.setImportEventButtonText(translate("Import event", "en", lang));
         adminOverviewCtrl.setExportEventButtonText(translate("Export event", "en", lang));
@@ -156,7 +172,8 @@ public class SetLanguage {
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
         System.out.println("admin overview translated");
     }
-    public void setCreateEvent(String lang){
+
+    public void setCreateEvent(String lang) {
         createEventCtrl.setEventNameText(translate("Event name", "en", lang));
         createEventCtrl.setDateText(translate("Date", "en", lang));
         createEventCtrl.setEventDescriptionText(translate("Event description", "en", lang));
@@ -167,7 +184,8 @@ public class SetLanguage {
         createEventCtrl.setRequired(translate("required", "en", lang));
         System.out.println("setCreateEvent translated");
     }
-    public void setEditEvent(String lang){
+
+    public void setEditEvent(String lang) {
         editEventCrtl.setEventNameText(translate("New event name", "en", lang));
         editEventCrtl.setCreateButton(translate("Confirm event name", "en", lang));
         editEventCrtl.setCancelButton(translate("Cancel", "en", lang));
@@ -177,14 +195,16 @@ public class SetLanguage {
 
         System.out.println("setEditEvent translated     ");
     }
-    public void setStatistics(String lang){
+
+    public void setStatistics(String lang) {
         statisticsCtrl.setTotalCostText(translate("Total cost of event: ",
                 "en", lang));
         statisticsCtrl.setStatisticsText(translate("Statistics", "en", lang));
         statisticsCtrl.setBackButton(translate("Back", "en", lang));
         statisticsCtrl.setHoverLabel(translate("Hover over a category to see the percentage", "en", lang));
     }
-    private void setSettings(String lang){
+
+    private void setSettings(String lang) {
         settingsCtrl.setSettingsText(translate("settings", "en", lang));
         settingsCtrl.setAddLanguage(translate("Add language", "en", lang));
         settingsCtrl.setAddLangText(translate("Add language", "en", lang));
@@ -197,7 +217,8 @@ public class SetLanguage {
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         System.out.println("settings translated");
     }
-    private void setServer(String lang){
+
+    private void setServer(String lang) {
         serverCtrl.setServerText(translate("Server", "en", lang));
         serverCtrl.setConnectButton(translate("Connect", "en", lang));
         serverCtrl.setStartupNotification(translate("No server has been found," +
@@ -208,7 +229,8 @@ public class SetLanguage {
         serverCtrl.setTitle(translate("Change splitty server", "en", lang));
 
     }
-    private void setInvite(String lang){
+
+    private void setInvite(String lang) {
         invitationCtrl.setBack(translate("Back", "en", lang));
         invitationCtrl.setInviteCodeText(translate("Invite Code:", "en", lang));
         invitationCtrl.setSendEmailInvitesText(translate("Send email invites:", "en", lang));
@@ -218,7 +240,8 @@ public class SetLanguage {
         invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
         System.out.println("invitation translated");
     }
-    private void setManageParticipants(String lang){
+
+    private void setManageParticipants(String lang) {
         manageParticipantsCtrl.setAddButton(translate("Add participants", "en", lang));
         manageParticipantsCtrl.setBackButton(translate("Back", "en", lang));
         manageParticipantsCtrl.setRemoveButton(translate("Remove participants", "en", lang));
@@ -232,7 +255,8 @@ public class SetLanguage {
                 "en", lang));
         System.out.println("participant manager translated");
     }
-    private void setEditParticipant(String lang){
+
+    private void setEditParticipant(String lang) {
         editParticipantCtrl.setApplyChangesButton(translate("Apply change", "en", lang));
         editParticipantCtrl.setTitle(translate("Edit participant", "en", lang));
         editParticipantCtrl.setName(translate("Name", "en", lang));
@@ -244,7 +268,8 @@ public class SetLanguage {
                 "en", lang));
         editParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
-    private void setAddPartiticipant(String lang){
+
+    private void setAddPartiticipant(String lang) {
         addParticipantCtrl.setApplyChangesButton(translate("Apply change", "en", lang));
         addParticipantCtrl.setTitle(translate("Add participant", "en", lang));
         addParticipantCtrl.setName(translate("Name", "en", lang));
@@ -256,7 +281,9 @@ public class SetLanguage {
                 "en", lang));
         addParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
-    public void setEditExpense(String lang){
+
+    public void setEditExpense(String lang) {
+        editExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
         editExpenseCtrl.setSceneTypeText(translate("Edit Expense", "en", lang));
         editExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         editExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
@@ -286,7 +313,7 @@ public class SetLanguage {
                 .queryParam("targetLang", targetLang)
                 .request(APPLICATION_JSON)
                 .get();
-        if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             response.close();
             throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
         }
@@ -296,19 +323,17 @@ public class SetLanguage {
 
     }
 
-    public Image getFlag(String lang){
+    public Image getFlag(String lang) {
         Image image;
-        try{
+        try {
             String path = lang + "Flag.png";
-            image =  new Image(path);
-        }
-        catch (Exception e){
+            image = new Image(path);
+        } catch (Exception e) {
             return null;
         }
 
         return image;
     }
-
 
 
 }

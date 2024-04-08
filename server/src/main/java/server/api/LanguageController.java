@@ -1,9 +1,7 @@
 package server.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +10,6 @@ import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -50,12 +46,17 @@ public class LanguageController {
 
         if (serverIoUtil.fileExists(newfile)) {
             // Read JSON file
-            JsonObject object = translator.readJsonFile(newfile);
-            // Check if translation exists in JSON
-            String translation = getTranslationFromJson(query, object);
-            if (translation != null) {
-                return ResponseEntity.ok(translation);
+            try{
+                JsonObject object = translator.readJsonFile(newfile);
+                String translation = getTranslationFromJson(query, object);
+                if (translation != null || translation.isEmpty()) {
+                    return ResponseEntity.ok(translation);
+                }
+            }catch (Exception e){
+                System.out.println(e);
             }
+            // Check if translation exists in JSON
+
 
         }
         String translation = translator.translateWithAPI(query, sourceLang, targetLang);

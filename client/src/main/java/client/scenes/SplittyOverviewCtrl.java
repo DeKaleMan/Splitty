@@ -489,55 +489,82 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void setExpensesText(String text) {
-        this.expenses.setText(text);
+        Platform.runLater(() -> {
+            this.expenses.setText(text);
+        });
     }
 
     public void setParticipants(String text) {
-        this.participants.setText(text);
+        Platform.runLater(() -> {
+            this.participants.setText(text);
+        });
     }
 
     public void setBackButton(String text) {
-        this.backButton.setText(text);
+        Platform.runLater(() -> {
+            this.backButton.setText(text);
+        });
     }
 
     public void setSettleDebtsButton(String text) {
-        this.settleDebtsButton.setText(text);
+        Platform.runLater(() -> {
+            this.settleDebtsButton.setText(text);
+        });
     }
 
     public void setStatisticsButton(String text) {
-        this.statisticsButton.setText(text);
+        Platform.runLater(() -> {
+            this.statisticsButton.setText(text);
+        });
     }
 
     public void setAddExpenseButton(String text) {
-        this.addExpenseButton.setText(text);
+        Platform.runLater(() -> {
+            this.addExpenseButton.setText(text);
+        });
     }
 
-
     public void setPaidByMe(String text) {
-        this.paidByMe.setText(text);
+        Platform.runLater(() -> {
+            this.paidByMe.setText(text);
+        });
     }
 
     public void setDeleteExpenseButton(String text) {
-        this.deleteExpenseButton.setText(text);
+        Platform.runLater(() -> {
+            this.deleteExpenseButton.setText(text);
+        });
     }
 
     public void setSendInvites(String text) {
-        this.sendInvites.setText(text);
+        Platform.runLater(() -> {
+            this.sendInvites.setText(text);
+        });
     }
 
     public void setAllExpenses(String text) {
-        this.allExpenses.setText(text);
-    }
-    public void setEditEvent(String text) {
-        this.editEvent.setText(text);
-    }
-    public void setEditExpense(String text) {
-        this.editExpenseButton.setText(text);
-    }
-    public void setLeaveButton(String text) {
-        this.leaveButton.setText(text);
+        Platform.runLater(() -> {
+            this.allExpenses.setText(text);
+        });
     }
 
+    public void setEditEvent(String text) {
+        Platform.runLater(() -> {
+            this.editEvent.setText(text);
+        });
+    }
+
+    public void setEditExpense(String text) {
+        Platform.runLater(() -> {
+            this.editExpenseButton.setText(text);
+        });
+    }
+
+    public void setLeaveButton(String text) {
+        Platform.runLater(() -> {
+            this.leaveButton.setText(text);
+        });
+    }
 
     public void leaveEvent() {
         if (admin) {
@@ -637,7 +664,7 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.stop();
     }
     public void setmyDetails(String txt){
-        this.myDetails.setText(txt);
+        Platform.runLater(() -> {this.myDetails.setText(txt);});
     }
     public void setHostOptionsButton(String txt){
         this.hostOptionsButton.setText(txt);
