@@ -173,9 +173,12 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void deleteExpenseInAllListViews(Expense expense) {
-        allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
-        paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
-        includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+        allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+        paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+        includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
     }
 
     private void handleUpdateExpense(Expense expense) {

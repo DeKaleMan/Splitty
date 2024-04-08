@@ -3,9 +3,10 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.*;
 import commons.Currency;
-import commons.Participant;
-import commons.Payment;
+import commons.dto.DebtDTO;
+import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
@@ -166,7 +167,7 @@ public class DebtCtrl implements Initializable {
         fillRegion.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(fillRegion, Priority.ALWAYS);
         grid.add(fillRegion,1,0);
-        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 2, 0);
+        grid.add(received, 2, 0);
         grid.getStyleClass().add("headerGrid");
         grid.setHgap(10.0);
         return grid;
@@ -191,21 +192,38 @@ public class DebtCtrl implements Initializable {
 
     private void persistPayments(List<Payment> payments) {
         for (Payment p : payments) {
+            Payment fromDB;
+            try{
+                fromDB = serverUtils.getPayment(p.getId());
+            } catch (RuntimeException e){
+                continue;
+            }
+            if(fromDB.isPaid() == p.isPaid()) continue;
             serverUtils.updatePayment(
                 new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode,
                     p.getAmount(),
                     p.isPaid()), p.getId());
-            Participant payer = p.getPayer();
-            Participant payee = p.getPayee();
+            Participant payer = serverUtils.getParticipant(p.getPayer().getUuid(), eventCode);
+            Participant payee = serverUtils.getParticipant(p.getPayee().getUuid(), eventCode);
             if(p.isPaid()){
-                serverUtils.updateParticipant(payer.getUuid(),
-                    new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(),
-                        payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),
-                        payer.getEvent().getId(),payer.getUuid()));
+                ExpenseDTO
+                    exp =
+                    new ExpenseDTO(eventCode, "Partial debt settling", Type.Other, new Date(),
+                        p.getAmount(), payer.getUuid(),false);
+                Expense expense = serverUtils.addExpense(exp);
+                serverUtils.saveDebt(
+                    new DebtDTO(-p.getAmount(), eventCode, expense.getExpenseId(), payee.getUuid()));
                 serverUtils.updateParticipant(payee.getUuid(),
-                    new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(),
-                        payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),
-                        payee.getEvent().getId(),payee.getUuid()));
+                    new ParticipantDTO(payee.getName(), payee.getBalance() - p.getAmount(), payee.getIBan(),
+                        payee.getBIC(), payee.getEmail(), payee.getAccountHolder(), payee.getEvent().getId(),
+                        payee.getUuid()));
+                serverUtils.saveDebt(
+                    new DebtDTO(p.getAmount(), eventCode, expense.getExpenseId(), payer.getUuid()));
+                serverUtils.updateParticipant(payer.getUuid(),
+                    new ParticipantDTO(payer.getName(), payer.getBalance() + p.getAmount(), payer.getIBan(),
+                        payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
+                        payer.getUuid()));
+                serverUtils.send("/app/updateExpense", expense);
             }
         }
     }

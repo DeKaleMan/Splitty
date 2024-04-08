@@ -103,4 +103,9 @@ public class PaymentService {
 
         return payments;
     }
+
+    public Payment getPayment(long id) {
+        Optional<Payment> optionalPayment = paymentRepository.findById(id);
+        return optionalPayment.orElse(null);
+    }
 }
