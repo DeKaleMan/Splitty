@@ -3,10 +3,7 @@ package client.utils;
 
 import commons.*;
 import commons.Currency;
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
-import commons.dto.PaymentDTO;
+import commons.dto.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

@@ -1,0 +1,38 @@
+package server.service;
+
+import commons.Event;
+import commons.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import server.database.EventRepository;
+import server.database.TagRepository;
+
+import java.util.List;
+
+@Service
+public class TagService {
+
+    private final TagRepository tagRepository;
+    private final EventRepository eventRepository;
+
+    @Autowired
+    public TagService(TagRepository tagRepository, EventRepository eventRepository) {
+        this.tagRepository = tagRepository;
+        this.eventRepository = eventRepository;
+    }
+
+    /**
+     * gets the tags which belong to an event
+     * @param eventId the id of the event where the tags belong to
+     * @return the list of tags
+     */
+    public List<Tag> getTagsByEventId(int eventId) {
+        Event event = eventRepository.findEventById(eventId);
+        if (event == null) {
+            return null;
+        }
+        List<Tag> tags = tagRepository.findAll();
+        tags = tags.stream().filter(tag -> event.equals(tag.getEvent())).toList();
+        return tags;
+    }
+}

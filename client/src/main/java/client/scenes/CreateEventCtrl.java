@@ -3,7 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Event;
-import commons.EventDTO;
+import commons.dto.EventDTO;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.fxml.FXML;

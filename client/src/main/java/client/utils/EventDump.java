@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.dto.DebtDTO;
+import commons.dto.EventDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 
