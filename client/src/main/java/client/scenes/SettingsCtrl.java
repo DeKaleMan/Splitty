@@ -18,7 +18,7 @@ import javax.inject.Inject;
 public class SettingsCtrl {
     private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-    private final Config config;
+    public final Config config;
     private boolean noConnection = false;
     @FXML
     public Button cancelButton;
