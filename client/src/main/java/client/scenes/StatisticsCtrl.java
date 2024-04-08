@@ -9,16 +9,11 @@ import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
@@ -63,7 +58,7 @@ public class StatisticsCtrl {
     private Config config;
 
     @FXML
-    Label percentageLabel;
+    Label hoverLabel;
 
     @Inject
     public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
@@ -140,16 +135,9 @@ public class StatisticsCtrl {
         pieChart.setData(data);
 
         pieChart.getData().forEach(d -> {
-            d.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        percentageLabel.setTranslateX(mouseEvent.getSceneX());
-                        percentageLabel.setTranslateY(mouseEvent.getSceneY());
-                        percentageLabel.setText(mainCtrl.getFormattedDoubleString(100.0 * d.pieValueProperty().getValue() / total)+
-                            "%");
-                    }
-                });
+            Tooltip.install(d.getNode(), new Tooltip(
+                mainCtrl.getFormattedDoubleString(100.0 * d.pieValueProperty().getValue() / total)
+                    + "%"));
         });
     }
 
@@ -262,5 +250,18 @@ public class StatisticsCtrl {
 
     public void setBackButton(String txt) {
         this.back.setText(txt);
+    }
+
+    public void setHoverLabel(String t){
+        this.hoverLabel.setText(t);
+    }
+
+    public void showHoverLabel(){
+        hoverLabel.setVisible(true);
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+        visiblePause.setOnFinished(
+            event1 -> hoverLabel.setVisible(false)
+        );
+        visiblePause.play();
     }
 }

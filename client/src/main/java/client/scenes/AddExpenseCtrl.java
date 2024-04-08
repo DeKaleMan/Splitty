@@ -123,7 +123,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 expenseLoading.setVisible(false);
                 return;
             }
-            
+
             Double amountDouble = getAmountDouble(date);
             if (amountDouble == null) {
                 expenseLoading.setVisible(false);

@@ -181,6 +181,7 @@ public class SetLanguage {
                 "en", lang));
         statisticsCtrl.setStatisticsText(translate("Statistics", "en", lang));
         statisticsCtrl.setBackButton(translate("Back", "en", lang));
+        statisticsCtrl.setHoverLabel(translate("Hover over a category to see the percentage", "en", lang));
     }
     private void setSettings(String lang){
         settingsCtrl.setSettingsText(translate("settings", "en", lang));
@@ -255,14 +256,14 @@ public class SetLanguage {
         addParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
     public void setEditExpense(String lang){
-        editExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
+        editExpenseCtrl.setSceneTypeText(translate("Edit Expense", "en", lang));
         editExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         editExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
         editExpenseCtrl.setWhen(translate("When?", "en", lang));
         editExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
         editExpenseCtrl.setDescription(translate("Description", "en", lang));
         editExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
-        editExpenseCtrl.setCommit(translate("Add expense", "en", lang));
+        editExpenseCtrl.setCommit(translate("Edit expense", "en", lang));
         editExpenseCtrl.setAbort(translate("Cancel", "en", lang));
         editExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         editExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));

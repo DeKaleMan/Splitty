@@ -35,6 +35,10 @@
          </children>
       </VBox>
       <Label fx:id="errorLabel" layoutX="399.0" layoutY="140.0" text="Failed to convert currency" textFill="RED" visible="false" />
-      <Label fx:id="percentageLabel" />
+      <Label fx:id="hoverLabel" layoutX="479.0" layoutY="237.0" prefHeight="70.0" prefWidth="113.0" text="Hover over a category to see the percentage" textFill="#3700ff" visible="false" wrapText="true">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

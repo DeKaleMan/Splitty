@@ -387,6 +387,7 @@ public class MainCtrl {
             statisticsCtrl.fetchStat();
             //set the pieChart
             statisticsCtrl.setPieChart();
+            statisticsCtrl.showHoverLabel();
         } catch (RuntimeException e) {
             e.printStackTrace();
             checkConnection();
