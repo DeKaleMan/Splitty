@@ -295,6 +295,11 @@ public class MainCtrl {
         invitationCtrl.setTitle(event.getName());
     }
 
+
+    public void setServerForEmail(){
+        invitationCtrl.setServer(ServerUtils.server);
+    }
+
     public void showAdminLogin() {
         if (!getConnection()) {
             showStartScreen();

@@ -1,11 +1,11 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
 import javax.inject.Inject;
 import java.util.Scanner;
 
@@ -13,8 +13,12 @@ public class InvitationCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+
+    private final Config config;
     private String inviteCode;
     private int eventCode;
+
+    private String serverURL;
 
     @FXML
     private Label titleLabel;
@@ -38,9 +42,10 @@ public class InvitationCtrl {
     private TextArea emailArea;
 
     @Inject
-    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
+        this.config = config;
         inviteCode = "testInviteCode";
     }
 
@@ -61,6 +66,10 @@ public class InvitationCtrl {
         System.out.println("Button clicked!!");
         readAndSendEmails();
         mainCtrl.showSplittyOverview(eventCode);
+    }
+
+    public void setServer(String serverURL){
+        this.serverURL = serverURL;
     }
 
     /**
@@ -143,4 +152,6 @@ public class InvitationCtrl {
     public void setEmailArea(String txt) {
         this.emailArea.setPromptText(txt);
     }
+
+
 }
