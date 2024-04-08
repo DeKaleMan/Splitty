@@ -4,6 +4,7 @@ import commons.*;
 import commons.dto.ExpenseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.service.ExpenseService;
 
@@ -206,14 +207,15 @@ class ExpenseControllerTest {
     @Test
     void testWS(){
         Date date = new Date();
+        Expense e = new Expense(event1, "", Type.Drinks,
+            date, 0.0, p1,true);
         var actual =
-            sut.expenseByEventWS(new ExpenseDTO(1, "", Type.Drinks,
-                date, 0.0, "uuid",true));
-        assertEquals(new Expense(event1, "", Type.Drinks,
-                date, 0.0, p1,true),
-            actual.getBody());
-        assertEquals("save", expenseRepository.methods.getLast());
+            sut.expenseByEventWS(e);
+        assertEquals(e,
+            actual);
+        //assertEquals(HttpStatus.OK,actual.getStatusCode());
+        //assertEquals("save", expenseRepository.methods.getLast());
         //cleanup
-        expenseRepository.expenses.removeLast();
+        //expenseRepository.expenses.removeLast();
     }
 }

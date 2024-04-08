@@ -21,8 +21,8 @@ public class Event {
     private Date lastActivity;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
-    private List<Expense> expenseList;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    public List<Expense> expenseList;
 
     @JsonIgnore
     @OneToMany(mappedBy = "id.event", cascade = CascadeType.REMOVE)

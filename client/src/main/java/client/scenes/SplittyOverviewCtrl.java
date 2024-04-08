@@ -161,6 +161,21 @@ public class SplittyOverviewCtrl implements Initializable {
             }
         });
         serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
+        serverUtils.registerForExpenseWS("/topic/updateExpense", Expense.class, this::handleUpdateExpense);
+    }
+
+    private void handleUpdateExpense(Expense expense) {
+        if(expense.getEvent().getId() != eventId) return;
+        Platform.runLater(()->{
+            allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+            paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+            includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+            allExpensesList.getItems().add(expense);
+            if(expense.getPayer().getUuid().equals(config.getId())) paidByMeList.getItems().add(expense);
+            List<String> including = serverUtils.getDebtByExpense(eventId,
+                expense.getExpenseId()).stream().map(x -> x.getParticipant().getUuid()).toList();
+            if (including.contains(config.getId())) includingMeList.getItems().add(expense);
+        });
     }
 
     private void handleUpdate(Participant p){

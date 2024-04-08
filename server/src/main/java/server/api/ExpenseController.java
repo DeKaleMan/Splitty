@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import server.service.ExpenseService;
 
@@ -21,11 +22,10 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @MessageMapping("/addExpense") // -> /app/addExpense
-    @SendTo("/topic/addExpense") // when we are done processing it we send it to the path provided
-    public ResponseEntity<Expense> expenseByEventWS(ExpenseDTO expenseDTO){
-        ResponseEntity<Expense> expPerEvent = saveExpense(expenseDTO);
-        return expPerEvent;
+    @MessageMapping("/updateExpense") // -> /app/addExpense
+    @SendTo("/topic/updateExpense") // when we are done processing it we send it to the path provided
+    public Expense expenseByEventWS(@RequestBody Expense expense){
+        return expense;
     }
 
     @GetMapping(path = {"", "/"})
@@ -47,6 +47,7 @@ public class ExpenseController {
     }
 
     @PostMapping("addExp")
+    @Transactional
     public ResponseEntity<Expense> saveExpense(@RequestBody ExpenseDTO expenseDTO) {
         Expense expense = expenseService.saveExpense(expenseDTO);
         return (expense == null) ?

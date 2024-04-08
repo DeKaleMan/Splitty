@@ -129,7 +129,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 expenseLoading.setVisible(false);
                 return;
             }
-
+            
             Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
             if(!isSharedExpense && receiver == null) {
                 //TODO handle invalid receiver
@@ -234,9 +234,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         splitList.setVisible(false);
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
-        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class, exp -> {
-            System.out.println("expense added " + exp);
-        });
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
         } catch (Exception e) {

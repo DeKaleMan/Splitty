@@ -134,6 +134,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
                 new ExpenseDTO(eventCode, description, type, date, amountDouble,
                     payer.getUuid(),isSharedExpense);
             Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
+            serverUtils.send("/app/updateExpense", editedExpense);
             if(isSharedExpense) editSharedExpense(editedExpense, oldPayer, amountDouble);
             else editGivingMoneyToSomeone(editedExpense, oldPayer, amountDouble, receiver);
             serverUtils.generatePaymentsForEvent(eventCode);
@@ -276,8 +277,8 @@ public class EditExpenseCtrl extends ExpenseCtrl {
                 selectAll.setSelected(true);
             } else {
                 selectSome.setSelected(true);
-                owing.addAll(owingFromDb);
             }
+            owing.addAll(owingFromDb);
         }else{
             givingMoneyToSomeone.setSelected(true);
             Participant receiver = owingFromDb.getFirst();

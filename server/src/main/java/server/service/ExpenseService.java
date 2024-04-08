@@ -57,6 +57,7 @@ public class ExpenseService {
             new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
                 expenseDTO.getDate(), expenseDTO.getTotalExpense(),
                 payer, expenseDTO.isSharedExpense());
+        event.get().expenseList.add(expense);
         return expenseRepo.save(expense);
     }
 
