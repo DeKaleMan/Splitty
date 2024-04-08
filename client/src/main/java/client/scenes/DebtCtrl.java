@@ -84,6 +84,7 @@ public class DebtCtrl implements Initializable {
                                 VBox info = generateInfo(payment);
                                 TitledPane pane = new TitledPane("", info);
                                 headerGrid.minWidthProperty().bind(pane.widthProperty());
+                                headerGrid.maxWidthProperty().bind(pane.widthProperty());
                                 headerGrid.setPadding(new Insets(0,10,0,35));
                                 pane.setGraphic(headerGrid);
                                 pane.getStyleClass().add("paymentInstruction");
@@ -157,6 +158,8 @@ public class DebtCtrl implements Initializable {
         received.getStyleClass().add("receivedButton");
         Label titleNode = new Label(title);
         titleNode.setStyle("-fx-text-fill: white; -fx-font-size: 12px");
+        titleNode.setMaxWidth(110);
+        titleNode.setWrapText(true);
         GridPane grid = new GridPane();
         grid.add(titleNode, 0, 0);
         Region fillRegion = new Region();
