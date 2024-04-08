@@ -134,10 +134,10 @@ public class EditExpenseCtrl extends ExpenseCtrl {
                 new ExpenseDTO(eventCode, description, type, date, amountDouble,
                     payer.getUuid(),isSharedExpense);
             Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
-            serverUtils.send("/app/updateExpense", editedExpense);
             if(isSharedExpense) editSharedExpense(editedExpense, oldPayer, amountDouble);
             else editGivingMoneyToSomeone(editedExpense, oldPayer, amountDouble, receiver);
             serverUtils.generatePaymentsForEvent(eventCode);
+            serverUtils.send("/app/updateExpense", editedExpense);
             back();
         } catch (Exception e) {
             commitExpenseError.setVisible(true);
@@ -183,8 +183,8 @@ public class EditExpenseCtrl extends ExpenseCtrl {
                 new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(),
                     p.getUuid()));
             serverUtils.updateParticipant(p.getUuid(),
-                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson
-                    , p.getIBan(),
+                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson,
+                    p.getIBan(),
                     p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
                     p.getUuid()));
         }

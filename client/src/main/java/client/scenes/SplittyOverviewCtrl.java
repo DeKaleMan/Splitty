@@ -162,14 +162,26 @@ public class SplittyOverviewCtrl implements Initializable {
         });
         serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
         serverUtils.registerForExpenseWS("/topic/updateExpense", Expense.class, this::handleUpdateExpense);
+        serverUtils.registerForExpenseWS("/topic/deleteExpense", Expense.class, this::handleDeleteExpense);
+    }
+
+    private void handleDeleteExpense(Expense expense) {
+        if(expense.getEvent().getId() != eventId) return;
+        Platform.runLater(()->{
+            deleteExpenseInAllListViews(expense);
+        });
+    }
+
+    private void deleteExpenseInAllListViews(Expense expense) {
+        allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+        paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+        includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
     }
 
     private void handleUpdateExpense(Expense expense) {
         if(expense.getEvent().getId() != eventId) return;
         Platform.runLater(()->{
-            allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
-            paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
-            includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id && expense.getExpenseId() == x.getExpenseId());
+            deleteExpenseInAllListViews(expense);
             allExpensesList.getItems().add(expense);
             if(expense.getPayer().getUuid().equals(config.getId())) paidByMeList.getItems().add(expense);
             List<String> including = serverUtils.getDebtByExpense(eventId,
@@ -324,6 +336,7 @@ public class SplittyOverviewCtrl implements Initializable {
             }
             serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
             serverUtils.deleteExpense(toDelete);
+            serverUtils.send("/app/deleteExpense",toDelete);
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
             expenseNotDeletedError.setVisible(true);

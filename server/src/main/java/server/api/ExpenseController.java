@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import server.service.ExpenseService;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
@@ -24,7 +25,15 @@ public class ExpenseController {
 
     @MessageMapping("/updateExpense") // -> /app/addExpense
     @SendTo("/topic/updateExpense") // when we are done processing it we send it to the path provided
-    public Expense expenseByEventWS(@RequestBody Expense expense){
+    @ResponseBody
+    public Expense updateExpenseWS(@RequestBody Expense expense){
+        return expense;
+    }
+
+    @MessageMapping("/deleteExpense")
+    @SendTo("/topic/deleteExpense")
+    @ResponseBody
+    public Expense deleteExpenseWS(@RequestBody Expense expense){
         return expense;
     }
 

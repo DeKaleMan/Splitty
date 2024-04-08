@@ -123,7 +123,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 expenseLoading.setVisible(false);
                 return;
             }
-
+            
             Double amountDouble = getAmountDouble(date);
             if (amountDouble == null) {
                 expenseLoading.setVisible(false);
@@ -142,10 +142,10 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 ExpenseDTO exp =
                         new ExpenseDTO(eventCode,description,type, date, amountDouble, payer.getUuid(),isSharedExpense);
                 Expense expense = serverUtils.addExpense(exp);
-                serverUtils.send("/app/addExpense", exp);
                 if(isSharedExpense) addSharedExpense(amountDouble, expense, payer);
                 else addGivingMoneyToSomeone(amountDouble, expense, payer, receiver);
                 serverUtils.generatePaymentsForEvent(eventCode);
+                serverUtils.send("/app/updateExpense", expense);
                 expenseLoading.setVisible(false);
                 back();
             } catch (Exception e) {
