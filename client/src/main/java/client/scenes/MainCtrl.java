@@ -164,6 +164,8 @@ public class MainCtrl {
 
         settingCtrl.initializeConfig();
         serverUtils = new ServerUtils();
+        ServerUtils.serverDomain = settingCtrl.getConnection();
+        ServerUtils.resetServer();
         setupConnection();
         setLanguage();
         showStartScreen();

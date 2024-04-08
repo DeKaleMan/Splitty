@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Participant;
 import commons.Type;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -390,7 +391,9 @@ public abstract class ExpenseCtrl {
 
     @FXML
     protected void back() {
-        mainCtrl.showSplittyOverview(eventCode);
+        Platform.runLater(() -> {
+            mainCtrl.showSplittyOverview(eventCode);
+        });
     }
 
 //    public void setTitle(String title) {

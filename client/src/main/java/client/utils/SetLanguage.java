@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class SetLanguage {
-    private static final String SERVER = "http://localhost:8080/";
     private MainCtrl mainCtrl;
     private StartScreenCtrl startScreenCtrl;
     private SplittyOverviewCtrl splittyOverviewCtrl;
@@ -278,7 +277,7 @@ public class SetLanguage {
 
     public String translate(String query, String sourceLang, String targetLang) {
         Response response = ClientBuilder.newClient()
-                .target(SERVER)
+                .target(ServerUtils.server)
                 .path("api/translate")
                 .queryParam("query", query)
                 .queryParam("sourceLang", sourceLang)

@@ -88,9 +88,6 @@ public class ParticipantController {
     @GetMapping("{uuid}/events")
     public ResponseEntity<List<Event>> getEventsByParticipant(@PathVariable String uuid) {
         List<Event> events = participantService.getEventsByParticipant(uuid);
-        if (events.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(events);
     }
 

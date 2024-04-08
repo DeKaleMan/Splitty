@@ -137,7 +137,7 @@ class ParticipantControllerTest {
         when(participantService.getEventsByParticipant(any(String.class))).thenReturn(new ArrayList<>());
 
         ResponseEntity<List<Event>> result = participantController.getEventsByParticipant("uuid");
-        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
