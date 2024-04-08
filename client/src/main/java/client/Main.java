@@ -16,7 +16,9 @@
 package client;
 
 import client.scenes.*;
+import client.utils.AdminWindows;
 import client.utils.EventPropGrouper;
+import client.utils.TagsGrouper;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -24,7 +26,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.utils.AdminWindows;
 import static com.google.inject.Guice.createInjector;
 
 
@@ -60,14 +61,16 @@ public class Main extends Application {
             // group these in the EventPropGrouper
             var eventPropGrouper = new EventPropGrouper(addExpense, addParticipant, editParticipant,
                     statistics, debts,editEvent, editExpense, manageParticipants);
-
+            var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
+            var manageTags = FXML.load(ManageTagsCtrl.class, "client", "scenes", "ManageTags.fxml");
+            var tagsGrouper = new TagsGrouper(addTag, manageTags);
             var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
             var adminOverview = FXML.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
             var adminWindows = new AdminWindows(adminLogin, adminOverview);
             var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
             mainCtrl.initialize(primaryStage, invitation,splittyOverview,
                     startScreen, contactDetails, eventPropGrouper, userEventList,
-                    createEvent, adminWindows, settings, server);
+                    createEvent, adminWindows, settings, server, tagsGrouper);
             primaryStage.setOnCloseRequest((event) -> mainCtrl.stopLongPolling());
 
         } catch (Exception e) {

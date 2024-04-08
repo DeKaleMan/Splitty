@@ -15,10 +15,7 @@
  */
 package client.scenes;
 
-import client.utils.AdminWindows;
-import client.utils.EventPropGrouper;
-import client.utils.ServerUtils;
-import client.utils.SetLanguage;
+import client.utils.*;
 import commons.*;
 import commons.dto.ParticipantDTO;
 import javafx.scene.Parent;
@@ -96,6 +93,12 @@ public class MainCtrl {
     private Scene server;
     private ServerCtrl serverCtrl;
 
+    private Scene manageTags;
+    private ManageTagsCtrl manageTagsCtrl;
+
+    private Scene addTag;
+    private AddTagCtrl addTagCtrl;
+
 
     // probably not the best place to put that here but works for now
     // maybe in the future isolate it into an eventctrl?
@@ -123,7 +126,8 @@ public class MainCtrl {
                            Pair<CreateEventCtrl, Parent> createEvent,
                            AdminWindows adminWindows,
                            Pair<SettingsCtrl, Parent> settings,
-                           Pair<ServerCtrl, Parent> server) {
+                           Pair<ServerCtrl, Parent> server,
+                           TagsGrouper tagsGrouper) {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
@@ -161,6 +165,10 @@ public class MainCtrl {
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
         this.serverCtrl = server.getKey();
         this.server = new Scene(server.getValue());
+        this.manageTagsCtrl = tagsGrouper.manageTag().getKey();
+        this.manageTags = new Scene(tagsGrouper.manageTag().getValue());
+        this.addTagCtrl = tagsGrouper.addTag().getKey();
+        this.addTag = new Scene(tagsGrouper.addTag().getValue());
 
         settingCtrl.initializeConfig();
         serverUtils = new ServerUtils();
@@ -564,6 +572,34 @@ public class MainCtrl {
         this.editParticipantCtrl.setEventId(eventId);
         this.editParticipantCtrl.autoFillWithMyData();
         this.editParticipantCtrl.setHost(false);
+    }
+
+    public void showManageTags() {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(manageTags);
+        primaryStage.setTitle("Manage Tags");
+        manageTagsCtrl.refreshList();
+    }
+    public void showAddExpense() {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(addExpense);
+        primaryStage.setTitle("Add Tag");
+
+    }
+    public void showAddExpense(Tag tag) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(addExpense);
+        primaryStage.setTitle("Edit Tag");
+
     }
 
     public void setConfirmationEditParticipant() {

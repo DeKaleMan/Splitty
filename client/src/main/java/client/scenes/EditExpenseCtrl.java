@@ -23,9 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class EditExpenseCtrl extends ExpenseCtrl {
+    public Button addTagButton;
     @FXML
     protected ComboBox<Participant> personComboBox;
     @FXML
@@ -291,5 +294,9 @@ public class EditExpenseCtrl extends ExpenseCtrl {
         setComboboxUp(list);
         setListViewsUp();
         setTogglesUp();
+    }
+
+    public void showManageTags() {
+        mainCtrl.showManageTags();
     }
 }

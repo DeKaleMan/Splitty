@@ -28,6 +28,7 @@ import java.util.*;
 
 
 public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
+
     @FXML
     protected ComboBox<Participant> personComboBox;
     @FXML
@@ -52,6 +53,8 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @FXML
     protected ComboBox<Type> category;
+    @FXML
+    public Button addTagButton;
 
     @FXML
     protected Label sceneTypeText;
@@ -256,6 +259,10 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         currencyComboBox.setValue(Currency.EUR);
         personComboBox.setValue(null);
         amount.setText("");
+    }
+
+    public void showManageTags() {
+        mainCtrl.showManageTags();
     }
 
 }

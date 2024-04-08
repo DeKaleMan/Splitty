@@ -54,7 +54,7 @@
                         </TabPane>
                         <HBox alignment="CENTER" layoutX="-9.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
                             <children>
-                                <Label fx:id="expenses" styleClass="label" text="expenses">
+                                <Label fx:id="expenses" styleClass="label" text="Expenses">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
