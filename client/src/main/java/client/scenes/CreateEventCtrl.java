@@ -90,7 +90,11 @@ public class CreateEventCtrl {
 
     @FXML
     public ParticipantDTO addHost(int id, String inviteID) {
-        return new ParticipantDTO(config.getName(), 0.0, config.getIban(), config.getBic(),
+        String name = config.getName();
+        if (name == null || name.isEmpty()) {
+            name = "Unknown";
+        }
+        return new ParticipantDTO(name, 0.0, config.getIban(), config.getBic(),
                 config.getEmail(), config.getName(), id, config.getId(), inviteID);
     }
 
@@ -101,8 +105,8 @@ public class CreateEventCtrl {
         String description = eventDescriptionArea.getText();
         Date date = null;
         boolean error = false;
-        if(config.getName() == null){
-            error = noNameError();
+        if (config.getName() == null || config.getName().isEmpty()) {
+            error = !noNameError();
         }
         try {
             LocalDate localDate = datePicker.getValue();
