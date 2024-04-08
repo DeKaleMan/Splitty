@@ -297,6 +297,6 @@ public class EditExpenseCtrl extends ExpenseCtrl {
     }
 
     public void showManageTags() {
-        mainCtrl.showManageTags();
+        mainCtrl.showManageTags(eventCode);
     }
 }

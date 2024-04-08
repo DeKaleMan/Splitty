@@ -262,7 +262,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     }
 
     public void showManageTags() {
-        mainCtrl.showManageTags();
+        mainCtrl.showManageTags(eventCode);
     }
 
 }

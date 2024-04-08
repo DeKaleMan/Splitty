@@ -574,14 +574,14 @@ public class MainCtrl {
         this.editParticipantCtrl.setHost(false);
     }
 
-    public void showManageTags() {
+    public void showManageTags(int eventId) {
         if (!getConnection()) {
             showStartScreen();
             return;
         }
         primaryStage.setScene(manageTags);
         primaryStage.setTitle("Manage Tags");
-        manageTagsCtrl.refreshList();
+        manageTagsCtrl.refreshList(eventId);
     }
     public void showAddExpense() {
         if (!getConnection()) {

@@ -664,6 +664,25 @@ public class ServerUtils {
 
     }
 
+    public List<Tag> getTagsByEvent(int eventId) {
+        Response response = client.target(server).path("api/tag/getAll/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Tag> list = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return list;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tags. Status code: " + response.getStatus());
+        }
+    }
+    public void deleteTag(Tag tag) {
+    }
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
     public Conversion getConversion(Currency from, Currency to, String date) {
@@ -722,4 +741,5 @@ public class ServerUtils {
     public void stop() {
         EXEC.shutdownNow();
     }
+
 }
