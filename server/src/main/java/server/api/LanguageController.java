@@ -1,5 +1,6 @@
 package server.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONObject;
@@ -11,6 +12,8 @@ import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -109,16 +112,15 @@ public class LanguageController {
     }
 
     @PutMapping("write")
-    public ResponseEntity<String> writeJSONLang(@RequestParam JSONObject jsonObject, @RequestParam String lang){
+    public ResponseEntity<String> writeJSONLang(@RequestBody String jsonObject, @RequestParam String lang){
         try{
             File file = new File(basepath + lang + ".json");
 //            if(!serverIoUtil.deleteFile(file)){
 //                System.out.println("deletion failed");
 //            }
 //            serverIoUtil.createNewFile(file);
-            Gson gson = new Gson();
-            JsonObject convertedObject = gson.fromJson(jsonObject.toString(), JsonObject.class);
-            serverIoUtil.writeJson(convertedObject, file);
+
+            serverIoUtil.write(jsonObject, file);
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
