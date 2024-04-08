@@ -8,6 +8,9 @@ import jakarta.ws.rs.core.Response;
 import javafx.scene.image.Image;
 
 
+import java.io.File;
+import java.util.Objects;
+
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class SetLanguage {
@@ -27,6 +30,8 @@ public class SetLanguage {
     private AddParticipantCtrl addParticipantCtrl;
     private EditExpenseCtrl editExpenseCtrl;
     private EditEventCrtl editEventCrtl;
+
+    private ClientFileIOutil io;
 
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
@@ -51,6 +56,7 @@ public class SetLanguage {
         this.addParticipantCtrl = addParticipantCtrl;
         this.editExpenseCtrl = editExpenseCtrl;
         this.editEventCrtl = editEventCrtl;
+        this.io = new ClientFileIOutilActual();
         //this.language = Language.en;
     }
 
@@ -301,7 +307,6 @@ public class SetLanguage {
         System.out.println("EditExpense translated");
     }
 
-    private static final String API_ENDPOINT = "https://api.mymemory.translated.net/get";
 
 
     public String translate(String query, String sourceLang, String targetLang) {
@@ -319,20 +324,38 @@ public class SetLanguage {
         }
         String res = response.readEntity(String.class);
 
+        if (res.length() > 16 && res.substring(0, 17).equals("MYMEMORY WARNING:")){
+            mainCtrl.language = "en";
+            mainCtrl.resetLanguage();
+            //display error
+            return query;
+        }
+
         return res;
 
     }
 
     public Image getFlag(String lang) {
-        Image image;
+        Image image = null;
         try {
             String path = lang + "Flag.png";
             image = new Image(path);
+            if(image == null){
+
+            }
         } catch (Exception e) {
-            return null;
+            System.out.println(e);
+            if(Objects.equals(lang, "default")) throw new RuntimeException("no flag found");
+            image = getFlag("default");
         }
 
         return image;
+    }
+    public boolean addFlag(File imageFile) {
+        //TODO ASK FOR HELP
+        //Files.copy(imageFile, io.createNewFile());
+        return io.createNewFile(imageFile);
+
     }
 
 

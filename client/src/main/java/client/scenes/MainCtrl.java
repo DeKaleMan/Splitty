@@ -15,10 +15,7 @@
  */
 package client.scenes;
 
-import client.utils.AdminWindows;
-import client.utils.EventPropGrouper;
-import client.utils.ServerUtils;
-import client.utils.SetLanguage;
+import client.utils.*;
 import commons.*;
 import commons.Currency;
 import commons.dto.DebtDTO;
@@ -32,14 +29,14 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
 public class MainCtrl {
-    private final String css = this.getClass().getResource("/general.css").toExternalForm();
 
-    protected String language = "en";
+    public String language = "en";
     protected String currentLang = "en";
     protected List<String> languages;
 
@@ -192,14 +189,19 @@ public class MainCtrl {
         languages = new ArrayList<>();
         //TODO we should add the available languages perhaps to a file
         languages.addAll(List.of("en", "nl", "is", "zh", "es"));
+        if(!languages.contains(this.language)) this.language = "en";
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
                 editParticipantCtrl, addParticipantCtrl, editExpenseCtrl, editEventCrtl);
+
+        resetLanguage();
+
+    }
+    public void resetLanguage(){
         startScreenCtrl.setLanguageSelect();
         splittyOverviewCtrl.setLanguageSelect();
         startScreenCtrl.changeLanguage();
-
     }
 
     public void changeLanguage(String toLang) {
@@ -218,7 +220,6 @@ public class MainCtrl {
         try {
             Event event = serverUtils.getEventById(id);
             splittyOverviewCtrl.initializeAll(event);
-            splittyOverview.getStylesheets().add(css);
             splittyOverviewCtrl.setEventCode(id);
             primaryStage.setTitle("Event overview");
             primaryStage.setScene(splittyOverview);
@@ -235,8 +236,11 @@ public class MainCtrl {
 
     public Image getFlag() {
         return setLanguage.getFlag(this.language);
-
     }
+    public boolean addFlag(File image){
+        return setLanguage.addFlag(image);
+    }
+
 
     public List<Event> getMyEvents() {
         if (settingCtrl != null) {

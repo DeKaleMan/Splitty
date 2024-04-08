@@ -70,6 +70,14 @@ public class ClientFileIOutilActual implements ClientFileIOutil {
             e.printStackTrace();
         }
     }
+    @Override
+    public boolean createNewFile(File newfile){
+        try {
+            return newfile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public boolean fileExists(File file) {

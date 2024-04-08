@@ -11,8 +11,11 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
+import java.io.File;
+
 
 
 public class SettingsCtrl {
@@ -20,6 +23,8 @@ public class SettingsCtrl {
     private final MainCtrl mainCtrl;
     public final Config config;
     private boolean noConnection = false;
+
+    private File flag;
     @FXML
     public Button cancelButton;
     @FXML
@@ -183,8 +188,9 @@ public class SettingsCtrl {
             try{
                 config.setLanguage(newLang);
                 config.write();
-                mainCtrl.changeLanguage(newLang);
                 mainCtrl.languages.add(newLang);
+                mainCtrl.changeLanguage(newLang);
+
                 langTextfield.setText("");
             }catch (Exception e){
                 progressBar.setVisible(false);
@@ -206,11 +212,30 @@ public class SettingsCtrl {
 
     @FXML
     public void confirmLang(){
+        progressBar.setVisible(true);
         confirmlangBox.setVisible(false);
         String lang = addedLang.getText();
         String stringForJson = lang.replace("\n", "");
         serverUtils.setNewLang(stringForJson, newLang);
+        if(this.flag != null){
+            mainCtrl.addFlag(flag);
+        }
+        this.flag = null;
+
         mainCtrl.changeLanguage(newLang);
+        progressBar.setVisible(false);
+    }
+    @FXML
+    public void setFlag(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose image to set as flag");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG Files", "*.png"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        flag = fileChooser.showOpenDialog(null);
+        mainCtrl.addFlag(flag);
+
     }
 
     public String getLanguage() {

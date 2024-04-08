@@ -342,6 +342,11 @@ public class StartScreenCtrl implements Initializable {
         if (mainCtrl.language == null) {
             mainCtrl.language = "en";
         }
+        if(!mainCtrl.languages.contains(mainCtrl.language)){
+            mainCtrl.language = "en";
+            config.setLanguage("en");
+            config.write();
+        }
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(mainCtrl.language);
