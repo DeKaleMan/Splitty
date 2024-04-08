@@ -18,5 +18,7 @@ public interface ClientFileIOutil {
 
     boolean fileExists(File file);
 
+    public boolean createNewFile(File file);
+
     boolean createFileStructure();
 }
