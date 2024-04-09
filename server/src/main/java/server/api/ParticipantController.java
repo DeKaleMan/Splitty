@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 
@@ -21,8 +21,8 @@ public class ParticipantController {
 
     private final ParticipantService participantService;
 
-    protected Map<Object, Consumer<Participant>> updateListeners = new HashMap<>();
-    protected Map<Object, Consumer<Participant>> deletionListeners = new HashMap<>();
+    protected Map<Object, Consumer<Participant>> updateListeners = new ConcurrentHashMap<>();
+    protected Map<Object, Consumer<Participant>> deletionListeners = new ConcurrentHashMap<>();
 
     @Autowired
     public ParticipantController(ParticipantService participantService) {
