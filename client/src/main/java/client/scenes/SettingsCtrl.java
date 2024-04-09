@@ -200,14 +200,14 @@ public class SettingsCtrl {
                 return;
             }
         }
-        progressBar.setVisible(false);
+
 
         //TODO get jsonfile here
         confirmlangBox.setVisible(true);
         String jsonString = serverUtils.getLanguageJSON(newLang);
         jsonString = jsonString.replace(",", ",\n");
         addedLang.setText(jsonString);
-
+        progressBar.setVisible(false);
     }
 
     @FXML
