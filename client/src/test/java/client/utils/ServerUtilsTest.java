@@ -822,7 +822,7 @@ class ServerUtilsTest {
         List<Payment> real = serverUtils.getPaymentsOfEvent(eventId);
 
         verify(mockClient).target(ServerUtils.server);
-        verify(mockWebTarget).path("api/payments/{id}");
+        verify(mockWebTarget).path("api/payments/event/{id}");
         verify(mockWebTarget).resolveTemplate("id", eventId);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
