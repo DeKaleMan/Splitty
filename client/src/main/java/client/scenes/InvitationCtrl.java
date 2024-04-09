@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.EmailType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -41,6 +42,9 @@ public class InvitationCtrl {
     @FXML
     private TextArea emailArea;
 
+    @FXML
+    private ComboBox<EmailType> TypeEmail;
+
     @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
@@ -50,7 +54,7 @@ public class InvitationCtrl {
     }
 
     public void initialize() {
-        mainCtrl.setButtonGreenProperty(sendInvites);
+
     }
     /**
      * Displays the invite code in the associated label
