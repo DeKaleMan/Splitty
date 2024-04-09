@@ -667,7 +667,9 @@ public class SplittyOverviewCtrl implements Initializable {
         Platform.runLater(() -> {this.myDetails.setText(txt);});
     }
     public void setHostOptionsButton(String txt){
-        this.hostOptionsButton.setText(txt);
+        Platform.runLater(() -> {
+            this.hostOptionsButton.setText(txt);
+        });
     }
 
     @FXML

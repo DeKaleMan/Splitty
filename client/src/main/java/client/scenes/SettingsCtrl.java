@@ -15,7 +15,7 @@ import javafx.stage.FileChooser;
 
 import javax.inject.Inject;
 import java.io.File;
-
+import java.util.concurrent.CountDownLatch;
 
 
 public class SettingsCtrl {
@@ -174,6 +174,11 @@ public class SettingsCtrl {
     private TextArea addedLang;
     @FXML
     private VBox confirmlangBox;
+    private CountDownLatch latch = new CountDownLatch(1);
+
+    public void setLatch(){
+        latch.countDown();
+    }
     @FXML
     public void addLang(){
         progressBar.setVisible(true);
@@ -189,25 +194,41 @@ public class SettingsCtrl {
                 config.setLanguage(newLang);
                 config.write();
                 mainCtrl.languages.add(newLang);
+                this.latch = new CountDownLatch(1);
                 mainCtrl.changeLanguage(newLang);
-
                 langTextfield.setText("");
+
             }catch (Exception e){
-                progressBar.setVisible(false);
+
                 langTextfield.setText("no valid languageCode");
                 System.out.println(e);
                 progressBar.setVisible(false);
                 return;
             }
+            try {
+                while(latch.getCount() != 0){
+                    progressBar.setVisible(true);
+                }
+                latch.await();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            getJSONFile();
+
         }
 
 
         //TODO get jsonfile here
         confirmlangBox.setVisible(true);
-        String jsonString = serverUtils.getLanguageJSON(newLang);
-        jsonString = jsonString.replace(",", ",\n");
-        addedLang.setText(jsonString);
         progressBar.setVisible(false);
+    }
+
+    public void getJSONFile(){
+            String jsonString = serverUtils.getLanguageJSON(newLang);
+            jsonString = jsonString.replace(",", ",\n");
+            addedLang.setText(jsonString);
+            progressBar.setVisible(false);
     }
 
     @FXML
@@ -223,7 +244,6 @@ public class SettingsCtrl {
         this.flag = null;
 
         mainCtrl.changeLanguage(newLang);
-        progressBar.setVisible(false);
     }
     @FXML
     public void setFlag(){

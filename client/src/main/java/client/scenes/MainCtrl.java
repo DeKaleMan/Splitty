@@ -198,7 +198,7 @@ public class MainCtrl {
         resetLanguage();
 
     }
-    public void resetLanguage(){
+    public synchronized void resetLanguage(){
         Platform.runLater(() -> {
             try{
                 startScreenCtrl.setLanguageSelect();
@@ -211,13 +211,12 @@ public class MainCtrl {
         });
     }
 
-    public void changeLanguage(String toLang) {
-        Platform.runLater(() -> {
+    public synchronized void changeLanguage(String toLang) {
             this.language = toLang;
             setLanguage.changeTo(toLang);
             splittyOverviewCtrl.setLanguageSelect();
             startScreenCtrl.setLanguageSelect();
-        });
+
     }
 
     public String translate(String query) {

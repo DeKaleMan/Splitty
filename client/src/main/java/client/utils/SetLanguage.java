@@ -83,9 +83,8 @@ public class SetLanguage {
             setEditExpense(lang);
             setEditEvent(lang);
             System.out.println("\nFINISHED\n");
+            settingsCtrl.setLatch();
         }).start();
-
-
 
     }
 
@@ -348,7 +347,7 @@ public class SetLanguage {
             }
             image = new Image("file:" +  File.separator + File.separator + File.separator + path);
         } catch (Exception e) {
-            System.out.println(e);
+            //System.out.println(e);
             if(Objects.equals(lang, "default")) throw new RuntimeException("no flag found");
             image = getFlag("default");
         }
