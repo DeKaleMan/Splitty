@@ -23,6 +23,13 @@ public class ClientFileIOutilActual implements ClientFileIOutil {
             changeStatus = true;
             System.out.println("Created data folder");
         }
+        String flagFolder = getFlagFolder();
+        File flagFile = new File(flagFolder);
+        if (!flagFile.isDirectory()) {
+            flagFile.mkdir();
+            changeStatus = true;
+            System.out.println("Created flag folder");
+        }
         folder = getConfigFile();
         file = new File(folder);
         try {
