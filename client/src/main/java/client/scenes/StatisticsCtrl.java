@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Participant;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -225,13 +226,19 @@ public class StatisticsCtrl {
     }
 
     public void setStatisticsText(String txt) {
-        this.statisticsText.setText(txt);
+        Platform.runLater(() -> {
+            this.statisticsText.setText(txt);
+        });
     }
 
     public void setTotalCostText(String txt) {
-        this.totalCostText.setText(txt);
+        Platform.runLater(() -> {
+            this.totalCostText.setText(txt);
+        });
     }
     public void setBackButton(String txt){
-        this.back.setText(txt);
+        Platform.runLater(() -> {
+            this.back.setText(txt);
+        });
     }
 }

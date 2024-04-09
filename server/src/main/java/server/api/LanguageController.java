@@ -11,9 +11,7 @@ import server.api.depinjectionUtils.ServerIOUtil;
 import server.api.depinjectionUtils.LanguageResponse;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 @RestController
@@ -128,7 +126,7 @@ public class LanguageController {
     }
 
     @PutMapping("write")
-    public ResponseEntity<String> writeJSONLang(@RequestBody String jsonObject, @RequestParam String lang){
+    public synchronized ResponseEntity<String> writeJSONLang(@RequestBody String jsonObject, @RequestParam String lang){
         try{
             File file = new File(basepath + lang + ".json");
             serverIoUtil.write(jsonObject, file);
