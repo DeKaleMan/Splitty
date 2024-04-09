@@ -79,14 +79,14 @@ class ServerUtilsTest {
         when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
-
+        Tag t = new Tag();
         Date d = new Date(2004, Calendar.AUGUST,16);
         Event e1 = new Event("test", d, "stijn", "this is an event");
         Participant p1 = new Participant("testp", 50, "84342521345"
                 , "3252345", "kajshd", "","uuidtest", e1);
         List<Expense> mockExpenses = Arrays.asList(
-                new Expense(e1, "Test expense", Type.Food, d, 100, p1,true),
-                new Expense(e1, "Test expense 2", Type.Drinks, d, 150, p1,true)
+                new Expense(e1, "Test expense", t, d, 100, p1,true),
+                new Expense(e1, "Test expense 2", t, d, 150, p1,true)
         );
         when(mockBuilder.get(new GenericType<List<Expense>>() {})).thenReturn(mockExpenses);
 
@@ -112,9 +112,10 @@ class ServerUtilsTest {
 
         Date d1 = new Date(2004, Calendar.JULY,16);
         Event e1 = new Event("test", d1, "stijn", "this is an event");
+        Tag t = new Tag(e1, "Food", "000000");
         Participant p1 = new Participant("stijn", 70.0, "1234567890"
                 , "123456", "bal@gmail.com", "","uuidtest", e1);
-        Expense exp1 = new Expense(e1, "this is a expense", Type.Drinks, d1, 100.0, p1, true);
+        Expense exp1 = new Expense(e1, "this is a expense", t, d1, 100.0, p1, true);
         List<Expense> expListMock = List.of(exp1);
 
         when(mockBuilder.get(new GenericType<List<Expense>>() {})).thenReturn(expListMock);
@@ -188,16 +189,17 @@ class ServerUtilsTest {
 
         Date d1 = new Date(2004, Calendar.AUGUST,16);
         Event e1 = new Event("test", d1, "stijn", "this is an event");
+        Tag t = new Tag(e1, "Food", "000000");
         Participant p1 = new Participant("stijn", 70.0, "1234567890"
                 , "123456", "bal@gmail.com", "","uuidtest", e1);
         Expense mockExp = new Expense(e1, "this is a expense"
-                , Type.Drinks, d1, 100.0, p1, true);
+                , t, d1, 100.0, p1, true);
 
         when(mockBuilder.post(any(Entity.class), eq(Expense.class))).thenReturn(mockExp);
 
         Date d = new Date(2004, Calendar.AUGUST,16);
         ExpenseDTO expenseDTO = new ExpenseDTO(1, "test DTO Expense"
-                , Type.Food, d, 100.0, "uuidtest", true);
+                , t.getName(), t.getColour(), d, 100.0, "uuidtest", true);
 
         Expense res = serverUtils.addExpense(expenseDTO);
 
@@ -221,10 +223,11 @@ class ServerUtilsTest {
 
         Date d = new Date(2020, Calendar.AUGUST, 23);
         Event e = new Event("test", d, "stijn", "this is an event");
+        Tag t = new Tag(e, "Food", "000000");
         Participant p = new Participant("jaap", 56.0, "123"
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
-                , Type.Drinks, d, 100.0, p, true);
+                , t, d, 100.0, p, true);
         Debt mockDebt = new Debt(mockExp, 100.0, p);
         List<Debt> mockDebtList = List.of(mockDebt);
         when(mockBuilder.get(new GenericType<List<Debt>>(){})).thenReturn(mockDebtList);
@@ -252,10 +255,11 @@ class ServerUtilsTest {
 
         Date d = new Date(2020, Calendar.AUGUST, 23);
         Event e = new Event("test", d, "stijn", "this is an event");
+        Tag t = new Tag(e, "Food", "000000");
         Participant p = new Participant("jaap", 56.0, "123"
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
-                , Type.Drinks, d, 100.0, p, true);
+                , t, d, 100.0, p, true);
         Debt mockDebt = new Debt(mockExp, 100.0, p);
         List<Debt> mockDebtList = List.of(mockDebt);
         when(mockBuilder.get(new GenericType<List<Debt>>(){})).thenReturn(mockDebtList);
@@ -286,10 +290,11 @@ class ServerUtilsTest {
 
         Date d = new Date(2020, Calendar.AUGUST, 23);
         Event e = new Event("test", d, "stijn", "this is an event");
+        Tag t = new Tag(e, "Food", "000000");
         Participant p = new Participant("jaap", 56.0, "123"
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
-                , Type.Drinks, d, 100.0, p, true);
+                , t, d, 100.0, p, true);
         Debt mockDebt = new Debt(mockExp, 100.0, p);
         List<Debt> mockDebtList = List.of(mockDebt);
         when(mockBuilder.get(new GenericType<List<Debt>>(){})).thenReturn(mockDebtList);
@@ -315,10 +320,11 @@ class ServerUtilsTest {
 
         Date d = new Date(2020, Calendar.AUGUST, 23);
         Event e = new Event("test", d, "stijn", "this is an event");
+        Tag t = new Tag(e, "Food", "000000");
         Participant p = new Participant("jaap", 56.0, "123"
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
-                , Type.Drinks, d, 100.0, p, true);
+                , t, d, 100.0, p, true);
         Debt mockDebt = new Debt(mockExp, 100.0, p);
 
         when(mockBuilder.post(any(Entity.class), eq(Debt.class))).thenReturn(mockDebt);
@@ -351,10 +357,11 @@ class ServerUtilsTest {
 
         Date d = new Date(2020, Calendar.AUGUST, 23);
         Event e = new Event("test", d, "stijn", "this is an event");
+        Tag t = new Tag(e, "Food", "000000");
         Participant p = new Participant("jaap", 56.0, "123"
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
-                , Type.Drinks, d, 100.0, p, true);
+                , t, d, 100.0, p, true);
 
         when(mockResponse.readEntity((Class<Object>) any())).thenReturn(mockExp);
         when(mockBuilder.delete()).thenReturn(mockResponse);
@@ -385,10 +392,11 @@ class ServerUtilsTest {
 
         Date d = new Date(2020, Calendar.AUGUST, 23);
         Event e = new Event("test", d, "stijn", "this is an event");
+        Tag t = new Tag(e, "Food", "000000");
         Participant p = new Participant("jaap", 56.0, "123"
                 , "123", "qwer@gmail.com", "", "uuid", e);
         Expense mockExp = new Expense(e, "this is a expense"
-                , Type.Drinks, d, 100.0, p, true);
+                , t, d, 100.0, p, true);
 
         // Verifying the results
         assertThrows(RuntimeException.class, () ->

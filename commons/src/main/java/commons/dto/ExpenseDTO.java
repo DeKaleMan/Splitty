@@ -1,9 +1,6 @@
 package commons.dto;
 
-import commons.Tag;
-
 import java.util.Date;
-
 import java.util.Objects;
 
 
@@ -13,8 +10,8 @@ public class ExpenseDTO {
 
     private String description;
 
-    private Tag tag; // type of expense (i.e. food, drinks, travel)
-
+    private String tagName;
+    private String tagColour;
 
     private Date date; // date of expense
 
@@ -29,15 +26,32 @@ public class ExpenseDTO {
 
     }
 
-    public ExpenseDTO(int eventId, String description, Tag tag, Date date,
+    public ExpenseDTO(int eventId, String description, String tagName, String tagColour, Date date,
                    double totalExpense, String payerUuid, boolean sharedExpense) {
         this.eventId = eventId;
         this.description = description;
-        this.tag = tag;
+        this.tagName = tagName;
+        this.tagColour = tagColour;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payerUuid = payerUuid;
         this.sharedExpense = sharedExpense;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public String getTagColour() {
+        return tagColour;
+    }
+
+    public void setTagColour(String tagColour) {
+        this.tagColour = tagColour;
     }
 
     public String getDescription() {
@@ -47,16 +61,6 @@ public class ExpenseDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-    public Tag getTag() {
-        return tag;
-    }
-
-    public void setTag(Tag type) {
-        this.tag = tag;
-    }
-
 
 
     public Date getDate() {
@@ -102,25 +106,18 @@ public class ExpenseDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExpenseDTO that = (ExpenseDTO) o;
-        return eventId == that.eventId &&
-            Double.compare(totalExpense, that.totalExpense) == 0 &&
-            sharedExpense == that.sharedExpense &&
-            Objects.equals(description, that.description) && tag.equals(that.tag) &&
-            Objects.equals(date, that.date) &&
-            Objects.equals(payerUuid, that.payerUuid);
+        if (!(o instanceof ExpenseDTO that)) return false;
+        return eventId == that.eventId && Double.compare(totalExpense, that.totalExpense) == 0 && sharedExpense == that.sharedExpense && Objects.equals(description, that.description) && Objects.equals(tagName, that.tagName) && Objects.equals(tagColour, that.tagColour) && Objects.equals(date, that.date) && Objects.equals(payerUuid, that.payerUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, description, tag, date, totalExpense, payerUuid,
-            sharedExpense);
+        return Objects.hash(eventId, description, tagName, tagColour, date, totalExpense, payerUuid, sharedExpense);
     }
 
     @Override
     public String toString() {
-        return "This is an expense:\n" + description + "\nThe expense type is: " + this.tag.getName()
+        return "This is an expense:\n" + description + "\nThe expense type is: " + this.tagName
             + ".\nThe total amount spent is: "
             + totalExpense + "."
             + "\nThe person who paid was: " + payerUuid + ", on " + date

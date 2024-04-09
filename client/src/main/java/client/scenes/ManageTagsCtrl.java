@@ -112,7 +112,7 @@ public class ManageTagsCtrl implements Initializable {
         }
     }
     public void back() {
-        mainCtrl.showAddExpense();
+        mainCtrl.showAddExpense(eventId);
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {

@@ -27,13 +27,14 @@ class ExpenseControllerTest {
     Participant p2 = new Participant("test", 10.0,"IBAN","BIC","email1","","uuid2",event1);
 
     Participant p3 = new Participant("test", 10.0,"IBAN","BIC","email3","","uuid3",event2);
-
+    Tag t1 = new Tag(event1, "Food", "2a8000");
+    Tag t2 = new Tag(event2, "Travel", "3700ff");
     Date date = new Date();
-    Expense e1 = new Expense(event1, "", Type.Drinks,
+    Expense e1 = new Expense(event1, "", t1,
         date, 0.0, p1,true);
-    Expense e2 = new Expense(event1, "", Type.Drinks,
+    Expense e2 = new Expense(event1, "", t1,
         date, 0.0, p2,true);
-    Expense e3 = new Expense(event2, "", Type.Drinks,
+    Expense e3 = new Expense(event2, "", t2,
         date, 0.0, p1,true);
 
     @BeforeEach
@@ -67,14 +68,14 @@ class ExpenseControllerTest {
     @Test
     void nullSaveDate() {
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
+            sut.saveExpense(new ExpenseDTO(1, "", "","",
                 null, 0.0, "uuid",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
     @Test
     void nullSaveUuid() {
-        var actual = sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
+        var actual = sut.saveExpense(new ExpenseDTO(1, "","e", "2",
             new Date(), 0.0, null,true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
@@ -82,14 +83,14 @@ class ExpenseControllerTest {
     @Test
     void nullSaveNegative() {
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
+            sut.saveExpense(new ExpenseDTO(1, "", "e","e",
                 new Date(), -1.0, "uuid",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
     @Test
     void emptyUuid() {
-        var actual = sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
+        var actual = sut.saveExpense(new ExpenseDTO(1, "", "e","e",
             new Date(), 0.0, "",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
@@ -98,9 +99,10 @@ class ExpenseControllerTest {
     void testSave() {
         Date date = new Date();
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", Type.Drinks,
+            sut.saveExpense(new ExpenseDTO(1, "", "Food","000000",
                 date, 0.0, "uuid",true));
-        assertEquals(new Expense(event1, "", Type.Drinks,
+        Tag tag = new Tag(event1, "Food", "000000");
+        assertEquals(new Expense(event1, "", tag,
                 date, 0.0, p1,true),
             actual.getBody());
         assertEquals("save", expenseRepository.methods.getLast());
@@ -110,7 +112,7 @@ class ExpenseControllerTest {
 
     @Test
     void testSaveInvalidEvent() {
-        ResponseEntity<Expense> response = sut.saveExpense(new ExpenseDTO(-1, "", Type.Drinks,
+        ResponseEntity<Expense> response = sut.saveExpense(new ExpenseDTO(-1, "", "e","e",
             date, 0.0, "uuid",true));
         assertEquals(BAD_REQUEST, response.getStatusCode());
     }
@@ -144,16 +146,16 @@ class ExpenseControllerTest {
     }
 
     @Test
-    void testUpdate(){
-        Expense toUpdate = new Expense(event1,"d", Type.Drinks, new Date(), 1.0, p1,
+    void testUpdate() {
+        Expense toUpdate = new Expense(event1,"d", t1, new Date(), 1.0, p1,
             true);
         toUpdate.expenseId = 4;
         expenseRepository.expenses.add(toUpdate);
-        Expense updated = new Expense(event1,"d2", Type.Food, new Date(1,1,1), 2.0,
+        Expense updated = new Expense(event1,"d2", t1, new Date(1,1,1), 2.0,
             p2, false);
         updated.expenseId = 4;
         ResponseEntity<Expense> response = sut.updateExpense(1,4,new ExpenseDTO(1,"d2",
-            Type.Food, new Date(1,1,1), 2.0, "uuid2", false));
+           t1.getName(),t1.getColour(), new Date(1,1,1), 2.0, "uuid2", false));
         assertEquals(updated,response.getBody());
         assertEquals(OK,response.getStatusCode());
         assertEquals("save", expenseRepository.methods.getLast());
@@ -178,7 +180,7 @@ class ExpenseControllerTest {
         var actual = sut.deleteExpenseByEventIdAndExpenseId(0, 0);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
         Date date = new Date();
-        ExpenseDTO e1 = new ExpenseDTO(event1.id, "", Type.Drinks,
+        ExpenseDTO e1 = new ExpenseDTO(event1.id, "", "","",
                 date, 0.0, "uuid",true);
         var actual2 = sut.deleteExpenseByEventIdAndExpenseId(event1.id, -33);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
@@ -192,7 +194,7 @@ class ExpenseControllerTest {
     //I could not make this test work even though the actual method does work. If someone can spot the mistake
     @Test
     void testDeleteExpense(){
-        Expense toDelete = new Expense(event1,"d", Type.Drinks, new Date(), 1.0, p1, true);
+        Expense toDelete = new Expense(event1,"d", t1, new Date(), 1.0, p1, true);
         toDelete.expenseId = 4;
         expenseRepository.expenses.add(toDelete);
         ResponseEntity<Expense> response = sut.deleteExpenseByEventIdAndExpenseId(1,4);
@@ -206,7 +208,7 @@ class ExpenseControllerTest {
     @Test
     void testUpdateWS(){
         Date date = new Date();
-        Expense e = new Expense(event1, "", Type.Drinks,
+        Expense e = new Expense(event1, "", t1,
             date, 0.0, p1,true);
         var actual =
             sut.updateExpenseWS(e);
@@ -217,7 +219,7 @@ class ExpenseControllerTest {
     @Test
     void testDeleteWS(){
         Date date = new Date();
-        Expense e = new Expense(event1, "", Type.Drinks,
+        Expense e = new Expense(event1, "", t1,
             date, 0.0, p1,true);
         var actual =
             sut.deleteExpenseWS(e);

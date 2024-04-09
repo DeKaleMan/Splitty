@@ -607,7 +607,7 @@ public class MainCtrl {
     public Expense addExpense(String description, Tag tag, Date date, Double amountDouble,
                               Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO exp =
-                new ExpenseDTO(eventCode, description, tag, date, amountDouble, payer.getUuid(),isSharedExpense);
+                new ExpenseDTO(eventCode, description, tag.getName(), tag.getColour() , date, amountDouble, payer.getUuid(),isSharedExpense);
         Expense expense = serverUtils.addExpense(exp);
         if(isSharedExpense) addSharedExpense(amountDouble, expense, payer,owing, eventCode);
         else addGivingMoneyToSomeone(amountDouble, expense, payer, owing.getFirst(), eventCode);
@@ -657,7 +657,7 @@ public class MainCtrl {
                             Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, tag, date, amountDouble,
+                new ExpenseDTO(eventCode, description, tag.getName(), tag.getColour(), date, amountDouble,
                         payer.getUuid(),isSharedExpense);
         Expense editedExpense = serverUtils.updateExpense(expenseId, exp);
         if(isSharedExpense) editSharedExpense(editedExpense, payer, amountDouble, eventCode, owing);
