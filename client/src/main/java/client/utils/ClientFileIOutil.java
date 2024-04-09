@@ -7,7 +7,9 @@ public interface ClientFileIOutil {
     default String getDataFolder() {
         return System.getProperty("user.dir") + File.separator + "SplittyClientData";
     }
-
+    default String getFlagFolder(){
+        return getDataFolder() + File.separator + "flags";
+    }
     default String getConfigFile(){
         return getDataFolder() + File.separator + "Config.json";
     }
