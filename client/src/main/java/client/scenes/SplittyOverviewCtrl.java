@@ -7,8 +7,6 @@ import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Type;
-import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -27,6 +25,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -114,6 +113,12 @@ public class SplittyOverviewCtrl implements Initializable {
 
     ObservableList<Participant> participantsList;
 
+    @FXML
+    private Button undo;
+    
+    Stack<Pair<String,Expense>> undoExpenseStack;
+    Stack<Debt> undoDebtStack;
+
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
         this.serverUtils = server;
@@ -121,6 +126,8 @@ public class SplittyOverviewCtrl implements Initializable {
         this.config = config;
         admin = false;
         participantsList = FXCollections.observableArrayList();
+        undoExpenseStack = new Stack<>();
+        undoDebtStack = new Stack<>();
     }
 
     public void initializeAll(Event event) {
@@ -160,7 +167,42 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
+        undo.setVisible(false);
         serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
+        serverUtils.registerForExpenseWS("/topic/updateExpense", Expense.class, this::handleUpdateExpense);
+        serverUtils.registerForExpenseWS("/topic/deleteExpense", Expense.class, this::handleDeleteExpense);
+    }
+
+    private void handleDeleteExpense(Expense expense) {
+        if(expense.getEvent().getId() != eventId) return;
+        Platform.runLater(()->{
+            deleteExpenseInAllListViews(expense);
+        });
+    }
+
+    private void deleteExpenseInAllListViews(Expense expense) {
+        allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+        paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+        includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+    }
+
+    private void handleUpdateExpense(Expense expense) {
+        if(expense.getEvent().getId() != eventId) return;
+        Platform.runLater(()->{
+            deleteExpenseInAllListViews(expense);
+            addExpenseToAllListViews(expense);
+        });
+    }
+
+    private void addExpenseToAllListViews(Expense expense) {
+        allExpensesList.getItems().add(expense);
+        if(expense.getPayer().getUuid().equals(config.getId())) paidByMeList.getItems().add(expense);
+        List<String> including = serverUtils.getDebtByExpense(eventId,
+            expense.getExpenseId()).stream().map(x -> x.getParticipant().getUuid()).toList();
+        if (including.contains(config.getId())) includingMeList.getItems().add(expense);
     }
 
     private void handleUpdate(Participant p){
@@ -232,30 +274,14 @@ public class SplittyOverviewCtrl implements Initializable {
         } else {
             mainCtrl.showStartScreen();
         }
+        hideUndo();
+        undoExpenseStack.clear();
+        undoDebtStack.clear();
     }
 
     @FXML
     private void viewDebts() {
         mainCtrl.viewDeptsPerEvent(eventId);
-    }
-
-
-    public void addExpense(String description, Type type, Date date,
-                           Double totalExpense, String payerEmail) {
-        try {
-            ExpenseDTO exp = new ExpenseDTO(eventId, description, type,
-                date, totalExpense, payerEmail, true);
-            serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventId);
-        } catch (NotFoundException ep) {
-            // Handle 404 Not Found error
-            // Display an error message or log the error
-            System.err.println("Expense creation failed: Resource not found.");
-            ep.printStackTrace();
-            // Optionally, notify the user or perform error recovery actions
-        }
-
     }
 
     @FXML
@@ -301,14 +327,9 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         try {
             List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            for(Debt d : debts){
-                Participant p = d.getParticipant();
-                serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
-                    p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
-                    p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
-            }
-            serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            serverUtils.deleteExpense(toDelete);
+            deleteExpenseAndDebts(debts, toDelete);
+            pushUndoStacks(toDelete,debts,"delete");
+            showUndo();
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
             expenseNotDeletedError.setVisible(true);
@@ -322,6 +343,19 @@ public class SplittyOverviewCtrl implements Initializable {
         fetchExpenses();
         serverUtils.generatePaymentsForEvent(eventId);
         return toDelete;
+    }
+
+    private void deleteExpenseAndDebts(List<Debt> debts, Expense toDelete) {
+        for(Debt d : debts){
+//                undoDebtStack.push(d);
+            Participant p = d.getParticipant();
+            serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+        serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+        serverUtils.deleteExpense(toDelete);
+        serverUtils.send("/app/deleteExpense", toDelete);
     }
 
 
@@ -557,6 +591,10 @@ public class SplittyOverviewCtrl implements Initializable {
         if (k.match(press)) {
             showAddExpense();
         }
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
+        if(ctrlZ.match(press)){
+            undo();
+        }
 
     }
 
@@ -659,6 +697,72 @@ public class SplittyOverviewCtrl implements Initializable {
         setFlag(flag);
         translating = false;
     }
+    
+    public void pushUndoStacks(Expense expense, List<Debt> debts, String method){
+        undoExpenseStack.push(new Pair<>(method,expense));
+        debts.forEach(undoDebtStack::push);
+    }
+    
+    public void undo(){
+        if(undoExpenseStack.isEmpty()) return;
+        Pair<String,Expense> expensePair = undoExpenseStack.pop();
+        List<Debt> debts = new ArrayList<>();
+        while(!undoDebtStack.isEmpty() && undoDebtStack.peek().getExpense()
+            .equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
+        if(expensePair.getKey().equals("add")){
+            undoAdd(expensePair.getValue());
+        }else if(expensePair.getKey().equals("edit")){
+            undoEdit(expensePair.getValue(), debts);
+        }else{
+            undoDelete(expensePair.getValue(),debts);
+        }
+        fetchExpenses();
+        if(undoExpenseStack.isEmpty()) undo.setVisible(false);
+        serverUtils.generatePaymentsForEvent(eventId);
+    }
 
+    private void undoEdit(Expense expense, List<Debt> debts) {
+        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getType(),
+            expense.getDate(),expense.getTotalExpense(),
+            expense.getPayer(), expense.getEvent().getId(),
+            expense.isSharedExpense(),
+            debts
+                .stream()
+                .filter(x -> x.getBalance() < 0)
+                .map(x -> x.getParticipant())
+                .toList());
+    }
+
+    private void undoDelete(Expense expense, List<Debt> debts) {
+        mainCtrl.addExpense(expense.getDescription(), expense.getType(),
+                expense.getDate(),expense.getTotalExpense(),
+                serverUtils.getParticipant(expense.getPayer().getUuid(),
+                    expense.getPayer().getEvent().getId()), expense.getEvent().getId(),
+                expense.isSharedExpense(),
+                debts
+                        .stream()
+                        .filter(x -> x.getBalance() < 0)
+                        .map(x -> serverUtils.getParticipant(x.getParticipant().getUuid(),
+                            x.getParticipant().getEvent().getId()))
+                        .toList());
+        serverUtils.generatePaymentsForEvent(eventId);
+    }
+
+    private void undoAdd(Expense toDelete) {
+        List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+        deleteExpenseAndDebts(debts, toDelete);
+    }
+
+    public void showUndo(){
+        undo.setVisible(true);
+    }
+
+    public void hideUndo(){
+        undo.setVisible(false);
+    }
+
+    public void setUndo(String t){
+        this.undo.setText(t);
+    }
 }
 

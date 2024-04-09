@@ -3,10 +3,8 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.*;
 import commons.Currency;
-import commons.Participant;
-import commons.Payment;
-import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,11 +15,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
@@ -35,6 +32,8 @@ public class DebtCtrl implements Initializable {
     private MainCtrl mainCtrl;
 
     private Config config;
+    @FXML
+    AnchorPane background;
 
     @FXML
     private ListView<Payment> paymentInstructionListView;
@@ -84,6 +83,7 @@ public class DebtCtrl implements Initializable {
                                 VBox info = generateInfo(payment);
                                 TitledPane pane = new TitledPane("", info);
                                 headerGrid.minWidthProperty().bind(pane.widthProperty());
+                                headerGrid.maxWidthProperty().bind(pane.widthProperty());
                                 headerGrid.setPadding(new Insets(0,10,0,35));
                                 pane.setGraphic(headerGrid);
                                 pane.getStyleClass().add("paymentInstruction");
@@ -157,13 +157,15 @@ public class DebtCtrl implements Initializable {
         received.getStyleClass().add("receivedButton");
         Label titleNode = new Label(title);
         titleNode.setStyle("-fx-text-fill: white; -fx-font-size: 12px");
+        titleNode.setMaxWidth(110);
+        titleNode.setWrapText(true);
         GridPane grid = new GridPane();
         grid.add(titleNode, 0, 0);
         Region fillRegion = new Region();
         fillRegion.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(fillRegion, Priority.ALWAYS);
         grid.add(fillRegion,1,0);
-        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 2, 0);
+        grid.add(received, 2, 0);
         grid.getStyleClass().add("headerGrid");
         grid.setHgap(10.0);
         return grid;
@@ -188,21 +190,22 @@ public class DebtCtrl implements Initializable {
 
     private void persistPayments(List<Payment> payments) {
         for (Payment p : payments) {
+            Payment fromDB;
+            try{
+                fromDB = serverUtils.getPayment(p.getId());
+            } catch (RuntimeException e){
+                continue;
+            }
+            if(fromDB.isPaid() == p.isPaid()) continue;
             serverUtils.updatePayment(
                 new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode,
                     p.getAmount(),
                     p.isPaid()), p.getId());
-            Participant payer = p.getPayer();
-            Participant payee = p.getPayee();
+            Participant payer = serverUtils.getParticipant(p.getPayer().getUuid(), eventCode);
+            Participant payee = serverUtils.getParticipant(p.getPayee().getUuid(), eventCode);
             if(p.isPaid()){
-                serverUtils.updateParticipant(payer.getUuid(),
-                    new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(),
-                        payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),
-                        payer.getEvent().getId(),payer.getUuid()));
-                serverUtils.updateParticipant(payee.getUuid(),
-                    new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(),
-                        payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),
-                        payee.getEvent().getId(),payee.getUuid()));
+                mainCtrl.addExpense("Partial debt settling", Type.Other, new Date(),
+                    p.getAmount(), payer, eventCode,false, List.of(payee));
             }
         }
     }
@@ -237,6 +240,7 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void undo() {
+        if(undone.isEmpty()) return;
         Payment p = undone.pop();
         changed.remove(p);
         p.setPaid(false);
@@ -245,8 +249,13 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
+        }
+
+        if(ctrlZ.match(press)){
+            undo();
         }
     }
 }

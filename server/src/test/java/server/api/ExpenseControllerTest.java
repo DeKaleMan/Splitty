@@ -204,16 +204,24 @@ class ExpenseControllerTest {
     }
 
     @Test
-    void testWS(){
+    void testUpdateWS(){
         Date date = new Date();
+        Expense e = new Expense(event1, "", Type.Drinks,
+            date, 0.0, p1,true);
         var actual =
-            sut.expenseByEventWS(new ExpenseDTO(1, "", Type.Drinks,
-                date, 0.0, "uuid",true));
-        assertEquals(new Expense(event1, "", Type.Drinks,
-                date, 0.0, p1,true),
-            actual.getBody());
-        assertEquals("save", expenseRepository.methods.getLast());
-        //cleanup
-        expenseRepository.expenses.removeLast();
+            sut.updateExpenseWS(e);
+        assertEquals(e,
+            actual);
+    }
+
+    @Test
+    void testDeleteWS(){
+        Date date = new Date();
+        Expense e = new Expense(event1, "", Type.Drinks,
+            date, 0.0, p1,true);
+        var actual =
+            sut.deleteExpenseWS(e);
+        assertEquals(e,
+            actual);
     }
 }
