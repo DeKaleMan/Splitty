@@ -8,13 +8,15 @@ import org.simplejavamail.mailer.MailerBuilder;
 
 public class Mail {
 
-    public void makeEmail(String fromEmail, String toEmail, String subject, String body){
+    public static Email makeEmail(String fromEmail, String toEmail, String subject, String body){
         Email email = EmailBuilder.startingBlank()
                 .from(fromEmail)
                 .to(toEmail)
                 .withSubject(subject)
                 .withPlainText(body)
                 .buildEmail();
+
+        return email;
     }
 
     public void getSenderInfo(String host, int port, String userEmail, String passwordToken){

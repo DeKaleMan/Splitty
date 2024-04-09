@@ -4,9 +4,14 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.EmailType;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.simplejavamail.api.email.Email;
+
 import javax.inject.Inject;
 import java.util.Scanner;
 
@@ -14,8 +19,6 @@ public class InvitationCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-
-    private final Server server;
 
     private final Config config;
     private String inviteCode;
@@ -85,7 +88,6 @@ public class InvitationCtrl {
      */
     private void readAndSendEmails() {
         Scanner scanner = new Scanner(emailArea.getText());
-        getherDataForEmail();
         while(scanner.hasNextLine()){
             sendEmailInvitation(scanner.nextLine());
         }
@@ -95,11 +97,11 @@ public class InvitationCtrl {
     /**
      * Sends an invitation to the specified email
      * TO DO - the actual sending functionality
-     * @param email String email to send the invitation to
+     * @param emailadress String email to send the invitation to
      */
-    private void sendEmailInvitation(String email){
-        System.out.println("Invitation sent to: " + email);
-        /* TO DO */
+    private void sendEmailInvitation(String emailadress){
+        System.out.println("Invitation sent to: " + emailadress);
+        Email email = getherDataForEmail(emailadress);
     }
 
     @FXML
@@ -163,27 +165,50 @@ public class InvitationCtrl {
         this.emailArea.setPromptText(txt);
     }
 
-    public void getherDataForEmail(){
+    public Email getherDataForEmail(String emailT){
         EmailType emailType = typeEmail.getValue();
+        String emailSubject = emailSubject(emailType);
         String emailBody = emailBody(emailType);
-//        String serverConnection =
+        String fromEmail = config.getEmail();
+        String emailTo = emailT;
 
-        System.out.println("test");
+        Email email = Mail.makeEmail(fromEmail, emailTo, emailSubject, emailBody);
+
+        System.out.println("gethering information for making an email.");
+
+        return email;
+//        String serverConnection = ServerUtils.server;
+
     }
 
     public String emailBody(EmailType emailType){
-        String s = "";
+        String emailBody = "";
         switch (emailType) {
             case EmailType.Default:
-                return s + "default email";
+                return emailBody + "default email";
             case EmailType.Invitation:
-                return s + "invitation email";
+                return emailBody + "invitation email";
             case EmailType.Reminder:
-                return s + "Reminder email";
+                return emailBody + "Reminder email";
             case EmailType.ReminderToPay:
-                return s + "reminder to pay";
+                return emailBody + "reminder to pay";
         }
-        return s;
+        return emailBody;
+    }
+
+    public String emailSubject(EmailType emailType){
+        String emailSubject = "";
+        switch (emailType) {
+            case EmailType.Default:
+                return emailSubject + "default email";
+            case EmailType.Invitation:
+                return emailSubject + "invitation email";
+            case EmailType.Reminder:
+                return emailSubject + "Reminder email";
+            case EmailType.ReminderToPay:
+                return emailSubject + "reminder to pay";
+        }
+        return emailSubject;
     }
 
 
