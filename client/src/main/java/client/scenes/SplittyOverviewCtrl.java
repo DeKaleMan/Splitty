@@ -7,8 +7,6 @@ import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Type;
-import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -16,7 +14,6 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -710,7 +707,8 @@ public class SplittyOverviewCtrl implements Initializable {
         if(undoExpenseStack.isEmpty()) return;
         Pair<String,Expense> expensePair = undoExpenseStack.pop();
         List<Debt> debts = new ArrayList<>();
-        while(!undoDebtStack.isEmpty() && undoDebtStack.peek().getExpense().equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
+        while(!undoDebtStack.isEmpty() && undoDebtStack.peek().getExpense()
+            .equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
         if(expensePair.getKey().equals("add")){
             undoAdd(expensePair.getValue());
         }else if(expensePair.getKey().equals("edit")){
@@ -738,12 +736,14 @@ public class SplittyOverviewCtrl implements Initializable {
     private void undoDelete(Expense expense, List<Debt> debts) {
         mainCtrl.addExpense(expense.getDescription(), expense.getType(),
                 expense.getDate(),expense.getTotalExpense(),
-                serverUtils.getParticipant(expense.getPayer().getUuid(), expense.getPayer().getEvent().getId()), expense.getEvent().getId(),
+                serverUtils.getParticipant(expense.getPayer().getUuid(),
+                    expense.getPayer().getEvent().getId()), expense.getEvent().getId(),
                 expense.isSharedExpense(),
                 debts
                         .stream()
                         .filter(x -> x.getBalance() < 0)
-                        .map(x -> serverUtils.getParticipant(x.getParticipant().getUuid(), x.getParticipant().getEvent().getId()))
+                        .map(x -> serverUtils.getParticipant(x.getParticipant().getUuid(),
+                            x.getParticipant().getEvent().getId()))
                         .toList());
     }
 

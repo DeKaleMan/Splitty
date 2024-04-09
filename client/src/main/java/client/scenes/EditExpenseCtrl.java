@@ -6,9 +6,6 @@ import commons.Currency;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -132,8 +129,10 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             List<Participant> participants = new ArrayList<>();
             if(isSharedExpense) participants.addAll(owing);
             else participants.add(receiver);
-            mainCtrl.updateOverviewUndoStacks(expense, serverUtils.getDebtByExpense(eventCode,expense.getExpenseId()), "edit");
-            mainCtrl.editExpense(expense.getExpenseId(), description, type, date, amountDouble, oldPayer, eventCode, isSharedExpense, participants);
+            mainCtrl.updateOverviewUndoStacks(expense,
+                serverUtils.getDebtByExpense(eventCode,expense.getExpenseId()), "edit");
+            mainCtrl.editExpense(expense.getExpenseId(), description, type, date, amountDouble,
+                oldPayer, eventCode, isSharedExpense, participants);
             mainCtrl.showUndoInOverview();
             back();
         } catch (Exception e) {

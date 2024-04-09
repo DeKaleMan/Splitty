@@ -8,10 +8,6 @@ import commons.Participant;
 import commons.Type;
 import javafx.animation.PauseTransition;
 
-
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -142,7 +138,8 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 List<Participant> participants = new ArrayList<>();
                 if(isSharedExpense) participants.addAll(owing);
                 else participants.add(receiver);
-                Expense e = mainCtrl.addExpense(description, type, date, amountDouble, payer, eventCode, isSharedExpense, participants);
+                Expense e = mainCtrl.addExpense(description, type, date, amountDouble, payer,
+                    eventCode, isSharedExpense, participants);
                 mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
                 mainCtrl.showUndoInOverview();
                 expenseLoading.setVisible(false);

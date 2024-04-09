@@ -568,7 +568,8 @@ public class MainCtrl {
         this.editParticipantCtrl.setHost(false);
     }
 
-    public Expense addExpense(String description, Type type, Date date, Double amountDouble, Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
+    public Expense addExpense(String description, Type type, Date date, Double amountDouble,
+                              Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO exp =
                 new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
         Expense expense = serverUtils.addExpense(exp);
@@ -586,7 +587,8 @@ public class MainCtrl {
                 new DebtDTO(-amountDouble, eventCode, expense.getExpenseId(), receiver.getUuid()));
         serverUtils.updateParticipant(receiver.getUuid(),
                 new ParticipantDTO(receiver.getName(), receiver.getBalance() - amountDouble, receiver.getIBan(),
-                        receiver.getBIC(), receiver.getEmail(), receiver.getAccountHolder(), receiver.getEvent().getId(),
+                        receiver.getBIC(), receiver.getEmail(),
+                        receiver.getAccountHolder(), receiver.getEvent().getId(),
                         receiver.getUuid()));
         serverUtils.saveDebt(
                 new DebtDTO(amountDouble, eventCode, expense.getExpenseId(), payer.getUuid()));
@@ -596,7 +598,8 @@ public class MainCtrl {
                         payer.getUuid()));
     }
 
-    private void addSharedExpense(double amountDouble, Expense expense, Participant payer, Collection<Participant> owing, int eventCode) {
+    private void addSharedExpense(double amountDouble, Expense expense, Participant payer,
+                                  Collection<Participant> owing, int eventCode) {
         double amountPerPerson = amountDouble / (owing.size()+1);
         for (Participant p : owing) {
             serverUtils.saveDebt(
@@ -609,12 +612,14 @@ public class MainCtrl {
         serverUtils.saveDebt(
                 new DebtDTO(amountDouble - amountPerPerson, eventCode, expense.getExpenseId(), payer.getUuid()));
         serverUtils.updateParticipant(payer.getUuid(),
-                new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
+                new ParticipantDTO(payer.getName(),
+                    payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
                         payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
                         payer.getUuid()));
     }
 
-    public void editExpense(int expenseId, String description, Type type, Date date, Double amountDouble, Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
+    public void editExpense(int expenseId, String description, Type type, Date date, Double amountDouble,
+                            Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO
                 exp =
                 new ExpenseDTO(eventCode, description, type, date, amountDouble,
@@ -653,7 +658,8 @@ public class MainCtrl {
     }
 
     private void editSharedExpense(Expense editedExpense,
-                                   Participant oldPayer, double amountDouble, int eventCode, Collection<Participant> owing) {
+                                   Participant oldPayer, double amountDouble, int eventCode,
+                                   Collection<Participant> owing) {
         double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
         for (Participant oldP : owing) {
             Participant p = serverUtils.getParticipant(
