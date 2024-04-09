@@ -12,6 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
 
@@ -19,6 +21,8 @@ public class SettingsCtrl {
     private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
+
+    private final Mail mail;
     private boolean noConnection = false;
     @FXML
     public Button cancelButton;
@@ -58,13 +62,18 @@ public class SettingsCtrl {
     private Label labelEmailToken;
     @FXML
     private TextField getToken;
+    @FXML
+    private Button sendEmail;
+    @FXML
+    private Label succes;
 
 
 
     @Inject
-    public SettingsCtrl(MainCtrl mainCtrl, Config config){
+    public SettingsCtrl(MainCtrl mainCtrl, Config config, Mail mail){
         this.mainCtrl = mainCtrl;
         this.config = config;
+        this.mail = mail;
     }
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
@@ -145,6 +154,7 @@ public class SettingsCtrl {
     }
 
     public void back() {
+        succes.setVisible(false);
         mainCtrl.showStartScreen();
     }
 
@@ -197,6 +207,30 @@ public class SettingsCtrl {
             }
         }
         progressBar.setVisible(false);
+    }
+
+    public void sendDefaultEmail(){
+        try{
+            String fromEmail = config.getEmail();
+            String toEmail = config.getEmail();
+            String passwordToken = config.getEmailToken();
+            String host = "smtp.gmail.com";
+            String emailSubject = "configuration email splitty";
+            String emailBody = toStringBody(fromEmail, passwordToken);
+            int port = 587;
+            Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
+            Email email = mail.makeEmail(fromEmail, toEmail, emailSubject, emailBody);
+            mail.mailSending(email, mailer);
+            System.out.println("email has been send correctly");
+            succes.setVisible(true);
+        } catch (RuntimeException e){
+            getToken.setText("password does not match the email");
+            System.out.println("could not make a Mailer");
+            e.printStackTrace();
+        } catch (Exception e){
+            emailField.setText("something wrong with email");
+        }
+
     }
 
     public String getLanguage() {
@@ -256,4 +290,21 @@ public class SettingsCtrl {
     public void setChangServerButton(String txt){
         this.changServerButton.setText(txt);
     }
+
+    public String toStringBody(String fromEmail, String passwordToken){
+        String s = "This email is from splitty. We would like to tell " +
+                "you that your email and credentials are set up correctly." +
+                "\n \n" +
+                "Your credetials are:\n" +
+                "email: " + fromEmail + "\n" +
+                "password token: " + passwordToken +
+                "\n \n" +
+                "From now on you can this email to send invites or " +
+                "send payment invitations." +
+                "\n \n" +
+                "sincerly, Team Splitty";
+
+        return s;
+    }
+
 }

@@ -102,6 +102,8 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
+      <Button fx:id="sendEmail" layoutX="346.0" layoutY="167.0" mnemonicParsing="false" onAction="#sendDefaultEmail" prefHeight="26.0" prefWidth="90.0" text="default email" />
+      <Label fx:id="succes" layoutX="444.0" layoutY="167.0" prefHeight="26.0" prefWidth="128.0" text="Email succesfully send!" visible="false" />
 
    </children>
 </AnchorPane>
