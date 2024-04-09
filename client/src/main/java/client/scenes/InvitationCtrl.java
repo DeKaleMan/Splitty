@@ -222,7 +222,8 @@ public class InvitationCtrl {
         String host = "smtp.gmail.com";
         int port = 587;
         String usernameEmail = config.getEmail();
-        String passwordToken = "txrobxvossaibwat";
+//        String passwordToken = "txrobxvossaibwat";
+        String passwordToken = config.getEmailToken();
         Mailer mailer = Mail.getSenderInfo(host, port, usernameEmail, passwordToken);
         return mailer;
     }

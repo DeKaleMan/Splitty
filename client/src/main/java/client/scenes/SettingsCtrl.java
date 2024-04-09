@@ -54,6 +54,12 @@ public class SettingsCtrl {
     private TextField ibanField;
     @FXML
     private TextField bicField;
+    @FXML
+    private Label labelEmailToken;
+    @FXML
+    private TextField getToken;
+
+
 
     @Inject
     public SettingsCtrl(MainCtrl mainCtrl, Config config){
@@ -90,6 +96,11 @@ public class SettingsCtrl {
         } else {
             bicField.setText("");
         }
+        if (config.getEmailToken() != null){
+            getToken.setText(config.getEmailToken());
+        } else {
+            getToken.setText("");
+        }
         currencyField.setText(config.getCurrency().toString());
         languageText.setText(config.getLanguage());
     }
@@ -104,6 +115,7 @@ public class SettingsCtrl {
         String name = nameField.getText();
         String iban  = ibanField.getText();
         String bic = bicField.getText();
+        String emailToken = getToken.getText();
         boolean abort = false;
         if (email == null || email.isEmpty()) {
             email = null;
@@ -116,6 +128,7 @@ public class SettingsCtrl {
         if (abort) {
             return;
         }
+        config.setEmailToken(emailToken);
         config.setEmail(email);
         config.setCurrency(Currency.valueOf(currency));
         config.setName(name);
