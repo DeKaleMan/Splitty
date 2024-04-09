@@ -19,7 +19,7 @@ public class Mail {
         return email;
     }
 
-    public void getSenderInfo(String host, int port, String userEmail, String passwordToken){
+    public static Mailer getSenderInfo(String host, int port, String userEmail, String passwordToken){
         Mailer mailerInfo = MailerBuilder
                 .withSMTPServerHost(host)
                 .withSMTPServerPort(port)
@@ -27,9 +27,10 @@ public class Mail {
                 .withSMTPServerPassword(passwordToken)
                 .withTransportStrategy(TransportStrategy.SMTP_TLS)
                 .buildMailer();
+        return mailerInfo;
     }
 
-    public void mailSending(Email email, Mailer mailerInfo){
+    public static void mailSending(Email email, Mailer mailerInfo){
         mailerInfo.sendMail(email);
         System.out.println("an Email has been succesfully send");
     }

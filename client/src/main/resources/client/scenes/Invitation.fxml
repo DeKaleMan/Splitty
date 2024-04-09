@@ -31,5 +31,15 @@
       <Button fx:id="back" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
       <ComboBox fx:id="typeEmail" layoutX="86.0" layoutY="290.0" prefWidth="150.0" promptText="type of email" />
+      <Label fx:id="errorNoValidEmail" layoutX="268.0" layoutY="321.0" prefHeight="43.0" prefWidth="182.0" text="Put a valid email in settings" textFill="#e40e0e" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="noEmail" layoutX="320.0" layoutY="-13.0" prefHeight="134.0" prefWidth="200.0" text="Please fill in an email address" textAlignment="JUSTIFY" textFill="#e70d0d" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

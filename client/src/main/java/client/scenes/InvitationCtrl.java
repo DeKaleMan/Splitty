@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.EmailType;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -10,10 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InvitationCtrl {
 
@@ -28,6 +33,9 @@ public class InvitationCtrl {
 
     @FXML
     private Label titleLabel;
+
+    @FXML
+    private Label noEmail;
 
     @FXML
     private Label inviteCodeLabel;
@@ -49,6 +57,9 @@ public class InvitationCtrl {
 
     @FXML
     private ComboBox<EmailType> typeEmail;
+
+    @FXML
+    private Label errorNoValidEmail;
 
     @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
@@ -76,7 +87,7 @@ public class InvitationCtrl {
     public void sendInvitesOnClick() {
         System.out.println("Button clicked!!");
         readAndSendEmails();
-        mainCtrl.showSplittyOverview(eventCode);
+//        mainCtrl.showSplittyOverview(eventCode);
     }
 
     public void setServer(String serverURL){
@@ -88,6 +99,14 @@ public class InvitationCtrl {
      */
     private void readAndSendEmails() {
         Scanner scanner = new Scanner(emailArea.getText());
+        EmailType type = typeEmail.getValue();
+        noEmail.setVisible(true);
+        if (!(scanner.hasNext()) && !(type.equals(EmailType.Default))){
+            noEmail.setVisible(true);
+            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(10));
+            pauseTransition.setOnFinished(event -> noEmail.setVisible(false));
+            pauseTransition.play();
+        }
         while(scanner.hasNextLine()){
             sendEmailInvitation(scanner.nextLine());
         }
@@ -100,13 +119,22 @@ public class InvitationCtrl {
      * @param emailadress String email to send the invitation to
      */
     private void sendEmailInvitation(String emailadress){
-        System.out.println("Invitation sent to: " + emailadress);
         Email email = getherDataForEmail(emailadress);
+        Mailer mailInfo = getSenderInfo();
+        try{
+            Mail.mailSending(email, mailInfo);
+            System.out.println("Invitation succesfully sent to: " + emailadress);
+        } catch (Exception e){
+
+        }
+
+
     }
 
     @FXML
     private void back() {
         System.out.println("going back to event overview");
+        errorNoValidEmail.setVisible(false);
         mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
     }
 
@@ -167,10 +195,19 @@ public class InvitationCtrl {
 
     public Email getherDataForEmail(String emailT){
         EmailType emailType = typeEmail.getValue();
+        String emailTo = "";
+        if (emailType == EmailType.Default){
+            emailTo = config.getEmail();
+        }
         String emailSubject = emailSubject(emailType);
         String emailBody = emailBody(emailType);
         String fromEmail = config.getEmail();
-        String emailTo = emailT;
+        boolean isValid = isValidEmail(fromEmail);
+        if (isValid == false){
+            errorNoValidEmail.setVisible(true);
+            throw new RuntimeException("email is not valid");
+        }
+        emailTo = emailT;
 
         Email email = Mail.makeEmail(fromEmail, emailTo, emailSubject, emailBody);
 
@@ -180,6 +217,17 @@ public class InvitationCtrl {
 //        String serverConnection = ServerUtils.server;
 
     }
+
+    public Mailer getSenderInfo(){
+        String host = "smtp.gmail.com";
+        int port = 587;
+        String usernameEmail = config.getEmail();
+        String passwordToken = "txrobxvossaibwat";
+        Mailer mailer = Mail.getSenderInfo(host, port, usernameEmail, passwordToken);
+        return mailer;
+    }
+
+
 
     public String emailBody(EmailType emailType){
         String emailBody = "";
@@ -197,6 +245,7 @@ public class InvitationCtrl {
     }
 
     public String emailSubject(EmailType emailType){
+        String defaultEmail = "";
         String emailSubject = "";
         switch (emailType) {
             case EmailType.Default:
@@ -209,6 +258,20 @@ public class InvitationCtrl {
                 return emailSubject + "reminder to pay";
         }
         return emailSubject;
+    }
+
+    public String toString(String messageBody, String serverURL, String inviteCode){
+        return null;
+    }
+
+    public boolean isValidEmail(String email){
+        String emailformat = "^[a-zA-Z0-9_+&*-" +
+                "]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:" +
+                "[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailformat);
+        Matcher matcher = pattern.matcher(email);
+        boolean isValid = matcher.matches();
+        return isValid;
     }
 
 
