@@ -167,6 +167,7 @@ class DebtServiceTest {
         debtRepository.debts.addAll(expected);
         List<Debt> actual = sut.deleteDebtsOfExpense(1, 4);
         assertEquals(expected, actual);
+        assertEquals("deleteDebtsByExpense", debtRepository.methods.getLast());
     }
 
     @Test
