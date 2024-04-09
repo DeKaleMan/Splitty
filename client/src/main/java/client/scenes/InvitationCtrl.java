@@ -230,18 +230,24 @@ public class InvitationCtrl {
 
 
     public String emailBody(EmailType emailType){
-        String emailBody = "";
+        String defaultBody = "This is a default email to yourself " +
+                "to check if it the credetials are right.";
+        String invitationBody = "Hi, you are invited to an event in spliity." +
+                " You can join with the invitecode: "
+                + inviteCode + ". The server we run it on is: " + serverURL;
+        String reminder = "You have received an email from me already. Please look at it.";
+        String reminderToPay = "You have participated in an event. Please pay me back.";
         switch (emailType) {
             case EmailType.Default:
-                return emailBody + "default email";
+                return defaultBody;
             case EmailType.Invitation:
-                return emailBody + "invitation email";
+                return invitationBody;
             case EmailType.Reminder:
-                return emailBody + "Reminder email";
+                return reminder;
             case EmailType.ReminderToPay:
-                return emailBody + "reminder to pay";
+                return reminderToPay;
         }
-        return emailBody;
+        return "Something went wrong please disregard this email.";
     }
 
     public String emailSubject(EmailType emailType){
@@ -258,10 +264,6 @@ public class InvitationCtrl {
                 return emailSubject + "reminder to pay";
         }
         return emailSubject;
-    }
-
-    public String toString(String messageBody, String serverURL, String inviteCode){
-        return null;
     }
 
     public boolean isValidEmail(String email){
