@@ -745,6 +745,7 @@ public class SplittyOverviewCtrl implements Initializable {
                         .map(x -> serverUtils.getParticipant(x.getParticipant().getUuid(),
                             x.getParticipant().getEvent().getId()))
                         .toList());
+        serverUtils.generatePaymentsForEvent(eventId);
     }
 
     private void undoAdd(Expense toDelete) {

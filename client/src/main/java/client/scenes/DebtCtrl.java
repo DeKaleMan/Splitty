@@ -207,24 +207,8 @@ public class DebtCtrl implements Initializable {
             Participant payer = serverUtils.getParticipant(p.getPayer().getUuid(), eventCode);
             Participant payee = serverUtils.getParticipant(p.getPayee().getUuid(), eventCode);
             if(p.isPaid()){
-                ExpenseDTO
-                    exp =
-                    new ExpenseDTO(eventCode, "Partial debt settling", Type.Other, new Date(),
-                        p.getAmount(), payer.getUuid(),false);
-                Expense expense = serverUtils.addExpense(exp);
-                serverUtils.saveDebt(
-                    new DebtDTO(-p.getAmount(), eventCode, expense.getExpenseId(), payee.getUuid()));
-                serverUtils.updateParticipant(payee.getUuid(),
-                    new ParticipantDTO(payee.getName(), payee.getBalance() - p.getAmount(), payee.getIBan(),
-                        payee.getBIC(), payee.getEmail(), payee.getAccountHolder(), payee.getEvent().getId(),
-                        payee.getUuid()));
-                serverUtils.saveDebt(
-                    new DebtDTO(p.getAmount(), eventCode, expense.getExpenseId(), payer.getUuid()));
-                serverUtils.updateParticipant(payer.getUuid(),
-                    new ParticipantDTO(payer.getName(), payer.getBalance() + p.getAmount(), payer.getIBan(),
-                        payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
-                        payer.getUuid()));
-                serverUtils.send("/app/updateExpense", expense);
+                mainCtrl.addExpense("Partial debt settling", Type.Other, new Date(),
+                    p.getAmount(), payer, eventCode,false, List.of(payee));
             }
         }
     }

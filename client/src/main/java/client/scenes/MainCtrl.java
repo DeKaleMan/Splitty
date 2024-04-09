@@ -575,7 +575,6 @@ public class MainCtrl {
         Expense expense = serverUtils.addExpense(exp);
         if(isSharedExpense) addSharedExpense(amountDouble, expense, payer,owing, eventCode);
         else addGivingMoneyToSomeone(amountDouble, expense, payer, owing.getFirst(), eventCode);
-        serverUtils.generatePaymentsForEvent(eventCode);
         serverUtils.send("/app/updateExpense", expense);
         return expense;
     }
