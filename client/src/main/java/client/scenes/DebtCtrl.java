@@ -18,11 +18,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
@@ -36,6 +35,8 @@ public class DebtCtrl implements Initializable {
     private MainCtrl mainCtrl;
 
     private Config config;
+    @FXML
+    AnchorPane background;
 
     @FXML
     private ListView<Payment> paymentInstructionListView;
@@ -258,6 +259,7 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void undo() {
+        if(undone.isEmpty()) return;
         Payment p = undone.pop();
         changed.remove(p);
         p.setPaid(false);
@@ -266,8 +268,13 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
+        }
+
+        if(ctrlZ.match(press)){
+            undo();
         }
     }
 }

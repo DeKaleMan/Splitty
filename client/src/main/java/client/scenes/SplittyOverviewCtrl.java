@@ -170,15 +170,7 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
-        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
-        background.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if(ctrlZ.match(keyEvent)){
-                    undo();
-                }
-            }
-        });
+        undo.setVisible(false);
         serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
         serverUtils.registerForExpenseWS("/topic/updateExpense", Expense.class, this::handleUpdateExpense);
         serverUtils.registerForExpenseWS("/topic/deleteExpense", Expense.class, this::handleDeleteExpense);
@@ -601,6 +593,10 @@ public class SplittyOverviewCtrl implements Initializable {
             KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
         if (k.match(press)) {
             showAddExpense();
+        }
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
+        if(ctrlZ.match(press)){
+            undo();
         }
 
     }
