@@ -695,5 +695,9 @@ public class MainCtrl {
     public void updateOverviewUndoStacks(Expense expense, List<Debt> debts, String method){
         splittyOverviewCtrl.pushUndoStacks(expense, debts, method);
     }
+
+    public void showUndoInOverview(){
+        splittyOverviewCtrl.showUndo();
+    }
 }
 

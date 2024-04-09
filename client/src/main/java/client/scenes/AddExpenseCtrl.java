@@ -144,6 +144,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 else participants.add(receiver);
                 Expense e = mainCtrl.addExpense(description, type, date, amountDouble, payer, eventCode, isSharedExpense, participants);
                 mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
+                mainCtrl.showUndoInOverview();
                 expenseLoading.setVisible(false);
                 back();
             } catch (Exception e) {

@@ -114,6 +114,9 @@ public class SplittyOverviewCtrl implements Initializable {
     private ListView<Participant> participantListView;
 
     ObservableList<Participant> participantsList;
+
+    @FXML
+    private Button undo;
     
     Stack<Pair<String,Expense>> undoExpenseStack;
     Stack<Debt> undoDebtStack;
@@ -272,30 +275,14 @@ public class SplittyOverviewCtrl implements Initializable {
         } else {
             mainCtrl.showStartScreen();
         }
+        hideUndo();
+        undoExpenseStack.clear();
+        undoDebtStack.clear();
     }
 
     @FXML
     private void viewDebts() {
         mainCtrl.viewDeptsPerEvent(eventId);
-    }
-
-
-    public void addExpense(String description, Type type, Date date,
-                           Double totalExpense, String payerEmail) {
-        try {
-            ExpenseDTO exp = new ExpenseDTO(eventId, description, type,
-                date, totalExpense, payerEmail, true);
-            serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventId);
-        } catch (NotFoundException ep) {
-            // Handle 404 Not Found error
-            // Display an error message or log the error
-            System.err.println("Expense creation failed: Resource not found.");
-            ep.printStackTrace();
-            // Optionally, notify the user or perform error recovery actions
-        }
-
     }
 
     @FXML
@@ -341,8 +328,9 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         try {
             List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            pushUndoStacks(toDelete,debts,"delete");
             deleteExpenseAndDebts(debts, toDelete);
+            pushUndoStacks(toDelete,debts,"delete");
+            showUndo();
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
             expenseNotDeletedError.setVisible(true);
@@ -724,6 +712,7 @@ public class SplittyOverviewCtrl implements Initializable {
             undoDelete(expensePair.getValue(),debts);
         }
         fetchExpenses();
+        if(undoExpenseStack.isEmpty()) undo.setVisible(false);
         serverUtils.generatePaymentsForEvent(eventId);
     }
 
@@ -756,5 +745,16 @@ public class SplittyOverviewCtrl implements Initializable {
         deleteExpenseAndDebts(debts, toDelete);
     }
 
+    public void showUndo(){
+        undo.setVisible(true);
+    }
+
+    public void hideUndo(){
+        undo.setVisible(false);
+    }
+
+    public void setUndo(String t){
+        this.undo.setText(t);
+    }
 }
 
