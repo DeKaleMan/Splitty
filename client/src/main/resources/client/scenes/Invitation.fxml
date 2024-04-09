@@ -41,5 +41,6 @@
             <Font size="15.0" />
          </font>
       </Label>
+      <Label fx:id="labelDefault" layoutX="86.0" layoutY="321.0" prefHeight="35.0" prefWidth="150.0" text="*default sends an email to your email from the config" wrapText="true" />
    </children>
 </AnchorPane>

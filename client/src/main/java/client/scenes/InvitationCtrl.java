@@ -61,6 +61,9 @@ public class InvitationCtrl {
     @FXML
     private Label errorNoValidEmail;
 
+    @FXML
+    private Label labelDefault;
+
     @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
         this.serverUtils = server;
@@ -100,12 +103,14 @@ public class InvitationCtrl {
     private void readAndSendEmails() {
         Scanner scanner = new Scanner(emailArea.getText());
         EmailType type = typeEmail.getValue();
-        noEmail.setVisible(true);
         if (!(scanner.hasNext()) && !(type.equals(EmailType.Default))){
             noEmail.setVisible(true);
             PauseTransition pauseTransition = new PauseTransition(Duration.seconds(10));
             pauseTransition.setOnFinished(event -> noEmail.setVisible(false));
             pauseTransition.play();
+        }
+        if ((type.equals(EmailType.Default)) && !(scanner.hasNextLine())){
+            scanner = new Scanner(config.getEmail());
         }
         while(scanner.hasNextLine()){
             sendEmailInvitation(scanner.nextLine());
