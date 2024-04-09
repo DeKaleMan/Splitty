@@ -340,18 +340,9 @@ public class SplittyOverviewCtrl implements Initializable {
 
         }
         try {
-            undoExpenseStack.push(new Pair<>("delete",toDelete));
             List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            for(Debt d : debts){
-                undoDebtStack.push(d);
-                Participant p = d.getParticipant();
-                serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
-                    p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
-                    p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
-            }
-            serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            serverUtils.deleteExpense(toDelete);
-            serverUtils.send("/app/deleteExpense",toDelete);
+            pushUndoStacks(toDelete,debts,"delete");
+            deleteExpenseAndDebts(debts, toDelete);
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
             expenseNotDeletedError.setVisible(true);
@@ -365,6 +356,19 @@ public class SplittyOverviewCtrl implements Initializable {
         fetchExpenses();
         serverUtils.generatePaymentsForEvent(eventId);
         return toDelete;
+    }
+
+    private void deleteExpenseAndDebts(List<Debt> debts, Expense toDelete) {
+        for(Debt d : debts){
+//                undoDebtStack.push(d);
+            Participant p = d.getParticipant();
+            serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+        serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+        serverUtils.deleteExpense(toDelete);
+        serverUtils.send("/app/deleteExpense", toDelete);
     }
 
 
@@ -711,11 +715,11 @@ public class SplittyOverviewCtrl implements Initializable {
     public void undo(){
         Pair<String,Expense> expensePair = undoExpenseStack.pop();
         List<Debt> debts = new ArrayList<>();
-        while(undoDebtStack.peek().getExpense().equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
+        while(!undoDebtStack.isEmpty() && undoDebtStack.peek().getExpense().equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
         if(expensePair.getKey().equals("add")){
             undoAdd(expensePair.getValue());
         }else if(expensePair.getKey().equals("edit")){
-            
+            undoEdit(expensePair.getValue(), debts);
         }else{
             undoDelete(expensePair.getValue(),debts);
         }
@@ -723,21 +727,25 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.generatePaymentsForEvent(eventId);
     }
 
-    private void undoDelete(Expense value, List<Debt> debts) {
+    private void undoEdit(Expense expense, List<Debt> debts) {
+        
+    }
 
+    private void undoDelete(Expense expense, List<Debt> debts) {
+        mainCtrl.addExpense(expense.getDescription(), expense.getType(),
+                expense.getDate(),expense.getTotalExpense(),
+                serverUtils.getParticipant(expense.getPayer().getUuid(), expense.getPayer().getEvent().getId()), expense.getEvent().getId(),
+                expense.isSharedExpense(),
+                debts
+                        .stream()
+                        .filter(x -> x.getBalance() < 0)
+                        .map(x -> serverUtils.getParticipant(x.getParticipant().getUuid(), x.getParticipant().getEvent().getId()))
+                        .toList());
     }
 
     private void undoAdd(Expense toDelete) {
         List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-        for(Debt d : debts){
-            Participant p = d.getParticipant();
-            serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
-                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
-                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
-        }
-        serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-        serverUtils.deleteExpense(toDelete);
-        serverUtils.send("/app/deleteExpense",toDelete);
+        deleteExpenseAndDebts(debts, toDelete);
     }
 
 }

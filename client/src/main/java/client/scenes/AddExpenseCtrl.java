@@ -139,13 +139,10 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             String description = whatFor.getText();
             try {
                 //add to database
-                ExpenseDTO exp =
-                        new ExpenseDTO(eventCode,description,type, date, amountDouble, payer.getUuid(),isSharedExpense);
-                Expense expense = serverUtils.addExpense(exp);
-                if(isSharedExpense) addSharedExpense(amountDouble, expense, payer);
-                else addGivingMoneyToSomeone(amountDouble, expense, payer, receiver);
-                serverUtils.generatePaymentsForEvent(eventCode);
-                serverUtils.send("/app/updateExpense", expense);
+                List<Participant> participants = new ArrayList<>();
+                if(isSharedExpense) participants.addAll(owing);
+                else participants.add(receiver);
+                mainCtrl.addExpense(description, type, date, amountDouble, payer, eventCode, isSharedExpense, participants);
                 expenseLoading.setVisible(false);
                 back();
             } catch (Exception e) {
@@ -156,41 +153,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 visiblePause.play();
             }
         }).start();
-    }
-
-
-    private void addGivingMoneyToSomeone(double amountDouble, Expense expense, Participant payer,
-                                         Participant receiver) {
-        serverUtils.saveDebt(
-            new DebtDTO(-amountDouble, eventCode, expense.getExpenseId(), receiver.getUuid()));
-        serverUtils.updateParticipant(receiver.getUuid(),
-            new ParticipantDTO(receiver.getName(), receiver.getBalance() - amountDouble, receiver.getIBan(),
-                receiver.getBIC(), receiver.getEmail(), receiver.getAccountHolder(), receiver.getEvent().getId(),
-                receiver.getUuid()));
-        serverUtils.saveDebt(
-            new DebtDTO(amountDouble, eventCode, expense.getExpenseId(), payer.getUuid()));
-        serverUtils.updateParticipant(payer.getUuid(),
-            new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble, payer.getIBan(),
-                payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
-                payer.getUuid()));
-    }
-
-    private void addSharedExpense(double amountDouble, Expense expense, Participant payer) {
-        double amountPerPerson = amountDouble / (owing.size()+1);
-        for (Participant p : owing) {
-            serverUtils.saveDebt(
-                new DebtDTO(-amountPerPerson, eventCode, expense.getExpenseId(), p.getUuid()));
-            serverUtils.updateParticipant(p.getUuid(),
-                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
-                    p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
-                    p.getUuid()));
-        }
-        serverUtils.saveDebt(
-            new DebtDTO(amountDouble - amountPerPerson, eventCode, expense.getExpenseId(), payer.getUuid()));
-        serverUtils.updateParticipant(payer.getUuid(),
-            new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
-                payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
-                payer.getUuid()));
     }
 
 
