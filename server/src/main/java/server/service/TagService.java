@@ -49,4 +49,14 @@ public class TagService {
         tagRepository.save(tag);
         return tag;
     }
+
+    public Tag deleteTag(String name, int eventId) {
+        Event event = eventRepository.findEventById(eventId);
+        Tag toDelete = tagRepository.findTagByTagIdIs(new TagId(name, event));
+        if (toDelete == null) {
+            return  null;
+        }
+        tagRepository.delete(toDelete);
+        return toDelete;
+    }
 }

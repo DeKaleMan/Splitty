@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Participant;
 import commons.Tag;
 import commons.dto.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,13 @@ public class TagController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(ret);
+    }
+    @DeleteMapping("/{name}/{eventId}")
+    public ResponseEntity<Participant> deleteParticipant(@PathVariable String name, @PathVariable int eventId) {
+        Tag tag = tagService.deleteTag(name, eventId);
+        if (tag == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
     }
 }
