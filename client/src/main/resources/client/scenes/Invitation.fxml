@@ -30,6 +30,6 @@
          </font></Label>
       <Button fx:id="back" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
-      <ComboBox fx:id="TypeEmail" layoutX="86.0" layoutY="290.0" prefWidth="150.0" promptText="type of email" />
+      <ComboBox fx:id="typeEmail" layoutX="86.0" layoutY="290.0" prefWidth="150.0" promptText="type of email" />
    </children>
 </AnchorPane>

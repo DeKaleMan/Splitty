@@ -15,6 +15,8 @@ public class InvitationCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
+    private final Server server;
+
     private final Config config;
     private String inviteCode;
     private int eventCode;
@@ -43,7 +45,7 @@ public class InvitationCtrl {
     private TextArea emailArea;
 
     @FXML
-    private ComboBox<EmailType> TypeEmail;
+    private ComboBox<EmailType> typeEmail;
 
     @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
@@ -54,6 +56,8 @@ public class InvitationCtrl {
     }
 
     public void initialize() {
+        typeEmail.getItems().addAll(EmailType.values());
+        typeEmail.setValue(EmailType.Default);
         mainCtrl.setButtonGreenProperty(sendInvites);
     }
     /**
@@ -81,9 +85,11 @@ public class InvitationCtrl {
      */
     private void readAndSendEmails() {
         Scanner scanner = new Scanner(emailArea.getText());
+        getherDataForEmail();
         while(scanner.hasNextLine()){
             sendEmailInvitation(scanner.nextLine());
         }
+
     }
 
     /**
@@ -156,6 +162,30 @@ public class InvitationCtrl {
     public void setEmailArea(String txt) {
         this.emailArea.setPromptText(txt);
     }
+
+    public void getherDataForEmail(){
+        EmailType emailType = typeEmail.getValue();
+        String emailBody = emailBody(emailType);
+//        String serverConnection =
+
+        System.out.println("test");
+    }
+
+    public String emailBody(EmailType emailType){
+        String s = "";
+        switch (emailType) {
+            case EmailType.Default:
+                return s + "default email";
+            case EmailType.Invitation:
+                return s + "invitation email";
+            case EmailType.Reminder:
+                return s + "Reminder email";
+            case EmailType.ReminderToPay:
+                return s + "reminder to pay";
+        }
+        return s;
+    }
+
 
 
 }
