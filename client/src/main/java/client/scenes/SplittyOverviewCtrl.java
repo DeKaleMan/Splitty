@@ -7,7 +7,6 @@ import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Type;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
@@ -33,7 +32,6 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
-    //We need to store the eventCode right here
     private int eventId;
     boolean translating = false;
     private final ServerUtils serverUtils;
@@ -208,7 +206,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText(), eventId);
+        mainCtrl.showAddExpense(eventId);
     }
 
     @FXML
@@ -240,10 +238,10 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
 
-    public void addExpense(String description, Type type, Date date,
+    public void addExpense(String description, Tag tag, Date date,
                            Double totalExpense, String payerEmail) {
         try {
-            ExpenseDTO exp = new ExpenseDTO(eventId, description, type,
+            ExpenseDTO exp = new ExpenseDTO(eventId, description, tag,
                 date, totalExpense, payerEmail, true);
             serverUtils.addExpense(exp);
             serverUtils.send("/app/addExpense", exp);
@@ -413,7 +411,7 @@ public class SplittyOverviewCtrl implements Initializable {
                 + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + "\n" + forT +  mainCtrl.translate(expense.getType().toString()));
+                + "\n" + forT +  expense.getTag().getName());
         } else {
             String gave = " " + mainCtrl.translate("gave") + " " ;
             String to = " " + mainCtrl.translate("to") + " " ;

@@ -26,7 +26,7 @@ public class Event {
 
     @JsonIgnore
     @OneToMany(mappedBy = "tagId.event", cascade = CascadeType.REMOVE)
-    private List<Expense> tagList;
+    private List<Tag> tagList;
 
     @JsonIgnore
     @OneToMany(mappedBy = "id.event", cascade = CascadeType.REMOVE)

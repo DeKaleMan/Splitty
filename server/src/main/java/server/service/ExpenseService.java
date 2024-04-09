@@ -54,7 +54,7 @@ public class ExpenseService {
         Participant payer = participantRepo.findById(new ParticipantId(expenseDTO.getPayerUuid(), event.get()));
         if(payer == null) return null;
         Expense expense =
-            new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getType(),
+            new Expense(event.get(), expenseDTO.getDescription(), expenseDTO.getTag(),
                 expenseDTO.getDate(), expenseDTO.getTotalExpense(),
                 payer, expenseDTO.isSharedExpense());
         return expenseRepo.save(expense);
@@ -77,7 +77,7 @@ public class ExpenseService {
         expense.setDate(expenseDTO.getDate());
         expense.setDescription(expenseDTO.getDescription());
         expense.setPayer(payer);
-        expense.setType(expenseDTO.getType());
+        expense.setTag(expenseDTO.getTag());
         expense.setSharedExpense(expenseDTO.isSharedExpense());
 
         return expenseRepo.save(expense);

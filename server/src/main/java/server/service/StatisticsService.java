@@ -30,22 +30,9 @@ public class StatisticsService {
         double[] stat = new double[4];
         //order = food, drinks, travel, other
         for (Expense expense : expenses) {
-            switch (expense.getType()) {
-                case Food:
-                    stat[0]+=expense.getTotalExpense();
-                    break;
-                case Drinks:
-                    stat[1]+=expense.getTotalExpense();
-                    break;
-                case Travel:
-                    stat[2]+=expense.getTotalExpense();
-                    break;
-                case Other:
-                    stat[3]+=expense.getTotalExpense();
-                    break;
-                default:
+            switch (expense.getTag()) {
                     // Handle unexpected expense types here, if needed
-                    break;
+                default: stat[0] = 1;
             }
         }
 

@@ -279,11 +279,10 @@ public class MainCtrl {
     }
 
 
-    public void showAddExpense(String title, int eventCode) {
+    public void showAddExpense(int eventCode) {
         try {
             primaryStage.setTitle("Add expense");
             addExpenseCtrl.refresh(eventCode);
-//            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -582,24 +581,6 @@ public class MainCtrl {
         primaryStage.setScene(manageTags);
         primaryStage.setTitle("Manage Tags");
         manageTagsCtrl.refreshList(eventId);
-    }
-    public void showAddExpense() {
-        if (!getConnection()) {
-            showStartScreen();
-            return;
-        }
-        primaryStage.setScene(addExpense);
-        primaryStage.setTitle("Add Tag");
-
-    }
-    public void showAddExpense(Tag tag) {
-        if (!getConnection()) {
-            showStartScreen();
-            return;
-        }
-        primaryStage.setScene(addExpense);
-        primaryStage.setTitle("Edit Tag");
-
     }
 
     public void setConfirmationEditParticipant() {

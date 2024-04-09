@@ -2,10 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.*;
 import commons.Currency;
-import commons.Expense;
-import commons.Participant;
-import commons.Type;
 import javafx.animation.PauseTransition;
 
 
@@ -52,7 +50,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     protected TextField amount;
 
     @FXML
-    protected ComboBox<Type> category;
+    protected ComboBox<Tag> category;
     @FXML
     public Button addTagButton;
 
@@ -119,7 +117,11 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 return;
             }
 
-            Type type = getType();
+            Tag tag = getTag();
+            if (tag == null) {
+                //error stuff
+                return;
+            }
             Participant payer = personComboBox.getValue();
             if (payer == null) {
                 payerError.setVisible(true);
@@ -143,12 +145,12 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             try {
                 //add to database
                 ExpenseDTO exp =
-                        new ExpenseDTO(eventCode,description,type, date, amountDouble, payer.getUuid(),isSharedExpense);
+                        new ExpenseDTO(eventId,description,tag, date, amountDouble, payer.getUuid(),isSharedExpense);
                 Expense expense = serverUtils.addExpense(exp);
                 serverUtils.send("/app/addExpense", exp);
                 if(isSharedExpense) addSharedExpense(amountDouble, expense, payer);
                 else addGivingMoneyToSomeone(amountDouble, expense, payer, receiver);
-                serverUtils.generatePaymentsForEvent(eventCode);
+                serverUtils.generatePaymentsForEvent(eventId);
                 expenseLoading.setVisible(false);
                 back();
             } catch (Exception e) {
@@ -165,13 +167,13 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     private void addGivingMoneyToSomeone(double amountDouble, Expense expense, Participant payer,
                                          Participant receiver) {
         serverUtils.saveDebt(
-            new DebtDTO(-amountDouble, eventCode, expense.getExpenseId(), receiver.getUuid()));
+            new DebtDTO(-amountDouble, eventId, expense.getExpenseId(), receiver.getUuid()));
         serverUtils.updateParticipant(receiver.getUuid(),
             new ParticipantDTO(receiver.getName(), receiver.getBalance() - amountDouble, receiver.getIBan(),
                 receiver.getBIC(), receiver.getEmail(), receiver.getAccountHolder(), receiver.getEvent().getId(),
                 receiver.getUuid()));
         serverUtils.saveDebt(
-            new DebtDTO(amountDouble, eventCode, expense.getExpenseId(), payer.getUuid()));
+            new DebtDTO(amountDouble, eventId, expense.getExpenseId(), payer.getUuid()));
         serverUtils.updateParticipant(payer.getUuid(),
             new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble, payer.getIBan(),
                 payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
@@ -182,14 +184,14 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         double amountPerPerson = amountDouble / (owing.size()+1);
         for (Participant p : owing) {
             serverUtils.saveDebt(
-                new DebtDTO(-amountPerPerson, eventCode, expense.getExpenseId(), p.getUuid()));
+                new DebtDTO(-amountPerPerson, eventId, expense.getExpenseId(), p.getUuid()));
             serverUtils.updateParticipant(p.getUuid(),
                 new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
                     p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
                     p.getUuid()));
         }
         serverUtils.saveDebt(
-            new DebtDTO(amountDouble - amountPerPerson, eventCode, expense.getExpenseId(), payer.getUuid()));
+            new DebtDTO(amountDouble - amountPerPerson, eventId, expense.getExpenseId(), payer.getUuid()));
         serverUtils.updateParticipant(payer.getUuid(),
             new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
                 payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
@@ -233,7 +235,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
 
     public void refresh(int eventCode){
-        this.eventCode = eventCode;
+        this.eventId = eventCode;
         splitList.setVisible(false);
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
@@ -262,7 +264,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     }
 
     public void showManageTags() {
-        mainCtrl.showManageTags(eventCode);
+        mainCtrl.showManageTags(eventId);
     }
 
 }

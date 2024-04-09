@@ -41,7 +41,7 @@ public class EventDump implements Serializable {
         eventDTO = new EventDTO(event.getName(), event.getDate(), event.getHost(), event.getDescription());
 
         serverUtils.getExpense(eventId).forEach(expense -> {
-            expenseDTOList.add(new ExpenseDTO(0, expense.getDescription(), expense.getType(),
+            expenseDTOList.add(new ExpenseDTO(0, expense.getDescription(), expense.getTag(),
                     expense.getDate(), expense.getTotalExpense(), expense.getPayer().getUuid(),
                     expense.isSharedExpense()));
             oldExpenseIds.add(expense.getExpenseId());
