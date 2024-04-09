@@ -52,9 +52,6 @@
                </font>
             </Button>
          </children></HBox>
-      <Button fx:id="goToSettings" layoutX="196.0" layoutY="158.0" mnemonicParsing="false" onAction="#showSettings" prefHeight="85.0" prefWidth="209.0" text="Go to settings" visible="false" />
-      <Label fx:id="hostNameError" layoutX="88.0" layoutY="-14.0" prefHeight="106.0" prefWidth="424.0" text="No name was found in your configuration. Go to settings to add a name" visible="false" wrapText="true" />
-
 
     </children>
 </AnchorPane>

@@ -7,7 +7,7 @@ build/
 
 SplittyClientData
 SplittyServerData
-CurrencyCache.json
+
 
 **/*.mv.db
 **/*.trace.db

@@ -17,6 +17,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CreateEventCtrl {
     private final ServerUtils serverUtils;
@@ -55,16 +56,6 @@ public class CreateEventCtrl {
 
 
 
-
-
-    @FXML
-    private Button goToSettings;
-    // participant text fields
-
-    @FXML
-    public Label hostNameError;
-
-
     // this list will store all added participants until
     // the create event button is clicked, then it will be added to the database
     // via foreign keys
@@ -76,7 +67,6 @@ public class CreateEventCtrl {
         this.mainCtrl = mainCtrl;
         participants = new ArrayList<>();
         this.config = config;
-
     }
 
     @FXML
@@ -100,7 +90,11 @@ public class CreateEventCtrl {
 
     @FXML
     public ParticipantDTO addHost(int id, String inviteID) {
-        return new ParticipantDTO(config.getName(), 0.0, config.getIban(), config.getBic(),
+        String name = config.getName();
+        if (name == null || name.isEmpty()) {
+            name = "Unknown";
+        }
+        return new ParticipantDTO(name, 0.0, config.getIban(), config.getBic(),
                 config.getEmail(), config.getName(), id, config.getId(), inviteID);
     }
 
@@ -111,9 +105,8 @@ public class CreateEventCtrl {
         String description = eventDescriptionArea.getText();
         Date date = null;
         boolean error = false;
-        if(config.getName() == null){
-            noNameError();
-            error = true;
+        if (config.getName() == null || config.getName().isEmpty()) {
+            error = !noNameError();
         }
         try {
             LocalDate localDate = datePicker.getValue();
@@ -130,6 +123,9 @@ public class CreateEventCtrl {
             dateEmptyError.setVisible(false);
             dateIncorrectError.setVisible(true);
             error = true;
+            return;
+        }
+        if (error) {
             return;
         }
         //fetch owner
@@ -160,9 +156,19 @@ public class CreateEventCtrl {
         dateIncorrectError.setVisible(false);
         dateEmptyError.setVisible(false);
     }
-    public void noNameError(){
-        hostNameError.setVisible(true);
-        goToSettings.setVisible(true);
+    public boolean noNameError(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Joining Event");
+        alert.setContentText("You are about to join an event without having a name, " +
+                "you can set your name in the settings. If you wish to continue," +
+                " your name will be set to 'Unknown'");
+        AtomicBoolean ok = new AtomicBoolean(true);
+        alert.showAndWait().ifPresent(action -> {
+            if (action != ButtonType.OK) {
+                ok.set(false);
+            }
+        });
+        return ok.get();
     }
     public void resetValues(){
         titleField.setText(null);
@@ -170,8 +176,6 @@ public class CreateEventCtrl {
         eventDescriptionArea.setText(null);
         resetDateFieldError();
         resetTitleFieldError();
-        hostNameError.setVisible(false);
-        goToSettings.setVisible(false);
     }
 
 
