@@ -111,7 +111,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 expenseLoading.setVisible(false);
                 return;
             }
-
             Type type = getType();
             Participant payer = personComboBox.getValue();
             if (payer == null) {

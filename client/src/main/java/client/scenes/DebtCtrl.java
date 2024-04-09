@@ -5,9 +5,6 @@ import client.utils.ServerUtils;
 
 import commons.*;
 import commons.Currency;
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
