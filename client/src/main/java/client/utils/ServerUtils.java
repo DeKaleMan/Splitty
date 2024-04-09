@@ -357,6 +357,10 @@ public class ServerUtils {
     }
 
     public Event addEvent(EventDTO newEvent) {
+        if (newEvent.getDescription() == null ||
+                newEvent.getDescription().isEmpty()) {
+            newEvent.setDescription("");
+        }
         Response response = client
             .target(server).path("api/event")
             .request(APPLICATION_JSON)

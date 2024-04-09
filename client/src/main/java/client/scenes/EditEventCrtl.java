@@ -67,7 +67,7 @@ public class EditEventCrtl {
         String newName = nameChange.getText();
         if(newName == null || newName.isEmpty()){
             nameChange.setPromptText("please provide a name");
-            throw new NoSuchElementException();
+            return;
         }
         try{
             Event event = serverUtils.getEventById(eventId);
