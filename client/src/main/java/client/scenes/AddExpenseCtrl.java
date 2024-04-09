@@ -2,10 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.*;
 import commons.Currency;
-import commons.Expense;
-import commons.Participant;
-import commons.Type;
 import javafx.animation.PauseTransition;
 
 import javafx.beans.value.ChangeListener;
@@ -48,7 +46,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     protected TextField amount;
 
     @FXML
-    protected ComboBox<Type> category;
+    protected ComboBox<Tag> category;
     @FXML
     public Button addTagButton;
 
@@ -114,7 +112,12 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 expenseLoading.setVisible(false);
                 return;
             }
-            Type type = getType();
+            Tag tag = getTag();
+            if (tag == null) {
+                //error stuff
+                return;
+            }
+
             Participant payer = personComboBox.getValue();
             if (payer == null) {
                 payerError.setVisible(true);
@@ -140,9 +143,9 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 List<Participant> participants = new ArrayList<>();
                 if(isSharedExpense) participants.addAll(owing);
                 else participants.add(receiver);
-                Expense e = mainCtrl.addExpense(description, type, date, amountDouble, payer,
-                    eventCode, isSharedExpense, participants);
-                serverUtils.generatePaymentsForEvent(eventCode);
+                Expense e = mainCtrl.addExpense(description, tag, date, amountDouble, payer,
+                    eventId, isSharedExpense, participants);
+                serverUtils.generatePaymentsForEvent(eventId);
                 mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
                 mainCtrl.showUndoInOverview();
                 expenseLoading.setVisible(false);
@@ -156,7 +159,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             }
         }).start();
     }
-
 
     void setSplitListUp() {
         splitList.setItems(rest);
@@ -194,7 +196,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
 
     public void refresh(int eventCode){
-        this.eventCode = eventCode;
+        this.eventId = eventCode;
         splitList.setVisible(false);
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
@@ -220,7 +222,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     }
 
     public void showManageTags() {
-        mainCtrl.showManageTags(eventCode);
+        mainCtrl.showManageTags(eventId);
     }
 
 }

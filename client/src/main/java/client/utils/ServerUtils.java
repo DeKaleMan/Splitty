@@ -27,6 +27,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import javafx.util.Pair;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -357,6 +358,10 @@ public class ServerUtils {
     }
 
     public Event addEvent(EventDTO newEvent) {
+        if (newEvent.getDescription() == null ||
+                newEvent.getDescription().isEmpty()) {
+            newEvent.setDescription("");
+        }
         Response response = client
             .target(server).path("api/event")
             .request(APPLICATION_JSON)
@@ -384,6 +389,84 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(event, APPLICATION_JSON));
         return response.getStatus() == Response.Status.OK.getStatusCode();
+    }
+
+    public List<Tag> getTagsByEvent(int eventId) {
+        Response response = client.target(server).path("api/tag/getAll/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Tag> list = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return list;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tags. Status code: " + response.getStatus());
+        }
+    }
+    public Tag deleteTag(int eventId, String name) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to delete tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag saveTag(TagDTO tagDTO) {
+        Response response = client.target(server).path("api/tag/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tagDTO, APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to save tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag updateTag(TagDTO tagDTO, String name, int eventId) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tagDTO, APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            List<Tag> tags = getTagsByEvent(eventId);
+            if (tags.stream().anyMatch(t ->
+                    t.getName().equals(tagDTO.getName()))) {
+                throw new DuplicateKeyException("This name is already used for this event");
+            } else {
+                throw new RuntimeException();
+                // either the event is null or the tag with the given name and event does not exit
+            }
+        }
     }
 
     // stomp session which means you are connected to your websocket
@@ -674,26 +757,6 @@ public class ServerUtils {
                 "Failed to retrieve participant. Status code: " + response.getStatus());
         }
 
-    }
-
-    public List<Tag> getTagsByEvent(int eventId) {
-        Response response = client.target(server).path("api/tag/getAll/{eventId}")
-                .resolveTemplate("eventId", eventId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            List<Tag> list = response.readEntity(new GenericType<>() {
-            });
-            response.close();
-            return list;
-        } else {
-            response.close();
-            throw new RuntimeException(
-                    "Failed to retrieve tags. Status code: " + response.getStatus());
-        }
-    }
-    public void deleteTag(Tag tag) {
     }
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024

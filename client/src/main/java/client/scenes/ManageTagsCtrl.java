@@ -105,7 +105,7 @@ public class ManageTagsCtrl implements Initializable {
 
     public void remove(Tag tag) {
         try {
-            serverUtils.deleteTag(tag);
+            serverUtils.deleteTag(eventId, tag.getName());
             tagListView.getItems().remove(tag);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);

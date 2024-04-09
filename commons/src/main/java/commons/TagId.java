@@ -1,10 +1,12 @@
 package commons;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class TagId implements Serializable {
     private String name;
 

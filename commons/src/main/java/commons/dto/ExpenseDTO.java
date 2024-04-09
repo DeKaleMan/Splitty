@@ -1,6 +1,6 @@
 package commons.dto;
 
-import commons.Type;
+import commons.Tag;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ public class ExpenseDTO {
 
     private String description;
 
-    private Type type; // type of expense (i.e. food, drinks, travel)
+    private Tag tag; // type of expense (i.e. food, drinks, travel)
 
 
     private Date date; // date of expense
@@ -29,11 +29,11 @@ public class ExpenseDTO {
 
     }
 
-    public ExpenseDTO(int eventId, String description, Type type, Date date,
+    public ExpenseDTO(int eventId, String description, Tag tag, Date date,
                    double totalExpense, String payerUuid, boolean sharedExpense) {
         this.eventId = eventId;
         this.description = description;
-        this.type = type;
+        this.tag = tag;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payerUuid = payerUuid;
@@ -49,12 +49,12 @@ public class ExpenseDTO {
     }
 
 
-    public Type getType() {
-        return type;
+    public Tag getTag() {
+        return tag;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setTag(Tag type) {
+        this.tag = tag;
     }
 
 
@@ -107,20 +107,20 @@ public class ExpenseDTO {
         return eventId == that.eventId &&
             Double.compare(totalExpense, that.totalExpense) == 0 &&
             sharedExpense == that.sharedExpense &&
-            Objects.equals(description, that.description) && type == that.type &&
+            Objects.equals(description, that.description) && tag.equals(that.tag) &&
             Objects.equals(date, that.date) &&
             Objects.equals(payerUuid, that.payerUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, description, type, date, totalExpense, payerUuid,
+        return Objects.hash(eventId, description, tag, date, totalExpense, payerUuid,
             sharedExpense);
     }
 
     @Override
     public String toString() {
-        return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
+        return "This is an expense:\n" + description + "\nThe expense type is: " + this.tag.getName()
             + ".\nThe total amount spent is: "
             + totalExpense + "."
             + "\nThe person who paid was: " + payerUuid + ", on " + date

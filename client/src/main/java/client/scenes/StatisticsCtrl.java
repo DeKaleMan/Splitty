@@ -51,7 +51,7 @@ public class StatisticsCtrl {
 
     ObservableList<Participant> listViewData;
 
-    private int eventCode;
+    private int eventId;
 
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
@@ -82,9 +82,10 @@ public class StatisticsCtrl {
                         if (participant == null || b) {
                             setText(null);
                         } else {
+
                             double amount = 0.0;
                             try {
-                                amount = serverUtils.getExpenseByUuid(eventCode,
+                                amount = serverUtils.getExpenseByUuid(eventId,
                                         participant.getUuid())
                                     .stream()
                                     .mapToDouble(
@@ -96,6 +97,7 @@ public class StatisticsCtrl {
                                 displayError();
                                 return;
                             }
+
                             setText(participant.getName()
                                 + ": "
                                 + mainCtrl.getFormattedDoubleString(amount)
@@ -148,11 +150,11 @@ public class StatisticsCtrl {
     }
 
     public void setEventCode(int eventCode) {
-        this.eventCode = eventCode;
+        this.eventId = eventCode;
     }
 
     public void fetchStat() {
-        this.stat = serverUtils.getStatisticsByEventID(eventCode);
+        this.stat = serverUtils.getStatisticsByEventID(eventId);
         setFood();
         setDrinks();
         setTransport();
@@ -208,7 +210,7 @@ public class StatisticsCtrl {
 
     @FXML
     public void goBack() {
-        mainCtrl.showSplittyOverview(eventCode);
+        mainCtrl.showSplittyOverview(eventId);
     }
 
     @FXML
@@ -227,8 +229,8 @@ public class StatisticsCtrl {
 
     public void refresh() {
         listViewData.clear();
-        listViewData.addAll(serverUtils.getParticipants(eventCode));
-        total = serverUtils.getTotalCostEvent(eventCode);
+        listViewData.addAll(serverUtils.getParticipants(eventId));
+        total = serverUtils.getTotalCostEvent(eventId);
         try {
             total = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
                 new Date(), total);

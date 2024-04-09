@@ -7,6 +7,10 @@ import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+<<<<<<< HEAD
+=======
+import commons.dto.ExpenseDTO;
+>>>>>>> cf8a494da76c0b46f34a7d66a5119294485b1b9d
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -32,7 +36,6 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
-    //We need to store the eventCode right here
     private int eventId;
     boolean translating = false;
     private final ServerUtils serverUtils;
@@ -250,7 +253,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText(), eventId);
+        mainCtrl.showAddExpense(eventId);
     }
 
     @FXML
@@ -283,6 +286,7 @@ public class SplittyOverviewCtrl implements Initializable {
     private void viewDebts() {
         mainCtrl.viewDeptsPerEvent(eventId);
     }
+
 
     @FXML
     public void editExpense() {
@@ -447,7 +451,7 @@ public class SplittyOverviewCtrl implements Initializable {
                 + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + "\n" + forT +  mainCtrl.translate(expense.getType().toString()));
+                + "\n" + forT +  expense.getTag().getName());
         } else {
             String gave = " " + mainCtrl.translate("gave") + " " ;
             String to = " " + mainCtrl.translate("to") + " " ;
@@ -722,7 +726,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void undoEdit(Expense expense, List<Debt> debts) {
-        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getType(),
+        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getTag(),
             expense.getDate(),expense.getTotalExpense(),
             expense.getPayer(), expense.getEvent().getId(),
             expense.isSharedExpense(),
@@ -734,7 +738,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void undoDelete(Expense expense, List<Debt> debts) {
-        mainCtrl.addExpense(expense.getDescription(), expense.getType(),
+        mainCtrl.addExpense(expense.getDescription(), expense.getTag(),
                 expense.getDate(),expense.getTotalExpense(),
                 serverUtils.getParticipant(expense.getPayer().getUuid(),
                     expense.getPayer().getEvent().getId()), expense.getEvent().getId(),

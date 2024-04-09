@@ -5,7 +5,14 @@ import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Expense;
 import commons.Participant;
+<<<<<<< HEAD
 import commons.Type;
+=======
+import commons.Tag;
+import commons.dto.DebtDTO;
+import commons.dto.ExpenseDTO;
+import commons.dto.ParticipantDTO;
+>>>>>>> cf8a494da76c0b46f34a7d66a5119294485b1b9d
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -49,7 +56,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
     protected TextField amount;
 
     @FXML
-    protected ComboBox<Type> category;
+    protected ComboBox<Tag> category;
 
     @FXML
     protected Label sceneTypeText;
@@ -109,7 +116,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
         Date date = getDate();
         if(date == null) return;
 
-        Type type = getType();
+        Tag tag = getTag();
         Participant oldPayer = personComboBox.getValue();
         if (oldPayer == null) {
             payerError.setVisible(true);
@@ -133,9 +140,9 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             if(isSharedExpense) participants.addAll(owing);
             else participants.add(receiver);
             mainCtrl.updateOverviewUndoStacks(expense,
-                serverUtils.getDebtByExpense(eventCode,expense.getExpenseId()), "edit");
-            mainCtrl.editExpense(expense.getExpenseId(), description, type, date, amountDouble,
-                oldPayer, eventCode, isSharedExpense, participants);
+                serverUtils.getDebtByExpense(eventId,expense.getExpenseId()), "edit");
+            mainCtrl.editExpense(expense.getExpenseId(), description, tag, date, amountDouble,
+                oldPayer, eventId, isSharedExpense, participants);
             mainCtrl.showUndoInOverview();
             back();
         } catch (Exception e) {
@@ -145,7 +152,6 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             visiblePause.play();
         }
     }
-
 
 
     void setSplitListUp() {
@@ -184,12 +190,12 @@ public class EditExpenseCtrl extends ExpenseCtrl {
     }
 
     public void refresh(Expense expense){
-        this.eventCode = expense.getEvent().getId();
+        this.eventId = expense.getEvent().getId();
         isSharedExpense = expense.isSharedExpense();
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
         try {
-            allparticipants = serverUtils.getParticipants(eventCode);
+            allparticipants = serverUtils.getParticipants(eventId);
         } catch (Exception e) {
             allparticipants = new ArrayList<>();
         }
@@ -206,7 +212,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             .toLocalDate());
         currencyComboBox.setValue(config.getCurrency());
         whatFor.setText(expense.getDescription());
-        category.setValue(expense.getType());
+        category.setValue(expense.getTag());
         double totalExpense = expense.getTotalExpense();
         if(config.getCurrency() != commons.Currency.EUR) totalExpense = mainCtrl.getAmountInDifferentCurrency(
             Currency.EUR,
@@ -240,6 +246,6 @@ public class EditExpenseCtrl extends ExpenseCtrl {
     }
 
     public void showManageTags() {
-        mainCtrl.showManageTags(eventCode);
+        mainCtrl.showManageTags(eventId);
     }
 }

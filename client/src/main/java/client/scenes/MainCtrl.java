@@ -280,11 +280,10 @@ public class MainCtrl {
     }
 
 
-    public void showAddExpense(String title, int eventCode) {
+    public void showAddExpense(int eventCode) {
         try {
             primaryStage.setTitle("Add expense");
             addExpenseCtrl.refresh(eventCode);
-//            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -604,10 +603,10 @@ public class MainCtrl {
         primaryStage.setTitle("Edit Tag");
     }
 
-    public Expense addExpense(String description, Type type, Date date, Double amountDouble,
+    public Expense addExpense(String description, Tag tag, Date date, Double amountDouble,
                               Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
+                new ExpenseDTO(eventCode, description, tag, date, amountDouble, payer.getUuid(),isSharedExpense);
         Expense expense = serverUtils.addExpense(exp);
         if(isSharedExpense) addSharedExpense(amountDouble, expense, payer,owing, eventCode);
         else addGivingMoneyToSomeone(amountDouble, expense, payer, owing.getFirst(), eventCode);
@@ -653,11 +652,11 @@ public class MainCtrl {
                         payer.getUuid()));
     }
 
-    public void editExpense(int expenseId, String description, Type type, Date date, Double amountDouble,
+    public void editExpense(int expenseId, String description, Tag tag, Date date, Double amountDouble,
                             Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble,
+                new ExpenseDTO(eventCode, description, tag, date, amountDouble,
                         payer.getUuid(),isSharedExpense);
         Expense editedExpense = serverUtils.updateExpense(expenseId, exp);
         if(isSharedExpense) editSharedExpense(editedExpense, payer, amountDouble, eventCode, owing);
@@ -720,6 +719,7 @@ public class MainCtrl {
                         newPayer.getEvent().getId(),
                         newPayer.getUuid()));
     }
+
 
     public void setConfirmationEditParticipant() {
         manageParticipantsCtrl.setParticipantEditedConfirmation();
