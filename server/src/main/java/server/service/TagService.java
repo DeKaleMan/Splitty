@@ -57,6 +57,7 @@ public class TagService {
 
     public Tag deleteTag(String name, int eventId) {
         Event event = eventRepository.findEventById(eventId);
+        if (event == null) return null;
         Tag toDelete = tagRepository.findTagByTagId(new TagId(name, event));
         if (toDelete == null) {
             return  null;

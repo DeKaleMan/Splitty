@@ -71,5 +71,28 @@ public class TagControllerTest {
         assertEquals(response2.getBody(), tagRepo.findTagByTagId(new TagId("New Name", e1)));
         assertEquals("find tag by id", tagRepo.methods.getLast());
     }
+    @Test
+    public void putTestInvalid() {
+        sut.saveTag(t1);
+        sut.saveTag(t2);
+        sut.saveTag(t3);
+        t3.setEventId(e1.getId());
+        TagDTO temp = new TagDTO(t3.getEventId(), "Food", "Random Colour");
+        ResponseEntity<Tag> response = sut.updateTag(t3.getName(), t3.getEventId(), temp);
+        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+        assertEquals(t3.getName(),tagRepo.findTagByTagId(new TagId(t3.getName(), e2)).getName());
+    }
+    @Test
+    public void deleteTestValid() {
+        sut.saveTag(t1);
+        sut.saveTag(t2);
+        sut.saveTag(t3);
+        assertEquals(3,tagRepo.tags.size());
+        sut.deleteTag(t1.getName(), t1.getEventId());
+        assertEquals(2,tagRepo.tags.size());
+        ResponseEntity<Tag> deleted = sut.deleteTag(t2.getName(), t2.getEventId());
+        Tag temp = new Tag(eventRepo.findEventById(t2.getEventId()), t2.getName(), t2.getColour());
+        assertEquals(deleted.getBody(),temp);
+    }
 
 }

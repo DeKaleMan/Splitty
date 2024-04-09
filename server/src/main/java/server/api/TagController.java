@@ -38,12 +38,12 @@ public class TagController {
         return ResponseEntity.ok(ret);
     }
     @DeleteMapping("/{name}/{eventId}")
-    public ResponseEntity<Participant> deleteParticipant(@PathVariable String name, @PathVariable int eventId) {
+    public ResponseEntity<Tag> deleteTag(@PathVariable String name, @PathVariable int eventId) {
         Tag tag = tagService.deleteTag(name, eventId);
         if (tag == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(tag);
     }
 
     @PutMapping("/{name}/{eventId}")
@@ -52,7 +52,7 @@ public class TagController {
                                                          @RequestBody TagDTO tagDTO) {
         Tag tag = tagService.updateTag(tagDTO, name, eventId);
         if (tag == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(tag);
     }
