@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.*;
 import commons.*;
 import commons.dto.ParticipantDTO;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -36,7 +37,6 @@ import java.util.List;
 public class MainCtrl {
 
     public String language = "en";
-    protected String currentLang = "en";
     protected List<String> languages;
 
 
@@ -196,16 +196,25 @@ public class MainCtrl {
 
     }
     public void resetLanguage(){
-        startScreenCtrl.setLanguageSelect();
-        splittyOverviewCtrl.setLanguageSelect();
-        startScreenCtrl.changeLanguage();
+        Platform.runLater(() -> {
+            try{
+                startScreenCtrl.setLanguageSelect();
+                splittyOverviewCtrl.setLanguageSelect();
+                startScreenCtrl.changeLanguage();
+
+            }catch (NullPointerException e){
+                //nobody knows....but it works
+            }
+        });
     }
 
     public void changeLanguage(String toLang) {
-        this.language = toLang;
-        setLanguage.changeTo(toLang);
-        splittyOverviewCtrl.setLanguageSelect();
-        startScreenCtrl.setLanguageSelect();
+        Platform.runLater(() -> {
+            this.language = toLang;
+            setLanguage.changeTo(toLang);
+            splittyOverviewCtrl.setLanguageSelect();
+            startScreenCtrl.setLanguageSelect();
+        });
     }
 
     public String translate(String query) {
@@ -235,7 +244,7 @@ public class MainCtrl {
         return setLanguage.getFlag(this.language);
     }
     public boolean addFlag(File image){
-        return setLanguage.addFlag(image);
+        return setLanguage.addFlag(image, this.language);
     }
 
 

@@ -20,7 +20,7 @@
             <Label fx:id="langInstructions" text="Enter the languagecode and an image for the flag of the language you want to add" wrapText="true" />
             <TextField fx:id="langTextfield" promptText="Languagecode e.g. &quot;en&quot; for English" />
             <Button mnemonicParsing="false" onAction="#setFlag" text="Upload flag" />
-            <ProgressBar fx:id="progressBar" prefHeight="52.0" prefWidth="232.0" />
+            <ProgressBar fx:id="progressBar" prefHeight="52.0" prefWidth="232.0" visible="false"/>
             <Button fx:id="addLanguage" mnemonicParsing="false" onAction="#addLang" text="Add language" />
          </children>
       </VBox>

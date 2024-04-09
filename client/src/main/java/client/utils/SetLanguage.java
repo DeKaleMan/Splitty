@@ -5,10 +5,13 @@ import client.scenes.*;
 import jakarta.ws.rs.client.ClientBuilder;
 
 import jakarta.ws.rs.core.Response;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
+import org.hibernate.query.PathException;
 
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Objects;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -331,11 +334,12 @@ public class SetLanguage {
     public Image getFlag(String lang) {
         Image image = null;
         try {
-            String path = lang + "Flag.png";
-            image = new Image(path);
-            if(image == null){
-
+            String path = io.getFlagFolder() + File.separator + lang + "Flag.png";
+            File file = new File(path);
+            if(!io.fileExists(file)){
+                throw new RuntimeException();
             }
+            image = new Image("file:" +  File.separator + File.separator + File.separator + path);
         } catch (Exception e) {
             System.out.println(e);
             if(Objects.equals(lang, "default")) throw new RuntimeException("no flag found");
@@ -344,9 +348,10 @@ public class SetLanguage {
 
         return image;
     }
-    public boolean addFlag(File imageFile) {
+    public boolean addFlag(File imageFile, String lang) {
         //TODO ASK FOR HELP
-        //Files.copy(imageFile, io.createNewFile());
+        File file = new File(io.getFlagFolder() + lang + ".png");
+       // Files.copy(imageFile, io.createNewFile(file));
         return io.createNewFile(imageFile);
 
     }
