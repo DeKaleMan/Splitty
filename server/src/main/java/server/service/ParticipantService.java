@@ -58,7 +58,7 @@ public class ParticipantService {
                 event
         );
         participant.setGhost(participantDTO.isGhost());
-
+        participant.setInactive(false);
         return participantRepository.save(participant);
     }
 
@@ -78,6 +78,7 @@ public class ParticipantService {
         existingParticipant.setBIC(participantDTO.getbIC());
         existingParticipant.setEmail(participantDTO.getEmail());
         existingParticipant.setAccountHolder(participantDTO.getAccountHolder());
+        existingParticipant.setInactive(participantDTO.isInactive());
         // No UUID update as it's the identifier
         return participantRepository.save(existingParticipant);
     }
@@ -100,6 +101,6 @@ public class ParticipantService {
     }
 
     public List<Participant> getByEvent(int eventID) {
-        return participantRepository.findByEventId(eventID);
+        return participantRepository.findByEventId(eventID).stream().filter(p -> !p.isInactive()).toList();
     }
 }
