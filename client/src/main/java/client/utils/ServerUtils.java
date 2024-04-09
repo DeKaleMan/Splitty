@@ -681,7 +681,23 @@ public class ServerUtils {
                     "Failed to retrieve tags. Status code: " + response.getStatus());
         }
     }
-    public void deleteTag(Tag tag) {
+    public Tag deleteTag(int eventId, String name) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tags. Status code: " + response.getStatus());
+        }
     }
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024

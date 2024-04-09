@@ -2,6 +2,8 @@ package server.service;
 
 import commons.Event;
 import commons.Tag;
+import commons.TagId;
+import commons.dto.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
@@ -34,5 +36,17 @@ public class TagService {
         List<Tag> tags = tagRepository.findAll();
         tags = tags.stream().filter(tag -> event.equals(tag.getEvent())).toList();
         return tags;
+    }
+
+    public Tag saveTag(TagDTO tagDTO) {
+        Event event = eventRepository.findEventById(tagDTO.getEventId());
+        if (event == null) return null;
+        Tag existingTag = tagRepository.findTagByTagIdIs(new TagId(tagDTO.getName(), event));
+        if (existingTag != null) {
+            return null;
+        }
+        Tag tag = new Tag(event, tagDTO.getName(), tagDTO.getColour());
+        tagRepository.save(tag);
+        return tag;
     }
 }

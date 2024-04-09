@@ -17,6 +17,7 @@ public class Tag {
         this.colour = colour;
     }
     public Tag() {
+        tagId = new TagId();
     }
 
     public TagId getTagId() {

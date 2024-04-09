@@ -1,12 +1,10 @@
 package server.api;
 
 import commons.Tag;
+import commons.dto.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.service.TagService;
 
 import java.util.List;
@@ -28,5 +26,14 @@ public class TagController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(tags);
+    }
+
+    @PostMapping
+    public ResponseEntity<Tag> saveTag(@RequestBody TagDTO tag) {
+        Tag ret = tagService.saveTag(tag);
+        if (ret == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(ret);
     }
 }
