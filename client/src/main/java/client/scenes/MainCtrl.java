@@ -614,6 +614,72 @@ public class MainCtrl {
                         payer.getUuid()));
     }
 
+    public void editExpense(int expenseId, String description, Type type, Date date, Double amountDouble, Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
+        ExpenseDTO
+                exp =
+                new ExpenseDTO(eventCode, description, type, date, amountDouble,
+                        payer.getUuid(),isSharedExpense);
+        Expense editedExpense = serverUtils.updateExpense(expenseId, exp);
+        if(isSharedExpense) editSharedExpense(editedExpense, payer, amountDouble, eventCode, owing);
+        else editGivingMoneyToSomeone(editedExpense, payer, amountDouble, owing.getFirst(), eventCode);
+        serverUtils.generatePaymentsForEvent(eventCode);
+        serverUtils.send("/app/updateExpense", editedExpense);
+    }
+
+    private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer,
+                                          double amountDouble, Participant receiver, int eventCode) {
+        Participant newReceiver = serverUtils.getParticipant(
+                receiver.getUuid(), receiver.getEvent().getId());
+        serverUtils.saveDebt(
+                new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(),
+                        newReceiver.getUuid()));
+        serverUtils.updateParticipant(newReceiver.getUuid(),
+                new ParticipantDTO(newReceiver.getName(),
+                        newReceiver.getBalance() - amountDouble, newReceiver.getIBan(),
+                        newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(),
+                        newReceiver.getEvent().getId(),
+                        newReceiver.getUuid()));
+        Participant newPayer = serverUtils.getParticipant(
+                oldPayer.getUuid(), oldPayer.getEvent().getId());
+        serverUtils.saveDebt(
+                new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(),
+                        newPayer.getUuid()));
+        serverUtils.updateParticipant(newPayer.getUuid(),
+                new ParticipantDTO(newPayer.getName(),
+                        newPayer.getBalance() + amountDouble, newPayer.getIBan(),
+                        newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
+                        newPayer.getEvent().getId(),
+                        newPayer.getUuid()));
+    }
+
+    private void editSharedExpense(Expense editedExpense,
+                                   Participant oldPayer, double amountDouble, int eventCode, Collection<Participant> owing) {
+        double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
+        for (Participant oldP : owing) {
+            Participant p = serverUtils.getParticipant(
+                    oldP.getUuid(), oldP.getEvent().getId());
+            serverUtils.saveDebt(
+                    new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(),
+                            p.getUuid()));
+            serverUtils.updateParticipant(p.getUuid(),
+                    new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson,
+                            p.getIBan(),
+                            p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
+                            p.getUuid()));
+        }
+        Participant newPayer = serverUtils.getParticipant(
+                oldPayer.getUuid(), oldPayer.getEvent().getId());
+        serverUtils.saveDebt(
+                new DebtDTO(amountDouble - amountPerPerson,
+                        eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+        serverUtils.updateParticipant(newPayer.getUuid(),
+                new ParticipantDTO(newPayer.getName(),
+                        newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
+                        newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
+                        newPayer.getEvent().getId(),
+                        newPayer.getUuid()));
+    }
+
     public void setConfirmationEditParticipant() {
         manageParticipantsCtrl.setParticipantEditedConfirmation();
     }
