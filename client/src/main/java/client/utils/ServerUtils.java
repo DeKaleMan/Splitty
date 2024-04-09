@@ -386,6 +386,46 @@ public class ServerUtils {
         return response.getStatus() == Response.Status.OK.getStatusCode();
     }
 
+    public List<Tag> getTagsByEvent(int eventId) {
+        Response response = client.target(server).path("api/tag/getAll/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Tag> list = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return list;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tags. Status code: " + response.getStatus());
+        }
+    }
+    public Tag deleteTag(int eventId, String name) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tags. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag saveTag(TagDTO tag) {
+        return null;
+    }
+
     // stomp session which means you are connected to your websocket
 
     public void setSession(StompSession session) {
@@ -662,42 +702,6 @@ public class ServerUtils {
                 "Failed to retrieve participant. Status code: " + response.getStatus());
         }
 
-    }
-
-    public List<Tag> getTagsByEvent(int eventId) {
-        Response response = client.target(server).path("api/tag/getAll/{eventId}")
-                .resolveTemplate("eventId", eventId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            List<Tag> list = response.readEntity(new GenericType<>() {
-            });
-            response.close();
-            return list;
-        } else {
-            response.close();
-            throw new RuntimeException(
-                    "Failed to retrieve tags. Status code: " + response.getStatus());
-        }
-    }
-    public Tag deleteTag(int eventId, String name) {
-        Response response = client.target(server).path("api/tag/{name}/{eventId}")
-                .resolveTemplate("name", name)
-                .resolveTemplate("eventId", eventId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            Tag tag = response.readEntity(new GenericType<>() {
-            });
-            response.close();
-            return tag;
-        } else {
-            response.close();
-            throw new RuntimeException(
-                    "Failed to retrieve tags. Status code: " + response.getStatus());
-        }
     }
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
