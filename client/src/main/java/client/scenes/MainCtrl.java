@@ -584,20 +584,22 @@ public class MainCtrl {
         primaryStage.setTitle("Manage Tags");
         manageTagsCtrl.refreshList(eventId);
     }
-    public void showAddExpense() {
+    public void showAddTag(int eventId) {
         if (!getConnection()) {
             showStartScreen();
             return;
         }
+        addTagCtrl.setFields(eventId);
         primaryStage.setScene(addExpense);
         primaryStage.setTitle("Add Tag");
 
     }
-    public void showAddExpense(Tag tag) {
+    public void showAddTag(Tag tag, int eventId) {
         if (!getConnection()) {
             showStartScreen();
             return;
         }
+        addTagCtrl.setFields(tag, eventId);
         primaryStage.setScene(addExpense);
         primaryStage.setTitle("Edit Tag");
     }

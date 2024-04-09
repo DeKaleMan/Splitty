@@ -110,7 +110,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             Date date = getDate();
             boolean error = false;
             if(date == null) {
-                expenseLoading.setVisible(false);
                 error = true;
             }
             Tag tag = getTag();
@@ -118,13 +117,11 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             Participant payer = personComboBox.getValue();
             if (payer == null) {
                 payerError.setVisible(true);
-                expenseLoading.setVisible(false);
                 error = true;
             }
 
             Double amountDouble = getAmountDouble(date);
             if (amountDouble == null) {
-                expenseLoading.setVisible(false);
                 error = true;
             }
             
@@ -136,6 +133,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             }
             String description = whatFor.getText();
             if (error) {
+                expenseLoading.setVisible(false);
                 return;
             }
             try {
