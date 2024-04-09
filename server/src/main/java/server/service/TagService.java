@@ -11,7 +11,6 @@ import server.database.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class TagService {
@@ -82,5 +81,23 @@ public class TagService {
         toUpdate.setName(tagDTO.getName());
         toUpdate.setColour(tagDTO.getColour());
         return tagRepository.save(toUpdate);
+    }
+
+    public List<Tag> setUpTags(int eventId) {
+        Tag food = saveTag(new TagDTO(eventId, "Food", "#33FF57"));
+        Tag entranceFees = saveTag(new TagDTO(eventId, "Entrance Fees", "#3356FF"));
+        Tag travel = saveTag(new TagDTO(eventId, "Travel", "#CC0E25"));
+        Tag drinks = saveTag(new TagDTO(eventId, "Drinks", "#77A9FF"));
+        Tag other = saveTag(new TagDTO(eventId, "Other", "#666666"));
+        if (food == null || entranceFees == null || travel == null || drinks == null || other == null) {
+            return null;
+        }
+        return List.of(food, entranceFees, travel, drinks, other);
+    }
+
+    public Tag getOtherTag(int eventId) {
+        Event event = eventRepository.findEventById(eventId);
+        if (event == null) return null;
+        return tagRepository.findTagByTagId(new TagId("Other", event));
     }
 }

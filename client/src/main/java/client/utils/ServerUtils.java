@@ -371,8 +371,6 @@ public class ServerUtils {
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
             Event event = response.readEntity(new GenericType<>() {
             });
-            boolean error = setTags(event);
-            // don't know what to do if this happens... aborting the method seems like a bad idea
             response.close();
             return event;
         } else {
@@ -382,12 +380,13 @@ public class ServerUtils {
 
     }
 
-    public boolean setTags(Event event) {
+    public boolean setTags(int eventId) {
         Response response = client
-                .target(server).path("api/tag")
+                .target(server).path("api/tag/setup/{eventId}")
+                .resolveTemplate("eventId", eventId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(event, APPLICATION_JSON));
+                .get();
         return response.getStatus() == Response.Status.OK.getStatusCode();
     }
 
@@ -424,6 +423,24 @@ public class ServerUtils {
             response.close();
             throw new RuntimeException(
                     "Failed to delete tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag getOtherTagById(int eventId) {
+        Response response = client.target(server).path("api/tag/other/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tag. Status code: " + response.getStatus());
         }
     }
 

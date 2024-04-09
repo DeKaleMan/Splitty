@@ -108,36 +108,36 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         expenseLoading.setVisible(true);
         new Thread(() -> {
             Date date = getDate();
+            boolean error = false;
             if(date == null) {
                 expenseLoading.setVisible(false);
-                return;
+                error = true;
             }
             Tag tag = getTag();
-            if (tag == null) {
-                //error stuff
-                return;
-            }
 
             Participant payer = personComboBox.getValue();
             if (payer == null) {
                 payerError.setVisible(true);
                 expenseLoading.setVisible(false);
-                return;
+                error = true;
             }
 
             Double amountDouble = getAmountDouble(date);
             if (amountDouble == null) {
                 expenseLoading.setVisible(false);
-                return;
+                error = true;
             }
             
             Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
             if(!isSharedExpense && receiver == null) {
                 //TODO handle invalid receiver
                 expenseLoading.setVisible(false);
-                return;
+                error = true;
             }
             String description = whatFor.getText();
+            if (error) {
+                return;
+            }
             try {
                 //add to database
                 List<Participant> participants = new ArrayList<>();
@@ -215,10 +215,15 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         selectSome.setSelected(false);
         dateSelect.setValue(null);
         whatFor.setText("");
-        category.setValue(null);
+        tagRefresh();
         currencyComboBox.setValue(Currency.EUR);
         personComboBox.setValue(null);
         amount.setText("");
+    }
+
+    private void tagRefresh() {
+        setTagsUp();
+        category.setValue(null);
     }
 
     public void showManageTags() {

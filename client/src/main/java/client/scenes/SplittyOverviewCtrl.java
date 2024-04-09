@@ -7,10 +7,6 @@ import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-<<<<<<< HEAD
-=======
-import commons.dto.ExpenseDTO;
->>>>>>> cf8a494da76c0b46f34a7d66a5119294485b1b9d
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;

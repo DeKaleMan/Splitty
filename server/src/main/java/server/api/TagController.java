@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Participant;
 import commons.Tag;
 import commons.dto.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import java.util.List;
 @RequestMapping("/api/tag")
 public class TagController {
     private final TagService tagService;
+    private final String other = "Other";
 
     @Autowired
     public TagController(TagService tagService) {
@@ -39,6 +39,9 @@ public class TagController {
     }
     @DeleteMapping("/{name}/{eventId}")
     public ResponseEntity<Tag> deleteTag(@PathVariable String name, @PathVariable int eventId) {
+        if (other.equals(name)) {
+            return ResponseEntity.badRequest().build();
+        }
         Tag tag = tagService.deleteTag(name, eventId);
         if (tag == null) {
             return ResponseEntity.notFound().build();
@@ -50,10 +53,31 @@ public class TagController {
     public ResponseEntity<Tag> updateTag(@PathVariable String name,
                                                          @PathVariable int eventId,
                                                          @RequestBody TagDTO tagDTO) {
+        if (other.equals(tagDTO.getName())) {
+            return ResponseEntity.badRequest().build();
+        }
         Tag tag = tagService.updateTag(tagDTO, name, eventId);
         if (tag == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(tag);
     }
+
+    @GetMapping("/setup/{eventId}")
+    public ResponseEntity<List<Tag>> setupTags(@PathVariable int eventId) {
+        List<Tag> tags = tagService.setUpTags(eventId);
+        if (tags == null || tags.isEmpty()) {
+            return  ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(tags);
+    }
+    @GetMapping("/other/{eventId}")
+    public ResponseEntity<Tag> getOtherTag(@PathVariable int eventId) {
+        Tag tag = tagService.getOtherTag(eventId);
+        if (tag == null) {
+            return  ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(tag);
+    }
+
 }

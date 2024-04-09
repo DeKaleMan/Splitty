@@ -132,6 +132,7 @@ public abstract class ExpenseCtrl {
     }
 
     public void setTagsUp() {
+        this.category.getItems().clear();
         this.category.setItems(
                 FXCollections.observableArrayList(serverUtils.getTagsByEvent(eventId)));
     }
@@ -184,7 +185,7 @@ public abstract class ExpenseCtrl {
                 if (empty || tag == null) {
                     setText(null);
                 } else {
-                    setText(tag.toString());
+                    setText(tag.getName());
                 }
             }
         });
@@ -327,6 +328,9 @@ public abstract class ExpenseCtrl {
 
     protected Tag getTag() {
         Tag tag = category.getValue();
+        if (tag == null) {
+            return serverUtils.getOtherTagById(eventId);
+        }
         return tag;
     }
 
@@ -394,9 +398,6 @@ public abstract class ExpenseCtrl {
         });
     }
 
-//    public void setTitle(String title) {
-//        titleLabel.setText(title);
-//    }
 
     public void setSceneTypeText(String text) {
         this.sceneTypeText.setText(text);

@@ -279,7 +279,6 @@ public class MainCtrl {
         return participant;
     }
 
-
     public void showAddExpense(int eventCode) {
         try {
             primaryStage.setTitle("Add expense");

@@ -136,6 +136,7 @@ public class CreateEventCtrl {
         ParticipantDTO participantDTO = null;
         participantDTO = addHost(eventCreated.getId(), eventCreated.getInviteCode());
         serverUtils.createParticipant(participantDTO);
+        serverUtils.setTags(eventCreated.getId());
         mainCtrl.showSplittyOverview(eventCreated.getId());
         mainCtrl.addEvent(eventCreated);
         mainCtrl.setConfirmationEventCreated();

@@ -5,14 +5,8 @@ import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Expense;
 import commons.Participant;
-<<<<<<< HEAD
-import commons.Type;
-=======
 import commons.Tag;
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
->>>>>>> cf8a494da76c0b46f34a7d66a5119294485b1b9d
+
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -212,7 +206,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             .toLocalDate());
         currencyComboBox.setValue(config.getCurrency());
         whatFor.setText(expense.getDescription());
-        category.setValue(expense.getTag());
+        tagRefresh(expense);
         double totalExpense = expense.getTotalExpense();
         if(config.getCurrency() != commons.Currency.EUR) totalExpense = mainCtrl.getAmountInDifferentCurrency(
             Currency.EUR,
@@ -235,6 +229,11 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             Participant receiver = owingFromDb.getFirst();
             receiverListView.getSelectionModel().select(receiver);
         }
+    }
+
+    private void tagRefresh(Expense expense) {
+        setTagsUp();
+        category.setValue(expense.getTag());
     }
 
     private void setup(ObservableList<Participant> list) {
