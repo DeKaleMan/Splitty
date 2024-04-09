@@ -105,14 +105,15 @@ public class SetLanguage {
         splittyOverviewCtrl.setStatisticsButton(translate("Statistics", "en", lang));
         splittyOverviewCtrl.setAddExpenseButton(translate("Add expense", "en", lang));
         splittyOverviewCtrl.setPaidByMe(translate("Paid by me", "en", lang));
-        splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
+        splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
-        splittyOverviewCtrl.setEditExpense(translate("Edit expense", "en",lang));
+        splittyOverviewCtrl.setEditExpense(translate("Edit", "en",lang));
         splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
         splittyOverviewCtrl.setmyDetails(translate("My details", "en",lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
+        splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
         System.out.println("event overview translated");
     }
     public void setAddExpense(String lang){
@@ -263,13 +264,13 @@ public class SetLanguage {
         editExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
         editExpenseCtrl.setDescription(translate("Description", "en", lang));
         editExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
-        editExpenseCtrl.setCommit(translate("Edit expense", "en", lang));
+        editExpenseCtrl.setCommit(translate("Edit", "en", lang));
         editExpenseCtrl.setAbort(translate("Cancel", "en", lang));
         editExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         editExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         editExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
-        addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
-        addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        editExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
+        editExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
         System.out.println("EditExpense translated");
     }
 

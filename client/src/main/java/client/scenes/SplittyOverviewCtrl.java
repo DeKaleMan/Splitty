@@ -16,6 +16,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -166,6 +167,15 @@ public class SplittyOverviewCtrl implements Initializable {
                     } else {
                         setText(item.getName());
                     }
+                }
+            }
+        });
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
+        background.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(ctrlZ.match(keyEvent)){
+                    undo();
                 }
             }
         });
@@ -701,6 +711,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
     
     public void undo(){
+        if(undoExpenseStack.isEmpty()) return;
         Pair<String,Expense> expensePair = undoExpenseStack.pop();
         List<Debt> debts = new ArrayList<>();
         while(!undoDebtStack.isEmpty() && undoDebtStack.peek().getExpense().equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
