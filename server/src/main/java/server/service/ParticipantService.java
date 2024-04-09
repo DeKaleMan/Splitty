@@ -43,7 +43,7 @@ public class ParticipantService {
 
         Participant existingParticipant = participantRepository.findById(
                 new ParticipantId(participantDTO.getUuid(), event));
-        if (existingParticipant != null) {
+        if (existingParticipant != null && !existingParticipant.isInactive()) {
             return null;
         }
 
@@ -92,12 +92,18 @@ public class ParticipantService {
         if (participant == null) {
             return null;
         }
-        participantRepository.delete(participant);
+        if(participant.isInactive()){
+            return null;
+        }
+        participant.setInactive(true);
+        participantRepository.save(participant);
         return participant;
     }
 
     public List<Event> getEventsByParticipant(String uuid) {
-        return participantRepository.findEventsByParticipant(uuid);
+        // only return events for which the participant isn't inactive
+        List<Event> events = participantRepository.findEventsByParticipant(uuid);
+        return events.stream().filter(e -> !participantRepository.findById(new ParticipantId(uuid, e)).isInactive()).toList();
     }
 
     public List<Participant> getByEvent(int eventID) {

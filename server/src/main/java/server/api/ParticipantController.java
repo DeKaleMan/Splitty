@@ -82,7 +82,7 @@ public class ParticipantController {
             return ResponseEntity.notFound().build();
         }
         notifyDeletionListeners(participant);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(participant);
     }
 
     @GetMapping("{uuid}/events")

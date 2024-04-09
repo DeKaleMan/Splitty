@@ -555,8 +555,8 @@ public class SplittyOverviewCtrl implements Initializable {
             // label or error?
             return;
         }
-
-        if (me.getBalance() != 0) {
+        // balance margin of error is 0.0001
+        if (Math.abs(me.getBalance()) > 0.0001){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Leaving an event");
             alert.setHeaderText("You can't leave the event");
