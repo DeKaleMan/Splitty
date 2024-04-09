@@ -132,8 +132,8 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             List<Participant> participants = new ArrayList<>();
             if(isSharedExpense) participants.addAll(owing);
             else participants.add(receiver);
-            mainCtrl.editExpense(expense.getExpenseId(), description, type, date, amountDouble, oldPayer, eventCode, isSharedExpense, participants);
             mainCtrl.updateOverviewUndoStacks(expense, serverUtils.getDebtByExpense(eventCode,expense.getExpenseId()), "edit");
+            mainCtrl.editExpense(expense.getExpenseId(), description, type, date, amountDouble, oldPayer, eventCode, isSharedExpense, participants);
             mainCtrl.showUndoInOverview();
             back();
         } catch (Exception e) {
