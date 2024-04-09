@@ -45,4 +45,15 @@ public class TagController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{name}/{eventId}")
+    public ResponseEntity<Tag> updateTag(@PathVariable String name,
+                                                         @PathVariable int eventId,
+                                                         @RequestBody TagDTO tagDTO) {
+        Tag tag = tagService.updateTag(tagDTO, name, eventId);
+        if (tag == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tag);
+    }
 }

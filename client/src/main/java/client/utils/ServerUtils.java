@@ -27,6 +27,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import javafx.util.Pair;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -422,12 +423,50 @@ public class ServerUtils {
         } else {
             response.close();
             throw new RuntimeException(
-                    "Failed to retrieve tags. Status code: " + response.getStatus());
+                    "Failed to delete tag. Status code: " + response.getStatus());
         }
     }
 
-    public Tag saveTag(TagDTO tag) {
-        return null;
+    public Tag saveTag(TagDTO tagDTO) {
+        Response response = client.target(server).path("api/tag/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tagDTO, APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to save tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag updateTag(TagDTO tagDTO, String name, int eventId) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tagDTO, APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            List<Tag> tags = getTagsByEvent(eventId);
+            if (tags.stream().anyMatch(t ->
+                    t.getName().equals(tagDTO.getName()))) {
+                throw new DuplicateKeyException("This name is already used for this event");
+            } else {
+                throw new RuntimeException();
+                // either the event is null or the tag with the given name and event does not exit
+            }
+        }
     }
 
     // stomp session which means you are connected to your websocket
