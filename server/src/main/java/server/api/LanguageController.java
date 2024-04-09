@@ -22,6 +22,8 @@ public class LanguageController {
     private String basepath;
 
     private LanguageResponse translator;
+    private boolean translationInProgress = false;
+
 
     @Autowired
     public LanguageController(ServerIOUtil serverIoUtil, LanguageResponse translator) {
@@ -74,18 +76,15 @@ public class LanguageController {
         // Write translation to JSON file
 
         ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            HashMap<String, String> object = serverIoUtil.readJson(newfile);
-            object.put(query, translation);
-            serverIoUtil.write(objectMapper.writeValueAsString(object), newfile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        synchronized (newfile){
+            try {
+                HashMap<String, String> object = serverIoUtil.readJson(newfile);
+                object.put(query, translation);
+                serverIoUtil.write(objectMapper.writeValueAsString(object), newfile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        //JsonObject object = translator.readJsonFile(newfile);
-//
-//        object.addProperty(query, translation);
-//        writeJsonFile(object, newfile);
-//        //serverIoUtil.writeJson(object, newfile);
         return ResponseEntity.ok(translation);
     }
 
@@ -111,7 +110,8 @@ public class LanguageController {
 
 
     @GetMapping("json")
-    public ResponseEntity<String> getJSONLang(@RequestParam String lang){
+    public synchronized ResponseEntity<String> getJSONLang(@RequestParam String lang){
+
         try {
             File file = new File(basepath + lang + ".json");
             if (serverIoUtil.fileExists(file)) {

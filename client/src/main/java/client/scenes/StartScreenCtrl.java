@@ -353,9 +353,9 @@ public class StartScreenCtrl implements Initializable {
         //languageSelect.setValue(flag);
         Image flag = mainCtrl.getFlag();
         setFlag(flag);
-        if (!mainCtrl.language.equals(currentLang)) {
-            changeLanguage();
-        }
+//        if (!mainCtrl.language.equals(currentLang)) {
+//            changeLanguage();
+//        }
         translating = false;
     }
 
@@ -366,7 +366,7 @@ public class StartScreenCtrl implements Initializable {
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if (selected.equals(currentLang)) {
+                if (selected.equals(config.getLanguage())) {
                     return;
                 }
                 //Language toLang = Language.valueOf(selected);
