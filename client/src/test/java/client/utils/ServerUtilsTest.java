@@ -1026,5 +1026,50 @@ class ServerUtilsTest {
         verify(mockBuilder).get(); // Ensure that get method is invoked
     }
 
+    @Test
+    void getPaymentTest(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(),anyLong())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+
+        Payment expected = new Payment();
+
+        when(mockResponse.readEntity(Payment.class)).thenReturn(expected);
+
+        Payment actual = serverUtils.getPayment(1L);
+
+        verify(mockClient).target(ServerUtils.server);
+        verify(mockWebTarget).path("api/payments/{id}");
+        verify(mockWebTarget).resolveTemplate("id",1L);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(); // Ensure that get method is invoked
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void getPaymentTestNotFound(){
+        when(mockClient.target(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(),anyLong())).thenReturn(mockWebTarget);
+        when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
+        when(mockBuilder.get()).thenReturn(mockResponse);
+
+        when(mockResponse.getStatus()).thenReturn(404);
+
+        assertThrows(RuntimeException.class, () -> serverUtils.getPayment(1L));
+
+        verify(mockClient).target(ServerUtils.server);
+        verify(mockWebTarget).path("api/payments/{id}");
+        verify(mockWebTarget).resolveTemplate("id",1L);
+        verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
+        verify(mockBuilder).get(); // Ensure that get method is invoked
+    }
 
 }

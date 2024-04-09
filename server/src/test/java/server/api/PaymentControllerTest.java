@@ -206,4 +206,17 @@ public class PaymentControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
     }
 
+    @Test
+    void testGetByID(){
+        ResponseEntity<Payment> response = sut.getPayment(1L);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(payment1, response.getBody());
+        assertEquals("findById", paymentRepository.methods.getLast());
+    }
+
+    @Test
+    void testGetByIDInvalid(){
+        ResponseEntity<Payment> response = sut.getPayment(-1L);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
