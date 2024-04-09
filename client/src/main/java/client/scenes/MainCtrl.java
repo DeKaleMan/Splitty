@@ -568,7 +568,7 @@ public class MainCtrl {
         this.editParticipantCtrl.setHost(false);
     }
 
-    public void addExpense(String description, Type type, Date date, Double amountDouble, Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
+    public Expense addExpense(String description, Type type, Date date, Double amountDouble, Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO exp =
                 new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
         Expense expense = serverUtils.addExpense(exp);
@@ -576,7 +576,7 @@ public class MainCtrl {
         else addGivingMoneyToSomeone(amountDouble, expense, payer, owing.getFirst(), eventCode);
         serverUtils.generatePaymentsForEvent(eventCode);
         serverUtils.send("/app/updateExpense", expense);
-        splittyOverviewCtrl.pushUndoStacks(expense,new ArrayList<>(), "add");
+        return expense;
     }
 
 
@@ -690,6 +690,10 @@ public class MainCtrl {
 
     public void stopLongPolling() {
         if (splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
+    }
+
+    public void updateOverviewUndoStacks(Expense expense, List<Debt> debts, String method){
+        splittyOverviewCtrl.pushUndoStacks(expense, debts, method);
     }
 }
 

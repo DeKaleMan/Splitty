@@ -728,7 +728,15 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void undoEdit(Expense expense, List<Debt> debts) {
-        
+        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getType(),
+            expense.getDate(),expense.getTotalExpense(),
+            expense.getPayer(), expense.getEvent().getId(),
+            expense.isSharedExpense(),
+            debts
+                .stream()
+                .filter(x -> x.getBalance() < 0)
+                .map(x -> x.getParticipant())
+                .toList());
     }
 
     private void undoDelete(Expense expense, List<Debt> debts) {
