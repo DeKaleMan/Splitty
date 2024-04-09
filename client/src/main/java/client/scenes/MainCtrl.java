@@ -293,10 +293,6 @@ public class MainCtrl {
         invitationCtrl.setInviteCode(event.getInviteCode());
         invitationCtrl.showInviteCode();
         invitationCtrl.setTitle(event.getName());
-    }
-
-
-    public void setServerForEmail(){
         invitationCtrl.setServer(ServerUtils.server);
     }
 

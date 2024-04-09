@@ -2,16 +2,12 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.EmailType;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.util.Duration;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
 
@@ -25,9 +21,13 @@ public class InvitationCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
+    private final SettingsCtrl settingsCtrl;
+
     private final Config config;
     private String inviteCode;
     private int eventCode;
+
+    private String titleEvent;
 
     private String serverURL;
 
@@ -56,25 +56,25 @@ public class InvitationCtrl {
     private TextArea emailArea;
 
     @FXML
-    private ComboBox<EmailType> typeEmail;
-
-    @FXML
     private Label errorNoValidEmail;
 
     @FXML
     private Label labelDefault;
+    @FXML
+    private Label defaultLabel;
+    @FXML
+    private Button defaultButton;
 
     @Inject
-    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
+    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config, SettingsCtrl settingsCtrl) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
+        this.settingsCtrl = settingsCtrl;
         inviteCode = "testInviteCode";
     }
 
     public void initialize() {
-        typeEmail.getItems().addAll(EmailType.values());
-        typeEmail.setValue(EmailType.Default);
         mainCtrl.setButtonGreenProperty(sendInvites);
     }
     /**
@@ -102,19 +102,14 @@ public class InvitationCtrl {
      */
     private void readAndSendEmails() {
         Scanner scanner = new Scanner(emailArea.getText());
-        EmailType type = typeEmail.getValue();
-        if (!(scanner.hasNext()) && !(type.equals(EmailType.Default))){
-            noEmail.setVisible(true);
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(10));
-            pauseTransition.setOnFinished(event -> noEmail.setVisible(false));
-            pauseTransition.play();
-        }
-        if ((type.equals(EmailType.Default)) && !(scanner.hasNextLine())){
-            scanner = new Scanner(config.getEmail());
+        if (!(scanner.hasNext())){
+            emailArea.setText("Please fill in the emails of all your \n" +
+                    "friends you want to \ninvite to event: " + titleEvent);
         }
         while(scanner.hasNextLine()){
             sendEmailInvitation(scanner.nextLine());
         }
+
 
     }
 
@@ -130,7 +125,7 @@ public class InvitationCtrl {
             Mail.mailSending(email, mailInfo);
             System.out.println("Invitation succesfully sent to: " + emailadress);
         } catch (Exception e){
-
+            System.out.println("did not work");
         }
 
 
@@ -150,6 +145,7 @@ public class InvitationCtrl {
      */
     public void setTitle(String title){
         titleLabel.setText(title);
+        this.titleEvent = title;
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
@@ -199,13 +195,9 @@ public class InvitationCtrl {
     }
 
     public Email getherDataForEmail(String emailT){
-        EmailType emailType = typeEmail.getValue();
         String emailTo = "";
-        if (emailType == EmailType.Default){
-            emailTo = config.getEmail();
-        }
-        String emailSubject = emailSubject(emailType);
-        String emailBody = emailBody(emailType);
+        String emailSubject = "Good new, you are invited!";
+        String emailBody = emailBody();
         String fromEmail = config.getEmail();
         boolean isValid = isValidEmail(fromEmail);
         if (isValid == false){
@@ -227,49 +219,29 @@ public class InvitationCtrl {
         String host = "smtp.gmail.com";
         int port = 587;
         String usernameEmail = config.getEmail();
-//        String passwordToken = "txrobxvossaibwat";
         String passwordToken = config.getEmailToken();
         Mailer mailer = Mail.getSenderInfo(host, port, usernameEmail, passwordToken);
         return mailer;
     }
 
 
-
-    public String emailBody(EmailType emailType){
-        String defaultBody = "This is a default email to yourself " +
-                "to check if it the credetials are right.";
-        String invitationBody = "Hi, you are invited to an event in spliity." +
-                " You can join with the invitecode: "
-                + inviteCode + ". The server we run it on is: " + serverURL;
-        String reminder = "You have received an email from me already. Please look at it.";
-        String reminderToPay = "You have participated in an event. Please pay me back.";
-        switch (emailType) {
-            case EmailType.Default:
-                return defaultBody;
-            case EmailType.Invitation:
-                return invitationBody;
-            case EmailType.Reminder:
-                return reminder;
-            case EmailType.ReminderToPay:
-                return reminderToPay;
-        }
-        return "Something went wrong please disregard this email.";
-    }
-
-    public String emailSubject(EmailType emailType){
-        String defaultEmail = "";
-        String emailSubject = "";
-        switch (emailType) {
-            case EmailType.Default:
-                return emailSubject + "default email";
-            case EmailType.Invitation:
-                return emailSubject + "invitation email";
-            case EmailType.Reminder:
-                return emailSubject + "Reminder email";
-            case EmailType.ReminderToPay:
-                return emailSubject + "reminder to pay";
-        }
-        return emailSubject;
+    public String emailBody(){
+        String name = config.getName();
+        String eventName = titleEvent;
+        String server = serverURL;
+        String res = "Dear reader,\n \n" + "Your friend "
+                + name + " would like to invite you to the "
+                + eventName + " event. " + "He is thrilled to welcome " +
+                "you to the event. Here are the details:\n \n"
+                + "Event: " + eventName + "\n" +
+                "Server: " + server + "\n" +
+                "InviteCode: " + inviteCode + "\n\n" +
+                "You can join the event easily with the inviteCode. \n \n" +
+                "By joining the event you never have to worry that you pay to much for " +
+                "any occasion, and make sure that you can fully enjoy the moment with you friends \n \n" +
+                "sincerly, \n" +
+                "Team Splitty";
+        return res;
     }
 
     public boolean isValidEmail(String email){
@@ -280,6 +252,12 @@ public class InvitationCtrl {
         Matcher matcher = pattern.matcher(email);
         boolean isValid = matcher.matches();
         return isValid;
+    }
+
+    public void checkDefault(){
+        settingsCtrl.sendDefaultEmail();
+        emailArea.setText("configure email has been send to \n" +
+                "yourself");
     }
 
 

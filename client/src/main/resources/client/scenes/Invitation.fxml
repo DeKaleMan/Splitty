@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -23,14 +22,13 @@
             <Font name="System Bold" size="18.0" />
          </font></Label>
       <TextArea fx:id="emailArea" layoutX="320.0" layoutY="115.0" prefHeight="200.0" prefWidth="200.0" promptText="Add your emails to send an invite to" />
-      <Button fx:id="sendInvites" layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send Invites" />
+      <Button fx:id="sendInvites" layoutX="480.0" layoutY="343.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send Invites" />
       <Label fx:id="inviteCodeLabel" alignment="CENTER" layoutX="84.0" layoutY="182.0" text="00000">
          <font>
             <Font name="System Bold Italic" size="42.0" />
          </font></Label>
       <Button fx:id="back" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
-      <ComboBox fx:id="typeEmail" layoutX="86.0" layoutY="290.0" prefWidth="150.0" promptText="type of email" />
       <Label fx:id="errorNoValidEmail" layoutX="268.0" layoutY="321.0" prefHeight="43.0" prefWidth="182.0" text="Put a valid email in settings" textFill="#e40e0e" visible="false">
          <font>
             <Font size="15.0" />
@@ -41,6 +39,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="labelDefault" layoutX="86.0" layoutY="321.0" prefHeight="35.0" prefWidth="150.0" text="*default sends an email to your email from the config" wrapText="true" />
+      <Button fx:id="defaultButton" layoutX="58.0" layoutY="352.0" mnemonicParsing="false" onAction="#checkDefault" prefHeight="26.0" prefWidth="154.0" text="check email works" />
+      <Label fx:id="defaultLabel" layoutX="58.0" layoutY="308.0" prefHeight="43.0" prefWidth="154.0" text="not sure if your email is configured? Use this button" textAlignment="CENTER" wrapText="true" />
    </children>
 </AnchorPane>
