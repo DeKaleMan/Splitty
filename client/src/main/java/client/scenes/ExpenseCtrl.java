@@ -302,7 +302,8 @@ public abstract class ExpenseCtrl {
                 amountError.setVisible(true);
                 return null;
             }
-            amountDouble = Double.parseDouble(amount.getText());
+            String amountText = amount.getText().replace(',','.');
+            amountDouble = Double.parseDouble(amountText);
             if (amountDouble <= 0.0) {
                 amountError.setVisible(true);
                 amountError.setText("Amount cannot be negative or zero*");

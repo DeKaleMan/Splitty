@@ -68,6 +68,7 @@
                     <children>
                         <Button fx:id="editExpenseButton" mnemonicParsing="false" onAction="#editExpense" text="Edit" />
                         <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" style="-fx-background-color: #c50000;" text="Delete" />
+                  <Button fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" visible="false" />
                     </children>
                 </HBox>
 

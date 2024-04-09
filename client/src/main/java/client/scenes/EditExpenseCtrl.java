@@ -6,9 +6,6 @@ import commons.Currency;
 import commons.Expense;
 import commons.Participant;
 import commons.Type;
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -132,14 +129,14 @@ public class EditExpenseCtrl extends ExpenseCtrl {
 
         try {
             //add to database
-            ExpenseDTO
-                exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble,
-                    payer.getUuid(),isSharedExpense);
-            Expense editedExpense = serverUtils.updateExpense(expense.getExpenseId(), exp);
-            if(isSharedExpense) editSharedExpense(editedExpense, oldPayer, amountDouble);
-            else editGivingMoneyToSomeone(editedExpense, oldPayer, amountDouble, receiver);
-            serverUtils.generatePaymentsForEvent(eventCode);
+            List<Participant> participants = new ArrayList<>();
+            if(isSharedExpense) participants.addAll(owing);
+            else participants.add(receiver);
+            mainCtrl.updateOverviewUndoStacks(expense,
+                serverUtils.getDebtByExpense(eventCode,expense.getExpenseId()), "edit");
+            mainCtrl.editExpense(expense.getExpenseId(), description, type, date, amountDouble,
+                oldPayer, eventCode, isSharedExpense, participants);
+            mainCtrl.showUndoInOverview();
             back();
         } catch (Exception e) {
             commitExpenseError.setVisible(true);
@@ -147,60 +144,6 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
             visiblePause.play();
         }
-    }
-
-    private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer,
-                                          double amountDouble, Participant receiver) {
-        Participant newReceiver = serverUtils.getParticipant(
-            receiver.getUuid(), receiver.getEvent().getId());
-        serverUtils.saveDebt(
-            new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(),
-                newReceiver.getUuid()));
-        serverUtils.updateParticipant(newReceiver.getUuid(),
-            new ParticipantDTO(newReceiver.getName(),
-                newReceiver.getBalance() - amountDouble, newReceiver.getIBan(),
-                newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(),
-                newReceiver.getEvent().getId(),
-                newReceiver.getUuid()));
-        Participant newPayer = serverUtils.getParticipant(
-            oldPayer.getUuid(), oldPayer.getEvent().getId());
-        serverUtils.saveDebt(
-            new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(),
-                newPayer.getUuid()));
-        serverUtils.updateParticipant(newPayer.getUuid(),
-            new ParticipantDTO(newPayer.getName(),
-                newPayer.getBalance() + amountDouble, newPayer.getIBan(),
-                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
-                newPayer.getEvent().getId(),
-                newPayer.getUuid()));
-    }
-
-    private void editSharedExpense(Expense editedExpense,
-                                   Participant oldPayer, double amountDouble) {
-        double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
-        for (Participant oldP : owing) {
-            Participant p = serverUtils.getParticipant(
-                oldP.getUuid(), oldP.getEvent().getId());
-            serverUtils.saveDebt(
-                new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(),
-                    p.getUuid()));
-            serverUtils.updateParticipant(p.getUuid(),
-                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson
-                    , p.getIBan(),
-                    p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
-                    p.getUuid()));
-        }
-        Participant newPayer = serverUtils.getParticipant(
-            oldPayer.getUuid(), oldPayer.getEvent().getId());
-        serverUtils.saveDebt(
-            new DebtDTO(amountDouble - amountPerPerson,
-                eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
-        serverUtils.updateParticipant(newPayer.getUuid(),
-            new ParticipantDTO(newPayer.getName(),
-                newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
-                newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
-                newPayer.getEvent().getId(),
-                newPayer.getUuid()));
     }
 
 
@@ -279,8 +222,8 @@ public class EditExpenseCtrl extends ExpenseCtrl {
                 selectAll.setSelected(true);
             } else {
                 selectSome.setSelected(true);
-                owing.addAll(owingFromDb);
             }
+            owing.addAll(owingFromDb);
         }else{
             givingMoneyToSomeone.setSelected(true);
             Participant receiver = owingFromDb.getFirst();
