@@ -16,7 +16,6 @@
 package client.scenes;
 
 import client.utils.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.dto.ParticipantDTO;
 import javafx.application.Platform;
@@ -29,13 +28,12 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 public class MainCtrl {
 
@@ -201,8 +199,8 @@ public class MainCtrl {
 
     }
 
-    public void addLang(String newLang){
-       setLanguage.addLang(newLang);
+    public void addLang(String newLang) {
+        setLanguage.addLang(newLang);
     }
 
     public synchronized void resetLanguage() {
