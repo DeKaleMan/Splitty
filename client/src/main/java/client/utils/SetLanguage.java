@@ -9,6 +9,9 @@ import javafx.scene.image.Image;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -345,12 +348,15 @@ public class SetLanguage {
         return image;
     }
     public boolean addFlag(File imageFile, String lang) {
-        //TODO ASK FOR HELP
-        File file = new File(io.getFlagFolder() + lang + ".png");
-       // Files.copy(imageFile, io.createNewFile(file));
-        return io.createNewFile(imageFile);
-
+        File flagFile = new File(io.getFlagFolder()  + File.separator + lang + "Flag.png");
+        try {
+            // Copy the image file to the flag folder with the specified language name
+            Files.copy(imageFile.toPath(), flagFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return true; // Flag added successfully
+        } catch (IOException e) {
+            System.err.println("Error adding flag: " + e.getMessage());
+            return false; // Flag not added
+        }
     }
-
 
 }

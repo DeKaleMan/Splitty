@@ -214,10 +214,12 @@ public class SettingsCtrl {
                         Platform.runLater(() -> {
                             confirmlangBox.setVisible(true);
                             progressBar.setVisible(false);
+
                         });
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+
                     getJSONFile();
                 }).start();
 
@@ -251,9 +253,10 @@ public class SettingsCtrl {
             mainCtrl.addFlag(flag);
         }
         this.flag = null;
-
+//        mainCtrl.addFlag(flag);
         mainCtrl.changeLanguage(newLang);
         this.progressBar.setVisible(false);
+
     }
 
     @FXML
@@ -265,8 +268,6 @@ public class SettingsCtrl {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
         flag = fileChooser.showOpenDialog(null);
-        mainCtrl.addFlag(flag);
-
     }
 
     public String getLanguage() {
