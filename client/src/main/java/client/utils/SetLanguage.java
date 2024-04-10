@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class SetLanguage {
-    private static final String SERVER = "http://localhost:8080/";
     private MainCtrl mainCtrl;
     private StartScreenCtrl startScreenCtrl;
     private SplittyOverviewCtrl splittyOverviewCtrl;
@@ -106,14 +105,15 @@ public class SetLanguage {
         splittyOverviewCtrl.setStatisticsButton(translate("Statistics", "en", lang));
         splittyOverviewCtrl.setAddExpenseButton(translate("Add expense", "en", lang));
         splittyOverviewCtrl.setPaidByMe(translate("Paid by me", "en", lang));
-        splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete expense", "en", lang));
+        splittyOverviewCtrl.setDeleteExpenseButton(translate("Delete", "en", lang));
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
-        splittyOverviewCtrl.setEditExpense(translate("Edit expense", "en",lang));
+        splittyOverviewCtrl.setEditExpense(translate("Edit", "en",lang));
         splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
         splittyOverviewCtrl.setmyDetails(translate("My details", "en",lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
+        splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
         System.out.println("event overview translated");
     }
     public void setAddExpense(String lang){
@@ -182,6 +182,7 @@ public class SetLanguage {
                 "en", lang));
         statisticsCtrl.setStatisticsText(translate("Statistics", "en", lang));
         statisticsCtrl.setBackButton(translate("Back", "en", lang));
+        statisticsCtrl.setHoverLabel(translate("Hover over a category to see the percentage", "en", lang));
     }
     private void setSettings(String lang){
         settingsCtrl.setSettingsText(translate("settings", "en", lang));
@@ -262,20 +263,20 @@ public class SetLanguage {
         addParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
     public void setEditExpense(String lang){
-        editExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
+        editExpenseCtrl.setSceneTypeText(translate("Edit Expense", "en", lang));
         editExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         editExpenseCtrl.setHowMuch(translate("How much?", "en", lang));
         editExpenseCtrl.setWhen(translate("When?", "en", lang));
         editExpenseCtrl.setHowToSplit(translate("How to split?", "en", lang));
         editExpenseCtrl.setDescription(translate("Description", "en", lang));
         editExpenseCtrl.setExpenseTypetext(translate("Expense type?", "en", lang));
-        editExpenseCtrl.setCommit(translate("Add expense", "en", lang));
+        editExpenseCtrl.setCommit(translate("Edit", "en", lang));
         editExpenseCtrl.setAbort(translate("Cancel", "en", lang));
         editExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         editExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         editExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
-        addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
-        addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        editExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
+        editExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
         System.out.println("EditExpense translated");
     }
 
@@ -284,7 +285,7 @@ public class SetLanguage {
 
     public String translate(String query, String sourceLang, String targetLang) {
         Response response = ClientBuilder.newClient()
-                .target(SERVER)
+                .target(ServerUtils.server)
                 .path("api/translate")
                 .queryParam("query", query)
                 .queryParam("sourceLang", sourceLang)

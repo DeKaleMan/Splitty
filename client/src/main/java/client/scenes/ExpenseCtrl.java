@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Participant;
 import commons.Type;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -301,7 +302,8 @@ public abstract class ExpenseCtrl {
                 amountError.setVisible(true);
                 return null;
             }
-            amountDouble = Double.parseDouble(amount.getText());
+            String amountText = amount.getText().replace(',','.');
+            amountDouble = Double.parseDouble(amountText);
             if (amountDouble <= 0.0) {
                 amountError.setVisible(true);
                 amountError.setText("Amount cannot be negative or zero*");
@@ -390,7 +392,9 @@ public abstract class ExpenseCtrl {
 
     @FXML
     protected void back() {
-        mainCtrl.showSplittyOverview(eventCode);
+        Platform.runLater(() -> {
+            mainCtrl.showSplittyOverview(eventCode);
+        });
     }
 
 //    public void setTitle(String title) {

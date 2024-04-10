@@ -25,7 +25,15 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getAllPayments());
     }
 
-    @GetMapping("/{eventId}")
+    @GetMapping("/{id}")
+    public ResponseEntity<Payment> getPayment(@PathVariable("id") long id) {
+        Payment payment = paymentService.getPayment(id);
+        return (payment == null) ?
+            ResponseEntity.notFound().build() :
+            ResponseEntity.ok(payment);
+    }
+
+    @GetMapping("/event/{eventId}")
     public ResponseEntity<List<Payment>> getPaymentsOfEvent(@PathVariable("eventId") int eventId){
         List<Payment> payments = paymentService.getPaymentsOfEvent(eventId);
         return (payments == null) ?

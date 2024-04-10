@@ -39,7 +39,7 @@
          <children>
 
 
-            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; : 6;" text="edit event" textFill="white">
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000;" text="edit event" textFill="white">
                <font>
                   <Font size="14.0" />
                </font>

@@ -8,10 +8,6 @@ import commons.Participant;
 import commons.Type;
 import javafx.animation.PauseTransition;
 
-
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -97,6 +93,9 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     @FXML
     protected ComboBox<Currency> currencyComboBox;
 
+    @FXML
+    protected ProgressIndicator expenseLoading;
+
     @Inject
     public AddExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         super(serverUtils, mainCtrl, config);
@@ -105,80 +104,54 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @FXML
     public void addExpense() {
-        Date date = getDate();
-        if(date == null) return;
+        expenseLoading.setVisible(true);
+        new Thread(() -> {
+            Date date = getDate();
+            if(date == null) {
+                expenseLoading.setVisible(false);
+                return;
+            }
+            Type type = getType();
+            Participant payer = personComboBox.getValue();
+            if (payer == null) {
+                payerError.setVisible(true);
+                expenseLoading.setVisible(false);
+                return;
+            }
 
-        Type type = getType();
-        Participant payer = personComboBox.getValue();
-        if (payer == null) {
-            payerError.setVisible(true);
-            return;
-        }
-
-        Double amountDouble = getAmountDouble(date);
-        if (amountDouble == null) return;
-
-        Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
-        if(!isSharedExpense && receiver == null) {
-            //TODO handle invalid receiver
-            return;
-        }
-
-        String description = whatFor.getText();
-
-        try {
-
-            //add to database
-            ExpenseDTO
-                exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
-            Expense expense = serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            if(isSharedExpense) addSharedExpense(amountDouble, expense, payer);
-            else addGivingMoneyToSomeone(amountDouble, expense, payer, receiver);
-            serverUtils.generatePaymentsForEvent(eventCode);
-            back();
-        } catch (Exception e) {
-            commitExpenseError.setVisible(true);
-            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-            visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
-            visiblePause.play();
-        }
-    }
-
-
-    private void addGivingMoneyToSomeone(double amountDouble, Expense expense, Participant payer,
-                                         Participant receiver) {
-        serverUtils.saveDebt(
-            new DebtDTO(-amountDouble, eventCode, expense.getExpenseId(), receiver.getUuid()));
-        serverUtils.updateParticipant(receiver.getUuid(),
-            new ParticipantDTO(receiver.getName(), receiver.getBalance() - amountDouble, receiver.getIBan(),
-                receiver.getBIC(), receiver.getEmail(), receiver.getAccountHolder(), receiver.getEvent().getId(),
-                receiver.getUuid()));
-        serverUtils.saveDebt(
-            new DebtDTO(amountDouble, eventCode, expense.getExpenseId(), payer.getUuid()));
-        serverUtils.updateParticipant(payer.getUuid(),
-            new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble, payer.getIBan(),
-                payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
-                payer.getUuid()));
-    }
-
-    private void addSharedExpense(double amountDouble, Expense expense, Participant payer) {
-        double amountPerPerson = amountDouble / (owing.size()+1);
-        for (Participant p : owing) {
-            serverUtils.saveDebt(
-                new DebtDTO(-amountPerPerson, eventCode, expense.getExpenseId(), p.getUuid()));
-            serverUtils.updateParticipant(p.getUuid(),
-                new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
-                    p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
-                    p.getUuid()));
-        }
-        serverUtils.saveDebt(
-            new DebtDTO(amountDouble - amountPerPerson, eventCode, expense.getExpenseId(), payer.getUuid()));
-        serverUtils.updateParticipant(payer.getUuid(),
-            new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
-                payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
-                payer.getUuid()));
+            Double amountDouble = getAmountDouble(date);
+            if (amountDouble == null) {
+                expenseLoading.setVisible(false);
+                return;
+            }
+            
+            Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
+            if(!isSharedExpense && receiver == null) {
+                //TODO handle invalid receiver
+                expenseLoading.setVisible(false);
+                return;
+            }
+            String description = whatFor.getText();
+            try {
+                //add to database
+                List<Participant> participants = new ArrayList<>();
+                if(isSharedExpense) participants.addAll(owing);
+                else participants.add(receiver);
+                Expense e = mainCtrl.addExpense(description, type, date, amountDouble, payer,
+                    eventCode, isSharedExpense, participants);
+                serverUtils.generatePaymentsForEvent(eventCode);
+                mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
+                mainCtrl.showUndoInOverview();
+                expenseLoading.setVisible(false);
+                back();
+            } catch (Exception e) {
+                commitExpenseError.setVisible(true);
+                expenseLoading.setVisible(false);
+                PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+                visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
+                visiblePause.play();
+            }
+        }).start();
     }
 
 
@@ -222,9 +195,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         splitList.setVisible(false);
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
-        serverUtils.registerForExpenseWS("/topic/addExpense", Expense.class, exp -> {
-            System.out.println("expense added " + exp);
-        });
         try {
             allparticipants = serverUtils.getParticipants(eventCode);
         } catch (Exception e) {

@@ -518,12 +518,24 @@ public class ServerUtils {
 
     public List<Payment> getPaymentsOfEvent(int eventId) {
         return client
-            .target(server).path("api/payments/{id}")
+            .target(server).path("api/payments/event/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get(new GenericType<List<Payment>>() {
             });
+    }
+
+    public Payment getPayment(long id) {
+        Response response = client
+            .target(server).path("api/payments/{id}")
+            .resolveTemplate("id", id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
+
+        if(response.getStatus() == 404) throw new RuntimeException("Payments have been updated");
+        return response.readEntity(Payment.class);
     }
 
     public Payment savePayment(PaymentDTO paymentDTO) {

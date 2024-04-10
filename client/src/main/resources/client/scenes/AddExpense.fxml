@@ -80,6 +80,7 @@
          </toggleGroup>
       </RadioButton>
       <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
+      <ProgressIndicator fx:id="expenseLoading" layoutX="568.0" layoutY="338.0" prefHeight="23.0" prefWidth="22.0" visible="false" />
 
 
    </children>
