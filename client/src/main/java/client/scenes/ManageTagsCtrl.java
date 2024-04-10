@@ -15,12 +15,10 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 
 public class ManageTagsCtrl implements Initializable {
-
 
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
@@ -42,6 +40,8 @@ public class ManageTagsCtrl implements Initializable {
     public Label noTagSelectedError;
     @FXML
     public Label unknownError;
+    @FXML
+    public Label otherSelectedError;
     @FXML
     public Label tagAddedConfirmation;
     @FXML
@@ -86,14 +86,6 @@ public class ManageTagsCtrl implements Initializable {
             tagList = new ArrayList<>();
             System.out.println(e);
         }
-        String other = "Other";
-        try {
-            Tag tag = tagList.stream().filter(t -> other.equals(t.getName())).toList().getFirst();
-            tagList.remove(tag);
-        } catch (NoSuchElementException e) {
-            System.out.println("Other is not a tag");
-            // create other tag again if it somehow was removed
-        }
         tagListView.getItems().addAll(tagList);
     }
 
@@ -136,8 +128,14 @@ public class ManageTagsCtrl implements Initializable {
 
     public void remove(Tag tag) {
         try {
+            String other = "Other";
+            if (other.equals(tag.getName())) {
+                throw new IllegalArgumentException();
+            }
             serverUtils.deleteTag(eventId, tag.getName());
             tagListView.getItems().remove(tag);
+        } catch (IllegalArgumentException e) {
+            setPauseTransition(otherSelectedError);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }

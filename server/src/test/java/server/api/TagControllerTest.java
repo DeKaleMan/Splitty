@@ -4,7 +4,6 @@ import commons.Event;
 import commons.Tag;
 import commons.TagId;
 import commons.dto.TagDTO;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -19,6 +18,7 @@ public class TagControllerTest {
     TagController sut;
     private TestTagRepository tagRepo;
     private TestEventRepository eventRepo;
+    private TestExpenseRepository expenseRepo;
 
     Event e1 = new Event("test1",new Date(10, 10, 2005),"owner","desc");
     Event e2 = new Event("test2",new Date(15, 10, 2015),"owner","desc");
@@ -29,7 +29,8 @@ public class TagControllerTest {
     public void setup() {
         tagRepo = new TestTagRepository();
         eventRepo = new TestEventRepository();
-        TagService service = new TagService(tagRepo, eventRepo);
+        expenseRepo = new TestExpenseRepository();
+        TagService service = new TagService(tagRepo, eventRepo, expenseRepo);
         sut = new TagController(service);
         e1.setId(1);
         e2.setId(2);

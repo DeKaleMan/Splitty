@@ -1,12 +1,14 @@
 package server.service;
 
 import commons.Event;
+import commons.Expense;
 import commons.Tag;
 import commons.TagId;
 import commons.dto.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
+import server.database.ExpenseRepository;
 import server.database.TagRepository;
 
 import java.util.ArrayList;
@@ -17,11 +19,13 @@ public class TagService {
 
     private final TagRepository tagRepository;
     private final EventRepository eventRepository;
+    private final ExpenseRepository expenseRepository;
 
     @Autowired
-    public TagService(TagRepository tagRepository, EventRepository eventRepository) {
+    public TagService(TagRepository tagRepository, EventRepository eventRepository, ExpenseRepository expenseRepository) {
         this.tagRepository = tagRepository;
         this.eventRepository = eventRepository;
+        this.expenseRepository = expenseRepository;
     }
 
     /**
@@ -61,8 +65,23 @@ public class TagService {
         if (toDelete == null) {
             return  null;
         }
-        tagRepository.delete(toDelete);
+        setExpensesWithTag(toDelete, event);
+        try {
+            tagRepository.delete(toDelete);
+        } catch (Exception e) {
+            return null;
+        }
         return toDelete;
+    }
+
+    private void setExpensesWithTag(Tag toDelete, Event event) {
+        List<Expense> expenses = expenseRepository.findByEvent(event);
+        expenses = expenses.stream().filter(expense -> expense.getTag().equals(toDelete)).toList();
+        Tag other = getOtherTag(event.id);
+        for (Expense expense : expenses) {
+            expense.setTag(other);
+        }
+        expenseRepository.saveAll(expenses);
     }
 
     public Tag updateTag(TagDTO tagDTO, String name, int eventId) {

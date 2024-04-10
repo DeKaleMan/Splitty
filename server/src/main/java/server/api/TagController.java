@@ -53,9 +53,6 @@ public class TagController {
     public ResponseEntity<Tag> updateTag(@PathVariable String name,
                                                          @PathVariable int eventId,
                                                          @RequestBody TagDTO tagDTO) {
-        if (other.equals(tagDTO.getName())) {
-            return ResponseEntity.badRequest().build();
-        }
         Tag tag = tagService.updateTag(tagDTO, name, eventId);
         if (tag == null) {
             return ResponseEntity.badRequest().build();

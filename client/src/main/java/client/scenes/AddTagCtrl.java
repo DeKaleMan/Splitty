@@ -62,6 +62,7 @@ public class AddTagCtrl {
     }
 
     public void setFields(int eventId) {
+        nameField.setEditable(true);
         add = true;
         nameField.setText("");
         colourField.setText("");
@@ -69,6 +70,12 @@ public class AddTagCtrl {
         setTitleText(mainCtrl.translate("Add Tag"));
     }
     public void setFields(Tag tag, int eventId) {
+        String other = "Other";
+        if (other.equals((tag.getName()))) {
+            nameField.setEditable(false);
+        } else {
+            nameField.setEditable(true);
+        }
         add = false;
         this.eventId = eventId;
         setTitleText(mainCtrl.translate("Edit Tag"));

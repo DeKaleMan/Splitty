@@ -49,6 +49,11 @@
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
+      <Label fx:id="otherSelectedError" layoutX="86.0" layoutY="314.0" text="Cannot remove Other tag*" textFill="RED" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font>
+      </Label>
 
     </children>
 </AnchorPane>
