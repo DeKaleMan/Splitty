@@ -111,6 +111,10 @@ public class DebtCtrl implements Initializable {
         undo.setVisible(false);
     }
 
+    public void setLabelWrong(String txt){
+        labelWrong.setText(txt);
+    }
+
     private VBox generateInfo(Payment payment) {
         VBox info = new VBox();
         GridPane emailInfo = new GridPane();
