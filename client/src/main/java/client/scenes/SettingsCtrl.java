@@ -80,6 +80,18 @@ public class SettingsCtrl {
         mainCtrl.setButtonGreenProperty(saveButton);
     }
 
+    public void setLabelEmailToken(String txt){
+        labelEmailToken.setText(txt);
+    }
+
+    public void setSucces(String txt){
+        succes.setText(txt);
+    }
+
+    public void setSendEmail(String txt){
+        sendEmail.setText(txt);
+    }
+
     /**
      * sets all the fields to the values obtained by the config file
      */

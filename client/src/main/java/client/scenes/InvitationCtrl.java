@@ -57,9 +57,6 @@ public class InvitationCtrl {
 
     @FXML
     private Label errorNoValidEmail;
-
-    @FXML
-    private Label labelDefault;
     @FXML
     private Label defaultLabel;
     @FXML
@@ -72,6 +69,18 @@ public class InvitationCtrl {
         this.config = config;
         this.settingsCtrl = settingsCtrl;
         inviteCode = "testInviteCode";
+    }
+
+    public void setDefaultButton(String txt){
+        defaultButton.setText(txt);
+    }
+
+    public void setDefaultLabel(String txt){
+        defaultLabel.setText(txt);
+    }
+
+    public void setNoEmail(String txt){
+        noEmail.setText(txt);
     }
 
     public void initialize() {

@@ -1,6 +1,6 @@
 package client.scenes;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
+
 import client.utils.Config;
 import client.utils.ServerUtils;
 
@@ -9,7 +9,6 @@ import commons.Participant;
 import commons.Payment;
 import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
-import jakarta.mail.AuthenticationFailedException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +29,6 @@ import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
-import javax.naming.AuthenticationException;
 import java.net.URL;
 import java.util.*;
 

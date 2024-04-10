@@ -34,7 +34,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="noEmail" layoutX="320.0" layoutY="-13.0" prefHeight="134.0" prefWidth="200.0" text="Please fill in an email address" textAlignment="JUSTIFY" textFill="#e70d0d" visible="false">
+      <Label fx:id="noEmail" layoutX="320.0" layoutY="-13.0" prefHeight="134.0" prefWidth="200.0" text="Please fill in an email address" textAlignment="JUSTIFY" textFill="#e70d0d">
          <font>
             <Font size="15.0" />
          </font>
