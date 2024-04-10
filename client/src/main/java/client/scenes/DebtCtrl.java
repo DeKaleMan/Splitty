@@ -288,7 +288,7 @@ public class DebtCtrl implements Initializable {
         }
 
         // Validate password length and format
-        if (passwordToken.length() != 12 || !passwordToken.matches("[a-z]+")) {
+        if (!passwordToken.matches("[a-z]+") || passwordToken.length() < 16) {
             System.out.println("Error: Password should be a 12-letter lowercase password.");
             return false;
         }
