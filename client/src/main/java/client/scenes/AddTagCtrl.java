@@ -43,6 +43,8 @@ public class AddTagCtrl {
     @FXML
     public Label invalidName;
     @FXML
+    public Label longNameError;
+    @FXML
     public Label invalidColour;
     @FXML
     public TextField nameField;
@@ -121,6 +123,10 @@ public class AddTagCtrl {
             if (t == null) {
                 return;
             }
+            if (nameField.getText().length() > 20) {
+                setPauseTransition(longNameError);
+                return;
+            }
             serverUtils.updateTag(t, oldName, eventId);
             mainCtrl.setConfirmationAddedTag();
             mainCtrl.showManageTags(eventId, addExpense, expense);
@@ -132,6 +138,10 @@ public class AddTagCtrl {
         try {
             TagDTO t = getTagDTO();
             if (t == null) {
+                return;
+            }
+            if (nameField.getText().length() > 20) {
+                setPauseTransition(longNameError);
                 return;
             }
             serverUtils.addTag(t);

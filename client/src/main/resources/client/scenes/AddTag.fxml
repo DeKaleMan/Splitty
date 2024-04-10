@@ -38,6 +38,10 @@
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
+      <Label fx:id="longNameError" layoutX="398.0" layoutY="145.0" prefHeight="32.0" prefWidth="194.0" text="Tag name cannot be longer than 20 characters*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
       <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
