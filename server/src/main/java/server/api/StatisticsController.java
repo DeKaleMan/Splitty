@@ -18,8 +18,9 @@ public class StatisticsController {
     }
 
     @GetMapping(path = {"/", ""})
-    public ResponseEntity<double[]> getPaymentsOfEvent(@RequestParam("eventID") int eventID){
-        double[] res = statisticsService.getPaymentsOfEvent(eventID);
+    public ResponseEntity<Double> getPaymentsOfEvent(@RequestParam("eventID") int eventID,
+                                                     @RequestParam("tagName") String tagName){
+        Double res = statisticsService.getPaymentsOfEvent(eventID, tagName);
         return (res == null) ?
             ResponseEntity.notFound().build() :
             ResponseEntity.ok(res);

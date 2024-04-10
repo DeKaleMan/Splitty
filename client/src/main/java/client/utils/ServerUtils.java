@@ -728,14 +728,15 @@ public class ServerUtils {
         }
     }
 
-    public double[] getStatisticsByEventID(int eventID) {
+    public Double getSumByTag(int eventID, String tagName) {
         return client
             .target(server)
             .path("/api/statistics")
             .queryParam("eventID", eventID)
+            .queryParam("tagName", tagName)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(double[].class);
+            .get(Double.class);
     }
 
     public double getTotalCostEvent(int eventID) {
