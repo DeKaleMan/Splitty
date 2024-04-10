@@ -731,9 +731,9 @@ public class ServerUtils {
     public Double getSumByTag(int eventID, String tagName) {
         return client
             .target(server)
-            .path("/api/statistics")
-            .queryParam("eventID", eventID)
-            .queryParam("tagName", tagName)
+            .path("/api/statistics/{eventId}/{tagName}")
+            .resolveTemplate("eventID", eventID)
+            .resolveTemplate("tagName", tagName)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get(Double.class);

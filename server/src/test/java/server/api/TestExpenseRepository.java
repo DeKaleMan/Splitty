@@ -35,8 +35,14 @@ public class TestExpenseRepository implements ExpenseRepository {
     }
 
     @Override
-    public Map<Tag, Double> findByTagAndSumByEvent(int eventId) {
-        return null;
+    public Double findTotalAmountByTag(int eventId, String tagName) {
+        List<Tag> tags = expenses.stream().
+                filter(expense -> expense.getEvent().id == eventId)
+                .map(Expense::getTag).toList();
+        Tag t = tags.stream().filter(tag -> tag.getName().equals(tagName)).toList().getFirst();
+        return expenses.stream().filter(expense -> expense.getTag().equals(t))
+                .mapToDouble(Expense::getTotalExpense)
+                .sum();
     }
 
 

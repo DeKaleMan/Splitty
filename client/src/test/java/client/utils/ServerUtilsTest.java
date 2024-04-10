@@ -927,25 +927,25 @@ class ServerUtilsTest {
     }
 
     @Test
-    public void getStatisticsByEventIDTest(){
+    public void getSumByTagTest(){
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
 
-        double[] expectedStats = {1.0, 2.0, 3.0};
-        when(mockBuilder.get(double[].class)).thenReturn(expectedStats);
-
+        Double expectedStats = 0.0;
+        when(mockBuilder.get(Double.class)).thenReturn(expectedStats);
+        when(serverUtils.getSumByTag(anyInt(), eq("Other"))).thenReturn(expectedStats);
         int eventId = 123;
-        double[] actualStats = serverUtils.getStatisticsByEventID(eventId);
+        Double actualStats = serverUtils.getSumByTag(eventId, "Other");
 
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("/api/statistics");
         verify(mockWebTarget).queryParam("eventID", eventId);
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
-        verify(mockBuilder).get(double[].class);
+        verify(mockBuilder).get(Double.class);
 
         assertEquals(actualStats, expectedStats);
     }

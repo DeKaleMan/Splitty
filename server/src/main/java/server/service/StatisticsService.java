@@ -1,27 +1,37 @@
 package server.service;
 
 import commons.Event;
+import commons.Tag;
+import commons.TagId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
+import server.database.TagRepository;
 
 import java.util.Optional;
 
 @Service
 public class StatisticsService {
-    private ExpenseRepository exRep;
-    private EventRepository eventRep;
+    private final ExpenseRepository exRep;
+    private final EventRepository eventRep;
+    private final TagRepository tagRep;
     @Autowired
     public StatisticsService(ExpenseRepository expenseRepository,
-                                EventRepository eventRepository){
+                             EventRepository eventRepository,
+                             TagRepository tagRepository){
         exRep = expenseRepository;
         eventRep = eventRepository;
+        this.tagRep = tagRepository;
     }
 
-    public Double getPaymentsOfEvent(int eventID, String  tagName){
+    public Double getSumByTag(int eventID, String  tagName){
         Optional<Event> optionalEvent = eventRep.findById(eventID);
         if(optionalEvent.isEmpty()){
+            return null;
+        }
+        Tag t = tagRep.findTagByTagId(new TagId(tagName, optionalEvent.get()));
+        if (t == null) {
             return null;
         }
         Double d =  exRep.findTotalAmountByTag(eventID, tagName);
@@ -32,7 +42,6 @@ public class StatisticsService {
     }
 
     public Double getTotalCost(int eventID){
-
         return (exRep.getTotalCostByEvent(eventID));
     }
 }
