@@ -63,11 +63,12 @@ public class SettingsCtrl {
     private String newLang;
 
     @Inject
-    public SettingsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils,  Config config){
+    public SettingsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
         this.mainCtrl = mainCtrl;
         this.config = config;
         this.serverUtils = serverUtils;
     }
+
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
         mainCtrl.setButtonGreenProperty(saveButton);
@@ -110,7 +111,7 @@ public class SettingsCtrl {
         String email = emailField.getText();
         String currency = currencyField.getText();
         String name = nameField.getText();
-        String iban  = ibanField.getText();
+        String iban = ibanField.getText();
         String bic = bicField.getText();
         boolean abort = false;
         if (email == null || email.isEmpty()) {
@@ -146,9 +147,11 @@ public class SettingsCtrl {
     public void initializeConfig() {
         config.read();
     }
+
     public String getEmail() {
         return config.getEmail();
     }
+
     public String getId() {
         return config.getId();
     }
@@ -176,21 +179,24 @@ public class SettingsCtrl {
     private VBox confirmlangBox;
     private CountDownLatch latch = new CountDownLatch(1);
 
-    public void setLatch(){
+    public void setLatch() {
         latch.countDown();
     }
+
     @FXML
-    public void addLang(){
-        progressBar.setVisible(true);
+    public void addLang() {
+        //TODO check if it is a language or not to make it imaginary?
+
         this.newLang = langTextfield.getText();
-        if(newLang != null || !newLang.isBlank()){
+        if (newLang != null && !newLang.isBlank()) {
+            progressBar.setVisible(true);
             //setLanguage to new found language, we can no longer use an enum
-            if(mainCtrl.languages.contains(newLang)){
+            if (mainCtrl.languages.contains(newLang)) {
                 langTextfield.setPromptText("This language already exists");
                 langTextfield.setText("");
                 return;
             }
-            try{
+            try {
                 config.setLanguage(newLang);
                 config.write();
                 mainCtrl.languages.add(newLang);
@@ -198,55 +204,60 @@ public class SettingsCtrl {
                 mainCtrl.changeLanguage(newLang);
                 langTextfield.setText("");
 
-            }catch (Exception e){
+                // Wait for the changeLanguage method to complete
+                //latch.await();
 
+                new Thread(() -> {
+                    try {
+                        progressBar.setVisible(true);
+                        latch.await();
+                        Platform.runLater(() -> {
+                            confirmlangBox.setVisible(true);
+                            progressBar.setVisible(false);
+                        });
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    getJSONFile();
+                }).start();
+
+            } catch (Exception e) {
                 langTextfield.setText("no valid languageCode");
                 System.out.println(e);
+            } finally {
                 progressBar.setVisible(false);
-                return;
             }
-            try {
-                while(latch.getCount() != 0){
-                    progressBar.setVisible(true);
-                }
-                latch.await();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            getJSONFile();
-
+        } else {
+            progressBar.setVisible(false);
         }
+    }
 
 
-        //TODO get jsonfile here
-        confirmlangBox.setVisible(true);
+    public void getJSONFile() {
+        String jsonString = serverUtils.getLanguageJSON(newLang);
+        jsonString = jsonString.replace(",", ",\n");
+        addedLang.setText(jsonString);
         progressBar.setVisible(false);
     }
 
-    public void getJSONFile(){
-            String jsonString = serverUtils.getLanguageJSON(newLang);
-            jsonString = jsonString.replace(",", ",\n");
-            addedLang.setText(jsonString);
-            progressBar.setVisible(false);
-    }
-
     @FXML
-    public void confirmLang(){
+    public void confirmLang() {
         progressBar.setVisible(true);
         confirmlangBox.setVisible(false);
         String lang = addedLang.getText();
         String stringForJson = lang.replace("\n", "");
         serverUtils.setNewLang(stringForJson, newLang);
-        if(this.flag != null){
+        if (this.flag != null) {
             mainCtrl.addFlag(flag);
         }
         this.flag = null;
 
         mainCtrl.changeLanguage(newLang);
+        this.progressBar.setVisible(false);
     }
+
     @FXML
-    public void setFlag(){
+    public void setFlag() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose image to set as flag");
         fileChooser.getExtensionFilters().addAll(
@@ -339,7 +350,8 @@ public class SettingsCtrl {
             this.settingsText.setText(txt);
         });
     }
-    public void setChangServerButton(String txt){
+
+    public void setChangServerButton(String txt) {
         Platform.runLater(() -> {
 
             this.changServerButton.setText(txt);
