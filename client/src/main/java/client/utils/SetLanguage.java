@@ -3,15 +3,12 @@ package client.utils;
 import client.scenes.*;
 
 import jakarta.ws.rs.client.ClientBuilder;
-
 import jakarta.ws.rs.core.Response;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
-import org.hibernate.query.PathException;
+
 
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.Objects;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;

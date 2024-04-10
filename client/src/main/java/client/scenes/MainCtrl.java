@@ -186,7 +186,7 @@ public class MainCtrl {
         languages = new ArrayList<>();
         //TODO we should add the available languages perhaps to a file
         languages.addAll(List.of("en", "nl", "is", "zh", "es"));
-        if(!languages.contains(this.language)) this.language = "en";
+        if (!languages.contains(this.language)) this.language = "en";
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
@@ -195,24 +195,25 @@ public class MainCtrl {
         resetLanguage();
 
     }
-    public synchronized void resetLanguage(){
+
+    public synchronized void resetLanguage() {
         Platform.runLater(() -> {
-            try{
+            try {
                 startScreenCtrl.setLanguageSelect();
                 splittyOverviewCtrl.setLanguageSelect();
                 startScreenCtrl.changeLanguage();
 
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 //nobody knows....but it works
             }
         });
     }
 
     public synchronized void changeLanguage(String toLang) {
-            this.language = toLang;
-            setLanguage.changeTo(toLang);
-            splittyOverviewCtrl.setLanguageSelect();
-            startScreenCtrl.setLanguageSelect();
+        this.language = toLang;
+        setLanguage.changeTo(toLang);
+        splittyOverviewCtrl.setLanguageSelect();
+        startScreenCtrl.setLanguageSelect();
 
     }
 
@@ -242,7 +243,8 @@ public class MainCtrl {
     public Image getFlag() {
         return setLanguage.getFlag(this.language);
     }
-    public boolean addFlag(File image){
+
+    public boolean addFlag(File image) {
         return setLanguage.addFlag(image, this.language);
     }
 
