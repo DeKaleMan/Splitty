@@ -103,7 +103,9 @@ public class ParticipantService {
     public List<Event> getEventsByParticipant(String uuid) {
         // only return events for which the participant isn't inactive
         List<Event> events = participantRepository.findEventsByParticipant(uuid);
-        return events.stream().filter(e -> !participantRepository.findById(new ParticipantId(uuid, e)).isInactive()).toList();
+        return events.stream().filter(e ->
+                !participantRepository.findById(new ParticipantId(uuid, e))
+                        .isInactive()).toList();
     }
 
     public List<Participant> getByEvent(int eventID) {
