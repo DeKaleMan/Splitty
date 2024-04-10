@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Expense;
 import commons.Tag;
 import commons.dto.TagDTO;
 import javafx.animation.PauseTransition;
@@ -23,7 +24,9 @@ public class AddTagCtrl {
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
     private int eventId;
-    private boolean add;
+    private boolean addTag;
+    private boolean addExpense;
+    private Expense expense;
     private List<Tag> tags = new ArrayList<>();
     String oldName;
 
@@ -52,7 +55,7 @@ public class AddTagCtrl {
     }
 
     public void cancel() {
-        mainCtrl.showManageTags(eventId);
+        mainCtrl.showManageTags(eventId, addExpense, expense);
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
@@ -61,22 +64,26 @@ public class AddTagCtrl {
         }
     }
 
-    public void setFields(int eventId) {
+    public void setFields(int eventId, boolean addExpense, Expense expense) {
+        this.addExpense = addExpense;
+        this.expense = expense;
         nameField.setEditable(true);
-        add = true;
+        addTag = true;
         nameField.setText("");
         colourField.setText("");
         this.eventId = eventId;
         setTitleText(mainCtrl.translate("Add Tag"));
     }
-    public void setFields(Tag tag, int eventId) {
+    public void setFields(Tag tag, int eventId, boolean addExpense, Expense expense) {
+        this.addExpense = addExpense;
+        this.expense = expense;
         String other = "Other";
         if (other.equals((tag.getName()))) {
             nameField.setEditable(false);
         } else {
             nameField.setEditable(true);
         }
-        add = false;
+        addTag = false;
         this.eventId = eventId;
         setTitleText(mainCtrl.translate("Edit Tag"));
         this.oldName = tag.getName();
@@ -86,7 +93,7 @@ public class AddTagCtrl {
 
     @FXML
     public void applyChanges() {
-        if (add) {
+        if (addTag) {
             addTag();
         } else {
             editTag();
@@ -106,7 +113,7 @@ public class AddTagCtrl {
             }
             serverUtils.updateTag(t, oldName, eventId);
             mainCtrl.setConfirmationAddedTag();
-            mainCtrl.showManageTags(eventId);
+            mainCtrl.showManageTags(eventId, addExpense, expense);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
@@ -119,7 +126,7 @@ public class AddTagCtrl {
             }
             serverUtils.addTag(t);
             mainCtrl.setConfirmationAddedTag();
-            mainCtrl.showManageTags(eventId);
+            mainCtrl.showManageTags(eventId, addExpense, expense);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
@@ -135,7 +142,7 @@ public class AddTagCtrl {
             setPauseTransition(invalidName);
         }
         if (names.contains(name)) {
-            if (add) {
+            if (addTag) {
                 setPauseTransition(duplicateName);
                 error = true;
             } else {

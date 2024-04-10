@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Expense;
 import commons.Tag;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -23,12 +24,13 @@ public class ManageTagsCtrl implements Initializable {
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
     private int eventId;
+    private boolean addExpense;
+    private Expense expense;
+    public List<Tag> tagList = new ArrayList<>();
     @FXML
     public Label titleLabel;
     @FXML
     public ListView<Tag> tagListView;
-
-    public List<Tag> tagList = new ArrayList<>();
 
     @FXML
     public Button editButton;
@@ -76,7 +78,9 @@ public class ManageTagsCtrl implements Initializable {
         });
     }
 
-    public void refreshList(int eventId) {
+    public void refreshList(int eventId, boolean addExpense, Expense expense) {
+        this.expense = expense;
+        this.addExpense = addExpense;
         this.eventId = eventId;
         titleLabel.setText(serverUtils.getEventById(eventId).getName());
         tagListView.getItems().clear();
@@ -96,11 +100,11 @@ public class ManageTagsCtrl implements Initializable {
             setPauseTransition(noTagSelectedError);
             return;
         }
-        mainCtrl.showAddTag(selected, eventId);
+        mainCtrl.showAddTag(selected, eventId, addExpense, expense);
     }
     @FXML
     public void addTag() {
-        mainCtrl.showAddTag(eventId);
+        mainCtrl.showAddTag(eventId, addExpense, expense);
     }
     @FXML
     public void removeTag() {
@@ -141,7 +145,11 @@ public class ManageTagsCtrl implements Initializable {
         }
     }
     public void back() {
-        mainCtrl.showAddExpense(eventId);
+        if (addExpense) {
+            mainCtrl.showAddExpense(eventId);
+        } else {
+            mainCtrl.showEditExpense(expense);
+        }
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
