@@ -1,11 +1,5 @@
 package commons.dto;
 
-import commons.Event;
-import commons.Tag;
-import commons.TagId;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Objects;
 
 public class TagDTO {

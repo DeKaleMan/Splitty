@@ -109,12 +109,12 @@ class ExpenseControllerTest {
 
     @Test
     void testUpdate() {
-        Expense updated = new Expense(event1, "d2", Type.Food, new Date(1, 1, 1), 2.0,
+        Expense updated = new Expense(event1, "d2", t1, new Date(1, 1, 1), 2.0,
                 p2, false);
         updated.expenseId = 4;
         when(service.updateExpense(anyInt(), anyInt(), any(ExpenseDTO.class))).thenReturn(updated);
         ResponseEntity<Expense> response = sut.updateExpense(1, 4, new ExpenseDTO(1, "d2",
-                Type.Food, new Date(1, 1, 1), 2.0, "uuid2", false));
+                t1.getName(), t1.getColour(), new Date(1, 1, 1), 2.0, "uuid2", false));
         assertEquals(updated, response.getBody());
         assertEquals(OK, response.getStatusCode());
     }

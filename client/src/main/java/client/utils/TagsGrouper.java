@@ -8,6 +8,7 @@ import javafx.util.Pair;
 public record TagsGrouper(
     Pair<AddTagCtrl, Parent> addTag,
     Pair<ManageTagsCtrl, Parent> manageTag
-    ) {
+)
+{
 
 }

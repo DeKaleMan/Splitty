@@ -107,7 +107,10 @@ public class ExpenseDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ExpenseDTO that)) return false;
-        return eventId == that.eventId && Double.compare(totalExpense, that.totalExpense) == 0 && sharedExpense == that.sharedExpense && Objects.equals(description, that.description) && Objects.equals(tagName, that.tagName) && Objects.equals(tagColour, that.tagColour) && Objects.equals(date, that.date) && Objects.equals(payerUuid, that.payerUuid);
+        return eventId == that.eventId && Double.compare(totalExpense, that.totalExpense) == 0
+                && sharedExpense == that.sharedExpense && Objects.equals(description, that.description)
+                && Objects.equals(tagName, that.tagName) && Objects.equals(tagColour, that.tagColour)
+                && Objects.equals(date, that.date) && Objects.equals(payerUuid, that.payerUuid);
     }
 
     @Override
@@ -122,7 +125,6 @@ public class ExpenseDTO {
             + totalExpense + "."
             + "\nThe person who paid was: " + payerUuid + ", on " + date
             + ".";
-
     }
 
 }

@@ -109,22 +109,19 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         new Thread(() -> {
             Date date = getDate();
             boolean error = false;
-            if(date == null) {
+            if (date == null) {
                 error = true;
             }
             Tag tag = getTag();
-
             Participant payer = personComboBox.getValue();
             if (payer == null) {
                 payerError.setVisible(true);
                 error = true;
             }
-
             Double amountDouble = getAmountDouble(date);
             if (amountDouble == null) {
                 error = true;
             }
-            
             Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
             if(!isSharedExpense && receiver == null) {
                 //TODO handle invalid receiver

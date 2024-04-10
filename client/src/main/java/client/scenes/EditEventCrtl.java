@@ -7,11 +7,6 @@ import commons.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-
-
-//import java.awt.*;
-import java.util.NoSuchElementException;
-
 public class EditEventCrtl {
     int eventId;
 
