@@ -57,6 +57,10 @@ public class AddTagCtrl {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
     }
+    // for test only!
+    public AddTagCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
 
     public void cancel() {
         mainCtrl.showManageTags(eventId, addExpense, expense);
@@ -140,23 +144,14 @@ public class AddTagCtrl {
 
     public TagDTO getTagDTO() {
         boolean error = false;
-        List<String> names = getTagNames();
         String name = nameField.getText();
         String colour = colourField.getText();
         if (name == null || name.isEmpty()) {
             error = true;
             setPauseTransition(invalidName);
         }
-        if (names.contains(name)) {
-            if (addTag) {
-                setPauseTransition(duplicateName);
-                error = true;
-            } else {
-                if (!oldName.equals(name)) {
-                    error = true;
-                    setPauseTransition(duplicateName);
-                }
-            }
+        if (checkDuplicate(name)) {
+            error = true;
         }
         if (!checkColour(colour)) {
             setPauseTransition(invalidColour);
@@ -166,6 +161,21 @@ public class AddTagCtrl {
             return null;
         }
         return new TagDTO(eventId, name, colour);
+    }
+    public boolean checkDuplicate(String name) {
+        List<String> names = getTagNames();
+        if (names.contains(name)) {
+            if (addTag) {
+                setPauseTransition(duplicateName);
+                return true;
+            } else {
+                if (!oldName.equals(name)) {
+                    setPauseTransition(duplicateName);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

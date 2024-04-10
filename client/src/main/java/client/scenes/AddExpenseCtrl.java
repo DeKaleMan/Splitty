@@ -102,44 +102,46 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         super(serverUtils, mainCtrl, config);
     }
 
+    public Expense getExpense() {
+        Date date = getDate();
+        boolean error;
+        error = date == null;
+        Tag tag = getTag();
+        Participant payer = personComboBox.getValue();
+        if (payer == null) {
+            payerError.setVisible(true);
+            error = true;
+        }
+        Double amountDouble = getAmountDouble(date);
+        if (amountDouble == null) {
+            expenseLoading.setVisible(false);
+            error = true;
+        }
+        Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
+        if(!isSharedExpense && receiver == null) {
+            //TODO handle invalid receiver
+            expenseLoading.setVisible(false);
+            error = true;
+        }
+        String description = whatFor.getText();
+        if (error) {
+            expenseLoading.setVisible(false);
+            return null;
+        }
+        List<Participant> participants = new ArrayList<>();
+        if(isSharedExpense) participants.addAll(owing);
+        else participants.add(receiver);
+        return mainCtrl.addExpense(description, tag, date, amountDouble, payer,
+                eventId, isSharedExpense, participants);
+    }
 
     @FXML
     public void addExpense() {
         expenseLoading.setVisible(true);
         new Thread(() -> {
-            Date date = getDate();
-            boolean error = false;
-            if (date == null) {
-                error = true;
-            }
-            Tag tag = getTag();
-            Participant payer = personComboBox.getValue();
-            if (payer == null) {
-                payerError.setVisible(true);
-                error = true;
-            }
-            Double amountDouble = getAmountDouble(date);
-            if (amountDouble == null) {
-                error = true;
-            }
-            Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
-            if(!isSharedExpense && receiver == null) {
-                //TODO handle invalid receiver
-                expenseLoading.setVisible(false);
-                error = true;
-            }
-            String description = whatFor.getText();
-            if (error) {
-                expenseLoading.setVisible(false);
-                return;
-            }
             try {
                 //add to database
-                List<Participant> participants = new ArrayList<>();
-                if(isSharedExpense) participants.addAll(owing);
-                else participants.add(receiver);
-                Expense e = mainCtrl.addExpense(description, tag, date, amountDouble, payer,
-                    eventId, isSharedExpense, participants);
+                Expense e = getExpense();
                 serverUtils.generatePaymentsForEvent(eventId);
                 mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
                 mainCtrl.showUndoInOverview();

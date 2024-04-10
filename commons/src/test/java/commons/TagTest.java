@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class TagTest {
     Event e1 = new Event("test1",new Date(10, 10, 2005),"owner","desc");
     Event e2 = new Event("test2",new Date(15, 15, 2015),"owner","desc");
-    Tag t1 = new Tag(e1, "Food", "2a8000");
-    Tag t2 = new Tag(e1, "Travel", "3700ff");
-    Tag t3 = new Tag(e2, "Entrance Fees", "c50000");
+    Tag t1 = new Tag(e1, "Food", "#2a8000");
+    Tag t2 = new Tag(e1, "Travel", "#3700ff");
+    Tag t3 = new Tag(e2, "Entrance Fees", "#c50000");
     @Test
     public void equalsTestTrue() {
         assertEquals(t1, new Tag(e1, "Food", "c50000"));

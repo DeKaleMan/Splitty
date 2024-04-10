@@ -3,7 +3,6 @@ package service;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Type;
 import commons.dto.ExpenseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -22,7 +22,8 @@ public class TagService {
     private final ExpenseRepository expenseRepository;
 
     @Autowired
-    public TagService(TagRepository tagRepository, EventRepository eventRepository, ExpenseRepository expenseRepository) {
+    public TagService(TagRepository tagRepository, EventRepository eventRepository,
+                      ExpenseRepository expenseRepository) {
         this.tagRepository = tagRepository;
         this.eventRepository = eventRepository;
         this.expenseRepository = expenseRepository;

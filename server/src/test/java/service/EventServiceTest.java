@@ -1,7 +1,7 @@
 package service;
 
 import commons.Event;
-import commons.EventDTO;
+import commons.dto.EventDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.api.TestEventRepository;
@@ -10,7 +10,8 @@ import server.service.EventService;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class EventServiceTest {
 

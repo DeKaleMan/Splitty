@@ -107,25 +107,28 @@ public class EditExpenseCtrl extends ExpenseCtrl {
     @FXML
     @Transactional
     public void editExpense() {
+        boolean error;
         Date date = getDate();
-        if(date == null) return;
-
+        error = date == null;
         Tag tag = getTag();
         Participant oldPayer = personComboBox.getValue();
         if (oldPayer == null) {
             payerError.setVisible(true);
-            return;
+            error = true;
         }
 
         Double amountDouble = getAmountDouble(date);
-        if (amountDouble == null) return;
+        if (amountDouble == null) {
+            error = true;
+        }
 
         Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
         if(!isSharedExpense && receiver == null) {
+            error = true;
+        }
+        if (error) {
             return;
         }
-
-
         String description = whatFor.getText();
 
         try {

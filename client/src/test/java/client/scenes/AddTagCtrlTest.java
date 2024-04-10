@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ public class AddTagCtrlTest {
 
     @BeforeEach
     public void setup() {
-        sut = new AddTagCtrl(new ServerUtils(), new MainCtrl());
+        sut = new AddTagCtrl(new MainCtrl());
     }
 
     @Test

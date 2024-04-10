@@ -3,7 +3,7 @@ package service;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Type;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.api.TestEventRepository;
@@ -27,10 +27,16 @@ class StatisticsServiceTest {
 
     Participant p3 = new Participant("test", 10.0, "IBAN", "BIC", "email3", "", "uuid3", event2);
 
-    Expense expense1 = new Expense(event1, "description", Type.Other, new Date(), 15.69, p1, true);
-    Expense expense2 = new Expense(event1, "description", Type.Drinks, new Date(), 69.69, p2, true);
-    Expense expense3 = new Expense(event2, "description", Type.Food, new Date(), 25.0, p3, true);
-    Expense expense4 = new Expense(event2, "description", Type.Travel, new Date(), 50.0, p3, true);
+    Tag t1 = new Tag(event1, "Food", "#2a8000");
+    Tag t2 = new Tag(event1, "Entrance Fees", "#c50000");
+    Tag t3 = new Tag(event2, "Travel", "#3700ff");
+    Tag t4 = new Tag(event2, "Other", "#000000");
+
+
+    Expense expense1 = new Expense(event1, "description", t1, new Date(), 15.69, p1, true);
+    Expense expense2 = new Expense(event1, "description", t2, new Date(), 69.69, p2, true);
+    Expense expense3 = new Expense(event2, "description", t3, new Date(), 25.0, p3, true);
+    Expense expense4 = new Expense(event2, "description", t4, new Date(), 50.0, p3, true);
 
     @BeforeEach
     void setup() {
