@@ -34,6 +34,8 @@ public class SettingsCtrl {
     @FXML
     public TextField currencyField;
     @FXML
+    public Button uploadFlag;
+    @FXML
     private TextField langTextfield;
     @FXML
     private Button changServerButton;
@@ -256,7 +258,7 @@ public class SettingsCtrl {
 //        mainCtrl.addFlag(flag);
         mainCtrl.changeLanguage(newLang);
         this.progressBar.setVisible(false);
-
+        this.uploadFlag.setStyle("-fx-background-color: #91a691;");
     }
 
     @FXML
@@ -268,6 +270,8 @@ public class SettingsCtrl {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
         flag = fileChooser.showOpenDialog(null);
+
+        this.uploadFlag.setStyle("-fx-background-color: #2a8dff;");
     }
 
     public String getLanguage() {
@@ -356,6 +360,11 @@ public class SettingsCtrl {
         Platform.runLater(() -> {
 
             this.changServerButton.setText(txt);
+        });
+    }
+    public void setUploadFlag(String txt) {
+        Platform.runLater(() -> {
+            this.uploadFlag.setText(txt);
         });
     }
 }
