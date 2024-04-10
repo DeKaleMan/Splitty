@@ -220,7 +220,8 @@ public class SetLanguage {
         settingsCtrl.setLanguage(translate("Language", "en", lang));
         settingsCtrl.setSaveButton(translate("Save", "en", lang));
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
-        settingsCtrl.setLangInstructions(translate("Enter the languagecode " +
+        settingsCtrl.setLangInstructions(translate("Enter the languagecode or " +
+                "the name of your imaginary language" +
                 "and an image for the flag of the language you want to add", "en", lang));
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
