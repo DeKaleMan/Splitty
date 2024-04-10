@@ -189,6 +189,7 @@ public class DebtCtrl implements Initializable {
         undo.setVisible(false);
         persistPayments(changed);
         mainCtrl.showSplittyOverview(eventCode);
+        labelWrong.setVisible(false);
     }
 
     public void markReceived(Button button)
@@ -263,7 +264,7 @@ public class DebtCtrl implements Initializable {
 
             if (!performAuthenticationCheck(fromEmail, passwordToken)) {
                 System.out.println("Error: Authentication failed. Please check your email and password token.");
-                labelWrong.setText("Authentication failed. Please check your email and password token.");
+//                labelWrong.setText("Authentication failed. Please check your email and password token.");
                 labelWrong.setVisible(true);
                 return;
             }
@@ -284,12 +285,14 @@ public class DebtCtrl implements Initializable {
         String format = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         if (!fromEmail.matches(format)) {
             System.out.println("Error: Invalid email format.");
+            labelWrong.setText("Error: Invalid email format. change it in settings");
             return false;
         }
 
         // Validate password length and format
         if (!passwordToken.matches("[a-z]+") || passwordToken.length() < 16) {
             System.out.println("Error: Password should be a 12-letter lowercase password.");
+            labelWrong.setText("Password should be a 16-letter lowercase password. go to settings");
             return false;
         }
 
