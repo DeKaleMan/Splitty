@@ -25,10 +25,7 @@ import java.util.List;
 public class StatisticsCtrl {
     @FXML
     private PieChart pieChart;
-    private double food = 0;
-    private double drinks = 0;
-    private double transport = 0;
-    private double other = 0;
+
     private List<Tag> tagList;
     private double total;
     ObservableList<Participant> listViewData;
@@ -55,7 +52,7 @@ public class StatisticsCtrl {
     @FXML
     private Label shareOfExpensesLabel;
     @FXML
-    Label hoverLabel;
+    private Label hoverLabel;
 
     @Inject
     public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
@@ -125,7 +122,6 @@ public class StatisticsCtrl {
                 )
             )
         );
-
         pieChart.setData(data);
         pieChart.getData().forEach(d -> {
             Tooltip.install(d.getNode(), new Tooltip(
@@ -212,7 +208,7 @@ public class StatisticsCtrl {
 
     public void showHoverLabel(){
         hoverLabel.setVisible(true);
-        PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(8));
         visiblePause.setOnFinished(
             event1 -> hoverLabel.setVisible(false)
         );

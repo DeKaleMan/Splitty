@@ -46,7 +46,7 @@
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="34.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
       <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#applyChanges" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
       <Label fx:id="colourInfoLabel" layoutX="236.0" layoutY="253.0" opacity="0.58" prefHeight="57.0" prefWidth="175.0" text="Colour is in hexadecimal with 6 or 3 digits, e.g. #aBC103  or #ab0. Colours can be duplicated" wrapText="true">
          <font>
