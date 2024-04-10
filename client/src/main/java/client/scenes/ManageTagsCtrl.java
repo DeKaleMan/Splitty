@@ -29,7 +29,7 @@ public class ManageTagsCtrl implements Initializable {
     @FXML
     public ListView<Tag> tagListView;
 
-    public List<Tag> tagList;
+    public List<Tag> tagList = new ArrayList<>();
 
     @FXML
     public Button editButton;
@@ -57,7 +57,22 @@ public class ManageTagsCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.setButtonRedProperty(removeButton);
+        setTagListUp();
+    }
 
+    private void setTagListUp() {
+        tagListView.setCellFactory(param -> new ListCell<Tag>() {
+            @Override
+            protected void updateItem(Tag tag, boolean empty) {
+                super.updateItem(tag, empty);
+                if (empty || tag == null) {
+                    setText(null);
+                } else {
+                    setText(tag.getName());
+                }
+            }
+        });
     }
 
     public void refreshList(int eventId) {
@@ -70,14 +85,24 @@ public class ManageTagsCtrl implements Initializable {
             tagList = new ArrayList<>();
             System.out.println(e);
         }
+        String other = "Other";
+        Tag tag = tagList.stream().filter(t -> other.equals(t.getName())).toList().getFirst();
+        tagList.remove(tag);
         tagListView.getItems().addAll(tagList);
     }
 
     @FXML
     private void editTag() {
+        Tag selected = tagListView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            setPauseTransition(noTagSelectedError);
+            return;
+        }
+        mainCtrl.showAddTag(selected, eventId);
     }
     @FXML
     public void addTag() {
+        mainCtrl.showAddTag(eventId);
     }
     @FXML
     public void removeTag() {
@@ -133,5 +158,13 @@ public class ManageTagsCtrl implements Initializable {
         PauseTransition pause = new PauseTransition(Duration.seconds(3));
         pause.setOnFinished(event1 -> l.setVisible(false));
         pause.play();
+    }
+
+    public void setAddedTagConfirmation() {
+        setPauseTransition(tagAddedConfirmation);
+    }
+
+    public void setEditedTagConfirmation() {
+        setPauseTransition(tagEditedConfirmation);
     }
 }

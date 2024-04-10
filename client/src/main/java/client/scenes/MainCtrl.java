@@ -587,7 +587,7 @@ public class MainCtrl {
             return;
         }
         addTagCtrl.setFields(eventId);
-        primaryStage.setScene(addExpense);
+        primaryStage.setScene(addTag);
         primaryStage.setTitle("Add Tag");
 
     }
@@ -597,7 +597,7 @@ public class MainCtrl {
             return;
         }
         addTagCtrl.setFields(tag, eventId);
-        primaryStage.setScene(addExpense);
+        primaryStage.setScene(addTag);
         primaryStage.setTitle("Edit Tag");
     }
 
@@ -727,6 +727,12 @@ public class MainCtrl {
     public void setConfirmationAddParticipant() {
         manageParticipantsCtrl.setParticipantAddedConfirmation();
     }
+    public void setConfirmationAddedTag() {
+        manageTagsCtrl.setAddedTagConfirmation();
+    }
+    public void setConfirmationEditedTag() {
+        manageTagsCtrl.setEditedTagConfirmation();
+    }
 
     public void stopLongPolling() {
         if (splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
@@ -739,5 +745,7 @@ public class MainCtrl {
     public void showUndoInOverview(){
         splittyOverviewCtrl.showUndo();
     }
+
+
 }
 

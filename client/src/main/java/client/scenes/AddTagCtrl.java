@@ -2,24 +2,54 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Tag;
-import javafx.event.ActionEvent;
+import commons.dto.TagDTO;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddTagCtrl {
+
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
     private int eventId;
+    private boolean add;
+    private List<Tag> tags = new ArrayList<>();
+    String oldName;
 
+    @FXML
+    public Label title;
+    @FXML
+    public Label unknownError;
+    @FXML
+    public Label duplicateName;
+    @FXML
+    public Label invalidName;
+    @FXML
+    public Label invalidColour;
+    @FXML
+    public TextField nameField;
+    @FXML
+    public TextField colourField;
+    @FXML
+    public Button applyChangesButton;
+    @FXML
+    public Button cancelButton;
     @Inject
     public AddTagCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
     }
-
 
     public void cancel() {
         mainCtrl.showManageTags(eventId);
@@ -32,10 +62,107 @@ public class AddTagCtrl {
     }
 
     public void setFields(int eventId) {
+        add = true;
+        nameField.setText("");
+        colourField.setText("");
+        this.eventId = eventId;
+        setTitleText(mainCtrl.translate("Add Tag"));
     }
     public void setFields(Tag tag, int eventId) {
+        add = false;
+        this.eventId = eventId;
+        setTitleText(mainCtrl.translate("Edit Tag"));
+        this.oldName = tag.getName();
+        nameField.setText(tag.getName());
+        colourField.setText(tag.getColour());
     }
 
-    public void addTag(ActionEvent actionEvent) {
+    @FXML
+    public void applyChanges() {
+        if (add) {
+            addTag();
+        } else {
+            editTag();
+        }
+    }
+
+    public List<String> getTagNames() {
+        tags = serverUtils.getTagsByEvent(eventId);
+        return tags.stream().map(Tag::getName).toList();
+    }
+
+    private void editTag() {
+        try {
+            TagDTO t = getTagDTO();
+            if (t == null) {
+                return;
+            }
+            serverUtils.updateTag(t, oldName, eventId);
+            mainCtrl.setConfirmationAddedTag();
+            mainCtrl.showManageTags(eventId);
+        } catch (RuntimeException e) {
+            setPauseTransition(unknownError);
+        }
+    }
+    private void addTag() {
+        try {
+            TagDTO t = getTagDTO();
+            if (t == null) {
+                return;
+            }
+            serverUtils.addTag(t);
+            mainCtrl.setConfirmationAddedTag();
+            mainCtrl.showManageTags(eventId);
+        } catch (RuntimeException e) {
+            setPauseTransition(unknownError);
+        }
+    }
+
+    public TagDTO getTagDTO() {
+        boolean error = false;
+        List<String> names = getTagNames();
+        String name = nameField.getText();
+        String colour = colourField.getText();
+        if (name == null || name.isEmpty()) {
+            error = true;
+            setPauseTransition(invalidName);
+        }
+        if (names.contains(name)) {
+            setPauseTransition(duplicateName);
+            error = true;
+        }
+        if (!checkColour(colour)) {
+            setPauseTransition(invalidColour);
+            error = true;
+        }
+        if (error) {
+            return null;
+        }
+        return new TagDTO(eventId, name, colour);
+    }
+
+
+    public boolean checkColour(String colour) {
+        if (colour == null || colour.isEmpty()) {
+            return false;
+        }
+        if (colour.length() != 4 && colour.length() != 7) {
+            return false;
+        }
+        Pattern hexaPattern = Pattern.compile("^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
+        Matcher matcher = hexaPattern.matcher(colour);
+        return matcher.matches();
+    }
+
+    public void setPauseTransition(Label l) {
+        if (l == null) return;
+        l.setVisible(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event1 -> l.setVisible(false));
+        pause.play();
+    }
+
+    public void setTitleText(String text) {
+        title.setText(text);
     }
 }

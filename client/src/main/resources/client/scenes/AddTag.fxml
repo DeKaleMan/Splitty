@@ -6,53 +6,35 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
    <children>
-      <Label fx:id="title" layoutX="228.0" layoutY="14.0" text="Add Participant">
+      <Label fx:id="title" layoutX="272.0" layoutY="66.0" prefWidth="94.0" text="Edit Tag">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Text fx:id="name" layoutX="185.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="59.85107421875">
+      <Text fx:id="name" layoutX="184.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="60.0">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="190.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" wrappingWidth="50.13677978515625">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-
-      <TextField fx:id="nameField" layoutX="249.0" layoutY="101.0" />
-      <TextField fx:id="emailField" layoutX="249.0" layoutY="148.0" />
-      <TextField fx:id="ibanField" layoutX="249.0" layoutY="192.0" />
-      <TextField fx:id="bicField" layoutX="249.0" layoutY="234.0" />
-      <TextField fx:id="accountHolderField" layoutX="249.0" layoutY="274.0" />
-
-      <Text layoutX="189.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN" wrappingWidth="50.13677978515625">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Text layoutX="198.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIC" wrappingWidth="32.4224853515625">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Text fx:id="accountHolder" layoutX="96.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" wrappingWidth="148.57142857142856">
+      <Text layoutX="184.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Colour" wrappingWidth="60.0">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
 
-      <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+      <TextField fx:id="nameField" layoutX="249.0" layoutY="148.0" promptText="Tag Name" />
+      <TextField fx:id="colourField" layoutX="249.0" layoutY="219.0" promptText="Tag Colour" />
+
+
+      <Label fx:id="duplicateName" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="A tag with this name already exists*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="invalidName" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Name is invalid*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="invalidColour" layoutX="401.0" layoutY="223.0" prefHeight="17.0" prefWidth="185.0" text="Colour is invalid*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
@@ -61,6 +43,10 @@
             <Font name="System Italic" size="11.0" />
          </font></Label>
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-      <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#addTag" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
+      <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#applyChanges" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
+      <Label layoutX="236.0" layoutY="253.0" opacity="0.58" prefHeight="57.0" prefWidth="175.0" text="Colour is in hexadecimal with 6 or 3 digits, e.g. #aBC103  or #ab0. Colours can be duplicated" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
    </children>
 </AnchorPane>

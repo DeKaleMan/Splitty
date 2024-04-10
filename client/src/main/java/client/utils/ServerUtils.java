@@ -444,7 +444,7 @@ public class ServerUtils {
         }
     }
 
-    public Tag saveTag(TagDTO tagDTO) {
+    public Tag addTag(TagDTO tagDTO) {
         Response response = client.target(server).path("api/tag/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
