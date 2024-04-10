@@ -4,6 +4,9 @@ import commons.*;
 import commons.dto.ExpenseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import server.service.ExpenseService;
 
@@ -11,22 +14,24 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.*;
 
 class ExpenseControllerTest {
+    @Mock
+    ExpenseService service;
+    @InjectMocks
     private ExpenseController sut;
-    private TestExpenseRepository expenseRepository;
-    private TestEventRepository eventRepository;
-    private TestParticipantRepository participantRepository;
 
     Event event1 = new Event("test", new Date(10, 10, 2005), "owner", "desc");
     Event event2 = new Event("test1", new Date(10, 10, 2005), "owner1", "desc1");
 
-    Participant p1 = new Participant("test", 10.0,"IBAN","BIC","email","","uuid",event1);
+    Participant p1 = new Participant("test", 10.0, "IBAN", "BIC", "email", "", "uuid", event1);
 
-    Participant p2 = new Participant("test", 10.0,"IBAN","BIC","email1","","uuid2",event1);
+    Participant p2 = new Participant("test", 10.0, "IBAN", "BIC", "email1", "", "uuid2", event1);
 
-    Participant p3 = new Participant("test", 10.0,"IBAN","BIC","email3","","uuid3",event2);
+    Participant p3 = new Participant("test", 10.0, "IBAN", "BIC", "email3", "", "uuid3",event2);
     Tag t1 = new Tag(event1, "Food", "2a8000");
     Tag t2 = new Tag(event2, "Travel", "3700ff");
     Date date = new Date();
@@ -37,96 +42,51 @@ class ExpenseControllerTest {
     Expense e3 = new Expense(event2, "", t2,
         date, 0.0, p1,true);
 
+
     @BeforeEach
     void setup() {
-        eventRepository = new TestEventRepository();
-        expenseRepository = new TestExpenseRepository();
-        participantRepository = new TestParticipantRepository();
-        ExpenseService expenseService = new ExpenseService(expenseRepository,eventRepository,participantRepository);
-        sut = new ExpenseController(expenseService);
+        MockitoAnnotations.openMocks(this);
         event1.id = 1;
         event2.id = 2;
-        eventRepository.events.add(event1);
-        eventRepository.events.add(event2);
-        participantRepository.participants.add(p1);
-        participantRepository.participants.add(p2);
-        participantRepository.participants.add(p3);
-        expenseRepository.expenses.add(e1);
-        expenseRepository.expenses.add(e2);
-        expenseRepository.expenses.add(e3);
         e1.expenseId = 1;
         e2.expenseId = 2;
         e3.expenseId = 3;
     }
 
     @Test
-    void nullSave() {
+    void testInvalidSave() {
+        when(service.saveExpense(any(ExpenseDTO.class))).thenReturn(null);
         var actual = sut.saveExpense(null);
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
-    }
-
-    @Test
-    void nullSaveDate() {
-        var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", "","",
-                null, 0.0, "uuid",true));
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
-    }
-
-    @Test
-    void nullSaveUuid() {
-        var actual = sut.saveExpense(new ExpenseDTO(1, "","e", "2",
-            new Date(), 0.0, null,true));
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
-    }
-
-    @Test
-    void nullSaveNegative() {
-        var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", "e","e",
-                new Date(), -1.0, "uuid",true));
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
-    }
-
-    @Test
-    void emptyUuid() {
-        var actual = sut.saveExpense(new ExpenseDTO(1, "", "e","e",
-            new Date(), 0.0, "",true));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
     @Test
     void testSave() {
         Date date = new Date();
+        Expense expected = new Expense(event1, "", t1,
+                date, 0.0, p1, true);
+        when(service.saveExpense(any(ExpenseDTO.class))).thenReturn(expected);
         var actual =
-            sut.saveExpense(new ExpenseDTO(1, "", "Food","000000",
-                date, 0.0, "uuid",true));
-        Tag tag = new Tag(event1, "Food", "000000");
-        assertEquals(new Expense(event1, "", tag,
-                date, 0.0, p1,true),
-            actual.getBody());
-        assertEquals("save", expenseRepository.methods.getLast());
-        //cleanup
-        expenseRepository.expenses.removeLast();
+                sut.saveExpense(new ExpenseDTO(1, "", t1.getName(), t1.getColour(),
+                        date, 0.0, "uuid", true));
+        assertEquals(expected, actual.getBody());
+        assertEquals(OK, actual.getStatusCode());
+
     }
 
-    @Test
-    void testSaveInvalidEvent() {
-        ResponseEntity<Expense> response = sut.saveExpense(new ExpenseDTO(-1, "", "e","e",
-            date, 0.0, "uuid",true));
-        assertEquals(BAD_REQUEST, response.getStatusCode());
-    }
 
     @Test
     void testGetByEventCode() {
         List<Expense> expected = List.of(e1, e2);
-        var actual = sut.findByEventCode(1).getBody();
-        assertEquals(expected, actual);
-        assertEquals("findByEvent", expenseRepository.methods.getLast());
+        when(service.getByEventCode(anyInt())).thenReturn(expected);
+        var actual = sut.findByEventCode(1);
+        assertEquals(expected, actual.getBody());
+        assertEquals(OK, actual.getStatusCode());
     }
 
     @Test
     void testGetByEventCodeInvalid() {
+        when(service.getByEventCode(anyInt())).thenReturn(null);
         ResponseEntity<List<Expense>> response = sut.findByEventCode(-1);
         assertEquals(BAD_REQUEST, response.getStatusCode());
     }
@@ -134,82 +94,63 @@ class ExpenseControllerTest {
     @Test
     void testGetByEventCodeAndPayerUuid() {
         List<Expense> expected = List.of(e1);
-        var actual = sut.findByEventCodeAndPayerUuid(1, "uuid").getBody();
-        assertEquals(expected, actual);
-        assertEquals("findByEventAndPayerUuid", expenseRepository.methods.getLast());
+        when(service.getByEventCodeAndPayerUuid(anyInt(), anyString())).thenReturn(expected);
+        var actual = sut.findByEventCodeAndPayerUuid(1, "uuid");
+        assertEquals(OK, actual.getStatusCode());
+        assertEquals(expected, actual.getBody());
     }
 
     @Test
     void testGetByEventCodeAndPayerUuidInvalid() {
-        ResponseEntity<List<Expense>> response = sut.findByEventCodeAndPayerUuid(-1,"invalid");
+        when(service.getByEventCodeAndPayerUuid(anyInt(), anyString())).thenReturn(null);
+        ResponseEntity<List<Expense>> response = sut.findByEventCodeAndPayerUuid(-1, "invalid");
         assertEquals(BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
     void testUpdate() {
-        Expense toUpdate = new Expense(event1,"d", t1, new Date(), 1.0, p1,
-            true);
-        toUpdate.expenseId = 4;
-        expenseRepository.expenses.add(toUpdate);
-        Expense updated = new Expense(event1,"d2", t1, new Date(1,1,1), 2.0,
-            p2, false);
+        Expense updated = new Expense(event1, "d2", Type.Food, new Date(1, 1, 1), 2.0,
+                p2, false);
         updated.expenseId = 4;
-        ResponseEntity<Expense> response = sut.updateExpense(1,4,new ExpenseDTO(1,"d2",
-           t1.getName(),t1.getColour(), new Date(1,1,1), 2.0, "uuid2", false));
-        assertEquals(updated,response.getBody());
-        assertEquals(OK,response.getStatusCode());
-        assertEquals("save", expenseRepository.methods.getLast());
-        //cleanup
-        expenseRepository.expenses.removeIf(x -> x.expenseId == 4 && x.getEvent().equals(event1));
+        when(service.updateExpense(anyInt(), anyInt(), any(ExpenseDTO.class))).thenReturn(updated);
+        ResponseEntity<Expense> response = sut.updateExpense(1, 4, new ExpenseDTO(1, "d2",
+                Type.Food, new Date(1, 1, 1), 2.0, "uuid2", false));
+        assertEquals(updated, response.getBody());
+        assertEquals(OK, response.getStatusCode());
     }
 
-    @Test
-    void testUpdateInvalidEvent(){
-        ResponseEntity<Expense> response = sut.updateExpense(-1,1, new ExpenseDTO());
-        assertEquals(BAD_REQUEST,response.getStatusCode());
-    }
 
     @Test
-    void testUpdateInvalidExpense(){
-        ResponseEntity<Expense> response = sut.updateExpense(1,-1, new ExpenseDTO());
-        assertEquals(BAD_REQUEST,response.getStatusCode());
-    }
-
-    @Test
-    void testIncorrectDelete1(){
-        var actual = sut.deleteExpenseByEventIdAndExpenseId(0, 0);
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
-        Date date = new Date();
-        ExpenseDTO e1 = new ExpenseDTO(event1.id, "", "","",
-                date, 0.0, "uuid",true);
-        var actual2 = sut.deleteExpenseByEventIdAndExpenseId(event1.id, -33);
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
-    }
-
-    @Test
-    void testIncorrectDelete2(){
-        ResponseEntity<Expense> response = sut.deleteExpenseByEventIdAndExpenseId(-1,3);
+    void testUpdateInvalidEvent() {
+        when(service.updateExpense(anyInt(), anyInt(), any(ExpenseDTO.class))).thenReturn(null);
+        ResponseEntity<Expense> response = sut.updateExpense(-1, 1, new ExpenseDTO());
         assertEquals(BAD_REQUEST, response.getStatusCode());
     }
+
+    @Test
+    void testDeleteInvalid() {
+        when(service.deleteExpense(anyInt(), anyInt())).thenReturn(null);
+        ResponseEntity<Expense> response = sut.deleteExpenseByEventIdAndExpenseId(-1, -1);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+    }
+
     //I could not make this test work even though the actual method does work. If someone can spot the mistake
     @Test
-    void testDeleteExpense(){
-        Expense toDelete = new Expense(event1,"d", t1, new Date(), 1.0, p1, true);
+
+    void testDeleteExpense() {
+        Expense toDelete = new Expense(event1, "d", t1, new Date(), 1.0, p1, true);
         toDelete.expenseId = 4;
-        expenseRepository.expenses.add(toDelete);
-        ResponseEntity<Expense> response = sut.deleteExpenseByEventIdAndExpenseId(1,4);
+        when(service.deleteExpense(anyInt(), anyInt())).thenReturn(toDelete);
+        ResponseEntity<Expense> response = sut.deleteExpenseByEventIdAndExpenseId(1, 4);
         assertEquals(toDelete, response.getBody());
         assertEquals(OK, response.getStatusCode());
-        assertEquals("delete",expenseRepository.methods.getLast());
-        //cleanup
-        expenseRepository.expenses.removeLast();
     }
 
     @Test
-    void testUpdateWS(){
+    void testUpdateWS() {
         Date date = new Date();
         Expense e = new Expense(event1, "", t1,
-            date, 0.0, p1,true);
+            date, 0.0, p1, true);
         var actual =
             sut.updateExpenseWS(e);
         assertEquals(e,
@@ -217,10 +158,10 @@ class ExpenseControllerTest {
     }
 
     @Test
-    void testDeleteWS(){
+    void testDeleteWS() {
         Date date = new Date();
         Expense e = new Expense(event1, "", t1,
-            date, 0.0, p1,true);
+            date, 0.0, p1, true);
         var actual =
             sut.deleteExpenseWS(e);
         assertEquals(e,

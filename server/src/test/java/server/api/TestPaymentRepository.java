@@ -15,8 +15,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TestPaymentRepository implements PaymentRepository {
-    List<Payment> payments = new ArrayList<>();
-    List<String> methods = new ArrayList<>();
+    public List<Payment> payments = new ArrayList<>();
+    public List<String> methods = new ArrayList<>();
 
     @Override
     public List<Payment> findByPayerId(ParticipantId payerId) {
