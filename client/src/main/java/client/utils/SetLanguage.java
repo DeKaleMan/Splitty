@@ -2,6 +2,7 @@ package client.utils;
 
 import client.scenes.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import javafx.scene.image.Image;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -366,6 +369,30 @@ public class SetLanguage {
         } catch (IOException e) {
             System.err.println("Error adding flag: " + e.getMessage());
             return false; // Flag not added
+        }
+    }
+
+    public List<String> getLanguages(){
+        List<String> list = new ArrayList<>();
+        File langFile = new File(io.getLangFile());
+        try {
+            list = new ObjectMapper().readValue(langFile, List.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    public boolean addLang(String newLang){
+        File langFile = new File(io.getLangFile());
+        try {
+            List<String> oldList = getLanguages();
+            oldList.add(newLang);
+            String newList = new ObjectMapper().writeValueAsString(oldList);
+            io.write(newList, langFile);
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

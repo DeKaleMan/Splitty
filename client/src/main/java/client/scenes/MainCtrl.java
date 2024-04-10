@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.utils.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.Currency;
 import commons.dto.DebtDTO;
@@ -31,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -38,7 +40,7 @@ import java.util.*;
 public class MainCtrl {
 
     public String language = "en";
-    protected List<String> languages;
+    public List<String> languages;
 
 
     private SetLanguage setLanguage;
@@ -186,17 +188,23 @@ public class MainCtrl {
     }
 
     private void setLanguage() {
-        languages = new ArrayList<>();
         //TODO we should add the available languages perhaps to a file
-        languages.addAll(List.of("en", "nl", "is", "zh", "es"));
-        if (!languages.contains(this.language)) this.language = "en";
+        //languages = new ArrayList<>();
+        //languages.addAll(List.of("en", "nl", "is", "zh", "es"));
+
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
                 editParticipantCtrl, addParticipantCtrl, editExpenseCtrl, editEventCrtl);
+        this.languages = setLanguage.getLanguages();
 
+        if (!languages.contains(this.language)) this.language = "en";
         resetLanguage();
 
+    }
+
+    public void addLang(String newLang){
+       setLanguage.addLang(newLang);
     }
 
     public synchronized void resetLanguage() {
