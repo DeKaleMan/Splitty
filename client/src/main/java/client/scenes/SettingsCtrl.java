@@ -240,6 +240,9 @@ public class SettingsCtrl {
     public void getJSONFile() {
         String jsonString = serverUtils.getLanguageJSON(newLang);
         jsonString = jsonString.replace(",", ",\n");
+        jsonString.replace("not a valid language", "failed to retrieve language");
+
+
         addedLang.setText(jsonString);
         progressBar.setVisible(false);
     }

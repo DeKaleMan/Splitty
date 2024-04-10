@@ -40,6 +40,9 @@ public class LanguageResponseActual implements LanguageResponse {
             if(response.getStatus() == HttpStatus.FORBIDDEN.value()){
                 return HttpStatus.FORBIDDEN.toString();
             }
+            if(response.getStatus() == HttpStatus.TOO_MANY_REQUESTS.value()){
+                return "not a valid language";
+            }
 
 
             //Retrieve and print the response body
