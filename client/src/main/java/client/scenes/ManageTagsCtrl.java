@@ -114,6 +114,10 @@ public class ManageTagsCtrl implements Initializable {
                 setPauseTransition(noTagSelectedError);
                 return;
             }
+            String other = "Other";
+            if (other.equals(selected.getName())) {
+                throw new IllegalArgumentException();
+            }
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
             confirmation.setTitle(mainCtrl.translate("Deleting Tag"));
             confirmation.setContentText(mainCtrl.translate("Are you sure you want to delete the tag: ")
@@ -121,27 +125,26 @@ public class ManageTagsCtrl implements Initializable {
             confirmation.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     System.out.println("remove" + selected);
-                    remove(selected);
-                    setPauseTransition(tagDeletedConfirmation);
+                    if (remove(selected)) {
+                        setPauseTransition(tagDeletedConfirmation);
+                    }
                 }
             });
+        } catch (IllegalArgumentException e) {
+            setPauseTransition(otherSelectedError);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
     }
 
-    public void remove(Tag tag) {
+    public boolean remove(Tag tag) {
         try {
-            String other = "Other";
-            if (other.equals(tag.getName())) {
-                throw new IllegalArgumentException();
-            }
             serverUtils.deleteTag(eventId, tag.getName());
             tagListView.getItems().remove(tag);
-        } catch (IllegalArgumentException e) {
-            setPauseTransition(otherSelectedError);
+            return true;
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
+            return false;
         }
     }
     public void back() {

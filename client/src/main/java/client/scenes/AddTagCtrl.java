@@ -20,15 +20,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddTagCtrl {
-
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
     private int eventId;
+    private String oldName;
     private boolean addTag;
     private boolean addExpense;
     private Expense expense;
+
     private List<Tag> tags = new ArrayList<>();
-    String oldName;
+    @FXML
+    public Label otherTagLabel;
+    @FXML
+    public Label colourInfoLabel;
 
     @FXML
     public Label title;
@@ -80,8 +84,10 @@ public class AddTagCtrl {
         String other = "Other";
         if (other.equals((tag.getName()))) {
             nameField.setEditable(false);
+            otherTagLabel.setVisible(true);
         } else {
             nameField.setEditable(true);
+            otherTagLabel.setVisible(false);
         }
         addTag = false;
         this.eventId = eventId;
