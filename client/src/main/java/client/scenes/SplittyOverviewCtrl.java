@@ -555,19 +555,19 @@ public class SplittyOverviewCtrl implements Initializable {
             // label or error?
             return;
         }
-
-        if (me.getBalance() != 0) {
+        // balance margin of error is 0.0001
+        if (Math.abs(me.getBalance()) > 0.0001){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Leaving an event");
-            alert.setHeaderText("You can't leave the event");
-            alert.setContentText("You owe/are owed money.");
+            alert.setTitle(mainCtrl.translate("Leaving an event"));
+            alert.setHeaderText(mainCtrl.translate("You can't leave the event"));
+            alert.setContentText(mainCtrl.translate("You owe/are owed money."));
             alert.showAndWait();
             return;
         }
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirmation");
-        confirmation.setHeaderText("Leaving event");
-        confirmation.setContentText("Are you sure you want to leave the event?");
+        confirmation.setTitle(mainCtrl.translate("Confirmation"));
+        confirmation.setHeaderText(mainCtrl.translate("Leaving event"));
+        confirmation.setContentText(mainCtrl.translate("Are you sure you want to leave the event?"));
         confirmation.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 serverUtils.deleteParticipant(config.getId(), eventId);

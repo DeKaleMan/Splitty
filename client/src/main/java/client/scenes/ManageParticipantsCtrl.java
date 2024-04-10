@@ -99,9 +99,9 @@ public class ManageParticipantsCtrl implements Initializable {
             // only allow to delete if balance is 0
             if(selected.getBalance() != 0){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Deleting Participant");
-                alert.setHeaderText("Cannot delete a participant");
-                alert.setContentText("Participant owes/is owed money.");
+                alert.setTitle(mainCtrl.translate("Deleting Participant"));
+                alert.setHeaderText(mainCtrl.translate("Cannot delete a participant"));
+                alert.setContentText(mainCtrl.translate("Participant owes/is owed money."));
                 alert.showAndWait();
                 return;
             }
