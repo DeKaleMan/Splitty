@@ -223,6 +223,7 @@ public class SetLanguage {
         settingsCtrl.setLangInstructions(translate("Enter the languagecode " +
                 "and an image for the flag of the language you want to add", "en", lang));
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
+        settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
         System.out.println("settings translated");
     }
 
@@ -322,11 +323,12 @@ public class SetLanguage {
                 .get();
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             response.close();
-            throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
+            //throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
+            return "no language found";
         }
         String res = response.readEntity(String.class);
 
-        if (res.length() > 16 && res.substring(0, 17).equals("MYMEMORY WARNING:")){
+        if (Objects.equals(res, "no translation found")){
             mainCtrl.language = "en";
             mainCtrl.resetLanguage();
             //display error
