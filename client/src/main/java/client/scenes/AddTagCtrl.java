@@ -128,8 +128,15 @@ public class AddTagCtrl {
             setPauseTransition(invalidName);
         }
         if (names.contains(name)) {
-            setPauseTransition(duplicateName);
-            error = true;
+            if (add) {
+                setPauseTransition(duplicateName);
+                error = true;
+            } else {
+                if (!oldName.equals(name)) {
+                    error = true;
+                    setPauseTransition(duplicateName);
+                }
+            }
         }
         if (!checkColour(colour)) {
             setPauseTransition(invalidColour);

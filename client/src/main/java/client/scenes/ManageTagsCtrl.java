@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 
@@ -86,8 +87,13 @@ public class ManageTagsCtrl implements Initializable {
             System.out.println(e);
         }
         String other = "Other";
-        Tag tag = tagList.stream().filter(t -> other.equals(t.getName())).toList().getFirst();
-        tagList.remove(tag);
+        try {
+            Tag tag = tagList.stream().filter(t -> other.equals(t.getName())).toList().getFirst();
+            tagList.remove(tag);
+        } catch (NoSuchElementException e) {
+            System.out.println("Other is not a tag");
+            // create other tag again if it somehow was removed
+        }
         tagListView.getItems().addAll(tagList);
     }
 

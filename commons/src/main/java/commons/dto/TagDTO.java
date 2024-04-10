@@ -15,6 +15,9 @@ public class TagDTO {
         this.name = name;
         this.colour = colour;
     }
+    public TagDTO() {
+
+    }
 
     public int getEventId() {
         return eventId;

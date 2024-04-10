@@ -75,9 +75,10 @@ public class TagService {
             return null;
         }
         Tag checkIfExists = tagRepository.findTagByTagId(new TagId(tagDTO.getName(), event));
-        if (checkIfExists != null) {
+        if (checkIfExists != null && checkIfExists.getColour().equals(tagDTO.getColour())) {
             return null;
         }
+        tagRepository.delete(toUpdate);
         toUpdate.setName(tagDTO.getName());
         toUpdate.setColour(tagDTO.getColour());
         return tagRepository.save(toUpdate);

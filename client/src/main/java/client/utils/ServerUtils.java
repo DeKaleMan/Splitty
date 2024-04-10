@@ -445,7 +445,8 @@ public class ServerUtils {
     }
 
     public Tag addTag(TagDTO tagDTO) {
-        Response response = client.target(server).path("api/tag/")
+        Response response = client
+                .target(server).path("api/tag")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tagDTO, APPLICATION_JSON));
