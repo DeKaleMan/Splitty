@@ -366,7 +366,7 @@ public class StartScreenCtrl implements Initializable {
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if (selected.equals(config.getLanguage())) {
+                if (selected.equals(currentLang)) {
                     return;
                 }
                 //Language toLang = Language.valueOf(selected);

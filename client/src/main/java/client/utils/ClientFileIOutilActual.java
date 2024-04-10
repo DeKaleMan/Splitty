@@ -1,9 +1,13 @@
 package client.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ClientFileIOutilActual implements ClientFileIOutil {
@@ -12,6 +16,7 @@ public class ClientFileIOutilActual implements ClientFileIOutil {
             "{\"connection\":\"localhost:8080\",\"language\":\"en\"," +
                     "\"currency\":\"EUR\",\"email\":null,\"id\":\"" +
                     UUID.randomUUID() + "\",\"name\":null,\"iban\":null,\"bic\":null}";
+    private final List<String> languages = List.of("en", "nl", "es", "zh", "is");
 
     @Override
     public boolean createFileStructure() {
@@ -38,6 +43,20 @@ public class ClientFileIOutilActual implements ClientFileIOutil {
                 // Set up basic json structure
                 write(configJson, file);
                 System.out.println("Created config file");
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        folder = getLangFile();
+        file = new File(folder);
+        try {
+            if (file.createNewFile()) {
+                changeStatus = true;
+                // Set up basic json structure
+                ObjectMapper objectMapper = new ObjectMapper();
+                String json = objectMapper.writeValueAsString(languages);
+                write(json, file);
+                System.out.println("Created languages file");
             }
         } catch (IOException e) {
             System.out.println(e);

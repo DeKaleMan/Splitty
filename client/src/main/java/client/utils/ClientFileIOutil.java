@@ -13,6 +13,9 @@ public interface ClientFileIOutil {
     default String getConfigFile(){
         return getDataFolder() + File.separator + "Config.json";
     }
+    default String getLangFile(){
+        return getDataFolder() + File.separator + "langFile.json";
+    }
 
     String read(File file);
 

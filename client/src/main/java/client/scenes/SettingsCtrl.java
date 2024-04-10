@@ -202,6 +202,7 @@ public class SettingsCtrl {
                 config.setLanguage(newLang);
                 config.write();
                 mainCtrl.languages.add(newLang);
+                mainCtrl.addLang(newLang);
                 this.latch = new CountDownLatch(1);
                 mainCtrl.changeLanguage(newLang);
                 langTextfield.setText("");
