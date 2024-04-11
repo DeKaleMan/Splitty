@@ -7,10 +7,12 @@ import commons.dto.TagDTO;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -31,8 +33,6 @@ public class AddTagCtrl {
     private List<Tag> tags = new ArrayList<>();
     @FXML
     public Label otherTagLabel;
-    @FXML
-    public Label colourInfoLabel;
 
     @FXML
     public Label title;
@@ -49,7 +49,7 @@ public class AddTagCtrl {
     @FXML
     public TextField nameField;
     @FXML
-    public TextField colourField;
+    public ColorPicker colorPicker;
     @FXML
     public Button applyChangesButton;
     @FXML
@@ -80,7 +80,6 @@ public class AddTagCtrl {
         nameField.setEditable(true);
         addTag = true;
         nameField.setText("");
-        colourField.setText("");
         this.eventId = eventId;
         setTitleText(mainCtrl.translate("Add Tag"));
     }
@@ -100,7 +99,7 @@ public class AddTagCtrl {
         setTitleText(mainCtrl.translate("Edit Tag"));
         this.oldName = tag.getName();
         nameField.setText(tag.getName());
-        colourField.setText(tag.getColour());
+        colorPicker.setValue(Color.web(tag.getColour()));
     }
 
     @FXML
@@ -155,7 +154,7 @@ public class AddTagCtrl {
     public TagDTO getTagDTO() {
         boolean error = false;
         String name = nameField.getText();
-        String colour = colourField.getText();
+        String colour = colorPicker.getValue().toString().substring(1, 8);
         if (name == null || name.isEmpty()) {
             error = true;
             setPauseTransition(invalidName);
@@ -218,4 +217,5 @@ public class AddTagCtrl {
     public void setTitleText(String text) {
         title.setText(text);
     }
+
 }

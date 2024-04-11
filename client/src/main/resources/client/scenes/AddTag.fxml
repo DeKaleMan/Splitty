@@ -23,7 +23,7 @@
       </Text>
 
       <TextField fx:id="nameField" layoutX="249.0" layoutY="148.0" promptText="Tag Name" />
-      <TextField fx:id="colourField" layoutX="249.0" layoutY="219.0" promptText="Tag Colour" />
+      <ColorPicker fx:id="colorPicker" layoutX="251.0" layoutY="219.0" prefHeight="25.0" prefWidth="155.0" />
 
 
       <Label fx:id="duplicateName" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="A tag with this name already exists*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
@@ -48,14 +48,12 @@
          </font></Label>
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="34.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
       <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#applyChanges" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
-      <Label fx:id="colourInfoLabel" layoutX="236.0" layoutY="253.0" opacity="0.58" prefHeight="57.0" prefWidth="175.0" text="Colour is in hexadecimal with 6 or 3 digits, e.g. #aBC103  or #ab0. Colours can be duplicated" wrapText="true">
-         <font>
-            <Font name="System Italic" size="11.0" />
-         </font></Label>
+
       <Label fx:id="otherTagLabel" layoutX="220.0" layoutY="173.0" opacity="0.59" text="You cannot edit the name of the 'Other' tag" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
+
    </children>
 </AnchorPane>
