@@ -12,10 +12,7 @@ import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Scanner;
-import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
