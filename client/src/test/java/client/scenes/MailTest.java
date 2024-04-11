@@ -31,13 +31,5 @@ public class MailTest {
         assertNotNull(mailer);
     }
 
-    @Test
-    public void testMailSending() {
-        Email email = Mail.makeEmail("stijndelangeman49@gmail.com", "stijndelangeman49@gmail.com", "Test Subject", "Test Body");
-        Mailer mailerInfo = Mail.getSenderInfo("smtp.gmail.com", 587, "stijndelangeman49@gmail.com", "txrobxvossaibwat");
-
-        Mail.mailSending(email, mailerInfo);
-
-    }
 
 }
