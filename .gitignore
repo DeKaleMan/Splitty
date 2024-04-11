@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 
 SplittyClientData/Config.json
+SplittyClientDate/langFile.json
 SplittyServerData/Languages/en.json
 CurrencyCache.json
 

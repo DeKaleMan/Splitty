@@ -1,6 +1,7 @@
 package server.api.depinjectionUtils;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.ws.rs.client.Client;
@@ -49,11 +50,12 @@ public class LanguageResponseActual implements LanguageResponse {
             String responseBody = response.readEntity(String.class);
             // Parse the JSON response
             JSONObject jsonResponse1 = new JSONObject(responseBody);
-            var responseData = jsonResponse1.get("responseData");
-            Scanner scanner = new Scanner(responseData.toString());
-            scanner.useDelimiter(",");
-            String translated = scanner.next().substring("{_translatedText_:".length());
-            translated = translated.substring(1, translated.length() -1);
+            String translated = jsonResponse1.getJSONObject("responseData").get("translatedText").toString();
+            if(translated.contains("INVALID TARGET LANGUAGE")) translated = "null";
+            //            Scanner scanner = new Scanner(responseData.toString());
+//            scanner.useDelimiter(",");
+//            String translated = scanner.next().substring("{_translatedText_:".length());
+//            translated = translated.substring(1, translated.length() -1);
 
             return translated;
         } catch (IOException e) {

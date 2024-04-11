@@ -41,8 +41,6 @@ public class SplittyOverviewCtrl implements Initializable {
     private final Config config;
     private boolean admin;
 
-    private String currentLang = "en";
-
     //these are for the css:
     @FXML
     private AnchorPane background;
@@ -659,8 +657,8 @@ public class SplittyOverviewCtrl implements Initializable {
         if(translating) return;
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
-                String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if(selected.equals(currentLang)){
+                String selected = languageSelect.getSelectionModel().getSelectedItem();
+                if(selected.equals(mainCtrl.language)){
                     return;
                 }
                 //Language toLang = Language.valueOf(selected);
@@ -670,8 +668,6 @@ public class SplittyOverviewCtrl implements Initializable {
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
                 }
-
-                this.currentLang = selected;
             }
         } catch (Exception e) {
             System.out.println(e);

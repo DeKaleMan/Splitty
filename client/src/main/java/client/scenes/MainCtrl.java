@@ -38,6 +38,7 @@ import java.util.List;
 public class MainCtrl {
 
     public String language = "en";
+
     public List<String> languages;
 
 
