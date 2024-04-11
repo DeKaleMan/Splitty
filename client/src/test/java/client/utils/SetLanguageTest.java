@@ -96,7 +96,7 @@ public class SetLanguageTest {
         verify(splittyOverviewCtrl).setmyDetails("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(16)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSetExpenses() {
@@ -159,7 +159,7 @@ public class SetLanguageTest {
         verify(statisticsCtrl).setStatisticsText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(3)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(4)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

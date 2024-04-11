@@ -135,11 +135,6 @@ public class SetLanguage {
         splittyOverviewCtrl.setEditEvent(translate("Edit event", "en", lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en", lang));
         splittyOverviewCtrl.setmyDetails(translate("My details", "en", lang));
-        splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en", lang));
-        splittyOverviewCtrl.setEditExpense(translate("Edit", "en",lang));
-        splittyOverviewCtrl.setEditEvent(translate("Edit event", "en",lang));
-        splittyOverviewCtrl.setLeaveButton(translate("Leave", "en",lang));
-        splittyOverviewCtrl.setmyDetails(translate("My details", "en",lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
         splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
         System.out.println("event overview translated");
@@ -300,7 +295,6 @@ public class SetLanguage {
     }
 
     public void setEditExpense(String lang) {
-        editExpenseCtrl.setSceneTypeText(translate("Add Expense", "en", lang));
         editExpenseCtrl.setSceneTypeText(translate("Edit Expense", "en", lang));
         editExpenseCtrl.setWhoPaid(translate("Who paid?", "en", lang));
         editExpenseCtrl.setHowMuch(translate("How much?", "en", lang));

@@ -357,7 +357,7 @@ public class StartScreenCtrl implements Initializable {
 //        }
         translating = false;
     }
-
+    private boolean starting = true;
     @FXML
     public void changeLanguage() {
         setProgress();
@@ -365,9 +365,10 @@ public class StartScreenCtrl implements Initializable {
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if (selected.equals(mainCtrl.language)) {
+                if (selected.equals(mainCtrl.language) && !starting) {
                     return;
                 }
+                starting = false;
                 //Language toLang = Language.valueOf(selected);
                 if (mainCtrl.languages.contains(selected)) {
                     config.setLanguage(selected);

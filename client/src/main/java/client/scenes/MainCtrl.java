@@ -198,7 +198,9 @@ public class MainCtrl {
         setLanguage.setServerUtilsIO(serverUtils, new ClientFileIOutilActual());
         this.languages = setLanguage.getLanguages();
 
-        if (!languages.contains(this.language)) this.language = "en";
+        if (!languages.contains(this.language)) {
+            this.language = "en";
+        }
         resetLanguage();
 
     }
