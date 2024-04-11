@@ -5,14 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-<<<<<<< HEAD
-
 SplittyServerData
 SplittyClientData
-=======
-SplittyClientData
-SplittyServerData
->>>>>>> cf8a494da76c0b46f34a7d66a5119294485b1b9d
 
 
 **/*.mv.db

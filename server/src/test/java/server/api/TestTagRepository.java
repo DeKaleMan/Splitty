@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Event;
 import commons.Tag;
 import commons.TagId;
 import org.springframework.data.domain.Example;
@@ -130,7 +129,8 @@ public class TestTagRepository implements TagRepository {
     }
 
     @Override
-    public <S extends Tag, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Tag, R> R findBy(Example<S> example,
+                                       Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 

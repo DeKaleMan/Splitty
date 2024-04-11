@@ -930,19 +930,21 @@ class ServerUtilsTest {
     public void getSumByTagTest(){
         when(mockClient.target(anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.path(anyString())).thenReturn(mockWebTarget);
-        when(mockWebTarget.queryParam(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyInt())).thenReturn(mockWebTarget);
+        when(mockWebTarget.resolveTemplate(anyString(), anyString())).thenReturn(mockWebTarget);
         when(mockWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
         when(mockBuilder.accept(MediaType.APPLICATION_JSON)).thenReturn(mockBuilder);
 
         Double expectedStats = 0.0;
         when(mockBuilder.get(Double.class)).thenReturn(expectedStats);
-        when(serverUtils.getSumByTag(anyInt(), eq("Other"))).thenReturn(expectedStats);
+
         int eventId = 123;
         Double actualStats = serverUtils.getSumByTag(eventId, "Other");
 
         verify(mockClient).target(ServerUtils.server);
-        verify(mockWebTarget).path("/api/statistics");
-        verify(mockWebTarget).queryParam("eventID", eventId);
+        verify(mockWebTarget).path("/api/statistics/{eventId}/{tagName}");
+        verify(mockWebTarget).resolveTemplate("eventID", 123);
+        verify(mockWebTarget).resolveTemplate("tagName", "Other");
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);
         verify(mockBuilder).get(Double.class);

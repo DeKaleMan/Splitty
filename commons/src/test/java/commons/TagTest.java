@@ -26,14 +26,14 @@ public class TagTest {
     @Test
     public void getterSetterTest() {
         assertEquals("Travel", t2.getName());
-        assertEquals("c50000",t3.getColour());
+        assertEquals("#c50000",t3.getColour());
         assertEquals(e1, t1.getEvent());
         Tag temp = new Tag();
         temp.setEvent(e2);
         temp.setName("Other");
-        temp.setColour("525252FF");
+        temp.setColour("#525252FF");
         assertEquals("Other",temp.getName());
-        assertEquals("525252FF",temp.getColour());
+        assertEquals("#525252FF",temp.getColour());
         assertEquals(e2, temp.getEvent());
         temp.setTagId(t3.getTagId());
         assertEquals(t3, temp);
