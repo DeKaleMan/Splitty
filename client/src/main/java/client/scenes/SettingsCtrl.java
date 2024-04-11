@@ -34,7 +34,7 @@ public class SettingsCtrl {
     @FXML
     public TextField currencyField;
     @FXML
-    public Button uploadFlag;
+    private Button uploadFlag;
     @FXML
     private TextField langTextfield;
     @FXML

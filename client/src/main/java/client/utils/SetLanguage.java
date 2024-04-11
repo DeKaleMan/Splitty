@@ -3,12 +3,10 @@ package client.utils;
 import client.scenes.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.core.Response;
 import javafx.scene.image.Image;
 
 
-
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class SetLanguage {
     private MainCtrl mainCtrl;
@@ -39,6 +36,8 @@ public class SetLanguage {
 
     private ClientFileIOutil io;
 
+    private ServerUtils serverUtils;
+    @Inject
     public SetLanguage(StartScreenCtrl startScreenCtrl, SplittyOverviewCtrl splittyOverviewCtrl,
                        AddExpenseCtrl addExpenseCtrl, AdminLoginCtrl adminLoginCtrl,
                        AdminOverviewCtrl adminOverviewCtrl, CreateEventCtrl createEventCtrl,
@@ -62,8 +61,13 @@ public class SetLanguage {
         this.addParticipantCtrl = addParticipantCtrl;
         this.editExpenseCtrl = editExpenseCtrl;
         this.editEventCrtl = editEventCrtl;
-        this.io = new ClientFileIOutilActual();
+
         //this.language = Language.en;
+    }
+
+    public void setServerUtilsIO(ServerUtils serverUtils, ClientFileIOutil io){
+        this.serverUtils = serverUtils;
+        this.io = io;
     }
 
     public void changeTo(String lang) {
@@ -154,8 +158,8 @@ public class SetLanguage {
         addExpenseCtrl.setSelectAll(translate("Select all", "en", lang));
         addExpenseCtrl.setSelectWhoPaid(translate("Select who paid", "en", lang));
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
-        //addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
-        //addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
+        addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
         System.out.println("addExpense translated");
     }
 
@@ -215,7 +219,7 @@ public class SetLanguage {
         statisticsCtrl.setHoverLabel(translate("Hover over a category to see the percentage", "en", lang));
     }
 
-    private void setSettings(String lang) {
+    public void setSettings(String lang) {
         settingsCtrl.setSettingsText(translate("settings", "en", lang));
         settingsCtrl.setAddLanguage(translate("Add language", "en", lang));
         settingsCtrl.setAddLangText(translate("Add language", "en", lang));
@@ -231,7 +235,7 @@ public class SetLanguage {
         System.out.println("settings translated");
     }
 
-    private void setServer(String lang) {
+    public void setServer(String lang) {
         serverCtrl.setServerText(translate("Server", "en", lang));
         serverCtrl.setConnectButton(translate("Connect", "en", lang));
         serverCtrl.setStartupNotification(translate("No server has been found," +
@@ -243,7 +247,7 @@ public class SetLanguage {
 
     }
 
-    private void setInvite(String lang) {
+    public void setInvite(String lang) {
         invitationCtrl.setBack(translate("Back", "en", lang));
         invitationCtrl.setInviteCodeText(translate("Invite Code:", "en", lang));
         invitationCtrl.setSendEmailInvitesText(translate("Send email invites:", "en", lang));
@@ -254,7 +258,7 @@ public class SetLanguage {
         System.out.println("invitation translated");
     }
 
-    private void setManageParticipants(String lang) {
+    public void setManageParticipants(String lang) {
         manageParticipantsCtrl.setAddButton(translate("Add participants", "en", lang));
         manageParticipantsCtrl.setBackButton(translate("Back", "en", lang));
         manageParticipantsCtrl.setRemoveButton(translate("Remove participants", "en", lang));
@@ -269,7 +273,7 @@ public class SetLanguage {
         System.out.println("participant manager translated");
     }
 
-    private void setEditParticipant(String lang) {
+    public void setEditParticipant(String lang) {
         editParticipantCtrl.setApplyChangesButton(translate("Apply change", "en", lang));
         editParticipantCtrl.setTitle(translate("Edit participant", "en", lang));
         editParticipantCtrl.setName(translate("Name", "en", lang));
@@ -282,7 +286,7 @@ public class SetLanguage {
         editParticipantCtrl.setInvalidEmailLabel(translate("Please enter a valid email address*", "en", lang));
     }
 
-    private void setAddPartiticipant(String lang) {
+    public void setAddPartiticipant(String lang) {
         addParticipantCtrl.setApplyChangesButton(translate("Apply change", "en", lang));
         addParticipantCtrl.setTitle(translate("Add participant", "en", lang));
         addParticipantCtrl.setName(translate("Name", "en", lang));
@@ -317,30 +321,14 @@ public class SetLanguage {
 
 
     public String translate(String query, String sourceLang, String targetLang) {
-        Response response = ClientBuilder.newClient()
-                .target(ServerUtils.server)
-                .path("api/translate")
-                .queryParam("query", query)
-                .queryParam("sourceLang", sourceLang)
-                .queryParam("targetLang", targetLang)
-                .request(APPLICATION_JSON)
-                .get();
-        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            response.close();
-            //throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
-            return "no language found";
-        }
-        String res = response.readEntity(String.class);
-
+        String res = serverUtils.translate(query, sourceLang, targetLang);
         if (Objects.equals(res, "no translation found")){
             mainCtrl.language = "en";
             mainCtrl.resetLanguage();
             //display error
             return query;
         }
-
         return res;
-
     }
 
     public Image getFlag(String lang) {
