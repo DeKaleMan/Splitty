@@ -28,6 +28,7 @@ public class ManageTagsCtrl implements Initializable {
     private MainCtrl mainCtrl;
     private int eventId;
     private boolean addExpense;
+    private boolean splittyOverview;
     private Expense expense;
     public List<Tag> tagList = new ArrayList<>();
     @FXML
@@ -104,7 +105,8 @@ public class ManageTagsCtrl implements Initializable {
         });
     }
 
-    public void refreshList(int eventId, boolean addExpense, Expense expense) {
+    public void refreshList(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        this.splittyOverview = splittyOverview;
         this.expense = expense;
         this.addExpense = addExpense;
         this.eventId = eventId;
@@ -127,11 +129,11 @@ public class ManageTagsCtrl implements Initializable {
             setPauseTransition(noTagSelectedError);
             return;
         }
-        mainCtrl.showAddTag(selected, eventId, addExpense, expense);
+        mainCtrl.showAddTag(selected, eventId, addExpense, expense, splittyOverview);
     }
     @FXML
     public void addTag() {
-        mainCtrl.showAddTag(eventId, addExpense, expense);
+        mainCtrl.showAddTag(eventId, addExpense, expense, splittyOverview);
     }
     @FXML
     public void removeTag() {
@@ -175,6 +177,10 @@ public class ManageTagsCtrl implements Initializable {
         }
     }
     public void back() {
+        if (splittyOverview) {
+            mainCtrl.showSplittyOverview(eventId);
+            return;
+        }
         if (addExpense) {
             mainCtrl.showAddExpense(eventId);
         } else {

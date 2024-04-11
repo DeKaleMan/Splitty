@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
+
     private int eventId;
     boolean translating = false;
     private final ServerUtils serverUtils;
@@ -105,7 +106,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label inviteCode;
     @FXML
     private Button myDetails;
-
+    @FXML
+    public Button manageTagsButton;
 
     @FXML
     private ListView<Participant> participantListView;
@@ -783,6 +785,10 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setUndo(String t){
         this.undo.setText(t);
+    }
+
+    public void viewManageTags() {
+        mainCtrl.showManageTags(eventId, false, null, true);
     }
 }
 

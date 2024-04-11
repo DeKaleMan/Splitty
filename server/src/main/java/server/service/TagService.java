@@ -102,6 +102,7 @@ public class TagService {
             return null;
         }
         Tag newTag = new Tag(event, tagDTO.getName(), tagDTO.getColour());
+        tagRepository.save(newTag);
         setExpensesWithTag(toUpdate, event, newTag);
         try {
             tagRepository.delete(toUpdate);
@@ -109,7 +110,7 @@ public class TagService {
             e.printStackTrace();
             return null;
         }
-        return tagRepository.save(newTag);
+        return newTag;
     }
 
     private Tag changeColour(TagDTO tagDTO, Tag toUpdate) {

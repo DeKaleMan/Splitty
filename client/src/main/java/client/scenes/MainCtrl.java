@@ -572,31 +572,31 @@ public class MainCtrl {
     }
 
 
-    public void showManageTags(int eventId, boolean addExpense, Expense expense) {
+    public void showManageTags(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
         if (!getConnection()) {
             showStartScreen();
             return;
         }
         primaryStage.setScene(manageTags);
         primaryStage.setTitle("Manage Tags");
-        manageTagsCtrl.refreshList(eventId, addExpense, expense);
+        manageTagsCtrl.refreshList(eventId, addExpense, expense, splittyOverview);
     }
-    public void showAddTag(int eventId, boolean addExpense, Expense expense) {
+    public void showAddTag(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
         if (!getConnection()) {
             showStartScreen();
             return;
         }
-        addTagCtrl.setFields(eventId, addExpense, expense);
+        addTagCtrl.setFields(eventId, addExpense, expense, splittyOverview);
         primaryStage.setScene(addTag);
         primaryStage.setTitle("Add Tag");
 
     }
-    public void showAddTag(Tag tag, int eventId, boolean addExpense, Expense expense) {
+    public void showAddTag(Tag tag, int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
         if (!getConnection()) {
             showStartScreen();
             return;
         }
-        addTagCtrl.setFields(tag, eventId, addExpense, expense);
+        addTagCtrl.setFields(tag, eventId, addExpense, expense, splittyOverview);
         primaryStage.setScene(addTag);
         primaryStage.setTitle("Edit Tag");
     }

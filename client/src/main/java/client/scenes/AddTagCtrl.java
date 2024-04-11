@@ -28,6 +28,7 @@ public class AddTagCtrl {
     private String oldName;
     private boolean addTag;
     private boolean addExpense;
+    private boolean splittyOverview;
     private Expense expense;
 
     private List<Tag> tags = new ArrayList<>();
@@ -65,7 +66,7 @@ public class AddTagCtrl {
     }
 
     public void cancel() {
-        mainCtrl.showManageTags(eventId, addExpense, expense);
+        mainCtrl.showManageTags(eventId, addExpense, expense, splittyOverview);
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
@@ -74,7 +75,8 @@ public class AddTagCtrl {
         }
     }
 
-    public void setFields(int eventId, boolean addExpense, Expense expense) {
+    public void setFields(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        this.splittyOverview = splittyOverview;
         this.addExpense = addExpense;
         this.expense = expense;
         nameField.setEditable(true);
@@ -83,7 +85,8 @@ public class AddTagCtrl {
         this.eventId = eventId;
         setTitleText(mainCtrl.translate("Add Tag"));
     }
-    public void setFields(Tag tag, int eventId, boolean addExpense, Expense expense) {
+    public void setFields(Tag tag, int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        this.splittyOverview = splittyOverview;
         this.addExpense = addExpense;
         this.expense = expense;
         String other = "Other";
@@ -128,7 +131,7 @@ public class AddTagCtrl {
             }
             serverUtils.updateTag(t, oldName, eventId);
             mainCtrl.setConfirmationAddedTag();
-            mainCtrl.showManageTags(eventId, addExpense, expense);
+            mainCtrl.showManageTags(eventId, addExpense, expense, splittyOverview);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
@@ -145,7 +148,7 @@ public class AddTagCtrl {
             }
             serverUtils.addTag(t);
             mainCtrl.setConfirmationAddedTag();
-            mainCtrl.showManageTags(eventId, addExpense, expense);
+            mainCtrl.showManageTags(eventId, addExpense, expense, splittyOverview);
         } catch (RuntimeException e) {
             setPauseTransition(unknownError);
         }
