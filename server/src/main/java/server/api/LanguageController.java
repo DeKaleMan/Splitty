@@ -1,8 +1,6 @@
 package server.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,27 +85,6 @@ public class LanguageController {
         }
         return ResponseEntity.ok(translation);
     }
-
-    private String getTranslationFromJson(String query, JsonObject object) {
-        if (object.has(query)) {
-            return object.get(query).getAsString();
-        }
-        return null;
-    }
-
-    //TODO NO FILEWRITE...move to ServerioUtils
-    public void writeJsonFile(JsonObject object, File file) {
-        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
-            Gson gson = new Gson();
-            gson.toJson(object, fileWriter);
-            System.out.println("JSON file updated successfully.");
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing JSON object to file", e);
-        }
-    }
-
-
-
 
     @GetMapping("json")
     public synchronized ResponseEntity<String> getJSONLang(@RequestParam String lang){

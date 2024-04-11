@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import server.api.depinjectionUtils.LanguageResponse;
 import server.api.depinjectionUtils.ServerIOUtil;
+import server.api.testmocks.LanguageResponseTest;
 import server.api.testmocks.ServerIOUtilsTest;
 
 import java.io.File;
@@ -95,33 +97,53 @@ class LanguageControllerTest {
     }
 
     @Test
-    public void writeTest(){
+    public void writeJSONLang(){
+        String jsonString = "{\"testString\": \"testsString\" }";
+        String lang = "testLang";
+        ServerIOUtil io = mock(ServerIOUtil.class);
+        LanguageController langC = new LanguageController(io, new LanguageResponseTest());
+        langC.writeJSONLang(jsonString, lang);
 
-        LanguageResponse responseMock = mock(LanguageResponse.class);
-        LanguageController l = new LanguageController(new ServerIOUtilsTest(), responseMock);
-        // Prepare test data
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("key", "value");
+        verify(io).write(anyString(), any(File.class));
+    }
+    @Test
+    public void getJSONLang(){
+        String lang = "test";
+        ServerIOUtil io = mock(ServerIOUtil.class);
+        LanguageController langC = new LanguageController(io, new LanguageResponseTest());
 
-        // Create a temporary file for testing
-        File tempFile;
-        try {
-            tempFile = File.createTempFile("test", ".json");
-        } catch (IOException e) {
-            fail("Failed to create temporary file: " + e.getMessage());
-            return;
-        }
+        when(io.read(any(File.class))).thenReturn("succes");
+        when(io.fileExists(any(File.class))).thenReturn(true);
 
-        // Call the method under test
-        l.writeJsonFile(jsonObject, tempFile);
+        String res = langC.getJSONLang(lang).getBody();
+        verify(io).read(any(File.class));
+        assertEquals("succes", res);
+    }
+    @Test
+    public void getWrongJSONLang(){
+        String lang = "test";
+        ServerIOUtil io = mock(ServerIOUtil.class);
+        LanguageController langC = new LanguageController(io, new LanguageResponseTest());
 
-        // Verify that the file was written correctly
-        Gson gson = new Gson();
-        try (FileReader fileReader = new FileReader(tempFile)) {
-            JsonObject parsedObject = gson.fromJson(fileReader, JsonObject.class);
-            assertEquals(jsonObject, parsedObject);
-        } catch (IOException e) {
-            fail("Failed to read file: " + e.getMessage());
-        }
+        when(io.read(any(File.class))).thenReturn("succes");
+        when(io.fileExists(any(File.class))).thenReturn(false);
+
+        int res = langC.getJSONLang(lang).getStatusCode().value();
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), res);
+    }
+    @Test
+    public void getFailedToReadJSONLang(){
+        String lang = "test";
+        ServerIOUtil io = mock(ServerIOUtil.class);
+        LanguageController langC = new LanguageController(io, new LanguageResponseTest());
+
+
+        when(io.read(any(File.class))).thenThrow(new RuntimeException());
+        when(io.fileExists(any(File.class))).thenReturn(true);
+
+        ResponseEntity<String> res = langC.getJSONLang(lang);
+
+        assertEquals(null, res);
     }
 }

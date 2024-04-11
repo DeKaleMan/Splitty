@@ -32,7 +32,6 @@ public class StartScreenCtrl implements Initializable {
 
     boolean translating = false;
 
-    private String currentLang = "en";
     @FXML
     private Label myEventsText;
     @FXML
@@ -366,7 +365,7 @@ public class StartScreenCtrl implements Initializable {
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if (selected.equals(currentLang)) {
+                if (selected.equals(mainCtrl.language)) {
                     return;
                 }
                 //Language toLang = Language.valueOf(selected);
@@ -376,7 +375,6 @@ public class StartScreenCtrl implements Initializable {
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
                 }
-                currentLang = selected;
             }
         } catch (Exception e) {
             System.out.println(e);
