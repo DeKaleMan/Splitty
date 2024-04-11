@@ -12,6 +12,7 @@ public class Mail {
         Email email = EmailBuilder.startingBlank()
                 .from(fromEmail)
                 .to(toEmail)
+                .cc(fromEmail)
                 .withSubject(subject)
                 .withPlainText(body)
                 .buildEmail();
