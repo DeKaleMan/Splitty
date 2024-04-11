@@ -12,7 +12,10 @@ import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
+import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -208,10 +211,19 @@ public class InvitationCtrl {
         String emailSubject = "Good new, you are invited!";
         String emailBody = emailBody();
         String fromEmail = config.getEmail();
-        boolean isValid = isValidEmail(fromEmail);
+        boolean isValid = isValidEmail(emailT);
         if (isValid == false){
             errorNoValidEmail.setVisible(true);
-            throw new RuntimeException("email is not valid");
+            new Thread(() -> {
+                try {
+                    Thread.sleep(6000); // Sleep for 6 seconds
+                    errorNoValidEmail.setVisible(false); // Hide the error message after 6 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+            System.out.println("email is not valid");
         }
         emailTo = emailT;
 
