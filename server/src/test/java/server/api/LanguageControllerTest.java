@@ -1,12 +1,10 @@
 package server.api;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import server.api.depinjectionUtils.LanguageResponse;
 import server.api.depinjectionUtils.ServerIOUtil;
@@ -14,8 +12,7 @@ import server.api.testmocks.LanguageResponseTest;
 import server.api.testmocks.ServerIOUtilsTest;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;

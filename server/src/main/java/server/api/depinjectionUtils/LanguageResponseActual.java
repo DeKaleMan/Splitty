@@ -1,7 +1,6 @@
 package server.api.depinjectionUtils;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.ws.rs.client.Client;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.Scanner;
 @Component
 public class LanguageResponseActual implements LanguageResponse {
 
