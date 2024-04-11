@@ -68,7 +68,7 @@ public class TagControllerTest {
         TagDTO temp = new TagDTO(t2.getEventId(), "New Name", "New Colour");
         ResponseEntity<Tag> response2 = sut.updateTag(t2.getName(), t2.getEventId(), temp);
         assertEquals(HttpStatus.OK, response2.getStatusCode());
-        assertEquals("save", tagRepo.methods.getLast());
+        assertEquals("delete", tagRepo.methods.getLast());
         assertEquals(response2.getBody(), tagRepo.findTagByTagId(new TagId("New Name", e1)));
         assertEquals("find tag by id", tagRepo.methods.getLast());
     }
