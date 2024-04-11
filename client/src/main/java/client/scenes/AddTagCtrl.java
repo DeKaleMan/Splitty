@@ -154,16 +154,14 @@ public class AddTagCtrl {
     public TagDTO getTagDTO() {
         boolean error = false;
         String name = nameField.getText();
-        String colour = colorPicker.getValue().toString().substring(1, 8);
+        String colour = colorPicker.getValue().toString().substring(2, 8);
+        colour = "#" + colour;
         if (name == null || name.isEmpty()) {
             error = true;
             setPauseTransition(invalidName);
         }
         if (checkDuplicate(name)) {
             error = true;
-        }
-        if (colour == null) {
-            colour = "";
         }
         if (!checkColour(colour)) {
             setPauseTransition(invalidColour);
@@ -190,13 +188,12 @@ public class AddTagCtrl {
         return false;
     }
 
-
     public boolean checkColour(String colour) {
         if (colour == null) {
             return false;
         }
         if (colour.isEmpty()) {
-            return true;
+            return false;
         }
         if (colour.length() != 4 && colour.length() != 7) {
             return false;
