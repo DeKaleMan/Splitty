@@ -2,11 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.*;
 import commons.Currency;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -21,7 +18,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -406,8 +406,16 @@ public class SplittyOverviewCtrl implements Initializable {
                             if (expense == null || b) setGraphic(null);
                             else {
                                 GridPane grid = new GridPane();
+                                Color bgColor = getBgColor(expense.getTag());
+                                String  textColor = getTextColor(bgColor);
+                                if (isSelected()) {
+                                    setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+                                    textColor = "#FFFFFF";
+                                } else {
+                                    setBackground(new Background(new BackgroundFill(bgColor, null, null)));
+                                }
                                 Date date = expense.getDate();
-                                Label dateLabel = getDateLabel(date);
+                                Label dateLabel = getDateLabel(date, textColor);
                                 List<Participant> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                             expense.getExpenseId()).stream()
@@ -418,28 +426,39 @@ public class SplittyOverviewCtrl implements Initializable {
                                         mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
                                             config.getCurrency(), date,
                                             totalExpense);
-                                }catch (RuntimeException e){
+                                } catch (RuntimeException e){
                                     grid.add(new Text(e.getMessage()),0,0);
                                     setGraphic(grid);
                                     return;
                                 }
-                                Text mainInfo = getMainInfo(expense, totalExpense,
-                                        involved);
+                                Label mainInfo = getMainInfo(expense, totalExpense,
+                                        involved, textColor);
                                 grid.add(dateLabel, 0, 0);
                                 grid.add(mainInfo, 1, 0);
-                                grid.add(new Text(involved.stream().map(x -> x.getName())
-                                    .toList().toString()), 1, 1);
+                                Label list = new Label(involved.stream().map(x -> x.getName())
+                                        .toList().toString());
+                                list.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
+                                grid.add(list, 1, 1);
                                 setGraphic(grid);
-                            }
-                        }
-                    };
-                }
+                            }}};}
             };
         return cellFactory;
     }
 
-    private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
-        Text mainInfo = new Text();
+    private Color getBgColor(Tag tag) {
+        if (tag.getColour() == null || tag.getColour().isEmpty()) {
+            return Color.WHITE;
+        }
+        return Color.web(tag.getColour());
+    }
+    private String  getTextColor(Color color) {
+        if (color.getBrightness() > 0.5) {
+            return "#000000";
+        }
+        return "#FFFFFF";
+    }
+    private Label getMainInfo(Expense expense, double totalExpense, List<Participant> involved, String textColor) {
+        Label mainInfo = new Label();
         if (expense.isSharedExpense()) {
             String paid =  " " + mainCtrl.translate("paid") + " ";
             String forT =  " " + mainCtrl.translate("for") + " " ;
@@ -462,15 +481,16 @@ public class SplittyOverviewCtrl implements Initializable {
                     .map(x -> x.getName())
                     .findFirst().get());
         }
+        mainInfo.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
         return mainInfo;
     }
 
-    private static Label getDateLabel(Date date) {
+    private static Label getDateLabel(Date date, String  textColor) {
         Label dateLabel = new Label(
             date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
                 + (date.getMonth() + 1) + "."
                 + (date.getYear() + 1900));
-        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
+        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
         dateLabel.setPrefWidth(70);
         return dateLabel;
     }

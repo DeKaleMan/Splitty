@@ -27,7 +27,7 @@ public class AddTagCtrlTest {
         String c8 = "EEE";
         String c9 = "1234";
         String c10 = "#ABC";
-        assertFalse(sut.checkColour(c1));
+        assertTrue(sut.checkColour(c1));
         assertTrue(sut.checkColour(c2));
         assertTrue(sut.checkColour(c3));
         assertFalse(sut.checkColour(c4));

@@ -943,7 +943,7 @@ class ServerUtilsTest {
 
         verify(mockClient).target(ServerUtils.server);
         verify(mockWebTarget).path("/api/statistics/{eventId}/{tagName}");
-        verify(mockWebTarget).resolveTemplate("eventID", 123);
+        verify(mockWebTarget).resolveTemplate("eventId", 123);
         verify(mockWebTarget).resolveTemplate("tagName", "Other");
         verify(mockWebTarget).request(MediaType.APPLICATION_JSON);
         verify(mockBuilder).accept(MediaType.APPLICATION_JSON);

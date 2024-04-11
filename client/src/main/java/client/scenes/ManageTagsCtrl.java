@@ -78,9 +78,11 @@ public class ManageTagsCtrl implements Initializable {
                 } else {
                     setText(tag.getName());
                     if (tag.getColour() == null || tag.getColour().isEmpty()) {
-                        setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+                        setBackground(new Background(new BackgroundFill(
+                                Color.WHITE, null, null)));
                         if (isSelected()) {
-                            setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); // Darken the color when selected
+                            setBackground(new Background(new BackgroundFill(
+                                    Color.BLUE, null, null))); // Darken the color when selected
                             setTextFill(Color.WHITE);
                         } else {
                             setTextFill(Color.BLACK);
@@ -88,9 +90,11 @@ public class ManageTagsCtrl implements Initializable {
                         return;
                     }
                     Color color = Color.web(tag.getColour());
-                    setBackground(new Background(new BackgroundFill(color, null, null)));
+                    setBackground(new Background(new BackgroundFill(
+                            color, null, null)));
                     if (isSelected()) {
-                        setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); // Darken the color when selected
+                        setBackground(new Background(new BackgroundFill(
+                                Color.BLUE, null, null))); // Darken the color when selected
                         setTextFill(Color.WHITE);
                     } else {
                         setTextFill(color.getBrightness() < 0.5 ? Color.WHITE : Color.BLACK);
