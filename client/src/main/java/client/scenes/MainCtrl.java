@@ -192,6 +192,7 @@ public class MainCtrl {
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
                 editParticipantCtrl, addParticipantCtrl, editExpenseCtrl, editEventCrtl);
+        setLanguage.setServerUtilsIO(serverUtils, new ClientFileIOutilActual());
         this.languages = setLanguage.getLanguages();
 
         if (!languages.contains(this.language)) this.language = "en";

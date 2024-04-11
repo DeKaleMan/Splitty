@@ -729,6 +729,26 @@ public class ServerUtils {
                 .put(Entity.entity(jsonObject, APPLICATION_JSON), String.class);
     }
 
+    public String translate(String query, String sourceLang, String targetLang) {
+        Response response = ClientBuilder.newClient()
+                .target(server)
+                .path("api/translate")
+                .queryParam("query", query)
+                .queryParam("sourceLang", sourceLang)
+                .queryParam("targetLang", targetLang)
+                .request(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            response.close();
+            //throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
+            return "no language found";
+        }
+        String res = response.readEntity(String.class);
+
+        return res;
+
+    }
+
 
     public void stop() {
         EXEC.shutdownNow();
