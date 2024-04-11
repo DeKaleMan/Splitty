@@ -163,6 +163,9 @@ public class AddTagCtrl {
         if (checkDuplicate(name)) {
             error = true;
         }
+        if (colour == null) {
+            colour = "";
+        }
         if (!checkColour(colour)) {
             setPauseTransition(invalidColour);
             error = true;
@@ -190,8 +193,11 @@ public class AddTagCtrl {
 
 
     public boolean checkColour(String colour) {
-        if (colour == null || colour.isEmpty()) {
+        if (colour == null) {
             return false;
+        }
+        if (colour.isEmpty()) {
+            return true;
         }
         if (colour.length() != 4 && colour.length() != 7) {
             return false;

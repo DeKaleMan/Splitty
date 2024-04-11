@@ -10,6 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -69,10 +72,29 @@ public class ManageTagsCtrl implements Initializable {
             @Override
             protected void updateItem(Tag tag, boolean empty) {
                 super.updateItem(tag, empty);
-                if (empty || tag == null) {
+                if (empty || tag == null || tag.getName().isEmpty()) {
                     setText(null);
+                    setBackground(Background.EMPTY);
                 } else {
                     setText(tag.getName());
+                    if (tag.getColour() == null || tag.getColour().isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+                        if (isSelected()) {
+                            setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); // Darken the color when selected
+                            setTextFill(Color.WHITE);
+                        } else {
+                            setTextFill(Color.BLACK);
+                        }
+                        return;
+                    }
+                    Color color = Color.web(tag.getColour());
+                    setBackground(new Background(new BackgroundFill(color, null, null)));
+                    if (isSelected()) {
+                        setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); // Darken the color when selected
+                        setTextFill(Color.WHITE);
+                    } else {
+                        setTextFill(color.getBrightness() < 0.5 ? Color.WHITE : Color.BLACK);
+                    }
                 }
             }
         });
@@ -82,6 +104,7 @@ public class ManageTagsCtrl implements Initializable {
         this.expense = expense;
         this.addExpense = addExpense;
         this.eventId = eventId;
+        setTagListUp();
         titleLabel.setText(serverUtils.getEventById(eventId).getName());
         tagListView.getItems().clear();
         try{

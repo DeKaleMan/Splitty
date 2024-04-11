@@ -66,21 +66,21 @@ public class TagService {
         if (toDelete == null) {
             return  null;
         }
-        setExpensesWithTag(toDelete, event);
+        setExpensesWithTag(toDelete, event, getOtherTag(eventId));
         try {
             tagRepository.delete(toDelete);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return toDelete;
     }
 
-    private void setExpensesWithTag(Tag toDelete, Event event) {
+    private void setExpensesWithTag(Tag toDelete, Event event, Tag newTag) {
         List<Expense> expenses = expenseRepository.findByEvent(event);
         expenses = expenses.stream().filter(expense -> expense.getTag().equals(toDelete)).toList();
-        Tag other = getOtherTag(event.id);
         for (Expense expense : expenses) {
-            expense.setTag(other);
+            expense.setTag(newTag);
         }
         expenseRepository.saveAll(expenses);
     }
@@ -94,12 +94,25 @@ public class TagService {
         if (toUpdate == null) {
             return null;
         }
+        if (toUpdate.getName().equals(tagDTO.getName())) {
+            return changeColour(tagDTO, toUpdate);
+        }
         Tag checkIfExists = tagRepository.findTagByTagId(new TagId(tagDTO.getName(), event));
-        if (checkIfExists != null && checkIfExists.getColour().equals(tagDTO.getColour())) {
+        if (checkIfExists != null) {
             return null;
         }
-        tagRepository.delete(toUpdate);
-        toUpdate.setName(tagDTO.getName());
+        Tag newTag = new Tag(event, tagDTO.getName(), tagDTO.getColour());
+        setExpensesWithTag(toUpdate, event, newTag);
+        try {
+            tagRepository.delete(toUpdate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return tagRepository.save(newTag);
+    }
+
+    private Tag changeColour(TagDTO tagDTO, Tag toUpdate) {
         toUpdate.setColour(tagDTO.getColour());
         return tagRepository.save(toUpdate);
     }

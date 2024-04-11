@@ -732,7 +732,7 @@ public class ServerUtils {
         return client
             .target(server)
             .path("/api/statistics/{eventId}/{tagName}")
-            .resolveTemplate("eventID", eventID)
+            .resolveTemplate("eventId", eventID)
             .resolveTemplate("tagName", tagName)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
