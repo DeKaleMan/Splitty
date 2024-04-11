@@ -90,7 +90,6 @@ public class StatisticsCtrl {
                                 displayError();
                                 return;
                             }
-
                             setText(participant.getName()
                                 + ": "
                                 + mainCtrl.getFormattedDoubleString(amount)
@@ -108,11 +107,25 @@ public class StatisticsCtrl {
      * initialize the chart with the current values for food, drinks, transport and other
      */
     public void setPieChart() {
+        pieChart.setLegendVisible(false);
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         this.tagList = serverUtils.getTagsByEvent(eventId);
         for (Tag t : tagList) {
             double d = serverUtils.getSumByTag(eventId, t.getName());
+            if (d < 0.001) {
+                continue;
+            }
             data.add(new PieChart.Data(t.getName(), d));
+        }
+        pieChart.setData(data);
+        for (PieChart.Data d : data) {
+            List<Tag> tags = tagList.stream()
+                    .filter(tag -> tag.getName().equals(d.getName()))
+                    .toList();
+            if (tags.isEmpty()) {
+                continue;
+            }
+            d.getNode().setStyle("-fx-pie-color: " + tags.getFirst().getColour() + ";");
         }
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                     d.getName(),
@@ -122,7 +135,6 @@ public class StatisticsCtrl {
                 )
             )
         );
-        pieChart.setData(data);
         pieChart.getData().forEach(d -> {
             Tooltip.install(d.getNode(), new Tooltip(
                 mainCtrl.getFormattedDoubleString(100.0 * d.pieValueProperty().getValue() / total)
