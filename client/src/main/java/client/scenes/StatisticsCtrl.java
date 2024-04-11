@@ -269,5 +269,6 @@ public class StatisticsCtrl {
             event1 -> hoverLabel.setVisible(false)
         );
         visiblePause.play();
+
     }
 }

@@ -97,6 +97,7 @@ public class SetLanguageTest {
         // Verify other text setting methods
         // Verify translation service called for each text
         verify(serverUtils, times(16)).translate(anyString(), anyString(), anyString());
+
     }
     @Test
     public void testSetExpenses() {

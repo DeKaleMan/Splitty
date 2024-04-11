@@ -44,7 +44,7 @@ public class SetLanguage {
                        SettingsCtrl settingsCtrl, StatisticsCtrl statisticsCtrl, ServerCtrl serverCtrl,
                        InvitationCtrl invitationCtrl, ManageParticipantsCtrl manageParticipantsCtrl,
                        EditParticipantCtrl editParticipantCtrl, AddParticipantCtrl addParticipantCtrl,
-                       EditExpenseCtrl editExpenseCtrl, EditEventCrtl editEventCrtl){
+                       EditExpenseCtrl editExpenseCtrl, EditEventCrtl editEventCrtl) {
         this.mainCtrl = new MainCtrl();
         this.startScreenCtrl = startScreenCtrl;
         this.splittyOverviewCtrl = splittyOverviewCtrl;
@@ -137,6 +137,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setmyDetails(translate("My details", "en", lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
         splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
+
         System.out.println("event overview translated");
     }
 

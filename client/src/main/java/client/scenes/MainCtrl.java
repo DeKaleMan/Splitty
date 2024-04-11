@@ -35,6 +35,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
+
 public class MainCtrl {
 
     public String language = "en";
@@ -201,6 +202,7 @@ public class MainCtrl {
         if (!languages.contains(this.language)) {
             this.language = "en";
         }
+
         resetLanguage();
 
     }
