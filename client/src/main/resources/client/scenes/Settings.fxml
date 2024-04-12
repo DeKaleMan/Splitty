@@ -10,7 +10,7 @@
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
 
       <Button fx:id="saveButton" layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" />
-      <VBox layoutX="346.0" layoutY="200.0" prefHeight="155.0" prefWidth="232.0" spacing="5.0">
+      <VBox layoutX="346.0" layoutY="111.0" prefHeight="244.0" prefWidth="232.0" spacing="5.0">
          <children>
             <Label fx:id="addLangText" text="Add language">
                <font>
@@ -19,9 +19,9 @@
             </Label>
             <Label fx:id="langInstructions" text="Enter the languagecode and an image for the flag of the language you want to add" wrapText="true" />
             <TextField fx:id="langTextfield" promptText="Languagecode e.g. &quot;en&quot; for English" />
-            <Button fx:id="uploadFlag" mnemonicParsing="false" onAction="#setFlag" text="Upload flag" style="-fx-background-color: #a69191;" />
-            <ProgressBar fx:id="progressBar" prefHeight="52.0" prefWidth="232.0" visible="false" />
+            <Button fx:id="uploadFlag" mnemonicParsing="false" onAction="#setFlag" style="-fx-background-color: #a69191;" text="Upload flag" />
             <Button fx:id="addLanguage" mnemonicParsing="false" onAction="#addLang" text="Add language" />
+            <ProgressBar fx:id="progressBar" prefHeight="21.0" prefWidth="232.0" visible="false" />
          </children>
       </VBox>
       <VBox layoutX="55.0" layoutY="54.0" prefHeight="324.0" prefWidth="188.0">
@@ -33,13 +33,13 @@
                </font>
             </Label>
             <TextField fx:id="emailField" promptText="e.g. name@domain.com" />
-            <Label fx:id="currency" prefHeight="17.0" prefWidth="86.0" text="Currency">
+            <Label fx:id="currency" text="Currency">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <TextField fx:id="currencyField" promptText="EU, USD, CHF" />
-            <Label text="Name">
+            <Label fx:id="nameText" text="Name">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
