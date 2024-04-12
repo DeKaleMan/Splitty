@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
    <children>
       <Label fx:id="titleLabel" layoutX="97.0" layoutY="19.0" prefHeight="35.0" prefWidth="444.0" text="Title">
          <font>
@@ -27,5 +29,13 @@
          </font></Label>
       <Button fx:id="back" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
+      <Label fx:id="noEmail" layoutX="320.0" layoutY="19.0" prefHeight="35.0" prefWidth="200.0" text="please fill in an email address" visible="false" />
+      <Button fx:id="defaultButton" layoutX="83.0" layoutY="342.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="122.0" text="Button" />
+      <Label fx:id="defaultLabel" layoutX="71.0" layoutY="283.0" prefHeight="62.0" prefWidth="148.0" text="not sure if your email is configured? Use this button" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="errorNoValidEmail" layoutX="320.0" layoutY="45.0" prefHeight="27.0" prefWidth="200.0" text="This is not an valid email" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.Scanner;
 @Component
 public class LanguageResponseActual implements LanguageResponse {
 
@@ -40,17 +39,21 @@ public class LanguageResponseActual implements LanguageResponse {
             if(response.getStatus() == HttpStatus.FORBIDDEN.value()){
                 return HttpStatus.FORBIDDEN.toString();
             }
+            if(response.getStatus() == HttpStatus.TOO_MANY_REQUESTS.value()){
+                return "not a valid language";
+            }
 
 
             //Retrieve and print the response body
             String responseBody = response.readEntity(String.class);
             // Parse the JSON response
             JSONObject jsonResponse1 = new JSONObject(responseBody);
-            var responseData = jsonResponse1.get("responseData");
-            Scanner scanner = new Scanner(responseData.toString());
-            scanner.useDelimiter(",");
-            String translated = scanner.next().substring("{_translatedText_:".length());
-            translated = translated.substring(1, translated.length() -1);
+            String translated = jsonResponse1.getJSONObject("responseData").get("translatedText").toString();
+            if(translated.contains("INVALID TARGET LANGUAGE")) translated = "null";
+            //            Scanner scanner = new Scanner(responseData.toString());
+//            scanner.useDelimiter(",");
+//            String translated = scanner.next().substring("{_translatedText_:".length());
+//            translated = translated.substring(1, translated.length() -1);
 
             return translated;
         } catch (IOException e) {

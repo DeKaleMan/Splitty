@@ -511,55 +511,82 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void setExpensesText(String text) {
-        this.expenses.setText(text);
+        Platform.runLater(() -> {
+            this.expenses.setText(text);
+        });
     }
 
     public void setParticipants(String text) {
-        this.participants.setText(text);
+        Platform.runLater(() -> {
+            this.participants.setText(text);
+        });
     }
 
     public void setBackButton(String text) {
-        this.backButton.setText(text);
+        Platform.runLater(() -> {
+            this.backButton.setText(text);
+        });
     }
 
     public void setSettleDebtsButton(String text) {
-        this.settleDebtsButton.setText(text);
+        Platform.runLater(() -> {
+            this.settleDebtsButton.setText(text);
+        });
     }
 
     public void setStatisticsButton(String text) {
-        this.statisticsButton.setText(text);
+        Platform.runLater(() -> {
+            this.statisticsButton.setText(text);
+        });
     }
 
     public void setAddExpenseButton(String text) {
-        this.addExpenseButton.setText(text);
+        Platform.runLater(() -> {
+            this.addExpenseButton.setText(text);
+        });
     }
 
-
     public void setPaidByMe(String text) {
-        this.paidByMe.setText(text);
+        Platform.runLater(() -> {
+            this.paidByMe.setText(text);
+        });
     }
 
     public void setDeleteExpenseButton(String text) {
-        this.deleteExpenseButton.setText(text);
+        Platform.runLater(() -> {
+            this.deleteExpenseButton.setText(text);
+        });
     }
 
     public void setSendInvites(String text) {
-        this.sendInvites.setText(text);
+        Platform.runLater(() -> {
+            this.sendInvites.setText(text);
+        });
     }
 
     public void setAllExpenses(String text) {
-        this.allExpenses.setText(text);
-    }
-    public void setEditEvent(String text) {
-        this.editEvent.setText(text);
-    }
-    public void setEditExpense(String text) {
-        this.editExpenseButton.setText(text);
-    }
-    public void setLeaveButton(String text) {
-        this.leaveButton.setText(text);
+        Platform.runLater(() -> {
+            this.allExpenses.setText(text);
+        });
     }
 
+    public void setEditEvent(String text) {
+        Platform.runLater(() -> {
+            this.editEvent.setText(text);
+        });
+    }
+
+    public void setEditExpense(String text) {
+        Platform.runLater(() -> {
+            this.editExpenseButton.setText(text);
+        });
+    }
+
+    public void setLeaveButton(String text) {
+        Platform.runLater(() -> {
+            this.leaveButton.setText(text);
+        });
+    }
 
     public void leaveEvent() {
         if (admin) {
@@ -577,19 +604,19 @@ public class SplittyOverviewCtrl implements Initializable {
             // label or error?
             return;
         }
-
-        if (me.getBalance() != 0) {
+        // balance margin of error is 0.0001
+        if (Math.abs(me.getBalance()) > 0.0001){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Leaving an event");
-            alert.setHeaderText("You can't leave the event");
-            alert.setContentText("You owe/are owed money.");
+            alert.setTitle(mainCtrl.translate("Leaving an event"));
+            alert.setHeaderText(mainCtrl.translate("You can't leave the event"));
+            alert.setContentText(mainCtrl.translate("You owe/are owed money."));
             alert.showAndWait();
             return;
         }
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirmation");
-        confirmation.setHeaderText("Leaving event");
-        confirmation.setContentText("Are you sure you want to leave the event?");
+        confirmation.setTitle(mainCtrl.translate("Confirmation"));
+        confirmation.setHeaderText(mainCtrl.translate("Leaving event"));
+        confirmation.setContentText(mainCtrl.translate("Are you sure you want to leave the event?"));
         confirmation.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 serverUtils.deleteParticipant(config.getId(), eventId);
@@ -659,10 +686,12 @@ public class SplittyOverviewCtrl implements Initializable {
         serverUtils.stop();
     }
     public void setmyDetails(String txt){
-        this.myDetails.setText(txt);
+        Platform.runLater(() -> {this.myDetails.setText(txt);});
     }
     public void setHostOptionsButton(String txt){
-        this.hostOptionsButton.setText(txt);
+        Platform.runLater(() -> {
+            this.hostOptionsButton.setText(txt);
+        });
     }
 
     @FXML
@@ -688,8 +717,8 @@ public class SplittyOverviewCtrl implements Initializable {
         if(translating) return;
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
-                String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if(selected.equals(config.getLanguage())){
+                String selected = languageSelect.getSelectionModel().getSelectedItem();
+                if(selected.equals(mainCtrl.language)){
                     return;
                 }
                 //Language toLang = Language.valueOf(selected);

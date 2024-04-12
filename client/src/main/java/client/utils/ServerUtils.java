@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.dto.*;
+
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -28,6 +29,7 @@ import jakarta.ws.rs.core.Response;
 import javafx.util.Pair;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.dao.DuplicateKeyException;
+
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -831,6 +833,44 @@ public class ServerUtils {
             }
         });
     }
+
+    public String getLanguageJSON(String lang){
+        return client.target(server)
+                .path("api/translate/json")
+                .queryParam("lang", lang)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(String.class);
+    }
+    public String setNewLang(String jsonObject, String lang){
+        return client.target(server)
+                .path("api/translate/write")
+                .queryParam("lang", lang)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(jsonObject, APPLICATION_JSON), String.class);
+    }
+
+    public String translate(String query, String sourceLang, String targetLang) {
+        Response response = ClientBuilder.newClient()
+                .target(server)
+                .path("api/translate")
+                .queryParam("query", query)
+                .queryParam("sourceLang", sourceLang)
+                .queryParam("targetLang", targetLang)
+                .request(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            response.close();
+            //throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
+            return "no language found";
+        }
+        String res = response.readEntity(String.class);
+
+        return res;
+
+    }
+
 
     public void stop() {
         EXEC.shutdownNow();

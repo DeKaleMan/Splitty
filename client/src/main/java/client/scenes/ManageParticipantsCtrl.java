@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -99,9 +100,9 @@ public class ManageParticipantsCtrl implements Initializable {
             // only allow to delete if balance is 0
             if(selected.getBalance() != 0){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Deleting Participant");
-                alert.setHeaderText("Cannot delete a participant");
-                alert.setContentText("Participant owes/is owed money.");
+                alert.setTitle(mainCtrl.translate("Deleting Participant"));
+                alert.setHeaderText(mainCtrl.translate("Cannot delete a participant"));
+                alert.setContentText(mainCtrl.translate("Participant owes/is owed money."));
                 alert.showAndWait();
                 return;
             }
@@ -206,48 +207,72 @@ public class ManageParticipantsCtrl implements Initializable {
     }
 
     public void setEditButton(String txt){
-        this.editButton.setText(txt);
+        Platform.runLater(() -> {
+            this.editButton.setText(txt);
+        });
     }
     public void setRemoveButton(String txt) {
-        this.removeButton.setText(txt);
+        Platform.runLater(() -> {
+            this.removeButton.setText(txt);
+        });
     }
 
     public void setAddButton(String txt) {
-        this.addButton.setText(txt);
+        Platform.runLater(() -> {
+            this.addButton.setText(txt);
+        });
     }
 
     public void setTitleLabel(String txt) {
-        this.titleLabel.setText(txt);
+        Platform.runLater(() -> {
+            this.titleLabel.setText(txt);
+        });
     }
 
     public void setParticipantsText(String txt) {
-        this.participantsText.setText(txt);
+        Platform.runLater(() -> {
+            this.participantsText.setText(txt);
+        });
     }
 
     public void setUndo(String txt) {
-        this.undo.setText(txt);
+        Platform.runLater(() -> {
+            this.undo.setText(txt);
+        });
     }
 
     public void setNoParticipantSelectedError(String txt) {
-        this.noParticipantSelectedError.setText(txt);
+        Platform.runLater(() -> {
+            this.noParticipantSelectedError.setText(txt);
+        });
     }
 
     public void setUnknownError(String txt) {
-        this.unknownError.setText(txt);
+        Platform.runLater(() -> {
+            this.unknownError.setText(txt);
+        });
     }
 
     public void setParticipantAddedConfirmation(String txt) {
-        this.participantAddedConfirmation.setText(txt);
+        Platform.runLater(() -> {
+            this.participantAddedConfirmation.setText(txt);
+        });
     }
 
     public void setParticipantEditedConfirmation(String txt) {
-        this.participantEditedConfirmation.setText(txt);
+        Platform.runLater(() -> {
+            this.participantEditedConfirmation.setText(txt);
+        });
     }
 
     public void setParticipantDeletedConfirmation(String txt) {
-        this.participantDeletedConfirmation.setText(txt);
+        Platform.runLater(() -> {
+            this.participantDeletedConfirmation.setText(txt);
+        });
     }
     public void setBackButton(String txt) {
-        this.back.setText(txt);
+        Platform.runLater(() -> {
+            this.back.setText(txt);
+        });
     }
 }
