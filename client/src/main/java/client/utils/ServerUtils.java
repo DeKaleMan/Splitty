@@ -15,33 +15,21 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.lang.reflect.Type;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
-import java.util.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
-import commons.Currency;
-import commons.dto.DebtDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
+import commons.dto.*;
+
 import jakarta.ws.rs.client.Client;
-import commons.dto.PaymentDTO;
-import jakarta.ws.rs.core.Response;
-
-import javafx.util.Pair;
-import org.glassfish.jersey.client.ClientConfig;
-
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import javafx.util.Pair;
+import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.dao.DuplicateKeyException;
+
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -49,6 +37,17 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * The type server utils.
@@ -361,6 +360,10 @@ public class ServerUtils {
     }
 
     public Event addEvent(EventDTO newEvent) {
+        if (newEvent.getDescription() == null ||
+                newEvent.getDescription().isEmpty()) {
+            newEvent.setDescription("");
+        }
         Response response = client
             .target(server).path("api/event")
             .request(APPLICATION_JSON)
@@ -377,6 +380,113 @@ public class ServerUtils {
             throw new RuntimeException("Failed to add event. Status code: " + response.getStatus());
         }
 
+    }
+
+    public boolean setTags(int eventId) {
+        Response response = client
+                .target(server).path("api/tag/setup/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        return response.getStatus() == Response.Status.OK.getStatusCode();
+    }
+
+    public List<Tag> getTagsByEvent(int eventId) {
+        Response response = client.target(server).path("api/tag/getAll/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            List<Tag> list = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return list;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tags. Status code: " + response.getStatus());
+        }
+    }
+    public Tag deleteTag(int eventId, String name) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to delete tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag getOtherTagById(int eventId) {
+        Response response = client.target(server).path("api/tag/other/{eventId}")
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to retrieve tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag addTag(TagDTO tagDTO) {
+        Response response = client
+                .target(server).path("api/tag")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tagDTO, APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            throw new RuntimeException(
+                    "Failed to save tag. Status code: " + response.getStatus());
+        }
+    }
+
+    public Tag updateTag(TagDTO tagDTO, String name, int eventId) {
+        Response response = client.target(server).path("api/tag/{name}/{eventId}")
+                .resolveTemplate("name", name)
+                .resolveTemplate("eventId", eventId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tagDTO, APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Tag tag = response.readEntity(new GenericType<>() {
+            });
+            response.close();
+            return tag;
+        } else {
+            response.close();
+            List<Tag> tags = getTagsByEvent(eventId);
+            if (tags.stream().anyMatch(t ->
+                    t.getName().equals(tagDTO.getName()))) {
+                throw new DuplicateKeyException("This name is already used for this event");
+            } else {
+                throw new RuntimeException();
+                // either the event is null or the tag with the given name and event does not exit
+            }
+        }
     }
 
     // stomp session which means you are connected to your websocket
@@ -519,12 +629,24 @@ public class ServerUtils {
 
     public List<Payment> getPaymentsOfEvent(int eventId) {
         return client
-            .target(server).path("api/payments/{id}")
+            .target(server).path("api/payments/event/{id}")
             .resolveTemplate("id", eventId)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get(new GenericType<List<Payment>>() {
             });
+    }
+
+    public Payment getPayment(long id) {
+        Response response = client
+            .target(server).path("api/payments/{id}")
+            .resolveTemplate("id", id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get();
+
+        if(response.getStatus() == 404) throw new RuntimeException("Payments have been updated");
+        return response.readEntity(Payment.class);
     }
 
     public Payment savePayment(PaymentDTO paymentDTO) {
@@ -608,14 +730,15 @@ public class ServerUtils {
         }
     }
 
-    public double[] getStatisticsByEventID(int eventID) {
+    public Double getSumByTag(int eventID, String tagName) {
         return client
             .target(server)
-            .path("/api/statistics")
-            .queryParam("eventID", eventID)
+            .path("/api/statistics/{eventId}/{tagName}")
+            .resolveTemplate("eventId", eventID)
+            .resolveTemplate("tagName", tagName)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .get(double[].class);
+            .get(Double.class);
     }
 
     public double getTotalCostEvent(int eventID) {
@@ -656,7 +779,6 @@ public class ServerUtils {
         }
 
     }
-
 
     //http://localhost:8080/api/currency/?from=USD&to=CHF&date=31-03-2024
     public Conversion getConversion(Currency from, Currency to, String date) {
@@ -712,7 +834,46 @@ public class ServerUtils {
         });
     }
 
+    public String getLanguageJSON(String lang){
+        return client.target(server)
+                .path("api/translate/json")
+                .queryParam("lang", lang)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(String.class);
+    }
+    public String setNewLang(String jsonObject, String lang){
+        return client.target(server)
+                .path("api/translate/write")
+                .queryParam("lang", lang)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(jsonObject, APPLICATION_JSON), String.class);
+    }
+
+    public String translate(String query, String sourceLang, String targetLang) {
+        Response response = ClientBuilder.newClient()
+                .target(server)
+                .path("api/translate")
+                .queryParam("query", query)
+                .queryParam("sourceLang", sourceLang)
+                .queryParam("targetLang", targetLang)
+                .request(APPLICATION_JSON)
+                .get();
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            response.close();
+            //throw new RuntimeException("Failed to retrieve language. Status code: " + response.getStatus());
+            return "no language found";
+        }
+        String res = response.readEntity(String.class);
+
+        return res;
+
+    }
+
+
     public void stop() {
         EXEC.shutdownNow();
     }
+
 }

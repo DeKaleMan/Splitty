@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
    <children>
       <Label fx:id="titleLabel" layoutX="97.0" layoutY="19.0" prefHeight="35.0" prefWidth="444.0" text="Title">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="55.0" layoutY="83.0" text="Invite Code: ">
+      <Label fx:id="inviteCodeText" layoutX="55.0" layoutY="83.0" text="Invite Code: ">
          <font>
             <Font name="System Bold" size="18.0" />
          </font></Label>
-      <Label layoutX="319.0" layoutY="83.0" prefHeight="17.0" prefWidth="181.0" text="Send email invites:">
+      <Label fx:id="sendEmailInvitesText" layoutX="319.0" layoutY="83.0" prefHeight="17.0" prefWidth="181.0" text="Send email invites:">
          <font>
             <Font name="System Bold" size="18.0" />
          </font></Label>
       <TextArea fx:id="emailArea" layoutX="320.0" layoutY="115.0" prefHeight="200.0" prefWidth="200.0" promptText="Add your emails to send an invite to" />
       <Button fx:id="sendInvites" layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send Invites" />
-      <Label fx:id="inviteCodeLabel" alignment="CENTER" layoutX="84.0" layoutY="182.0" prefHeight="67.0" prefWidth="154.0" text="00000">
+      <Label fx:id="inviteCodeLabel" alignment="CENTER" layoutX="84.0" layoutY="182.0" text="00000">
          <font>
             <Font name="System Bold Italic" size="42.0" />
          </font></Label>
-      <Button layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Label alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
+      <Button fx:id="back" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
+      <Label fx:id="noEmail" layoutX="320.0" layoutY="19.0" prefHeight="35.0" prefWidth="200.0" text="please fill in an email address" visible="false" />
+      <Button fx:id="defaultButton" layoutX="83.0" layoutY="342.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="122.0" text="Button" />
+      <Label fx:id="defaultLabel" layoutX="71.0" layoutY="283.0" prefHeight="62.0" prefWidth="148.0" text="not sure if your email is configured? Use this button" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="errorNoValidEmail" layoutX="320.0" layoutY="45.0" prefHeight="27.0" prefWidth="200.0" text="This is not an valid email" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

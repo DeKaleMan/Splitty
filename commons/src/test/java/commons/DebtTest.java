@@ -2,23 +2,25 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class DebtTest {
 
     Event e1 = new Event("test1", new Date(10), "test1","test1");
     Event e2 = new Event("test2", new Date(20), "test2","test2");
+    Tag t1 = new Tag(e1, "Food", "2a8000");
+    Tag t2 = new Tag(e1, "Travel", "3700ff");
 
     Participant p1 = new Participant("test1", 10.0, "test1", "test1", "test1", "","sss", e1);
 
     Participant p2 = new Participant("test2", 11.0, "test2", "test2", "test2", "test2", "d",e2);
 
-    Expense expense1 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0,p1,true);
+    Expense expense1 = new Expense(e1, "test1", t1, new Date(10), 10.0,p1,true);
 
-    Expense expense2 = new Expense(e2, "test1", Type.Food, new Date(10), 1.0,p2,true);
+    Expense expense2 = new Expense(e2, "test1", t2, new Date(10), 1.0,p2,true);
 
     Debt d1 = new Debt(expense1,10.0,p1);
     Debt d1Copy = new Debt(expense1,10.0,p1);

@@ -69,7 +69,7 @@
 
 
         <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-        <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" />
+        <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Edit" textFill="white" />
         <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false">
             <font>
                 <Font size="10.0" />
@@ -80,7 +80,8 @@
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
-
+        <Button fx:id="addTagButton" layoutX="434.0" layoutY="337.0" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
 
     </children>
 </AnchorPane>
+

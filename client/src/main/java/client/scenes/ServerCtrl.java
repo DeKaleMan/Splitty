@@ -2,14 +2,13 @@ package client.scenes;
 
 import client.MyFXML;
 import client.MyModule;
-import client.utils.AdminWindows;
-import client.utils.Config;
-import client.utils.EventPropGrouper;
-import client.utils.ServerUtils;
+import client.utils.*;
 import com.google.inject.Injector;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,10 +16,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import javax.inject.Inject;
 
 import static com.google.inject.Guice.createInjector;
-
-import javax.inject.Inject;
 
 
 public class ServerCtrl {
@@ -30,17 +28,23 @@ public class ServerCtrl {
 
     boolean noConnection = false;
     @FXML
-    public Label startupNotification;
+    private Label startupNotification;
     @FXML
-    public Label notConnectedError;
+    private Label title;
     @FXML
-    public ImageView imageView;
+    private Label serverText;
     @FXML
-    public TextField serverField;
+    private Label notConnectedError;
+    @FXML
+    private ImageView imageView;
+    @FXML
+    private TextField serverField;
     @FXML
     public Button connectButton;
     @FXML
-    public Button backButton;
+    private Button backButton;
+    @FXML
+    private ProgressIndicator connectLoading;
 
     @Inject
     public ServerCtrl(MainCtrl mainCtrl, Config config) {
@@ -50,37 +54,47 @@ public class ServerCtrl {
 
 
     public void setFields(boolean noConnection) {
-        this.noConnection = noConnection;
-        if (config.getConnection() != null) {
-            serverField.setText(config.getConnection());
-        }
-        if (noConnection) {
-            startupNotification.setVisible(true);
-            imageView.setImage(new Image("no-connection.png"));
-            backButton.setText("Settings");
-        } else {
-            startupNotification.setVisible(false);
-            imageView.setImage(new Image("connection2.png"));
-            backButton.setText("Back");
-        }
+        Platform.runLater(() -> {
+            this.noConnection = noConnection;
+            if (config.getConnection() != null) {
+                serverField.setText(config.getConnection());
+            }
+            if (noConnection) {
+                startupNotification.setVisible(true);
+                imageView.setImage(new Image("no-connection.png"));
+                backButton.setText("Settings");
+            } else {
+                startupNotification.setVisible(false);
+                imageView.setImage(new Image("connection2.png"));
+                backButton.setText("Back");
+            }
+        });
     }
 
     public void connect() {
-        notConnectedError.setVisible(false);
-        try {
-            ServerUtils.serverDomain = serverField.getText();
-            ServerUtils.resetServer();
-            serverUtils = new ServerUtils();
-            config.setConnection(serverField.getText());
-            config.write();
-            relaunch();
-            mainCtrl.closeStage();
-            noConnection = false;
-        } catch (RuntimeException e) {
-            notConnectedError.setVisible(true);
-            noConnection = true;
-            setFields(true);
-        }
+        new Thread(() -> {
+            notConnectedError.setVisible(false);
+            try {
+                ServerUtils.serverDomain = serverField.getText();
+                ServerUtils.resetServer();
+                serverUtils = new ServerUtils();
+                config.setConnection(serverField.getText());
+                config.write();
+                Platform.runLater(() -> {
+                    relaunch();
+                    mainCtrl.closeStage();
+                });
+                noConnection = false;
+                connectLoading.setVisible(false);
+            } catch (RuntimeException e) {
+                System.out.println("Could not connect");
+                notConnectedError.setVisible(true);
+                noConnection = true;
+                connectLoading.setVisible(false);
+                setFields(true);
+            }
+        }).start();
+        connectLoading.setVisible(true);
     }
 
     private void relaunch() throws RuntimeException {
@@ -105,15 +119,16 @@ public class ServerCtrl {
         // group these in the EventPropGrouper
         var eventPropGrouper = new EventPropGrouper(addExpense, addParticipant, editParticipant,
                 statistics, debts,editEvent, editExpense, manageParticipants);
-
+        var addTag = fxml.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
+        var manageTags = fxml.load(ManageTagsCtrl.class, "client", "scenes", "ManageTags.fxml");
+        var tagsGrouper = new TagsGrouper(addTag, manageTags);
         var adminLogin = fxml.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
         var adminOverview = fxml.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
         var adminWindows = new AdminWindows(adminLogin, adminOverview);
         var mainCtrl = injector.getInstance(MainCtrl.class);
         mainCtrl.initialize(new Stage(), invitation,splittyOverview,
                 startScreen, contactDetails, eventPropGrouper, userEventList,
-                createEvent, adminWindows, settings, server);
-
+                createEvent, adminWindows, settings, server, tagsGrouper);
     }
 
     public void back() {
@@ -128,5 +143,36 @@ public class ServerCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
+    }
+
+    public void setTitle(String txt) {
+        Platform.runLater(() -> {
+
+            this.title.setText(txt);
+        });
+    }
+    public void setConnectButton(String txt) {
+        Platform.runLater(() -> {
+
+            this.connectButton.setText(txt);
+        });
+    }
+    public void setNotConnectedError(String txt){
+        Platform.runLater(() -> {
+
+            this.notConnectedError.setText(txt);
+        });
+    }
+    public void setStartupNotification(String txt){
+        Platform.runLater(() -> {
+
+            this.startupNotification.setText(txt);
+        });
+    }
+    public void setServerText(String txt){
+        Platform.runLater(() -> {
+
+            this.serverText.setText(txt);
+        });
     }
 }

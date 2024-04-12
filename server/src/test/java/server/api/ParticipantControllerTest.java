@@ -5,109 +5,183 @@ import commons.Participant;
 import commons.dto.ParticipantDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.async.DeferredResult;
+import server.service.ParticipantService;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+class ParticipantControllerTest {
 
-public class ParticipantControllerTest {
+    @Mock
+    private ParticipantService participantService;
 
+    @InjectMocks
     private ParticipantController participantController;
-    private TestParticipantRepository testParticipantRepository;
-    private TestEventRepository testEventRepository;
-    private Event event;
+
     @BeforeEach
     void setUp() {
-        testParticipantRepository = new TestParticipantRepository();
-        testEventRepository = new TestEventRepository();
-        participantController = new ParticipantController(testParticipantRepository, testEventRepository);
-
-        event = new Event("Event1", new Date(10, 10, 2005), "Yavor", "cool event");
-        event.setInviteCode("testInviteCode");
-        event.setId(1);
-        testEventRepository.save(event);
+        MockitoAnnotations.openMocks(this);
+        participantController = new ParticipantController(participantService);
     }
 
     @Test
-    void testGetAllParticipants() {
-        Participant participant1 = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid", null);
-        Participant participant2 = new Participant("Jesse", 200.0,
-                "IBAN2", "BIC2", "jesse@tudelft.nl", "","uuid2", null);
+    void getAllParticipants() {
+        List<Participant> participants = new ArrayList<>();
+        participants.add(new Participant());
+        when(participantService.getAllParticipants()).thenReturn(participants);
 
-        testParticipantRepository.save(participant1);
-        testParticipantRepository.save(participant2);
-
-        List<Participant> participants = participantController.getAllParticipants();
-        assertEquals(2, participants.size());
+        List<Participant> result = participantController.getAllParticipants();
+        assertEquals(1, result.size());
     }
 
     @Test
-    void testGetParticipantNotFoundInvalidEvent() {
-        ResponseEntity<Participant> response = participantController
-                .getParticipantById("uuid", 2);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    void getParticipantByIdFound() {
+        Participant participant = new Participant();
+        when(participantService.getParticipantById(any(String.class), any(Integer.class))).thenReturn(participant);
+
+
+        ResponseEntity<Participant> result = participantController.getParticipantById("uuid", 1);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
-    void testGetParticipantNotFoundInvalidParticipant() {
-        ResponseEntity<Participant> response = participantController
-                .getParticipantById("notexisting", 1);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    void getParticipantByIdNotFound() {
+        when(participantService.getParticipantById(any(String.class), any(Integer.class))).thenReturn(null);
+        ResponseEntity<Participant> result = participantController.getParticipantById("uuid", 1);
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
     @Test
-    void testCreateParticipant() {
-        Participant participant = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid23", event);
-//        testParticipantRepository.save(participant);
-        ResponseEntity<Participant> response = participantController.createParticipant(
-                new ParticipantDTO(participant.getName(), participant.getBalance(),
-                        participant.getIBan(), participant.getBIC(), participant.getEmail(), "",
-                        event.getId(), participant.getUuid(), event.getInviteCode()));
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    void createParticipantSuccessful() {
+        Participant participant = new Participant();
+        when(participantService.createParticipant(any(ParticipantDTO.class))).thenReturn(participant);
+        ResponseEntity<Participant> result = participantController.createParticipant(new ParticipantDTO());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
-    void testCreateParticipantNotFoundInvalidEvent() {
-        ResponseEntity<Participant> response = participantController
-                .createParticipant(new ParticipantDTO("Yavor", 100.0,
-                        "IBAN1", "BIC1", "yavor@tudelft.nl", "",2,
-                        "uuid2", "notValidINvite"));
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    void createParticipantNotFound() {
+        when(participantService.createParticipant(any(ParticipantDTO.class))).thenReturn(null);
+        ResponseEntity<Participant> result = participantController.createParticipant(new ParticipantDTO());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
     @Test
-    void testGetParticipantById() {
+    void updateParticipantSuccessful() {
+        Participant participant = new Participant();
 
-        Participant participant1 = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid", event);
-        testParticipantRepository.save(participant1);
 
-        ResponseEntity<Participant> response = participantController
-                .getParticipantById("uuid", event.getId());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(participant1, response.getBody());
+        when(participantService.updateParticipant(any(String.class),
+                any(Integer.class),
+                any(ParticipantDTO.class)))
+                .thenReturn(participant);
+        ResponseEntity<Participant> result = participantController.updateParticipant("uuid", 1, new ParticipantDTO());
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
-    void testUpdateParticipant() {
-        Participant participant = new Participant("Yavor", 100.0,
-                "IBAN1", "BIC1", "yavor@tudelft.nl", "","uuid", event);
-        testParticipantRepository.save(participant);
-        ParticipantDTO pdto = new ParticipantDTO("Ivan", 22,
-                "iban2", "BIC2", "angel@tudelft.nl", "",event.getId(), "uuid1");
-        ResponseEntity<Participant> response = participantController.updateParticipant("uuid", event.getId(), pdto);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Ivan", response.getBody().getName());
-        assertEquals(22, response.getBody().getBalance());
-        assertEquals("iban2", response.getBody().getIBan());
-        assertEquals("BIC2", response.getBody().getBIC());
-        assertEquals("angel@tudelft.nl", response.getBody().getEmail());
-        assertEquals("uuid1", response.getBody().getUuid());
+    void updateParticipantNotFound() {
+        when(participantService.updateParticipant(any(String.class),
+                any(Integer.class),
+                any(ParticipantDTO.class)))
+                .thenReturn(null);
+        ResponseEntity<Participant> result = participantController.updateParticipant("uuid", 1, new ParticipantDTO());
+
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
+    @Test
+    void deleteParticipantSuccessful() {
+        Participant participant = new Participant();
+        when(participantService.deleteParticipant(any(String.class), any(Integer.class))).thenReturn(participant);
+
+        ResponseEntity<Participant> result = participantController.deleteParticipant("uuid", 1);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    void deleteParticipantNotFound() {
+        when(participantService.deleteParticipant(any(String.class), any(Integer.class))).thenReturn(null);
+
+
+        ResponseEntity<Participant> result = participantController.deleteParticipant("uuid", 1);
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
+    void getEventsByParticipantFound() {
+        List<Event> events = new ArrayList<>();
+
+        events.add(new Event());
+        when(participantService.getEventsByParticipant(any(String.class))).thenReturn(events);
+
+
+
+        ResponseEntity<List<Event>> result = participantController.getEventsByParticipant("uuid");
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    void getEventsByParticipantNotFound() {
+
+        when(participantService.getEventsByParticipant(any(String.class))).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Event>> result = participantController.getEventsByParticipant("uuid");
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    void getByEventFound() {
+        List<Participant> participants = new ArrayList<>();
+        participants.add(new Participant());
+
+        when(participantService.getByEvent(any(Integer.class))).thenReturn(participants);
+        ResponseEntity<List<Participant>> result = participantController.getByEvent(1);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    void getByEventNotFound() {
+        when(participantService.getByEvent(any(Integer.class))).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<Participant>> result = participantController.getByEvent(1);
+
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
+    void testGetUpdates() {
+        DeferredResult<ResponseEntity<Participant>> deferredResult = participantController.getUpdates();
+        Participant mockParticipant = new Participant();
+        participantController.notifyUpdateListeners(mockParticipant);
+
+        ResponseEntity<Participant> responseEntity = (ResponseEntity<Participant>) deferredResult.getResult();
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockParticipant, responseEntity.getBody());
+    }
+
+    @Test
+    void testGetDeletions() {
+        DeferredResult<ResponseEntity<Participant>> deferredResult = participantController.getDeletions();
+        Participant mockParticipant = new Participant();
+
+        participantController.notifyDeletionListeners(mockParticipant);
+
+
+        ResponseEntity<Participant> responseEntity = (ResponseEntity<Participant>) deferredResult.getResult();
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        assertEquals(mockParticipant, responseEntity.getBody());
+    }
 }

@@ -2,8 +2,6 @@ package server.api.depinjectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import commons.Conversion;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -102,16 +101,6 @@ public class ServerIOUtilActual implements ServerIOUtil {
         return file.exists();
     }
 
-    @Override
-    public void writeJson(JsonObject object, File file){
-        try (FileWriter fileWriter = new FileWriter(file.getPath())) {
-            Gson gson = new Gson();
-            gson.toJson(object, fileWriter);
-            System.out.println("JSON file updated successfully.");
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing JSON object to file", e);
-        }
-    }
 
     @Override
     public boolean createNewFile(File newfile){
@@ -119,6 +108,17 @@ public class ServerIOUtilActual implements ServerIOUtil {
             return newfile.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public HashMap readJson(File file) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(file, HashMap.class);
+        } catch (IOException e) {
+            System.out.println(e);
+            return new HashMap<>();
         }
     }
 }

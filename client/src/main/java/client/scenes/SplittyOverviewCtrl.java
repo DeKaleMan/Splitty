@@ -2,13 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.*;
 import commons.Currency;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Type;
-import commons.dto.ExpenseDTO;
+import commons.*;
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -21,15 +16,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -37,10 +33,8 @@ import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
 
-
-    //We need to store the eventCode right here
     private int eventId;
-
+    boolean translating = false;
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
@@ -49,6 +43,10 @@ public class SplittyOverviewCtrl implements Initializable {
     //these are for the css:
     @FXML
     private AnchorPane background;
+    @FXML
+    private ComboBox<String> languageSelect;
+    @FXML
+    private ImageView flag;
     @FXML
     private Label expenses;
     @FXML
@@ -80,6 +78,10 @@ public class SplittyOverviewCtrl implements Initializable {
     @FXML
     private Button deleteExpenseButton;
     @FXML
+    private Button editExpenseButton;
+
+
+    @FXML
     public Button hostOptionsButton;
 
 
@@ -102,12 +104,21 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label joinedEventLabel;
     @FXML
     public Label inviteCode;
-
+    @FXML
+    private Button myDetails;
+    @FXML
+    public Button manageTagsButton;
 
     @FXML
     private ListView<Participant> participantListView;
 
     ObservableList<Participant> participantsList;
+
+    @FXML
+    private Button undo;
+    
+    Stack<Pair<String,Expense>> undoExpenseStack;
+    Stack<Debt> undoDebtStack;
 
     @Inject
     public SplittyOverviewCtrl(ServerUtils server, MainCtrl mainCtrl, Config config){
@@ -116,6 +127,8 @@ public class SplittyOverviewCtrl implements Initializable {
         this.config = config;
         admin = false;
         participantsList = FXCollections.observableArrayList();
+        undoExpenseStack = new Stack<>();
+        undoDebtStack = new Stack<>();
     }
 
     public void initializeAll(Event event) {
@@ -155,7 +168,42 @@ public class SplittyOverviewCtrl implements Initializable {
                 }
             }
         });
+        undo.setVisible(false);
         serverUtils.registerForParticipantLongPolling(this::handleUpdate, this::handleDeletion);
+        serverUtils.registerForExpenseWS("/topic/updateExpense", Expense.class, this::handleUpdateExpense);
+        serverUtils.registerForExpenseWS("/topic/deleteExpense", Expense.class, this::handleDeleteExpense);
+    }
+
+    private void handleDeleteExpense(Expense expense) {
+        if(expense.getEvent().getId() != eventId) return;
+        Platform.runLater(()->{
+            deleteExpenseInAllListViews(expense);
+        });
+    }
+
+    private void deleteExpenseInAllListViews(Expense expense) {
+        allExpensesList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+        paidByMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+        includingMeList.getItems().removeIf(x -> x.getEvent().id == expense.getEvent().id
+            && expense.getExpenseId() == x.getExpenseId());
+    }
+
+    private void handleUpdateExpense(Expense expense) {
+        if(expense.getEvent().getId() != eventId) return;
+        Platform.runLater(()->{
+            deleteExpenseInAllListViews(expense);
+            addExpenseToAllListViews(expense);
+        });
+    }
+
+    private void addExpenseToAllListViews(Expense expense) {
+        allExpensesList.getItems().add(expense);
+        if(expense.getPayer().getUuid().equals(config.getId())) paidByMeList.getItems().add(expense);
+        List<String> including = serverUtils.getDebtByExpense(eventId,
+            expense.getExpenseId()).stream().map(x -> x.getParticipant().getUuid()).toList();
+        if (including.contains(config.getId())) includingMeList.getItems().add(expense);
     }
 
     private void handleUpdate(Participant p){
@@ -203,7 +251,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText(), eventId);
+        mainCtrl.showAddExpense(eventId);
     }
 
     @FXML
@@ -227,6 +275,9 @@ public class SplittyOverviewCtrl implements Initializable {
         } else {
             mainCtrl.showStartScreen();
         }
+        hideUndo();
+        undoExpenseStack.clear();
+        undoDebtStack.clear();
     }
 
     @FXML
@@ -234,24 +285,6 @@ public class SplittyOverviewCtrl implements Initializable {
         mainCtrl.viewDeptsPerEvent(eventId);
     }
 
-
-    public void addExpense(String description, Type type, Date date,
-                           Double totalExpense, String payerEmail) {
-        try {
-            ExpenseDTO exp = new ExpenseDTO(eventId, description, type,
-                date, totalExpense, payerEmail, true);
-            serverUtils.addExpense(exp);
-            serverUtils.send("/app/addExpense", exp);
-            serverUtils.generatePaymentsForEvent(eventId);
-        } catch (NotFoundException ep) {
-            // Handle 404 Not Found error
-            // Display an error message or log the error
-            System.err.println("Expense creation failed: Resource not found.");
-            ep.printStackTrace();
-            // Optionally, notify the user or perform error recovery actions
-        }
-
-    }
 
     @FXML
     public void editExpense() {
@@ -296,14 +329,9 @@ public class SplittyOverviewCtrl implements Initializable {
         }
         try {
             List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            for(Debt d : debts){
-                Participant p = d.getParticipant();
-                serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
-                    p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
-                    p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
-            }
-            serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
-            serverUtils.deleteExpense(toDelete);
+            deleteExpenseAndDebts(debts, toDelete);
+            pushUndoStacks(toDelete,debts,"delete");
+            showUndo();
         } catch (RuntimeException e) {
             noExpenseError.setVisible(false);
             expenseNotDeletedError.setVisible(true);
@@ -317,6 +345,19 @@ public class SplittyOverviewCtrl implements Initializable {
         fetchExpenses();
         serverUtils.generatePaymentsForEvent(eventId);
         return toDelete;
+    }
+
+    private void deleteExpenseAndDebts(List<Debt> debts, Expense toDelete) {
+        for(Debt d : debts){
+//                undoDebtStack.push(d);
+            Participant p = d.getParticipant();
+            serverUtils.updateParticipant(p.getUuid(),new ParticipantDTO(p.getName(),
+                p.getBalance() - d.getBalance(), p.getIBan(),p.getBIC(),p.getEmail(),
+                p.getAccountHolder(),p.getEvent().getId(),p.getUuid()));
+        }
+        serverUtils.deleteDebtsOfExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+        serverUtils.deleteExpense(toDelete);
+        serverUtils.send("/app/deleteExpense", toDelete);
     }
 
 
@@ -367,8 +408,16 @@ public class SplittyOverviewCtrl implements Initializable {
                             if (expense == null || b) setGraphic(null);
                             else {
                                 GridPane grid = new GridPane();
+                                Color bgColor = getBgColor(expense.getTag());
+                                String  textColor = getTextColor(bgColor);
+                                if (isSelected()) {
+                                    setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+                                    textColor = "#FFFFFF";
+                                } else {
+                                    setBackground(new Background(new BackgroundFill(bgColor, null, null)));
+                                }
                                 Date date = expense.getDate();
-                                Label dateLabel = getDateLabel(date);
+                                Label dateLabel = getDateLabel(date, textColor);
                                 List<Participant> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                             expense.getExpenseId()).stream()
@@ -379,55 +428,71 @@ public class SplittyOverviewCtrl implements Initializable {
                                         mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
                                             config.getCurrency(), date,
                                             totalExpense);
-                                }catch (RuntimeException e){
+                                } catch (RuntimeException e){
                                     grid.add(new Text(e.getMessage()),0,0);
                                     setGraphic(grid);
                                     return;
                                 }
-                                Text mainInfo = getMainInfo(expense, totalExpense,
-                                        involved);
+                                Label mainInfo = getMainInfo(expense, totalExpense,
+                                        involved, textColor);
                                 grid.add(dateLabel, 0, 0);
                                 grid.add(mainInfo, 1, 0);
-                                grid.add(new Text(involved.stream().map(x -> x.getName())
-                                    .toList().toString()), 1, 1);
+                                Label list = new Label(involved.stream().map(x -> x.getName())
+                                        .toList().toString());
+                                list.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
+                                grid.add(list, 1, 1);
                                 setGraphic(grid);
-                            }
-                        }
-                    };
-                }
+                            }}};}
             };
         return cellFactory;
     }
 
-    private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
-        Text mainInfo = new Text();
+    private Color getBgColor(Tag tag) {
+        if (tag.getColour() == null || tag.getColour().isEmpty()) {
+            return Color.WHITE;
+        }
+        return Color.web(tag.getColour());
+    }
+    private String  getTextColor(Color color) {
+        if (color.getBrightness() > 0.5) {
+            return "#000000";
+        }
+        return "#FFFFFF";
+    }
+    private Label getMainInfo(Expense expense, double totalExpense, List<Participant> involved, String textColor) {
+        Label mainInfo = new Label();
         if (expense.isSharedExpense()) {
+            String paid =  " " + mainCtrl.translate("paid") + " ";
+            String forT =  " " + mainCtrl.translate("for") + " " ;
             mainInfo.setText(expense.getPayer().getName()
-                + " paid "
+                + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + " for " + expense.getType());
+                + "\n" + forT +  expense.getTag().getName());
         } else {
+            String gave = " " + mainCtrl.translate("gave") + " " ;
+            String to = " " + mainCtrl.translate("to") + " " ;
             mainInfo.setText(expense.getPayer().getName()
-                + " gave "
+                + gave
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + " to "
+                + to
                 + involved
                     .stream()
                     .filter(x -> !x.equals(expense.getPayer()))
                     .map(x -> x.getName())
                     .findFirst().get());
         }
+        mainInfo.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
         return mainInfo;
     }
 
-    private static Label getDateLabel(Date date) {
+    private static Label getDateLabel(Date date, String  textColor) {
         Label dateLabel = new Label(
             date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
                 + (date.getMonth() + 1) + "."
                 + (date.getYear() + 1900));
-        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
+        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
         dateLabel.setPrefWidth(70);
         return dateLabel;
     }
@@ -446,46 +511,82 @@ public class SplittyOverviewCtrl implements Initializable {
 
 
     public void setExpensesText(String text) {
-        this.expenses.setText(text);
+        Platform.runLater(() -> {
+            this.expenses.setText(text);
+        });
     }
 
     public void setParticipants(String text) {
-        this.participants.setText(text);
+        Platform.runLater(() -> {
+            this.participants.setText(text);
+        });
     }
 
     public void setBackButton(String text) {
-        this.backButton.setText(text);
+        Platform.runLater(() -> {
+            this.backButton.setText(text);
+        });
     }
 
     public void setSettleDebtsButton(String text) {
-        this.settleDebtsButton.setText(text);
+        Platform.runLater(() -> {
+            this.settleDebtsButton.setText(text);
+        });
     }
 
     public void setStatisticsButton(String text) {
-        this.statisticsButton.setText(text);
+        Platform.runLater(() -> {
+            this.statisticsButton.setText(text);
+        });
     }
 
     public void setAddExpenseButton(String text) {
-        this.addExpenseButton.setText(text);
+        Platform.runLater(() -> {
+            this.addExpenseButton.setText(text);
+        });
     }
 
-
     public void setPaidByMe(String text) {
-        this.paidByMe.setText(text);
+        Platform.runLater(() -> {
+            this.paidByMe.setText(text);
+        });
     }
 
     public void setDeleteExpenseButton(String text) {
-        this.deleteExpenseButton.setText(text);
+        Platform.runLater(() -> {
+            this.deleteExpenseButton.setText(text);
+        });
     }
 
     public void setSendInvites(String text) {
-        this.sendInvites.setText(text);
+        Platform.runLater(() -> {
+            this.sendInvites.setText(text);
+        });
     }
 
     public void setAllExpenses(String text) {
-        this.allExpenses.setText(text);
+        Platform.runLater(() -> {
+            this.allExpenses.setText(text);
+        });
     }
 
+    public void setEditEvent(String text) {
+        Platform.runLater(() -> {
+            this.editEvent.setText(text);
+        });
+    }
+
+    public void setEditExpense(String text) {
+        Platform.runLater(() -> {
+            this.editExpenseButton.setText(text);
+        });
+    }
+
+    public void setLeaveButton(String text) {
+        Platform.runLater(() -> {
+            this.leaveButton.setText(text);
+        });
+    }
 
     public void leaveEvent() {
         if (admin) {
@@ -503,19 +604,19 @@ public class SplittyOverviewCtrl implements Initializable {
             // label or error?
             return;
         }
-
-        if (me.getBalance() != 0) {
+        // balance margin of error is 0.0001
+        if (Math.abs(me.getBalance()) > 0.0001){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("You can't leave the event");
-            alert.setContentText("You can only leave the event if your balance is 0");
+            alert.setTitle(mainCtrl.translate("Leaving an event"));
+            alert.setHeaderText(mainCtrl.translate("You can't leave the event"));
+            alert.setContentText(mainCtrl.translate("You owe/are owed money."));
             alert.showAndWait();
             return;
         }
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirmation");
-        confirmation.setHeaderText("Leaving event");
-        confirmation.setContentText("Are you sure you want to leave the event?");
+        confirmation.setTitle(mainCtrl.translate("Confirmation"));
+        confirmation.setHeaderText(mainCtrl.translate("Leaving event"));
+        confirmation.setContentText(mainCtrl.translate("Are you sure you want to leave the event?"));
         confirmation.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 serverUtils.deleteParticipant(config.getId(), eventId);
@@ -538,6 +639,10 @@ public class SplittyOverviewCtrl implements Initializable {
             KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
         if (k.match(press)) {
             showAddExpense();
+        }
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
+        if(ctrlZ.match(press)){
+            undo();
         }
 
     }
@@ -579,6 +684,140 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void stopUpdates(){
         serverUtils.stop();
+    }
+    public void setmyDetails(String txt){
+        Platform.runLater(() -> {this.myDetails.setText(txt);});
+    }
+    public void setHostOptionsButton(String txt){
+        Platform.runLater(() -> {
+            this.hostOptionsButton.setText(txt);
+        });
+    }
+
+    @FXML
+    public void showLangOptions(){
+        languageSelect.show();
+        flag.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!languageSelect.getBoundsInParent().contains(event.getX(), event.getY())) {
+                // Clicked outside the choice box, hide it
+                languageSelect.setVisible(false);
+            }
+        });
+        flag.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Hide the choice box when any key is pressed
+            languageSelect.setVisible(false);
+        });
+    }
+
+    public void setFlag(Image image) {
+        flag.setImage(image);
+    }
+    @FXML
+    public void changeLanguage(){
+        if(translating) return;
+        try {
+            if (languageSelect.getSelectionModel().getSelectedItem() != null) {
+                String selected = languageSelect.getSelectionModel().getSelectedItem();
+                if(selected.equals(mainCtrl.language)){
+                    return;
+                }
+                //Language toLang = Language.valueOf(selected);
+                if (mainCtrl.languages.contains(selected)) {
+                    config.setLanguage(selected);
+                    config.write();
+                    String toLang = selected;
+                    mainCtrl.changeLanguage(toLang);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void setLanguageSelect(){
+        translating = true;
+        ObservableList<String> languages = FXCollections.observableArrayList();
+        mainCtrl.language = config.getLanguage();
+        if (mainCtrl.language == null) {
+            mainCtrl.language = "en";
+        }
+        languages.addAll(mainCtrl.languages);
+        languageSelect.setItems(languages);
+        languageSelect.setValue(mainCtrl.language);
+        //languageSelect.setValue(flag);
+        Image flag = mainCtrl.getFlag();
+        setFlag(flag);
+        translating = false;
+    }
+    
+    public void pushUndoStacks(Expense expense, List<Debt> debts, String method){
+        undoExpenseStack.push(new Pair<>(method,expense));
+        debts.forEach(undoDebtStack::push);
+    }
+    
+    public void undo(){
+        if(undoExpenseStack.isEmpty()) return;
+        Pair<String,Expense> expensePair = undoExpenseStack.pop();
+        List<Debt> debts = new ArrayList<>();
+        while(!undoDebtStack.isEmpty() && undoDebtStack.peek().getExpense()
+            .equals(expensePair.getValue())) debts.add(undoDebtStack.pop());
+        if(expensePair.getKey().equals("add")){
+            undoAdd(expensePair.getValue());
+        }else if(expensePair.getKey().equals("edit")){
+            undoEdit(expensePair.getValue(), debts);
+        }else{
+            undoDelete(expensePair.getValue(),debts);
+        }
+        fetchExpenses();
+        if(undoExpenseStack.isEmpty()) undo.setVisible(false);
+        serverUtils.generatePaymentsForEvent(eventId);
+    }
+
+    private void undoEdit(Expense expense, List<Debt> debts) {
+        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getTag(),
+            expense.getDate(),expense.getTotalExpense(),
+            expense.getPayer(), expense.getEvent().getId(),
+            expense.isSharedExpense(),
+            debts
+                .stream()
+                .filter(x -> x.getBalance() < 0)
+                .map(x -> x.getParticipant())
+                .toList());
+    }
+
+    private void undoDelete(Expense expense, List<Debt> debts) {
+        mainCtrl.addExpense(expense.getDescription(), expense.getTag(),
+                expense.getDate(),expense.getTotalExpense(),
+                serverUtils.getParticipant(expense.getPayer().getUuid(),
+                    expense.getPayer().getEvent().getId()), expense.getEvent().getId(),
+                expense.isSharedExpense(),
+                debts
+                        .stream()
+                        .filter(x -> x.getBalance() < 0)
+                        .map(x -> serverUtils.getParticipant(x.getParticipant().getUuid(),
+                            x.getParticipant().getEvent().getId()))
+                        .toList());
+        serverUtils.generatePaymentsForEvent(eventId);
+    }
+
+    private void undoAdd(Expense toDelete) {
+        List<Debt> debts = serverUtils.getDebtByExpense(toDelete.getEvent().getId(), toDelete.getExpenseId());
+        deleteExpenseAndDebts(debts, toDelete);
+    }
+
+    public void showUndo(){
+        undo.setVisible(true);
+    }
+
+    public void hideUndo(){
+        undo.setVisible(false);
+    }
+
+    public void setUndo(String t){
+        this.undo.setText(t);
+    }
+
+    public void viewManageTags() {
+        mainCtrl.showManageTags(eventId, false, null, true);
     }
 }
 

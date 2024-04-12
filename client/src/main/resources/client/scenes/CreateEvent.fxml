@@ -4,24 +4,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="/general.css" fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
     <children>
 
         <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
       <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
          <children>
-      
-              <Label text="Event Name">
+
+              <Label fx:id="eventNameText" text="Event Name">
                   <font>
                       <Font name="System Bold" size="16.0" />
                   </font>
               </Label>
-      
+
               <TextField fx:id="titleField" onKeyPressed="#resetTitleFieldError" prefHeight="25.0" prefWidth="181.0" promptText="required" />
               <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
-      
-      
-            <Label text="Date">
+
+
+            <Label fx:id="dateText" text="Date">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -33,8 +33,8 @@
       </VBox>
       <VBox alignment="TOP_CENTER" layoutX="321.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
          <children>
-      
-                    <Label text="Event Description">
+
+                    <Label fx:id="eventDescriptionText" text="Event Description">
                   <font>
                       <Font name="System Bold" size="16.0" />
                   </font>
@@ -44,17 +44,14 @@
       </VBox>
       <HBox alignment="CENTER" layoutX="176.0" layoutY="311.0" prefHeight="30.0" prefWidth="248.0">
          <children>
-      
-                        
+
+
                                 <Button fx:id="createButton" mnemonicParsing="false" onAction="#createEvent" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Create Event" textFill="white">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
          </children></HBox>
-      <Button fx:id="goToSettings" layoutX="196.0" layoutY="158.0" mnemonicParsing="false" onAction="#showSettings" prefHeight="85.0" prefWidth="209.0" text="Go to settings" visible="false" />
-      <Label fx:id="hostNameError" layoutX="88.0" layoutY="-14.0" prefHeight="106.0" prefWidth="424.0" text="No name was found in your configuration. Go to settings to add a name" visible="false" wrapText="true" />
-
 
     </children>
 </AnchorPane>

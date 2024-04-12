@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -8,45 +9,37 @@
    <children>
 
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-      <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
+      <VBox alignment="TOP_CENTER" layoutX="75.0" layoutY="66.0" prefHeight="200.0" prefWidth="451.0" spacing="5.0">
          <children>
+            <Label fx:id="oldEventnameText" layoutX="78.0" layoutY="32.0" text="Old event name">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="oldEventname" alignment="CENTER" contentDisplay="CENTER" text="event name" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="18.0" />
+               </font></Label>
 
-            <Label text="Event Name">
+            <Label fx:id="eventNameText" text="New Event Name">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
 
-            <TextField fx:id="nameChange" prefHeight="25.0" prefWidth="181.0" promptText="required" />
+            <TextField fx:id="nameChange" prefHeight="25.0" prefWidth="181.0" promptText="required">
+               <VBox.margin>
+                  <Insets left="100.0" right="100.0" />
+               </VBox.margin></TextField>
             <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
-
-
-            <Label text="Date">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
             <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" visible="false" />
-            <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
-            <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" />
-         </children>
-      </VBox>
-      <VBox alignment="TOP_CENTER" layoutX="321.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">
-         <children>
-
-            <Label text="Event Description">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextArea fx:id="eventDescriptionArea" prefHeight="118.0" prefWidth="248.0" promptText="What is the event about..." visible="false" />
          </children>
       </VBox>
       <HBox alignment="CENTER" layoutX="176.0" layoutY="313.0" prefHeight="30.0" prefWidth="248.0">
          <children>
 
 
-            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; : 6;" text="edit event" textFill="white">
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#changeValues" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000;" text="edit event" textFill="white">
                <font>
                   <Font size="14.0" />
                </font>

@@ -4,14 +4,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
    <children>
-      <Label layoutX="228.0" layoutY="14.0" prefHeight="44.0" prefWidth="164.0" text="Add Participant">
+      <Label fx:id="title" layoutX="228.0" layoutY="14.0" text="Add Participant">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Text layoutX="185.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="59.85107421875">
+      <Text fx:id="name" layoutX="185.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="59.85107421875">
          <font>
             <Font size="20.0" />
          </font>
@@ -38,7 +38,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="96.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" wrappingWidth="148.57142857142856">
+      <Text fx:id="accountHolder" layoutX="96.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" wrappingWidth="148.57142857142856">
          <font>
             <Font size="20.0" />
          </font>

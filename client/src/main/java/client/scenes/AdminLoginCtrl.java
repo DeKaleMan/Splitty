@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.AdminServerUtils;
 import com.google.inject.Inject;
 import jakarta.ws.rs.core.Response;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,6 +28,8 @@ public class AdminLoginCtrl {
 
     @FXML
     private Text signIn;
+    @FXML
+    private Button back;
     @FXML
     private Text instruction;
     @FXML
@@ -83,32 +86,53 @@ public class AdminLoginCtrl {
     }
 
     public void setSignIn(String txt) {
-        this.signIn.setText(txt);
+        Platform.runLater(() -> {
+            this.signIn.setText(txt);
+        });
     }
 
     public void setInstruction(String txt) {
-        this.instruction.setText(txt);
+        Platform.runLater(() -> {
+            this.instruction.setText(txt);
+        });
     }
 
     public void setPasswordInstructionLink(String txt) {
-        this.passwordInstructionLink.setText(txt);
+        Platform.runLater(() -> {
+            this.passwordInstructionLink.setText(txt);
+        });
     }
 
     public void setSignInButton(String txt) {
-        this.signInButton.setText(txt);
+        Platform.runLater(() -> {
+            this.signInButton.setText(txt);
+        });
     }
 
     public void setUrlField(String txt) {
-        this.urlField.setPromptText(txt);
+        Platform.runLater(() -> {
+            this.urlField.setPromptText(txt);
+        });
     }
 
     public void setPasswordField(String txt) {
-        this.passwordField.setPromptText(txt);
+        Platform.runLater(() -> {
+            this.passwordField.setPromptText(txt);
+        });
     }
 
     public void setPasswordInstructionsText(String txt) {
-        this.passwordInstructionsText.setText(txt);
+        Platform.runLater(() -> {
+            this.passwordInstructionsText.setText(txt);
+        });
     }
+
+    public void setBack(String txt){
+        Platform.runLater(() -> {
+            this.back.setText(txt);
+        });
+    }
+
 
     public void back() {
         mainCtrl.showStartScreen();

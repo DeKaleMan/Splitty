@@ -4,7 +4,8 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Participant;
-import commons.Type;
+import commons.Tag;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,14 +30,9 @@ import java.util.*;
 
 public abstract class ExpenseCtrl {
     protected final ServerUtils serverUtils;
-    protected int eventCode;
+    protected int eventId;
     protected final MainCtrl mainCtrl;
     protected final Config config;
-
-
-//    @FXML
-//    protected Label titleLabel;
-
 
 
     @FXML
@@ -62,7 +58,7 @@ public abstract class ExpenseCtrl {
     protected TextField amount;
 
     @FXML
-    protected ComboBox<Type> category;
+    protected ComboBox<Tag> category;
 
     @FXML
     protected Label sceneTypeText;
@@ -135,6 +131,12 @@ public abstract class ExpenseCtrl {
         setCurrencyUp();
     }
 
+    public void setTagsUp() {
+        this.category.getItems().clear();
+        this.category.setItems(
+                FXCollections.observableArrayList(serverUtils.getTagsByEvent(eventId)));
+    }
+
     protected void setCurrencyUp() {
         currencyComboBox.setItems(FXCollections.observableArrayList(Currency.EUR,Currency.CHF,Currency.USD));
         currencyComboBox.setCellFactory(new Callback<ListView<Currency>, ListCell<Currency>>() {
@@ -176,30 +178,28 @@ public abstract class ExpenseCtrl {
     abstract void setSplitListUp();
 
     protected void setCategoriesUp() {
-        category.setCellFactory(param -> new ListCell<Type>() {
+        category.setCellFactory(param -> new ListCell<Tag>() {
             @Override
-            protected void updateItem(Type item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
+            protected void updateItem(Tag tag, boolean empty) {
+                super.updateItem(tag, empty);
+                if (empty || tag == null) {
                     setText(null);
                 } else {
-                    setText(item.toString());
+                    setText(tag.getName());
                 }
             }
         });
-        category.setButtonCell(new ListCell<Type>(){
+        category.setButtonCell(new ListCell<Tag>(){
             @Override
-            protected void updateItem(Type type, boolean b) {
-                super.updateItem(type, b);
-                if(type == null || b){
+            protected void updateItem(Tag tag, boolean b) {
+                super.updateItem(tag, b);
+                if(tag == null || b){
                     setText("Select category");
                 }else{
-                    setText("" + type);
+                    setText("" + tag.getName());
                 }
             }
         });
-        this.category.setItems(
-            FXCollections.observableArrayList(Type.Food, Type.Drinks, Type.Travel, Type.Other));
     }
 
     protected void setTogglesUp() {
@@ -301,7 +301,8 @@ public abstract class ExpenseCtrl {
                 amountError.setVisible(true);
                 return null;
             }
-            amountDouble = Double.parseDouble(amount.getText());
+            String amountText = amount.getText().replace(',','.');
+            amountDouble = Double.parseDouble(amountText);
             if (amountDouble <= 0.0) {
                 amountError.setVisible(true);
                 amountError.setText("Amount cannot be negative or zero*");
@@ -325,10 +326,12 @@ public abstract class ExpenseCtrl {
         return amountDouble;
     }
 
-    protected Type getType() {
-        Type type = (Type) category.getValue();
-        if (type == null) type= Type.Other;
-        return type;
+    protected Tag getTag() {
+        Tag tag = category.getValue();
+        if (tag == null) {
+            return serverUtils.getOtherTagById(eventId);
+        }
+        return tag;
     }
 
     protected Date getDate() {
@@ -390,66 +393,104 @@ public abstract class ExpenseCtrl {
 
     @FXML
     protected void back() {
-        mainCtrl.showSplittyOverview(eventCode);
+        Platform.runLater(() -> {
+            mainCtrl.showSplittyOverview(eventId);
+        });
     }
 
-//    public void setTitle(String title) {
-//        titleLabel.setText(title);
-//    }
+
 
     public void setSceneTypeText(String text) {
-        this.sceneTypeText.setText(text);
+        Platform.runLater(() -> {
+            this.sceneTypeText.setText(text);
+        });
     }
 
     public void setWhoPaid(String text) {
-        this.whoPaid.setText(text);
+        Platform.runLater(() -> {
+            this.whoPaid.setText(text);
+        });
     }
 
     public void setHowMuch(String text) {
-        this.howMuch.setText(text);
+        Platform.runLater(() -> {
+            this.howMuch.setText(text);
+        });
     }
 
     public void setWhen(String text) {
-        this.when.setText(text);
+        Platform.runLater(() -> {
+            this.when.setText(text);
+        });
     }
 
     public void setHowToSplit(String text) {
-        this.howToSplit.setText(text);
+        Platform.runLater(() -> {
+            this.howToSplit.setText(text);
+        });
     }
 
     public void setDescription(String text) {
-        this.description.setText(text);
+        Platform.runLater(() -> {
+            this.description.setText(text);
+        });
     }
 
     public void setExpenseTypetext(String text) {
-        this.expenseTypetext.setText(text);
+        Platform.runLater(() -> {
+            this.expenseTypetext.setText(text);
+        });
     }
 
     public void setCommit(String text) {
-        this.commit.setText(text);
+        Platform.runLater(() -> {
+            this.commit.setText(text);
+        });
     }
 
     public void setAbort(String text) {
-        this.cancel.setText(text);
+        Platform.runLater(() -> {
+            this.cancel.setText(text);
+        });
     }
 
     public void setSelectAll(String text) {
-        this.selectAll.setText(text);
+        Platform.runLater(() -> {
+            this.selectAll.setText(text);
+        });
     }
 
     public void setSelectWhoPaid(String text) {
-        this.personComboBox.setPromptText(text);
+        Platform.runLater(() -> {
+            this.personComboBox.setPromptText(text);
+        });
     }
 
     public void setExpenseTypeBox(String text) {
-        this.category.setPromptText(text);
+        Platform.runLater(() -> {
+            this.category.setPromptText(text);
+        });
     }
+
     @FXML
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
     }
+
+    public void setSharedExpense(String txt){
+        Platform.runLater(() -> {
+            this.sharedExpense.setText(txt);
+        });
+    }
+
+    public void setGivingMoneyToSomeone(String txt){
+        Platform.runLater(() -> {
+            this.givingMoneyToSomeone.setText(txt);
+        });
+    }
+
 
     public void resetPayerErrors() {
         payerError.setVisible(false);

@@ -29,6 +29,9 @@ public class Participant implements Serializable {
     @Column(nullable = false)
     private boolean ghost;
 
+    @Column(nullable = false)
+    private boolean inactive;
+
     @JsonIgnore
     @OneToMany(mappedBy = "payer", cascade = CascadeType.REMOVE)
     private List<Payment> paymentPayerList;
@@ -41,7 +44,7 @@ public class Participant implements Serializable {
     @EmbeddedId
     private ParticipantId id;
 
-    protected Participant() {
+    public Participant() {
         id = new ParticipantId();
     }
 
@@ -53,6 +56,7 @@ public class Participant implements Serializable {
         this.bIC = bIC;
         this.email = email;
         this.ghost = false;
+        this.inactive = false;
         this.id = new ParticipantId(uuid, event);
         this.accountHolder = accountHolder;
     }
@@ -64,6 +68,15 @@ public class Participant implements Serializable {
         getEvent().updateActivityDate();
     }
     // Getters and setters
+
+
+    public boolean isInactive() {
+        return inactive;
+    }
+
+    public void setInactive(boolean inactive) {
+        this.inactive = inactive;
+    }
 
     public String getName() {
         return name;

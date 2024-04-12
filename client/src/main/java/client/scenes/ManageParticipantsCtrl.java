@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,7 +25,15 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     public Button removeButton;
     @FXML
+    public Button back;
+    @FXML
+    public Button editButton;
+    @FXML
+    public Button addButton;
+    @FXML
     private Label titleLabel;
+    @FXML
+    private Label participantsText;
 
     @FXML
     private ListView<Participant> participantsList;
@@ -88,10 +97,20 @@ public class ManageParticipantsCtrl implements Initializable {
                 setPauseTransition(noParticipantSelectedError);
                 return;
             }
+            // only allow to delete if balance is 0
+            if(selected.getBalance() != 0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(mainCtrl.translate("Deleting Participant"));
+                alert.setHeaderText(mainCtrl.translate("Cannot delete a participant"));
+                alert.setContentText(mainCtrl.translate("Participant owes/is owed money."));
+                alert.showAndWait();
+                return;
+            }
+
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Deleting Participant");
-            confirmation.setContentText("Are you sure you want to delete " + selected.getName()+
-                    " from " + titleLabel.getText() + "?");
+            confirmation.setTitle(mainCtrl.translate("Deleting Participant"));
+            confirmation.setContentText(mainCtrl.translate("Are you sure you want to delete ") + selected.getName()+
+                    mainCtrl.translate(" from ") + titleLabel.getText() + "?");
             confirmation.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     System.out.println("remove" + selected);
@@ -185,5 +204,75 @@ public class ManageParticipantsCtrl implements Initializable {
         if (mouseEvent.getClickCount() >= 2) {
             editParticipant();
         }
+    }
+
+    public void setEditButton(String txt){
+        Platform.runLater(() -> {
+            this.editButton.setText(txt);
+        });
+    }
+    public void setRemoveButton(String txt) {
+        Platform.runLater(() -> {
+            this.removeButton.setText(txt);
+        });
+    }
+
+    public void setAddButton(String txt) {
+        Platform.runLater(() -> {
+            this.addButton.setText(txt);
+        });
+    }
+
+    public void setTitleLabel(String txt) {
+        Platform.runLater(() -> {
+            this.titleLabel.setText(txt);
+        });
+    }
+
+    public void setParticipantsText(String txt) {
+        Platform.runLater(() -> {
+            this.participantsText.setText(txt);
+        });
+    }
+
+    public void setUndo(String txt) {
+        Platform.runLater(() -> {
+            this.undo.setText(txt);
+        });
+    }
+
+    public void setNoParticipantSelectedError(String txt) {
+        Platform.runLater(() -> {
+            this.noParticipantSelectedError.setText(txt);
+        });
+    }
+
+    public void setUnknownError(String txt) {
+        Platform.runLater(() -> {
+            this.unknownError.setText(txt);
+        });
+    }
+
+    public void setParticipantAddedConfirmation(String txt) {
+        Platform.runLater(() -> {
+            this.participantAddedConfirmation.setText(txt);
+        });
+    }
+
+    public void setParticipantEditedConfirmation(String txt) {
+        Platform.runLater(() -> {
+            this.participantEditedConfirmation.setText(txt);
+        });
+    }
+
+    public void setParticipantDeletedConfirmation(String txt) {
+        Platform.runLater(() -> {
+            this.participantDeletedConfirmation.setText(txt);
+        });
+    }
+    public void setBackButton(String txt) {
+        Platform.runLater(() -> {
+            this.back.setText(txt);
+        });
     }
 }

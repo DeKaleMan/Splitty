@@ -1,12 +1,11 @@
 package client.scenes;
 
+
 import client.utils.Config;
 import client.utils.ServerUtils;
 
+import commons.*;
 import commons.Currency;
-import commons.Participant;
-import commons.Payment;
-import commons.dto.ParticipantDTO;
 import commons.dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,13 +16,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -35,6 +35,12 @@ public class DebtCtrl implements Initializable {
     private MainCtrl mainCtrl;
 
     private Config config;
+    @FXML
+    AnchorPane background;
+
+    private String eventName;
+
+    private Mail mail;
 
     @FXML
     private ListView<Payment> paymentInstructionListView;
@@ -43,6 +49,8 @@ public class DebtCtrl implements Initializable {
 
     @FXML
     private Button undo;
+    @FXML
+    private Label labelWrong;
 
     private Stack<Payment> undone;
 
@@ -57,6 +65,10 @@ public class DebtCtrl implements Initializable {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
+    }
+
+    public void injectMail(Mail mail){
+        this.mail = mail;
     }
 
 
@@ -84,6 +96,7 @@ public class DebtCtrl implements Initializable {
                                 VBox info = generateInfo(payment);
                                 TitledPane pane = new TitledPane("", info);
                                 headerGrid.minWidthProperty().bind(pane.widthProperty());
+                                headerGrid.maxWidthProperty().bind(pane.widthProperty());
                                 headerGrid.setPadding(new Insets(0,10,0,35));
                                 pane.setGraphic(headerGrid);
                                 pane.getStyleClass().add("paymentInstruction");
@@ -98,32 +111,36 @@ public class DebtCtrl implements Initializable {
         undo.setVisible(false);
     }
 
+    public void setLabelWrong(String txt){
+        labelWrong.setText(txt);
+    }
+
     private VBox generateInfo(Payment payment) {
         VBox info = new VBox();
         GridPane emailInfo = new GridPane();
         if (payment.getPayee().getEmail() == null)
-            emailInfo.add(new Text("No email specified for this participant.\n"), 0, 0);
+            emailInfo.add(new Text(mainCtrl.translate("No email specified for this participant.") + "\n"), 0, 0);
         else {
-            Button sendMessage = new Button("Send reminder");
+            Button sendMessage = new Button(mainCtrl.translate("Send reminder"));
             sendMessage.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     sendMessage(payment);
                 }
             });
-            emailInfo.add(new Text("Email available: "), 0, 0);
+            emailInfo.add(new Text(mainCtrl.translate("Email available: ")), 0, 0);
             emailInfo.add(sendMessage, 1, 0);
             emailInfo.setHgap(10.0);
         }
         info.getChildren().add(emailInfo);
         if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null &&
             payment.getPayee().getAccountHolder() != null) {
-            info.getChildren().add(new Text("Banking info available" +
-                "\n\tAccount Holder: " + payment.getPayee().getAccountHolder() +
-                "\n\tIBAN: " + payment.getPayee().getIBan() +
-                "\n\tBIC: " + payment.getPayee().getBIC()));
+            info.getChildren().add(new Text(mainCtrl.translate("Banking info available") +
+                "\n\t" + mainCtrl.translate("Account Holder:") + " " + payment.getPayee().getAccountHolder() +
+                "\n\t" + mainCtrl.translate("IBAN:") + " " + payment.getPayee().getIBan() +
+                "\n\t" + mainCtrl.translate("BIC:") + " " + payment.getPayee().getBIC()));
         } else {
-            info.getChildren().add(new Text("Incomplete or no banking info available"));
+            info.getChildren().add(new Text(mainCtrl.translate("Incomplete or no banking info available")));
         }
         info.setSpacing(2);
         return info;
@@ -139,13 +156,15 @@ public class DebtCtrl implements Initializable {
             errorGrid.add(new Text(e.getMessage()),0,0);
             return errorGrid;
         }
-        String title = payment.getPayer().getName()
-            + " pays "
-            + payment.getPayee().getName()
-            + " "
-            + mainCtrl.getFormattedDoubleString(amount)
-            + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
-        Button received = new Button("Mark received");
+
+        String pays = " " + mainCtrl.translate("pays") + " ";
+        String markReceived = mainCtrl.translate("Mark received");
+        String title = payment.getPayer().getName() + pays
+                + payment.getPayee().getName()
+                + " "
+                + mainCtrl.getFormattedDoubleString(amount)
+                + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol();
+        Button received = new Button(markReceived);
         received.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -155,13 +174,15 @@ public class DebtCtrl implements Initializable {
         received.getStyleClass().add("receivedButton");
         Label titleNode = new Label(title);
         titleNode.setStyle("-fx-text-fill: white; -fx-font-size: 12px");
+        titleNode.setMaxWidth(110);
+        titleNode.setWrapText(true);
         GridPane grid = new GridPane();
         grid.add(titleNode, 0, 0);
         Region fillRegion = new Region();
         fillRegion.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(fillRegion, Priority.ALWAYS);
         grid.add(fillRegion,1,0);
-        if (payment.getPayee().getUuid().equals(config.getId())) grid.add(received, 2, 0);
+        grid.add(received, 2, 0);
         grid.getStyleClass().add("headerGrid");
         grid.setHgap(10.0);
         return grid;
@@ -172,6 +193,7 @@ public class DebtCtrl implements Initializable {
         undo.setVisible(false);
         persistPayments(changed);
         mainCtrl.showSplittyOverview(eventCode);
+        labelWrong.setVisible(false);
     }
 
     public void markReceived(Button button)
@@ -186,21 +208,22 @@ public class DebtCtrl implements Initializable {
 
     private void persistPayments(List<Payment> payments) {
         for (Payment p : payments) {
+            Payment fromDB;
+            try{
+                fromDB = serverUtils.getPayment(p.getId());
+            } catch (RuntimeException e){
+                continue;
+            }
+            if(fromDB.isPaid() == p.isPaid()) continue;
             serverUtils.updatePayment(
                 new PaymentDTO(p.getPayer().getUuid(), p.getPayee().getUuid(), eventCode,
                     p.getAmount(),
                     p.isPaid()), p.getId());
-            Participant payer = p.getPayer();
-            Participant payee = p.getPayee();
+            Participant payer = serverUtils.getParticipant(p.getPayer().getUuid(), eventCode);
+            Participant payee = serverUtils.getParticipant(p.getPayee().getUuid(), eventCode);
             if(p.isPaid()){
-                serverUtils.updateParticipant(payer.getUuid(),
-                    new ParticipantDTO(payer.getName(),payer.getBalance() + p.getAmount(),
-                        payer.getIBan(),payer.getBIC(),payer.getEmail(),payer.getAccountHolder(),
-                        payer.getEvent().getId(),payer.getUuid()));
-                serverUtils.updateParticipant(payee.getUuid(),
-                    new ParticipantDTO(payee.getName(),payee.getBalance() - p.getAmount(),
-                        payee.getIBan(),payee.getBIC(),payee.getEmail(),payee.getAccountHolder(),
-                        payee.getEvent().getId(),payee.getUuid()));
+                mainCtrl.addExpense("Partial debt settling", serverUtils.getOtherTagById(eventCode), new Date(),
+                    p.getAmount(), payer, eventCode,false, List.of(payee));
             }
         }
     }
@@ -231,10 +254,74 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void sendMessage(Payment payment) {
-        //TODO actually send a message
+        try {
+            System.out.println("Test if this works !!!!");
+            String host = "smtp.gmail.com";
+            int port = 587;
+            String fromEmail = config.getEmail();
+            String passwordToken = config.getEmailToken();
+
+            if (fromEmail == null || fromEmail.isEmpty() || passwordToken == null || passwordToken.isEmpty()){
+                labelWrong.setVisible(true);
+                return;
+            }
+            Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
+
+            if (!performAuthenticationCheck(fromEmail, passwordToken)) {
+                System.out.println("Error: Authentication failed. Please check your email and password token.");
+//                labelWrong.setText("Authentication failed. Please check your email and password token.");
+                labelWrong.setVisible(true);
+                return;
+            }
+
+            String toEmail = payment.getPayee().getEmail();
+            String subject = "reminder to pay";
+            String body = makeBody(payment);
+            Email email = mail.makeEmail(fromEmail, toEmail, subject, body);
+
+            mail.mailSending(email, mailer);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
+
+    private boolean performAuthenticationCheck(String fromEmail, String passwordToken) {
+        String format = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        if (!fromEmail.matches(format)) {
+            System.out.println("Error: Invalid email format.");
+            labelWrong.setText("Error: Invalid email format. change it in settings");
+            return false;
+        }
+
+        // Validate password length and format
+        if (!passwordToken.matches("[a-z]+") || passwordToken.length() < 16) {
+            System.out.println("Error: Password should be a 12-letter lowercase password.");
+            labelWrong.setText("Password should be a 16-letter lowercase password. go to settings");
+            return false;
+        }
+
+        try {
+            String host = "smtp.gmail.com";
+            int port = 587;
+            Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
+
+            // Attempt to authenticate by sending a test email
+            Email testEmail = mail.makeEmail(fromEmail, fromEmail, "Test Subject", "Test Body");
+            mailer.sendMail(testEmail);
+
+            // If no exception is thrown during the sendMail operation, authentication is successful
+            return true;
+        } catch (Exception e) {
+            // Authentication failed
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @FXML
     public void undo() {
+        if(undone.isEmpty()) return;
         Payment p = undone.pop();
         changed.remove(p);
         p.setPaid(false);
@@ -243,8 +330,28 @@ public class DebtCtrl implements Initializable {
     }
     @FXML
     public void onKeyPressed(KeyEvent press) {
+        KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
+
+        if(ctrlZ.match(press)){
+            undo();
+        }
+    }
+
+    public String makeBody(Payment payment){
+        String nameEmailReveiver = payment.getPayee().getName();
+        String nameEvent =payment.getPayer().getEvent().getName();
+        String nameEmailSender = payment.getPayer().getName();
+        double balance = payment.getPayee().getBalance();
+        String s = "Dear " + nameEmailReveiver + "\n\n" +
+                "We would like to remind you that you still have an open debt in splitty event " + nameEvent +
+                ". You owe " + nameEmailSender + " " + balance + ". \n \n" +
+                "If you would like to leave the event, you first have to pay back all your debts. \n\n" +
+                "sincerly, Team splitty";
+
+
+        return s;
     }
 }

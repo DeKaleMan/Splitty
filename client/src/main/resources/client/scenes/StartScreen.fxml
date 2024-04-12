@@ -1,75 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="background" stylesheets="/general.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
+
+<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
 
 
     <children>
-        <AnchorPane layoutX="44.0" layoutY="89.0" prefHeight="132.0" prefWidth="200.0">
+        <AnchorPane layoutX="44.0" layoutY="89.0" prefHeight="132.0" prefWidth="266.0">
             <children>
-                <Button fx:id="create" contentDisplay="RIGHT" layoutX="133.0" layoutY="93.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="25.0" prefWidth="84.0" text="Create" AnchorPane.leftAnchor="50.0" />
+                <Button fx:id="create" contentDisplay="RIGHT" layoutX="35.0" layoutY="82.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="25.0" prefWidth="84.0" text="Create" />
                 <Label fx:id="createEventText" layoutX="14.0" layoutY="13.0" text="Create New Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
                 <TextField fx:id="createEventTextField" layoutX="35.0" layoutY="49.0" promptText="Event name" />
             </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
         </AnchorPane>
 
-        <AnchorPane layoutX="44.0" layoutY="233.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="132.0" prefWidth="214.0">
+        <AnchorPane layoutX="44.0" layoutY="221.0" prefHeight="132.0" prefWidth="228.0">
             <children>
-                <Button fx:id="join" contentDisplay="RIGHT" layoutX="144.0" layoutY="93.0" mnemonicParsing="false"  onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" AnchorPane.leftAnchor="50.0" />
-                <Label fx:id="joinEventText" layoutX="50.0" layoutY="1.0" text="Join Event">
+                <Button fx:id="join" contentDisplay="RIGHT" layoutX="33.0" layoutY="88.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" />
+                <Label fx:id="joinEventText" layoutX="14.0" layoutY="14.0" text="Join Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
 
-                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onMouseClicked="#resetErrors" onKeyPressed="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
-                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="79.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
-                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="70.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
-            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="70.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" />
+                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#resetErrors" onMouseClicked="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
+                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
+                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
+            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" />
             </children>
+         <padding>
+            <Insets right="5.0" />
+         </padding>
         </AnchorPane>
-        <Button fx:id="showAllEventsButton" layoutX="466.0" layoutY="334.0" mnemonicParsing="false" onAction="#showAllEvents" text="Show All Events" AnchorPane.rightAnchor="10.0" />
-        <Label layoutX="97.0" layoutY="14.0" text="Splitty">
-            <font>
-                <Font size="36.0" />
-            </font>
-        </Label>
-        <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" />
-        <ImageView fx:id="imageView" fitHeight="103.0" fitWidth="99.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
+        <Button fx:id="showAllEventsButton" layoutX="466.0" layoutY="334.0" mnemonicParsing="false" onAction="#showAllEvents" text="Show All Events" visible="false" AnchorPane.rightAnchor="10.0" />
 
-        <Button fx:id="settingsButton" layoutX="499.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
+        <Button fx:id="settingsButton" layoutX="499.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" AnchorPane.rightAnchor="42.333333333333336" />
 
 
         <Button fx:id="adminLogin" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login" AnchorPane.leftAnchor="10.0" />
-        <Label fx:id="createEventText1" layoutX="397.0" layoutY="71.0" text="My events">
+        <Pane layoutX="333.0" layoutY="91.0" prefHeight="294.0" prefWidth="243.0">
+            <Label fx:id="myEventsText" alignment="CENTER" contentDisplay="CENTER" layoutX="-19.0" layoutY="14.0" prefHeight="35.0" prefWidth="282.0" text="My events" textAlignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+            <ListView fx:id="eventListView" layoutX="34.0" layoutY="61.0" onKeyPressed="#handleKeyPress" onMouseClicked="#handleMouseClick" prefHeight="200.0" prefWidth="176.0" />
+         <Label fx:id="myEventsNotFoundError" layoutX="34.0" layoutY="208.0" prefHeight="53.0" prefWidth="176.0" text="Could not fetch my events, check the server availability" visible="false" wrapText="true">
             <font>
-                <Font name="System Bold" size="24.0" />
+               <Font name="System Italic" size="11.0" />
             </font>
-        </Label>
-        <ListView fx:id="eventListView" layoutX="367.0" layoutY="121.0" onMouseClicked="#handleMouseClick" onKeyPressed="#handleKeyPress" prefHeight="200.0" prefWidth="176.0" />
-
+         </Label>
+        </Pane>
         <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="275.0" layoutY="15.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
+        <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" visible="false" />
         <ProgressIndicator fx:id="progress" layoutX="237.0" layoutY="12.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
         <Label fx:id="settingsSavedLabel" layoutX="243.0" layoutY="358.0" text="Settings saved succesfully*" textFill="#3700ff" visible="false">
             <font>
                 <Font name="System Italic" size="10.0" />
             </font>
         </Label>
-      <Label fx:id="myEventsNotFoundError" layoutX="367.0" layoutY="320.0" prefHeight="53.0" prefWidth="114.0" text="Could not fetch my events, check the server availability" visible="false" wrapText="true">
-         <font>
-            <Font name="System Italic" size="11.0" />
-         </font></Label>
       <Label fx:id="noConnectionError" layoutX="205.0" layoutY="332.0" prefHeight="53.0" prefWidth="159.0" text="Go to settings to check your connection to the server and try to refresh or change the server*" textFill="RED" visible="false" wrapText="true">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
+      <Pane layoutX="10.0" layoutY="15.0" prefHeight="71.0" prefWidth="252.0" styleClass="blueBox">
+         <children>
+              <Label layoutX="112.0" layoutY="9.0" text="Splitty">
+                  <font>
+                      <Font size="36.0" />
+                  </font>
+              </Label>
+              <ImageView fx:id="imageView" fitHeight="62.0" fitWidth="100.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
     </children>
 
 </AnchorPane>

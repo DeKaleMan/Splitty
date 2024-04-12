@@ -15,12 +15,13 @@
  */
 package client.scenes;
 
-import client.utils.AdminWindows;
-import client.utils.EventPropGrouper;
-import client.utils.ServerUtils;
-import client.utils.SetLanguage;
+import client.utils.*;
 import commons.*;
+import commons.Currency;
+import commons.dto.DebtDTO;
+import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -29,17 +30,17 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 
 public class MainCtrl {
-    private final String css = this.getClass().getResource("/general.css").toExternalForm();
 
-    protected String language = "en";
-    protected List<String> languages;
+    public String language = "en";
+
+    public List<String> languages;
 
 
     private SetLanguage setLanguage;
@@ -55,7 +56,7 @@ public class MainCtrl {
     private StartScreenCtrl startScreenCtrl;
 
     private Scene addExpense;
-    private AddExpenseCtrl addExpenseCtrl ;
+    private AddExpenseCtrl addExpenseCtrl;
 
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
@@ -95,6 +96,11 @@ public class MainCtrl {
     private Scene server;
     private ServerCtrl serverCtrl;
 
+    private Scene manageTags;
+    private ManageTagsCtrl manageTagsCtrl;
+
+    private Scene addTag;
+    private AddTagCtrl addTagCtrl;
 
 
     // probably not the best place to put that here but works for now
@@ -123,7 +129,8 @@ public class MainCtrl {
                            Pair<CreateEventCtrl, Parent> createEvent,
                            AdminWindows adminWindows,
                            Pair<SettingsCtrl, Parent> settings,
-                           Pair<ServerCtrl, Parent> server) {
+                           Pair<ServerCtrl, Parent> server,
+                           TagsGrouper tagsGrouper) {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
@@ -155,22 +162,26 @@ public class MainCtrl {
         this.createEvent = new Scene(createEvent.getValue());
         this.settingCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
-
         this.editEvent = new Scene(eventPropGrouper.editEvent().getValue());
         this.editEventCrtl = eventPropGrouper.editEvent().getKey();
-
-
         this.editExpense = new Scene(eventPropGrouper.editExpense().getValue());
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
         this.serverCtrl = server.getKey();
         this.server = new Scene(server.getValue());
+        this.manageTagsCtrl = tagsGrouper.manageTag().getKey();
+        this.manageTags = new Scene(tagsGrouper.manageTag().getValue());
+        this.addTagCtrl = tagsGrouper.addTag().getKey();
+        this.addTag = new Scene(tagsGrouper.addTag().getValue());
         settingCtrl.initializeConfig();
         serverUtils = new ServerUtils();
         setupConnection();
         setLanguage();
         showStartScreen();
-        startScreenCtrl.setLanguageSelect();
         primaryStage.show();
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     private void setupConnection() {
@@ -183,25 +194,61 @@ public class MainCtrl {
         primaryStage.setTitle("Server");
         serverCtrl.setFields(connectionDown);
     }
-    private void setLanguage(){
-        languages = new ArrayList<>();
+
+    private void setLanguage() {
         //TODO we should add the available languages perhaps to a file
-        languages.addAll(List.of("en", "nl", "is", "zh", "es"));
+        //languages = new ArrayList<>();
+        //languages.addAll(List.of("en", "nl", "is", "zh", "es"));
+
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
-                addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl);
+                addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
+                settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
+                editParticipantCtrl, addParticipantCtrl, editExpenseCtrl, editEventCrtl);
+        setLanguage.setServerUtilsIO(serverUtils, new ClientFileIOutilActual());
+        this.languages = setLanguage.getLanguages();
+
+        if (!languages.contains(this.language)) {
+            this.language = "en";
+        }
+
+        resetLanguage();
+
     }
 
+    public void addLang(String newLang) {
+        setLanguage.addLang(newLang);
+    }
 
-    public void changeLanguage(String toLang){
+    public synchronized void resetLanguage() {
+        Platform.runLater(() -> {
+            try {
+                startScreenCtrl.setLanguageSelect();
+                splittyOverviewCtrl.setLanguageSelect();
+                startScreenCtrl.changeLanguage();
+
+            } catch (NullPointerException e) {
+                //nobody knows....but it works
+            }
+        });
+    }
+
+    public synchronized void changeLanguage(String toLang) {
         this.language = toLang;
-        setLanguage.changeTo(toLang.toString());
+        setLanguage.changeTo(toLang);
+        splittyOverviewCtrl.setLanguageSelect();
+        startScreenCtrl.setLanguageSelect();
+
     }
 
-    public void showSplittyOverview(int id){
+    public String translate(String query) {
+        if (this.language.equals("en")) return query;
+        return setLanguage.translate(query, "en", this.language);
+    }
+
+    public void showSplittyOverview(int id) {
         try {
             Event event = serverUtils.getEventById(id);
             splittyOverviewCtrl.initializeAll(event);
-            splittyOverview.getStylesheets().add(css);
             splittyOverviewCtrl.setEventCode(id);
             primaryStage.setTitle("Event overview");
             primaryStage.setScene(splittyOverview);
@@ -216,13 +263,17 @@ public class MainCtrl {
         splittyOverviewCtrl.setAdmin(admin);
     }
 
-    public Image getFlag(){
+    public Image getFlag() {
         return setLanguage.getFlag(this.language);
-
     }
 
-    public List<Event> getMyEvents(){
-        if(settingCtrl!=null){
+    public boolean addFlag(File image) {
+        return setLanguage.addFlag(image, this.language);
+    }
+
+
+    public List<Event> getMyEvents() {
+        if (settingCtrl != null) {
             events = serverUtils.getEventsByParticipant(settingCtrl.getId());
             return events;
         }
@@ -235,7 +286,7 @@ public class MainCtrl {
             name = "Unknown";
         }
 
-        ParticipantDTO participantDTO =  new ParticipantDTO(
+        ParticipantDTO participantDTO = new ParticipantDTO(
                 name,
                 0,
                 settingCtrl.getIban(),
@@ -254,12 +305,10 @@ public class MainCtrl {
         return participant;
     }
 
-
-    public void showAddExpense(String title, int eventCode) {
+    public void showAddExpense(int eventCode) {
         try {
             primaryStage.setTitle("Add expense");
             addExpenseCtrl.refresh(eventCode);
-//            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -267,7 +316,7 @@ public class MainCtrl {
         }
     }
 
-    public void showInvitation(int eventID){
+    public void showInvitation(int eventID) {
         if (!getConnection()) {
             showStartScreen();
             return;
@@ -279,6 +328,7 @@ public class MainCtrl {
         invitationCtrl.setInviteCode(event.getInviteCode());
         invitationCtrl.showInviteCode();
         invitationCtrl.setTitle(event.getName());
+        invitationCtrl.setServer(ServerUtils.server);
     }
 
     public void showAdminLogin() {
@@ -304,7 +354,7 @@ public class MainCtrl {
     /**
      * show start screen normal
      */
-    public void showStartScreen(){
+    public void showStartScreen() {
         primaryStage.setTitle("Splitty");
         primaryStage.setScene(startScreen);
         try {
@@ -341,9 +391,10 @@ public class MainCtrl {
 
     /**
      * Shows the participants manager
+     *
      * @param eventID the title of the current event
      */
-    public void showParticipantManager(int eventID){
+    public void showParticipantManager(int eventID) {
         try {
             primaryStage.setTitle("ManageParticipants");
             primaryStage.setScene(manageParticipants);
@@ -359,7 +410,7 @@ public class MainCtrl {
      * @param title     the title of the current event
      * @param eventCode
      */
-    public void showStatistics(String title, int eventCode){
+    public void showStatistics(String title, int eventCode) {
         try {
             primaryStage.setTitle("Statistics");
             primaryStage.setScene(statistics);
@@ -370,14 +421,15 @@ public class MainCtrl {
             statisticsCtrl.fetchStat();
             //set the pieChart
             statisticsCtrl.setPieChart();
+            statisticsCtrl.showHoverLabel();
         } catch (RuntimeException e) {
             e.printStackTrace();
             checkConnection();
         }
     }
 
-    public int getCurrentEventCode(){
-        if (splittyOverviewCtrl == null){
+    public int getCurrentEventCode() {
+        if (splittyOverviewCtrl == null) {
             throw new RuntimeException("Splitty overview controller is null," +
                     " exception thrown in MainCtrl getCurrentEventCode()");
         }
@@ -387,7 +439,7 @@ public class MainCtrl {
     /**
      * this shows the statistics window
      */
-    public void viewDeptsPerEvent(int eventCode){
+    public void viewDeptsPerEvent(int eventCode) {
         try {
             primaryStage.setTitle("Debts per event");
             primaryStage.setScene(debts);
@@ -405,9 +457,10 @@ public class MainCtrl {
     }
 
 
-    public void showEditEvent(int eventID){
+    public void showEditEvent(int eventID) {
         primaryStage.setTitle("EditEvent");
         editEventCrtl.setEventId(eventID);
+        editEventCrtl.setOldEventName();
         editEventCrtl.reset();
         primaryStage.setScene(editEvent);
     }
@@ -415,6 +468,7 @@ public class MainCtrl {
     public void setConfirmationSettings() {
         startScreenCtrl.setSettingsSavedLabel();
     }
+
     public void setConfirmationJoinedEvent() {
         splittyOverviewCtrl.setJoinedEventLabel();
     }
@@ -422,6 +476,7 @@ public class MainCtrl {
     public void setConfirmationEventCreated() {
         splittyOverviewCtrl.setEventCreatedLabel();
     }
+
     public void addEvent(Event event) {
         startScreenCtrl.addEvent(event);
     }
@@ -436,6 +491,7 @@ public class MainCtrl {
             }
         });
     }
+
     public void setButtonRedProperty(Button button) {
         button.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -487,20 +543,20 @@ public class MainCtrl {
 
 
     public double getAmountInDifferentCurrency(commons.Currency from, Currency to,
-                                                Date date, double amount){
-        if(from == to) return amount;
+                                               Date date, double amount) {
+        if (from == to) return amount;
         String dateString = getDateString(date);
         Conversion conversion = serverUtils.getConversion(from, to, dateString);
-        if(conversion == null) throw new RuntimeException("Failed to convert amount");
+        if (conversion == null) throw new RuntimeException("Failed to convert amount");
         return amount * conversion.conversionRate();
     }
 
     public String getDateString(Date date) {
         String dateString = ((date.getDate() < 10) ? "0" : "")
-            + date.getDate() + "-"
-            + ((date.getMonth() < 9) ? "0" : "")
-            + (date.getMonth()+1)
-            + "-" + (1900 + date.getYear());
+                + date.getDate() + "-"
+                + ((date.getMonth() < 9) ? "0" : "")
+                + (date.getMonth() + 1)
+                + "-" + (1900 + date.getYear());
         return dateString;
     }
 
@@ -519,6 +575,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add participant");
         this.addParticipantCtrl.setEventId(eventId);
     }
+
     public void showEditParticipant(int eventId, String participantId) {
         if (!getConnection()) {
             showStartScreen();
@@ -530,6 +587,7 @@ public class MainCtrl {
         this.editParticipantCtrl.autoFillWithMyData(participantId);
         this.editParticipantCtrl.setHost(true);
     }
+
     // one is accessed through the participant manager and the other through Splitty overview
     public void showEditParticipant(int eventId) {
         if (!getConnection()) {
@@ -543,6 +601,155 @@ public class MainCtrl {
         this.editParticipantCtrl.setHost(false);
     }
 
+
+    public void showManageTags(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(manageTags);
+        primaryStage.setTitle("Manage Tags");
+        manageTagsCtrl.refreshList(eventId, addExpense, expense, splittyOverview);
+    }
+    public void showAddTag(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        addTagCtrl.setFields(eventId, addExpense, expense, splittyOverview);
+        primaryStage.setScene(addTag);
+        primaryStage.setTitle("Add Tag");
+
+    }
+    public void showAddTag(Tag tag, int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        addTagCtrl.setFields(tag, eventId, addExpense, expense, splittyOverview);
+        primaryStage.setScene(addTag);
+        primaryStage.setTitle("Edit Tag");
+    }
+
+    public Expense addExpense(String description, Tag tag, Date date, Double amountDouble,
+                              Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
+        ExpenseDTO exp =
+                new ExpenseDTO(eventCode, description, tag.getName(), tag.getColour() ,
+                        date, amountDouble, payer.getUuid(),isSharedExpense);
+        Expense expense = serverUtils.addExpense(exp);
+        if(isSharedExpense) addSharedExpense(amountDouble, expense, payer,owing, eventCode);
+        else addGivingMoneyToSomeone(amountDouble, expense, payer, owing.getFirst(), eventCode);
+        serverUtils.send("/app/updateExpense", expense);
+        return expense;
+    }
+
+
+    private void addGivingMoneyToSomeone(double amountDouble, Expense expense, Participant payer,
+                                         Participant receiver, int eventCode) {
+        serverUtils.saveDebt(
+                new DebtDTO(-amountDouble, eventCode, expense.getExpenseId(), receiver.getUuid()));
+        serverUtils.updateParticipant(receiver.getUuid(),
+                new ParticipantDTO(receiver.getName(), receiver.getBalance() - amountDouble, receiver.getIBan(),
+                        receiver.getBIC(), receiver.getEmail(),
+                        receiver.getAccountHolder(), receiver.getEvent().getId(),
+                        receiver.getUuid()));
+        serverUtils.saveDebt(
+                new DebtDTO(amountDouble, eventCode, expense.getExpenseId(), payer.getUuid()));
+        serverUtils.updateParticipant(payer.getUuid(),
+                new ParticipantDTO(payer.getName(), payer.getBalance() + amountDouble, payer.getIBan(),
+                        payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
+                        payer.getUuid()));
+    }
+
+    private void addSharedExpense(double amountDouble, Expense expense, Participant payer,
+                                  Collection<Participant> owing, int eventCode) {
+        double amountPerPerson = amountDouble / (owing.size()+1);
+        for (Participant p : owing) {
+            serverUtils.saveDebt(
+                    new DebtDTO(-amountPerPerson, eventCode, expense.getExpenseId(), p.getUuid()));
+            serverUtils.updateParticipant(p.getUuid(),
+                    new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson, p.getIBan(),
+                            p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
+                            p.getUuid()));
+        }
+        serverUtils.saveDebt(
+                new DebtDTO(amountDouble - amountPerPerson, eventCode, expense.getExpenseId(), payer.getUuid()));
+        serverUtils.updateParticipant(payer.getUuid(),
+                new ParticipantDTO(payer.getName(),
+                    payer.getBalance() + amountDouble - amountPerPerson, payer.getIBan(),
+                        payer.getBIC(), payer.getEmail(), payer.getAccountHolder(), payer.getEvent().getId(),
+                        payer.getUuid()));
+    }
+
+    public void editExpense(int expenseId, String description, Tag tag, Date date, Double amountDouble,
+                            Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
+        ExpenseDTO
+                exp =
+                new ExpenseDTO(eventCode, description, tag.getName(), tag.getColour(), date, amountDouble,
+                        payer.getUuid(),isSharedExpense);
+        Expense editedExpense = serverUtils.updateExpense(expenseId, exp);
+        if(isSharedExpense) editSharedExpense(editedExpense, payer, amountDouble, eventCode, owing);
+        else editGivingMoneyToSomeone(editedExpense, payer, amountDouble, owing.getFirst(), eventCode);
+        serverUtils.generatePaymentsForEvent(eventCode);
+        serverUtils.send("/app/updateExpense", editedExpense);
+    }
+
+    private void editGivingMoneyToSomeone(Expense editedExpense, Participant oldPayer,
+                                          double amountDouble, Participant receiver, int eventCode) {
+        Participant newReceiver = serverUtils.getParticipant(
+                receiver.getUuid(), receiver.getEvent().getId());
+        serverUtils.saveDebt(
+                new DebtDTO(-amountDouble, eventCode, editedExpense.getExpenseId(),
+                        newReceiver.getUuid()));
+        serverUtils.updateParticipant(newReceiver.getUuid(),
+                new ParticipantDTO(newReceiver.getName(),
+                        newReceiver.getBalance() - amountDouble, newReceiver.getIBan(),
+                        newReceiver.getBIC(), newReceiver.getEmail(), newReceiver.getAccountHolder(),
+                        newReceiver.getEvent().getId(),
+                        newReceiver.getUuid()));
+        Participant newPayer = serverUtils.getParticipant(
+                oldPayer.getUuid(), oldPayer.getEvent().getId());
+        serverUtils.saveDebt(
+                new DebtDTO(amountDouble, eventCode, editedExpense.getExpenseId(),
+                        newPayer.getUuid()));
+        serverUtils.updateParticipant(newPayer.getUuid(),
+                new ParticipantDTO(newPayer.getName(),
+                        newPayer.getBalance() + amountDouble, newPayer.getIBan(),
+                        newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
+                        newPayer.getEvent().getId(),
+                        newPayer.getUuid()));
+    }
+
+    private void editSharedExpense(Expense editedExpense,
+                                   Participant oldPayer, double amountDouble, int eventCode,
+                                   Collection<Participant> owing) {
+        double amountPerPerson = editedExpense.getTotalExpense() / (owing.size()+1);
+        for (Participant oldP : owing) {
+            Participant p = serverUtils.getParticipant(
+                    oldP.getUuid(), oldP.getEvent().getId());
+            serverUtils.saveDebt(
+                    new DebtDTO(-amountPerPerson, eventCode, editedExpense.getExpenseId(),
+                            p.getUuid()));
+            serverUtils.updateParticipant(p.getUuid(),
+                    new ParticipantDTO(p.getName(), p.getBalance() - amountPerPerson,
+                            p.getIBan(),
+                            p.getBIC(), p.getEmail(), p.getAccountHolder(), p.getEvent().getId(),
+                            p.getUuid()));
+        }
+        Participant newPayer = serverUtils.getParticipant(
+                oldPayer.getUuid(), oldPayer.getEvent().getId());
+        serverUtils.saveDebt(
+                new DebtDTO(amountDouble - amountPerPerson,
+                        eventCode, editedExpense.getExpenseId(), newPayer.getUuid()));
+        serverUtils.updateParticipant(newPayer.getUuid(),
+                new ParticipantDTO(newPayer.getName(),
+                        newPayer.getBalance() + amountDouble - amountPerPerson, newPayer.getIBan(),
+                        newPayer.getBIC(), newPayer.getEmail(), newPayer.getAccountHolder(),
+                        newPayer.getEvent().getId(),
+                        newPayer.getUuid()));
+    }
+
+
     public void setConfirmationEditParticipant() {
         manageParticipantsCtrl.setParticipantEditedConfirmation();
     }
@@ -550,9 +757,25 @@ public class MainCtrl {
     public void setConfirmationAddParticipant() {
         manageParticipantsCtrl.setParticipantAddedConfirmation();
     }
-
-    public void stopLongPolling(){
-        if(splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
+    public void setConfirmationAddedTag() {
+        manageTagsCtrl.setAddedTagConfirmation();
     }
+    public void setConfirmationEditedTag() {
+        manageTagsCtrl.setEditedTagConfirmation();
+    }
+
+    public void stopLongPolling() {
+        if (splittyOverviewCtrl != null) splittyOverviewCtrl.stopUpdates();
+    }
+
+    public void updateOverviewUndoStacks(Expense expense, List<Debt> debts, String method){
+        splittyOverviewCtrl.pushUndoStacks(expense, debts, method);
+    }
+
+    public void showUndoInOverview(){
+        splittyOverviewCtrl.showUndo();
+    }
+
+
 }
 
