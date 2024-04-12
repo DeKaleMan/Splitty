@@ -17,9 +17,10 @@ public class StatisticsController {
         this.statisticsService = statisticsService;
     }
 
-    @GetMapping(path = {"/", ""})
-    public ResponseEntity<double[]> getPaymentsOfEvent(@RequestParam("eventID") int eventID){
-        double[] res = statisticsService.getPaymentsOfEvent(eventID);
+    @GetMapping("/{eventId}/{tagName}")
+    public ResponseEntity<Double> getPaymentsOfEvent(@PathVariable("eventId") int eventID,
+                                                     @PathVariable("tagName") String tagName){
+        Double res = statisticsService.getSumByTag(eventID, tagName);
         return (res == null) ?
             ResponseEntity.notFound().build() :
             ResponseEntity.ok(res);

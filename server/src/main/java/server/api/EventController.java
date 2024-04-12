@@ -1,7 +1,7 @@
 package server.api;
 
 import commons.Event;
-import commons.EventDTO;
+import commons.dto.EventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

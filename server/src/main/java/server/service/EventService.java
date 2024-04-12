@@ -1,7 +1,7 @@
 package server.service;
 
 import commons.Event;
-import commons.EventDTO;
+import commons.dto.EventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.dto.DebtDTO;
+import commons.dto.EventDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
 
@@ -40,9 +41,9 @@ public class EventDump implements Serializable {
         eventDTO = new EventDTO(event.getName(), event.getDate(), event.getHost(), event.getDescription());
 
         serverUtils.getExpense(eventId).forEach(expense -> {
-            expenseDTOList.add(new ExpenseDTO(0, expense.getDescription(), expense.getType(),
-                    expense.getDate(), expense.getTotalExpense(), expense.getPayer().getUuid(),
-                    expense.isSharedExpense()));
+            expenseDTOList.add(new ExpenseDTO(0, expense.getDescription(), expense.getTag().getName(),
+                    expense.getTag().getColour(), expense.getDate(), expense.getTotalExpense(),
+                    expense.getPayer().getUuid(), expense.isSharedExpense()));
             oldExpenseIds.add(expense.getExpenseId());
         });
 

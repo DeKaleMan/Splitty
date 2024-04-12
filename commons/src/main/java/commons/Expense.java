@@ -26,8 +26,8 @@ public class Expense {
     private String description;
     // all associated participants of the expense and how much they owe or are owed
 
-    @Enumerated(EnumType.STRING)
-    private Type type; // type of expense (i.e. food, drinks, travel)
+    @ManyToOne
+    private Tag tag; // type of expense (i.e. food, drinks, travel)
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -45,11 +45,11 @@ public class Expense {
 
     }
 
-    public Expense(Event event, String description, Type type, Date date,
+    public Expense(Event event, String description, Tag tag, Date date,
                    double totalExpense, Participant payer, boolean sharedExpense) {
         this.event = event;
         this.description = description;
-        this.type = type;
+        this.tag = tag;
         this.date = date;
         this.totalExpense = totalExpense;
         this.payer = payer;
@@ -80,12 +80,12 @@ public class Expense {
     }
 
 
-    public Type getType() {
-        return type;
+    public Tag getTag() {
+        return tag;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
 
@@ -130,20 +130,20 @@ public class Expense {
         return expenseId == expense.expenseId &&
             Double.compare(totalExpense, expense.totalExpense) == 0 &&
             sharedExpense == expense.sharedExpense && Objects.equals(event, expense.event) &&
-            Objects.equals(description, expense.description) && type == expense.type &&
+            Objects.equals(description, expense.description) && tag.equals(expense.tag) &&
             Objects.equals(date, expense.date) &&
             Objects.equals(payer, expense.payer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(event, expenseId, description, type, date, totalExpense, payer,
+        return Objects.hash(event, expenseId, description, tag, date, totalExpense, payer,
             sharedExpense);
     }
 
     @Override
     public String toString() {
-        return "This is an expense:\n" + description + "\nThe expense type is: " + this.type
+        return "This is an expense:\n" + description + "\nThe expense type is: " + this.tag.getName()
             + ".\nThe total amount spent is: "
             + totalExpense + "."
             + "\nThe person who paid was: " + payer.getUuid() + ", on " + date

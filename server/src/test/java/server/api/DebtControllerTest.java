@@ -33,12 +33,16 @@ class DebtControllerTest {
     Participant p1 = new Participant("test1", 10.0, "test1", "test1", "test1", "", "test1", e1);
 
     Participant p2 = new Participant("test2", 11.0, "test2", "test2", "test2", "", "test2", e2);
+    Tag t1 = new Tag(e1, "Food", "#2a8000");
+    Tag t2 = new Tag(e2, "Travel", "#3700ff");
+    Tag t3 = new Tag(e1, "Entrance Fees", "#c50000");
 
-    Expense expense1 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0, p1, true);
+    Expense expense1 = new Expense(e1, "test1", t1, new Date(10), 10.0, p1, true);
 
-    Expense expense2 = new Expense(e2, "test1", Type.Food, new Date(10), 1.0, p2, true);
+    Expense expense2 = new Expense(e2, "test1", t2, new Date(10), 1.0, p2, true);
 
-    Expense expense3 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0, p1, true);
+    Expense expense3 = new Expense(e1, "test1", t3, new Date(10), 10.0, p1, true);
+
 
     Debt d1 = new Debt(expense1, 10.0, p1);
 

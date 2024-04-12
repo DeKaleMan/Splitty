@@ -222,7 +222,7 @@ public class DebtCtrl implements Initializable {
             Participant payer = serverUtils.getParticipant(p.getPayer().getUuid(), eventCode);
             Participant payee = serverUtils.getParticipant(p.getPayee().getUuid(), eventCode);
             if(p.isPaid()){
-                mainCtrl.addExpense("Partial debt settling", Type.Other, new Date(),
+                mainCtrl.addExpense("Partial debt settling", serverUtils.getOtherTagById(eventCode), new Date(),
                     p.getAmount(), payer, eventCode,false, List.of(payee));
             }
         }

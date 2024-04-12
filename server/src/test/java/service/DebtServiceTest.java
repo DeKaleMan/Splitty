@@ -30,11 +30,14 @@ class DebtServiceTest {
 
     Participant p2 = new Participant("test2", 11.0, "test2", "test2", "test2", "", "test2", e2);
 
-    Expense expense1 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0, p1, true);
+    Tag t1 = new Tag(e1, "Food", "#2a8000");
+    Tag t2 = new Tag(e2, "Travel", "#3700ff");
+    Tag t3 = new Tag(e1, "Entrance Fees", "#c50000");
+    Expense expense1 = new Expense(e1, "test1", t1, new Date(10), 10.0, p1, true);
 
-    Expense expense2 = new Expense(e2, "test1", Type.Food, new Date(10), 1.0, p2, true);
+    Expense expense2 = new Expense(e2, "test1", t2, new Date(10), 1.0, p2, true);
 
-    Expense expense3 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0, p1, true);
+    Expense expense3 = new Expense(e1, "test1", t3, new Date(10), 10.0, p1, true);
 
     Debt d1 = new Debt(expense1, 10.0, p1);
 
@@ -160,7 +163,7 @@ class DebtServiceTest {
 
     @Test
     void testDeleteDebts() {
-        Expense expense4 = new Expense(e1, "test1", Type.Food, new Date(10), 10.0, p1, true);
+        Expense expense4 = new Expense(e1, "test1", t1, new Date(10), 10.0, p1, true);
         expenseRepository.expenses.add(expense4);
         expense4.expenseId = 4;
         List<Debt> expected = List.of(new Debt(expense4, 1, p1), new Debt(expense4, 2, p1));
