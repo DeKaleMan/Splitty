@@ -17,17 +17,18 @@
          <font>
             <Font name="System Bold" size="18.0" />
          </font></Label>
-      <Label fx:id="sendEmailInvitesText" layoutX="319.0" layoutY="83.0" prefHeight="17.0" prefWidth="181.0" text="Send email invites:">
+      <Label fx:id="sendEmailInvitesText" layoutX="319.0" layoutY="83.0" text="Send email invites:" wrapText="true">
          <font>
             <Font name="System Bold" size="18.0" />
          </font></Label>
       <TextArea fx:id="emailArea" layoutX="320.0" layoutY="115.0" prefHeight="200.0" prefWidth="200.0" promptText="Add your emails to send an invite to" />
-      <Button fx:id="sendInvites" layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send Invites" />
+      <Button fx:id="sendInvites" layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send Invites" AnchorPane.rightAnchor="54.0" />
       <Label fx:id="inviteCodeLabel" alignment="CENTER" layoutX="84.0" layoutY="182.0" text="00000">
          <font>
             <Font name="System Bold Italic" size="42.0" />
          </font></Label>
       <Button fx:id="back" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
+<!--      <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="55.0" layoutY="110.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />-->
       <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
       <Label fx:id="noEmail" layoutX="320.0" layoutY="19.0" prefHeight="35.0" prefWidth="200.0" text="please fill in an email address" visible="false" />
       <Button fx:id="defaultButton" layoutX="83.0" layoutY="342.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="122.0" text="Button" />

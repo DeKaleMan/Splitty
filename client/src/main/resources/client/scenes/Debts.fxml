@@ -14,8 +14,10 @@
          </font>
       </Label>
       <ListView id="paymentInstructionListView" fx:id="paymentInstructionListView" layoutX="150.0" layoutY="49.0" onKeyPressed="#onKeyPressed" prefHeight="317.0" prefWidth="299.0" />
+<!--      <ListView id="paymentInstructionListView" fx:id="paymentInstructionListView" layoutX="92.0" layoutY="49.0" prefHeight="317.0" prefWidth="415.0" />-->
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Button fx:id="undo" layoutX="494.0" layoutY="124.0" mnemonicParsing="false" onAction="#undo" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Undo" textFill="white" />
+      <Button fx:id="undo" layoutX="518.0" layoutY="124.0" mnemonicParsing="false" onAction="#undo" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Undo" textFill="white" />
+<!--      <Button fx:id="undo" layoutX="494.0" layoutY="124.0" mnemonicParsing="false" onAction="#undo" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Undo" textFill="white" />-->
       <Label fx:id="labelWrong" layoutX="20.0" layoutY="107.0" prefHeight="151.0" prefWidth="108.0" text="please fill in a correct email and passwordtoken in settings" textAlignment="CENTER" visible="false" wrapText="true">
          <font>
             <Font size="16.0" />

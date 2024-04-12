@@ -13,7 +13,7 @@
         <AnchorPane layoutX="44.0" layoutY="89.0" prefHeight="132.0" prefWidth="266.0">
             <children>
                 <Button fx:id="create" contentDisplay="RIGHT" layoutX="35.0" layoutY="82.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="25.0" prefWidth="84.0" text="Create" />
-                <Label fx:id="createEventText" layoutX="14.0" layoutY="13.0" text="Create New Event">
+                <Label fx:id="createEventText" layoutY="14.0" text="Create New Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
@@ -27,7 +27,7 @@
         <AnchorPane layoutX="44.0" layoutY="221.0" prefHeight="132.0" prefWidth="228.0">
             <children>
                 <Button fx:id="join" contentDisplay="RIGHT" layoutX="33.0" layoutY="88.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" />
-                <Label fx:id="joinEventText" layoutX="14.0" layoutY="14.0" text="Join Event">
+                <Label fx:id="joinEventText" layoutY="14.0" text="Join Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>

@@ -30,9 +30,11 @@ public class SettingsCtrl {
 
     private File flag;
     @FXML
-    public Button cancelButton;
+    private Button cancelButton;
     @FXML
-    public Button saveButton;
+    private Label nameText;
+    @FXML
+    private Button saveButton;
     @FXML
     private TextField emailField;
     @FXML
@@ -432,6 +434,11 @@ public class SettingsCtrl {
     public void setUploadFlag (String txt){
         Platform.runLater(() -> {
             this.uploadFlag.setText(txt);
+        });
+    }
+    public void setNameText(String txt) {
+        Platform.runLater(() -> {
+            this.nameText.setText(txt);
         });
     }
 

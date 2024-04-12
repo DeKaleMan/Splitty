@@ -16,9 +16,9 @@
         </Label>
         <Button fx:id="backButton" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.leftAnchor="10" />
 
-        <Pane layoutX="347.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
+        <Pane layoutX="350.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
             <children>
-                <ListView fx:id="participantListView" layoutX="46.0" layoutY="51.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="148.0" />
+                <ListView fx:id="participantListView" layoutX="12.0" layoutY="55.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="216.0" />
                 <HBox alignment="CENTER" layoutX="-16.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" spacing="10.0">
                     <children>
                         <Label fx:id="participants" styleClass="headerLabel" text="Participants">
@@ -45,7 +45,7 @@
             <children>
                 <AnchorPane layoutX="5.0" layoutY="21.0" prefHeight="235.0" prefWidth="200.0">
                     <children>
-                        <TabPane fx:id="expensesTabPane" layoutX="10.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="expensesTabPane" layoutX="3.0" layoutY="32.0" prefHeight="200.0" prefWidth="216.0" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
                                 <Tab fx:id="allExpenses" text="All" />
                                 <Tab fx:id="paidByMe" text="Paid by me" />
@@ -64,21 +64,26 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-                <HBox alignment="CENTER" layoutX="-2.0" layoutY="256.0" prefHeight="44.0" prefWidth="245.0" spacing="5.0">
+                <HBox alignment="CENTER" layoutX="-3.0" layoutY="256.0" prefHeight="35.0" prefWidth="245.0" spacing="5.0">
                     <children>
                         <Button fx:id="editExpenseButton" mnemonicParsing="false" onAction="#editExpense" text="Edit" />
                         <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" style="-fx-background-color: #c50000;" text="Delete" />
-                  <Button fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" visible="false" />
+                      </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="-2.0" layoutY="282.0" prefHeight="25.0" prefWidth="245.0" spacing="5.0">
+                    <children>
+                        <Button fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" visible="false" />
                     </children>
+
                 </HBox>
 
 
             </children>
         </Pane>
-        <VBox alignment="TOP_CENTER" layoutX="238.0" layoutY="157.0" prefHeight="200.0" prefWidth="124.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="153.0" prefHeight="200.0" prefWidth="114.0" spacing="10.0">
             <children>
-                <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
-                <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
+                <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" wrapText="true" />
+                <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" wrapText="true" />
                 <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="manageTagsButton" mnemonicParsing="false" onAction="#viewManageTags" text="Manage Tags" />
