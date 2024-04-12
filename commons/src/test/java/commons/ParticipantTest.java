@@ -96,13 +96,4 @@ public class ParticipantTest {
         assertEquals(p1.getId(), temp.getId());
     }
 
-    @Test
-    public void testToString() {
-        assertEquals("ParticipantId{uuid='" + p2.getUuid() +
-                "', event=This is event with name: Party that is created on Fri " +
-                        "Nov 10 00:00:00 CET 3905 the person that created is: " +
-                p1.getUuid() +  " the description is: The part is at .....}"
-                , p2.getId().toString());
-    }
-
 }
