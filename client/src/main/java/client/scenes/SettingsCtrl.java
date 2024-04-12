@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.Config;
-import client.utils.ServerUtils;
 import commons.Currency;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -54,6 +53,8 @@ public class SettingsCtrl {
     private Label currency;
     @FXML
     private Label settingsText;
+    @FXML
+    public Label incorrectCurrencyError;
     @FXML
     public Label connectionErrorLabel;
     @FXML
@@ -117,17 +118,18 @@ public class SettingsCtrl {
         String name = nameField.getText();
         String iban = ibanField.getText();
         String bic = bicField.getText();
-        boolean abort = false;
+
         if (email == null || email.isEmpty()) {
             email = null;
         }
         if (currency == null || (!currency.equals("EUR") &&
                 !currency.equals("CHF") && !currency.equals("USD"))) {
-            abort = true;
-            // set error message
-        }
-        if (abort) {
+            incorrectCurrencyError.setVisible(true);
+            PauseTransition pause = new PauseTransition(Duration.seconds(4));
+            pause.setOnFinished(event1 -> incorrectCurrencyError.setVisible(false));
+            pause.play();
             return;
+
         }
         config.setEmail(email);
         config.setCurrency(Currency.valueOf(currency));
