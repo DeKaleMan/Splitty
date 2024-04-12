@@ -8,10 +8,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ScrollPane?>
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsCtrl">
    <children>
-
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
 
       <Button fx:id="saveButton" layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" />
@@ -24,7 +25,8 @@
             </Label>
             <Label fx:id="langInstructions" text="Enter the languagecode and an image for the flag of the language you want to add" wrapText="true" />
             <TextField fx:id="langTextfield" promptText="Languagecode e.g. &quot;en&quot; for English" />
-            <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="232.0" visible="false" />
+            <Button fx:id="uploadFlag" mnemonicParsing="false" onAction="#setFlag" text="Upload flag" style="-fx-background-color: #a69191;" />
+            <ProgressBar fx:id="progressBar" prefHeight="52.0" prefWidth="232.0" visible="false" />
             <Button fx:id="addLanguage" mnemonicParsing="false" onAction="#addLang" text="Add language" />
          </children>
       </VBox>
@@ -48,7 +50,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-      
+
             <TextField fx:id="nameField" promptText="unknown" />
             <Label text="IBAN">
                <font>
@@ -78,7 +80,7 @@
       <Label fx:id="languageText" layoutX="346.0" layoutY="81.0" prefHeight="25.0" prefWidth="188.0" text="The language" />
       <HBox alignment="CENTER" layoutX="110.0" layoutY="16.0" prefHeight="45.0" prefWidth="379.0" spacing="10.0">
          <children>
-      
+
             <Label text="Splitty">
                <font>
                   <Font name="System Bold" size="28.0" />
@@ -91,6 +93,14 @@
             </Label>
          </children>
       </HBox>
+      <VBox fx:id="confirmlangBox" alignment="CENTER" layoutX="143.0" layoutY="27.0" prefHeight="347.0" prefWidth="315.0" visible="false">
+         <ScrollPane>
+            <content>
+               <TextArea fx:id="addedLang" layoutY="14.0" />
+            </content>
+         </ScrollPane>
+         <Button mnemonicParsing="false" onAction="#confirmLang" text="Confirm" />
+      </VBox>
       <TextField fx:id="getToken" layoutX="346.0" layoutY="135.0" prefHeight="26.0" prefWidth="232.0" />
       <Label layoutX="346.0" layoutY="107.0" prefHeight="27.0" prefWidth="188.0">
          <font>
@@ -104,6 +114,5 @@
       </Label>
       <Button fx:id="sendEmail" layoutX="346.0" layoutY="167.0" mnemonicParsing="false" onAction="#sendDefaultEmail" prefHeight="26.0" prefWidth="90.0" text="default email" />
       <Label fx:id="succes" layoutX="444.0" layoutY="167.0" prefHeight="26.0" prefWidth="128.0" text="Email succesfully send!" visible="false" />
-
    </children>
 </AnchorPane>

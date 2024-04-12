@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -180,27 +181,40 @@ public class InvitationCtrl {
 
 
     public void setInviteCodeText(String txt) {
-        this.inviteCodeText.setText(txt);
+        Platform.runLater(() -> {
+            this.inviteCodeText.setText(txt);
+        });
+
     }
 
     public void setInviteCodeInstructions(String txt) {
-        this.inviteCodeInstructions.setText(txt);
+        Platform.runLater(() -> {
+            this.inviteCodeInstructions.setText(txt);
+        });
     }
 
     public void setSendEmailInvitesText(String txt) {
-        this.sendEmailInvitesText.setText(txt);
+        Platform.runLater(() -> {
+            this.sendEmailInvitesText.setText(txt);
+        });
     }
 
     public void setBack(String txt) {
-        this.back.setText(txt);
+        Platform.runLater(() -> {
+            this.back.setText(txt);
+        });
     }
 
     public void setSendInvites(String txt) {
-        this.sendInvites.setText(txt);
+        Platform.runLater(() -> {
+            this.sendInvites.setText(txt);
+        });
     }
 
     public void setEmailArea(String txt) {
-        this.emailArea.setPromptText(txt);
+        Platform.runLater(() -> {
+            this.emailArea.setPromptText(txt);
+        });
     }
 
     public Email getherDataForEmail(String emailT){

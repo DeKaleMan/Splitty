@@ -191,4 +191,19 @@ class ParticipantServiceTest {
         assertFalse(events.isEmpty());
         assertEquals(1, events.size());
     }
+
+    @Test
+    public void deleteParticipantInactive() {
+        Event event = new Event();
+        event.setId(1);
+        testEventRepository.events.add(event);
+
+        Participant participant = new Participant();
+        participant.setUuid(UUID.randomUUID().toString());
+        participant.setEvent(event);
+        participant.setInactive(true);
+        testParticipantRepository.participants.add(participant);
+
+        assertNull(participantService.deleteParticipant(participant.getId().getUuid(), event.getId()));
+    }
 }
