@@ -1,4 +1,4 @@
-# Agenda week 8
+# Agenda week 9
 
 ---
 
@@ -17,17 +17,24 @@
 ## Opening by chair (1 min)
 - Check if everyone's present
 - Short introduction to the meeting
+<<<<<<< HEAD
 ## Check-in (7 min)
+=======
+## Check-in (3 min)
+>>>>>>> cd3268964e410232f713f08f5684c9275b7e3b10
 - How's everybody doing?
 - Everybody summarizes their work from the previous week
 - Did anybody encounter any problems?
 - Assess the execution of previous week's plan
+<<<<<<< HEAD
     - Translate error messages or list them
     - Email notifications finalize -Stijn
     - Create event with no name -> unknown -Julian
     - Mark received bug -Maciej
     - Keyboard shortcuts -Julian
     - Translation on another thread + refactor of JsonObject - Joris
+=======
+>>>>>>> cd3268964e410232f713f08f5684c9275b7e3b10
 ## Announcements by the TA (2 min)
 ## Presentation of the current state of the app to the TA (5 min)
 Show the following:
@@ -36,18 +43,32 @@ Show the following:
 - Mention service -classes
 - Ghost participants
 ## Discuss current issues/bugs (10 min)
+<<<<<<< HEAD
 - Alignment should be fixed
 - MILLION warnings, can they be at least hidden?
 - Edit expense cost is displayed using a ',' instead of a '.' so it creates an error
 - If anybody encountered anything else, this is the time to mention it
 ## Plan for this week 15 min)
+=======
+- If there are any new Labels, errors or buttons created translate it yourself
+- Alignment should be fixed
+- MILLION warnings, can they be at least hidden?
+- Edit expense cost is displayed using a ',' instead of a '.' so it creates an error
+- Cannot translate pop-up (for as far as I know)
+- If anybody encountered anything else, this is the time to mention it
+## Plan for this week (20 min)
+>>>>>>> cd3268964e410232f713f08f5684c9275b7e3b10
 - TESTING
 - clean-up
 - Presentation
 - More?
 #### Did we miss anything in the backlog? (10 min):
 - See backlog
+<<<<<<< HEAD
 #### Other assignments (5 min)
+=======
+#### Other assignments (10 min)
+>>>>>>> cd3268964e410232f713f08f5684c9275b7e3b10
 - When are deadlines of self reflection and buddy-check
 ## Summary of meeting (4 min)
 
@@ -58,3 +79,16 @@ Show the following:
 - cleanup application, testing, distribute presentation
 - testing: 80%
 - css done 
+
+## Minute taker notes:
+- Mainly fixes for this week, most features are done
+- features that still have to be done/fixed
+  - (custom) tags
+  - email functionality
+- Things to do for this week
+  - the features above
+  - front-end testing
+  - finishing up all translations
+    - making sure every button, textbox etc grows/shrinks when translating to another language
+    - making sure everything gets translated
+- Some people have resits so be aware of that

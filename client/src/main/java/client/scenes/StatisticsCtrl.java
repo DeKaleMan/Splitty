@@ -7,6 +7,7 @@ import commons.Currency;
 import commons.Participant;
 import commons.Tag;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -203,15 +204,20 @@ public class StatisticsCtrl {
     }
 
     public void setStatisticsText(String txt) {
-        this.statisticsText.setText(txt);
+        Platform.runLater(() -> {
+            this.statisticsText.setText(txt);
+        });
     }
 
     public void setTotalCostText(String txt) {
-        this.totalCostText.setText(txt);
+        Platform.runLater(() -> {
+            this.totalCostText.setText(txt);
+        });
     }
-
-    public void setBackButton(String txt) {
-        this.back.setText(txt);
+    public void setBackButton(String txt){
+        Platform.runLater(() -> {
+            this.back.setText(txt);
+        });
     }
 
     public void setHoverLabel(String t){
@@ -225,5 +231,6 @@ public class StatisticsCtrl {
             event1 -> hoverLabel.setVisible(false)
         );
         visiblePause.play();
+
     }
 }

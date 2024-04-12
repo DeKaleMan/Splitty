@@ -43,7 +43,7 @@
         </AnchorPane>
         <Button fx:id="showAllEventsButton" layoutX="466.0" layoutY="334.0" mnemonicParsing="false" onAction="#showAllEvents" text="Show All Events" visible="false" AnchorPane.rightAnchor="10.0" />
 
-        <Button fx:id="settingsButton" layoutX="499.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" />
+        <Button fx:id="settingsButton" layoutX="499.0" layoutY="14.0" mnemonicParsing="false" onAction="#showSettings" text="Settings" AnchorPane.rightAnchor="42.333333333333336" />
 
 
         <Button fx:id="adminLogin" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#showAdminLogin" text="Admin Login" AnchorPane.leftAnchor="10.0" />

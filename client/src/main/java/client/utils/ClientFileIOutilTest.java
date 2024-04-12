@@ -30,6 +30,13 @@ public class ClientFileIOutilTest implements ClientFileIOutil {
         return rateCached;
     }
 
+    @Override
+    public boolean createNewFile(File file) {
+        this.file = file;
+        ioCalls.add("create new file");
+        return true;
+    }
+
     public ArrayList<String> clearCallList() {
         ArrayList<String> result = new ArrayList<>(ioCalls);
         ioCalls.clear();

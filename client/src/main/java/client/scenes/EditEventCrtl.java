@@ -4,6 +4,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -86,21 +87,39 @@ public class EditEventCrtl {
     }
 
     public void setEventNameText(String txt){
-        this.eventNameText.setText(txt);
+        Platform.runLater(() -> {
+            this.eventNameText.setText(txt);
+        });
     }
+
     public void setCreateButton(String txt){
-        this.submitButton.setText(txt);
+        Platform.runLater(() -> {
+            this.submitButton.setText(txt);
+        });
     }
+
     public void setCancelButton(String txt){
-        this.cancelButton.setText(txt);
+        Platform.runLater(() -> {
+            this.cancelButton.setText(txt);
+        });
     }
+
     public void setTitleError(String txt){
-        this.titleError.setText(txt);
+        Platform.runLater(() -> {
+            this.titleError.setText(txt);
+        });
     }
+
     public void setSuccesFullyChanged(String txt) {
-        this.succesFullyChanged.setText(txt);
+        Platform.runLater(() -> {
+            this.succesFullyChanged.setText(txt);
+        });
     }
+
     public void setOldEventnameText(String txt) {
-        this.oldEventnameText.setText(txt);
+        Platform.runLater(() -> {
+            this.oldEventnameText.setText(txt);
+        });
     }
+
 }

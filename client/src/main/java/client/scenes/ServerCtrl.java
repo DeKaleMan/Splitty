@@ -146,18 +146,33 @@ public class ServerCtrl {
     }
 
     public void setTitle(String txt) {
-        this.title.setText(txt);
+        Platform.runLater(() -> {
+
+            this.title.setText(txt);
+        });
     }
     public void setConnectButton(String txt) {
-        this.connectButton.setText(txt);
+        Platform.runLater(() -> {
+
+            this.connectButton.setText(txt);
+        });
     }
     public void setNotConnectedError(String txt){
-        this.notConnectedError.setText(txt);
+        Platform.runLater(() -> {
+
+            this.notConnectedError.setText(txt);
+        });
     }
     public void setStartupNotification(String txt){
-        this.startupNotification.setText(txt);
+        Platform.runLater(() -> {
+
+            this.startupNotification.setText(txt);
+        });
     }
     public void setServerText(String txt){
-        this.serverText.setText(txt);
+        Platform.runLater(() -> {
+
+            this.serverText.setText(txt);
+        });
     }
 }

@@ -6,6 +6,7 @@ import commons.Event;
 import commons.dto.EventDTO;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -179,30 +180,52 @@ public class CreateEventCtrl {
         resetTitleFieldError();
     }
 
-
     public void setEventNameText(String txt){
-        this.eventNameText.setText(txt);
+        Platform.runLater(() -> {
+            this.eventNameText.setText(txt);
+        });
     }
+
     public void setDateText(String txt){
-        this.dateText.setText(txt);
+        Platform.runLater(() -> {
+            this.dateText.setText(txt);
+        });
     }
+
     public void setEventDescriptionText(String txt){
-        this.eventDescriptionText.setText(txt);
+        Platform.runLater(() -> {
+            this.eventDescriptionText.setText(txt);
+        });
     }
+
     public void setEventDescriptionArea(String txt){
-        this.eventDescriptionArea.setPromptText(txt);
+        Platform.runLater(() -> {
+            this.eventDescriptionArea.setPromptText(txt);
+        });
     }
+
     public void setNameText(String txt){
-        this.nameText.setText(txt);
+        Platform.runLater(() -> {
+            this.nameText.setText(txt);
+        });
     }
+
     public void setCreateButton(String txt){
-        this.createButton.setText(txt);
+        Platform.runLater(() -> {
+            this.createButton.setText(txt);
+        });
     }
+
     public void setCancelButton(String txt){
-        this.cancelButton.setText(txt);
+        Platform.runLater(() -> {
+            this.cancelButton.setText(txt);
+        });
     }
+
     public void setRequired(String txt){
-        //this.nameField.setPromptText(txt);
-        this.titleField.setPromptText(txt);
+        Platform.runLater(() -> {
+            //this.nameField.setPromptText(txt);
+            this.titleField.setPromptText(txt);
+        });
     }
 }
