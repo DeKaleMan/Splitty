@@ -26,6 +26,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -729,6 +731,27 @@ public class MainCtrl {
 
     public void showUndoInOverview(){
         splittyOverviewCtrl.showUndo();
+    }
+
+    public void getJSONFile(TextArea addedLang, String newLang) {
+        try {
+            String jsonString = serverUtils.getLanguageJSON(newLang);
+            jsonString = jsonString.replace(",", ",\n");
+            jsonString.replace("not a valid language", "failed to retrieve language");
+
+            addedLang.setText(jsonString);
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
+
+    }
+
+    public void setNewLang(String stringForJson, String newLang) {
+        try {
+            serverUtils.setNewLang(stringForJson, newLang);
+        } catch (RuntimeException e) {
+            checkConnection();
+        }
     }
 }
 

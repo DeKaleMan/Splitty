@@ -91,7 +91,6 @@ public class ServerCtrl {
                 noConnection = false;
                 connectLoading.setVisible(false);
             } catch (RuntimeException e) {
-                e.printStackTrace();
                 notConnectedError.setVisible(true);
                 noConnection = true;
                 connectLoading.setVisible(false);

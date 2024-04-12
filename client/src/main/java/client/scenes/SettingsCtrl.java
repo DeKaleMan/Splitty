@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -19,7 +21,6 @@ import java.util.concurrent.CountDownLatch;
 
 
 public class SettingsCtrl {
-    private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     public final Config config;
     private boolean noConnection = false;
@@ -54,6 +55,8 @@ public class SettingsCtrl {
     @FXML
     private Label settingsText;
     @FXML
+    public Label connectionErrorLabel;
+    @FXML
     private ProgressBar progressBar;
     @FXML
     private TextField nameField;
@@ -65,10 +68,9 @@ public class SettingsCtrl {
     private String newLang;
 
     @Inject
-    public SettingsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
+    public SettingsCtrl(MainCtrl mainCtrl, Config config) {
         this.mainCtrl = mainCtrl;
         this.config = config;
-        this.serverUtils = serverUtils;
     }
 
     public void initialize() {
@@ -188,7 +190,10 @@ public class SettingsCtrl {
     @FXML
     public void addLang() {
         //TODO check if it is a language or not to make it imaginary?
-
+        if (!mainCtrl.getConnection()) {
+            noConnectionError();
+            return;
+        }
         this.newLang = langTextfield.getText();
         if (newLang != null && !newLang.isBlank()) {
             progressBar.setVisible(true);
@@ -239,27 +244,25 @@ public class SettingsCtrl {
 
 
     public void getJSONFile() {
-        String jsonString = serverUtils.getLanguageJSON(newLang);
-        jsonString = jsonString.replace(",", ",\n");
-        jsonString.replace("not a valid language", "failed to retrieve language");
-
-
-        addedLang.setText(jsonString);
+        mainCtrl.getJSONFile(addedLang, newLang);
         progressBar.setVisible(false);
     }
 
     @FXML
     public void confirmLang() {
+        if (!mainCtrl.getConnection()) {
+            noConnectionError();
+            return;
+        }
         progressBar.setVisible(true);
         confirmlangBox.setVisible(false);
         String lang = addedLang.getText();
         String stringForJson = lang.replace("\n", "");
-        serverUtils.setNewLang(stringForJson, newLang);
+        mainCtrl.setNewLang(stringForJson, newLang);
         if (this.flag != null) {
             mainCtrl.addFlag(flag);
         }
         this.flag = null;
-//        mainCtrl.addFlag(flag);
         mainCtrl.changeLanguage(newLang);
         this.progressBar.setVisible(false);
         this.uploadFlag.setStyle("-fx-background-color: #91a691;");
@@ -282,6 +285,12 @@ public class SettingsCtrl {
         return config.getLanguage().toString();
     }
 
+    private void noConnectionError() {
+        connectionErrorLabel.setVisible(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(4));
+        pause.setOnFinished(event1 -> connectionErrorLabel.setVisible(false));
+        pause.play();
+    }
     @FXML
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
@@ -299,7 +308,6 @@ public class SettingsCtrl {
 
     public void setCancelButton(String txt) {
         Platform.runLater(() -> {
-
             this.cancelButton.setText(txt);
         });
     }
