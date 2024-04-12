@@ -149,7 +149,7 @@ public class SetLanguageTest {
         verify(settingsCtrl).setAddLanguage("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(10)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(13)).translate(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -182,7 +182,7 @@ public class SetLanguageTest {
         verify(invitationCtrl).setInviteCodeText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(6)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

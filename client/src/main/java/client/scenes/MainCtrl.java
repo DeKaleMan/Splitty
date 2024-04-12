@@ -322,6 +322,7 @@ public class MainCtrl {
         invitationCtrl.setInviteCode(event.getInviteCode());
         invitationCtrl.showInviteCode();
         invitationCtrl.setTitle(event.getName());
+        invitationCtrl.setServer(ServerUtils.server);
     }
 
     public void showAdminLogin() {

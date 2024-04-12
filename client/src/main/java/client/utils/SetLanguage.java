@@ -227,6 +227,9 @@ public class SetLanguage {
                 "the name of your imaginary language" +
                 "and an image for the flag of the language you want to add", "en", lang));
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
+        settingsCtrl.setLabelEmailToken(translate("Email password token", "en", lang));
+        settingsCtrl.setSendEmail(translate("default button", "en", lang));
+        settingsCtrl.setSucces(translate("Email succesfully send!", "en", lang));
         settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
         System.out.println("settings translated");
     }
@@ -251,6 +254,9 @@ public class SetLanguage {
                 "the invite code:", "en", lang));
         invitationCtrl.setEmailArea(translate("Add your emails to send an invite to", "en", lang));
         invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
+        invitationCtrl.setDefaultButton(translate("check email works", "en", lang));
+        invitationCtrl.setDefaultLabel(translate("not sure if your email is configured? Use this button", "en", lang));
+        invitationCtrl.setNoEmail(translate("Please fill in an email address", "en", lang));
         System.out.println("invitation translated");
     }
 

@@ -14,13 +14,15 @@ public class Config {
     private String email;
     private String id;
 
+    private String emailToken;
+
     private String name = "Test Name";
     private String iban;
     private String bic;
 
 
     public Config(String connection, String language, Currency currency, String email,
-                  String id, String name, String iban, String bic) {
+                  String id, String name, String iban, String bic, String emailToken) {
         this.connection = connection;
         this.language = language;
         this.currency = currency;
@@ -29,6 +31,7 @@ public class Config {
         this.name = name;
         this.iban = iban;
         this.bic = bic;
+        this.emailToken = emailToken;
     }
 
     public Config() {
@@ -57,6 +60,7 @@ public class Config {
             this.currency = tmpConfig.getCurrency();
             this.language = tmpConfig.getLanguage();
             this.name = tmpConfig.getName();
+            this.emailToken = tmpConfig.getEmailToken();
         } catch (NoSuchElementException | IOException e) {
             if (!write()) {
                 System.out.println("Config file could not be created");
@@ -119,6 +123,10 @@ public class Config {
         this.email = email;
     }
 
+    public void setEmailToken(String emailToken){
+        this.emailToken = emailToken;
+    }
+
     public String getId() {
         return id;
     }
@@ -143,6 +151,10 @@ public class Config {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmailToken(){
+        return emailToken;
     }
 
     public String getIban() {

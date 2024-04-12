@@ -10,6 +10,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.Mailer;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -21,7 +23,9 @@ import java.util.concurrent.CountDownLatch;
 public class SettingsCtrl {
     private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-    public final Config config;
+    private final Config config;
+
+    private final Mail mail;
     private boolean noConnection = false;
 
     private File flag;
@@ -61,19 +65,41 @@ public class SettingsCtrl {
     private TextField ibanField;
     @FXML
     private TextField bicField;
+    @FXML
+    private Label labelEmailToken;
+    @FXML
+    private TextField getToken;
+    @FXML
+    private Button sendEmail;
+    @FXML
+    private Label succes;
+
 
     private String newLang;
 
     @Inject
-    public SettingsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
+    public SettingsCtrl(MainCtrl mainCtrl, Config config, Mail mail) {
         this.mainCtrl = mainCtrl;
         this.config = config;
+        this.mail = mail;
         this.serverUtils = serverUtils;
     }
 
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
         mainCtrl.setButtonGreenProperty(saveButton);
+    }
+
+    public void setLabelEmailToken(String txt) {
+        labelEmailToken.setText(txt);
+    }
+
+    public void setSucces(String txt) {
+        succes.setText(txt);
+    }
+
+    public void setSendEmail(String txt) {
+        sendEmail.setText(txt);
     }
 
     /**
@@ -101,6 +127,11 @@ public class SettingsCtrl {
         } else {
             bicField.setText("");
         }
+        if (config.getEmailToken() != null) {
+            getToken.setText(config.getEmailToken());
+        } else {
+            getToken.setText("");
+        }
         currencyField.setText(config.getCurrency().toString());
         languageText.setText(config.getLanguage());
     }
@@ -115,6 +146,7 @@ public class SettingsCtrl {
         String name = nameField.getText();
         String iban = ibanField.getText();
         String bic = bicField.getText();
+        String emailToken = getToken.getText();
         boolean abort = false;
         if (email == null || email.isEmpty()) {
             email = null;
@@ -127,6 +159,7 @@ public class SettingsCtrl {
         if (abort) {
             return;
         }
+        config.setEmailToken(emailToken);
         config.setEmail(email);
         config.setCurrency(Currency.valueOf(currency));
         config.setName(name);
@@ -143,6 +176,7 @@ public class SettingsCtrl {
     }
 
     public void back() {
+        succes.setVisible(false);
         mainCtrl.showStartScreen();
     }
 
@@ -248,8 +282,31 @@ public class SettingsCtrl {
         progressBar.setVisible(false);
     }
 
+    public void sendDefaultEmail() {
+        try {
+            String fromEmail = config.getEmail();
+            String toEmail = config.getEmail();
+            String passwordToken = config.getEmailToken();
+            String host = "smtp.gmail.com";
+            String emailSubject = "configuration email splitty";
+            String emailBody = toStringBodyy(fromEmail, passwordToken);
+            int port = 587;
+            Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
+            Email email = mail.makeEmail(fromEmail, toEmail, emailSubject, emailBody);
+            mail.mailSending(email, mailer);
+            System.out.println("email has been send correctly");
+            succes.setVisible(true);
+        } catch (RuntimeException e) {
+            getToken.setText("password does not match the email");
+            System.out.println("could not make a Mailer");
+            e.printStackTrace();
+        } catch (Exception e) {
+            emailField.setText("something wrong with email");
+        }
+    }
+
     @FXML
-    public void confirmLang() {
+    public void confirmLang () {
         progressBar.setVisible(true);
         confirmlangBox.setVisible(false);
         String lang = addedLang.getText();
@@ -266,7 +323,7 @@ public class SettingsCtrl {
     }
 
     @FXML
-    public void setFlag() {
+    public void setFlag () {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose image to set as flag");
         fileChooser.getExtensionFilters().addAll(
@@ -278,12 +335,12 @@ public class SettingsCtrl {
         this.uploadFlag.setStyle("-fx-background-color: #2a8dff;");
     }
 
-    public String getLanguage() {
+    public String getLanguage () {
         return config.getLanguage().toString();
     }
 
     @FXML
-    public void onKeyPressed(KeyEvent press) {
+    public void onKeyPressed (KeyEvent press){
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
         }
@@ -293,82 +350,100 @@ public class SettingsCtrl {
         }
     }
 
-    public void changeServer() {
+    public void changeServer () {
         mainCtrl.showServerStartup(noConnection);
     }
 
-    public void setCancelButton(String txt) {
+    public void setCancelButton (String txt){
         Platform.runLater(() -> {
 
             this.cancelButton.setText(txt);
         });
     }
 
-    public void setSaveButton(String txt) {
+    public void setSaveButton (String txt){
         Platform.runLater(() -> {
             this.saveButton.setText(txt);
 
         });
     }
 
-    public void setLanguage(String txt) {
+    public void setLanguage (String txt){
         Platform.runLater(() -> {
             this.language.setText(txt);
 
         });
     }
 
-    public void setLanguageText(String txt) {
+    public void setLanguageText (String txt){
         Platform.runLater(() -> {
 
             this.languageText.setText(txt);
         });
     }
 
-    public void setLangInstructions(String txt) {
+    public void setLangInstructions (String txt){
         Platform.runLater(() -> {
 
             this.langInstructions.setText(txt);
         });
     }
 
-    public void setAddLangText(String txt) {
+    public void setAddLangText (String txt){
         Platform.runLater(() -> {
 
             this.addLangText.setText(txt);
         });
     }
 
-    public void setAddLanguage(String txt) {
+    public void setAddLanguage (String txt){
         Platform.runLater(() -> {
 
             this.addLanguage.setText(txt);
         });
     }
 
-    public void setCurrency(String txt) {
+    public void setCurrency (String txt){
         Platform.runLater(() -> {
 
             this.currency.setText(txt);
         });
     }
 
-    public void setSettingsText(String txt) {
+    public void setSettingsText (String txt){
         Platform.runLater(() -> {
 
             this.settingsText.setText(txt);
         });
     }
 
-    public void setChangServerButton(String txt) {
+    public void setChangServerButton (String txt){
         Platform.runLater(() -> {
 
             this.changServerButton.setText(txt);
         });
     }
-    public void setUploadFlag(String txt) {
+    public void setUploadFlag (String txt){
         Platform.runLater(() -> {
             this.uploadFlag.setText(txt);
         });
     }
+
+
+    private String toStringBodyy(String fromEmail, String passwordToken){
+        String s = "This email is from splitty. We would like to tell " +
+                "you that your email and credentials are set up correctly." +
+                "\n \n" +
+                "Your credetials are:\n" +
+                "email: " + fromEmail + "\n" +
+                "password token: " + passwordToken +
+                "\n \n" +
+                "From now on you can this email to send invites or " +
+                "send payment invitations." +
+                "\n \n" +
+                "sincerly, Team Splitty";
+
+        return s;
+    }
 }
+
