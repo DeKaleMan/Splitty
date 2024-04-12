@@ -141,16 +141,16 @@ public class SetLanguageTest {
         verify(serverUtils, times(7)).translate(anyString(), anyString(), anyString());
     }
 
-//    @Test
-//    public void testSetSettings() {
-//        when(serverUtils.translate(anyString(), anyString(), anyString())).thenReturn("TranslatedText");
-//        setLanguage.setSettings("en");
-//        verify(settingsCtrl).setSettingsText("TranslatedText");
-//        verify(settingsCtrl).setAddLanguage("TranslatedText");
-//        // Verify other text setting methods
-//        // Verify translation service called for each text
-//        verify(serverUtils, times(10)).translate(anyString(), anyString(), anyString());
-//    }
+    @Test
+    public void testSetSettings() {
+        when(serverUtils.translate(anyString(), anyString(), anyString())).thenReturn("TranslatedText");
+        setLanguage.setSettings("en");
+        verify(settingsCtrl).setSettingsText("TranslatedText");
+        verify(settingsCtrl).setAddLanguage("TranslatedText");
+        // Verify other text setting methods
+        // Verify translation service called for each text
+        verify(serverUtils, times(13)).translate(anyString(), anyString(), anyString());
+    }
 
     @Test
     public void testSetStatistics() {
@@ -174,16 +174,16 @@ public class SetLanguageTest {
         verify(serverUtils, times(5)).translate(anyString(), anyString(), anyString());
     }
 
-//    @Test
-//    public void testSetInvite() {
-//        when(serverUtils.translate(anyString(), anyString(), anyString())).thenReturn("TranslatedText");
-//        setLanguage.setInvite("en");
-//        verify(invitationCtrl).setBack("TranslatedText");
-//        verify(invitationCtrl).setInviteCodeText("TranslatedText");
-//        // Verify other text setting methods
-//        // Verify translation service called for each text
-//        verify(serverUtils, times(6)).translate(anyString(), anyString(), anyString());
-//    }
+    @Test
+    public void testSetInvite() {
+        when(serverUtils.translate(anyString(), anyString(), anyString())).thenReturn("TranslatedText");
+        setLanguage.setInvite("en");
+        verify(invitationCtrl).setBack("TranslatedText");
+        verify(invitationCtrl).setInviteCodeText("TranslatedText");
+        // Verify other text setting methods
+        // Verify translation service called for each text
+        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
+    }
 
     @Test
     public void testSetManageParticipants() {
