@@ -1,4 +1,4 @@
-# Agenda week 8
+# Agenda week 9
 
 ---
 
@@ -58,3 +58,16 @@ Show the following:
 - cleanup application, testing, distribute presentation
 - testing: 80%
 - css done 
+
+## Minute taker notes:
+- Mainly fixes for this week, most features are done
+- features that still have to be done/fixed
+  - (custom) tags
+  - email functionality
+- Things to do for this week
+  - the features above
+  - front-end testing
+  - finishing up all translations
+    - making sure every button, textbox etc grows/shrinks when translating to another language
+    - making sure everything gets translated
+- Some people have resits so be aware of that
