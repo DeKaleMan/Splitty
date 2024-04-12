@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javafx.application.Platform;
+
 
 public class StartScreenCtrl implements Initializable {
     private final ServerUtils serverUtils;
@@ -29,7 +32,6 @@ public class StartScreenCtrl implements Initializable {
 
     boolean translating = false;
 
-    private String currentLang = "en";
     @FXML
     private Label myEventsText;
     @FXML
@@ -79,7 +81,6 @@ public class StartScreenCtrl implements Initializable {
 
     @FXML
     private ImageView flag;
-
 
 
     @Inject
@@ -223,75 +224,111 @@ public class StartScreenCtrl implements Initializable {
     }
 
 
-
-
     @FXML
     public void showAllEvents() {
         mainCtrl.showUserEventList();
     }
 
-    public void setTitle(String eventTitle) {
-        createEventTextField.setText(eventTitle);
-    }
 
-    public void setmyEventsText(String txt){
-        this.myEventsText.setText(txt);
+    public void setMyEventsText(String txt) {
+        Platform.runLater(() -> {
+            myEventsText.setText(txt);
+        });
     }
-
 
     public void showAdminLogin(ActionEvent actionEvent) {
         mainCtrl.showAdminLogin();
     }
 
     public void setCreateEventText(String text) {
-        createEventText.setText(text);
+        Platform.runLater(() -> {
+            createEventText.setText(text);
+        });
     }
 
     public void setJoinEventText(String text) {
-        joinEventText.setText(text);
+        Platform.runLater(() -> {
+            joinEventText.setText(text);
+        });
     }
 
     public void setAdminLogin(String text) {
-        adminLogin.setText(text);
+        Platform.runLater(() -> {
+            adminLogin.setText(text);
+        });
     }
 
     public void setShowAllEvents(String text) {
-        showAllEventsButton.setText(text);
+        Platform.runLater(() -> {
+            showAllEventsButton.setText(text);
+        });
     }
 
     public void setJoinButtonText(String text) {
-        join.setText(text);
+        Platform.runLater(() -> {
+            join.setText(text);
+        });
     }
 
     public void setCreateButtonText(String text) {
-        create.setText(text);
-    }
-    public void setInvalidCodeError(String text) {
-        invalidCodeError.setText(text);
-    }
-    public void setCodeNotFoundError(String text) {
-        codeNotFoundError.setText(text);
-    }
-    public void setAlreadyParticipantError(String text) {
-        alreadyParticipantError.setText(text);
-    }
-    public void setNoConnectionError(String text) {
-        noConnectionError.setText(text);
-    }
-    public void setMyEventsNotFoundError(String text) {
-        noConnectionError.setText(text);
-    }
-    public void setSettingsSavedLabel(String text) {
-        settingsSavedLabel.setText(text);
+        Platform.runLater(() -> {
+            create.setText(text);
+        });
     }
 
+    public void setInvalidCodeError(String text) {
+        Platform.runLater(() -> {
+            invalidCodeError.setText(text);
+        });
+    }
+
+    public void setCodeNotFoundError(String text) {
+        Platform.runLater(() -> {
+            codeNotFoundError.setText(text);
+        });
+    }
+
+    public void setAlreadyParticipantError(String text) {
+        Platform.runLater(() -> {
+            alreadyParticipantError.setText(text);
+        });
+    }
+
+    public void setNoConnectionError(String text) {
+        Platform.runLater(() -> {
+            noConnectionError.setText(text);
+        });
+    }
+
+    public void setMyEventsNotFoundError(String text) {
+        Platform.runLater(() -> {
+            myEventsNotFoundError.setText(text);
+        });
+    }
+
+    public void setmyEventsText(String text) {
+        Platform.runLater(() -> {
+            myEventsText.setText(text);
+        });
+    }
+
+
+    public void setSettingsSavedLabel(String text) {
+        Platform.runLater(() -> {
+            settingsSavedLabel.setText(text);
+        });
+    }
 
 
     public void setNoEventLabel(String text) {
 //        noEventLabel.setText(text);
     }
-    public void setSettings(String text){
-        this.settingsButton.setText(text);
+
+    public void setSettings(String text) {
+        Platform.runLater(() -> {
+            this.settingsButton.setText(text);
+        });
+
     }
 
 
@@ -304,28 +341,34 @@ public class StartScreenCtrl implements Initializable {
         if (mainCtrl.language == null) {
             mainCtrl.language = "en";
         }
+        if(!mainCtrl.languages.contains(mainCtrl.language)){
+            mainCtrl.language = "en";
+            config.setLanguage("en");
+            config.write();
+        }
         languages.addAll(mainCtrl.languages);
         languageSelect.setItems(languages);
         languageSelect.setValue(mainCtrl.language);
         //languageSelect.setValue(flag);
         Image flag = mainCtrl.getFlag();
         setFlag(flag);
-        if (!mainCtrl.language.equals(currentLang)) {
-            changeLanguage();
-        }
+//        if (!mainCtrl.language.equals(currentLang)) {
+//            changeLanguage();
+//        }
         translating = false;
     }
-
+    private boolean starting = true;
     @FXML
     public void changeLanguage() {
         setProgress();
-        if(translating) return;
+        if (translating) return;
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
                 String selected = (String) languageSelect.getSelectionModel().getSelectedItem();
-                if(selected.equals(currentLang)){
+                if (selected.equals(mainCtrl.language) && !starting) {
                     return;
                 }
+                starting = false;
                 //Language toLang = Language.valueOf(selected);
                 if (mainCtrl.languages.contains(selected)) {
                     config.setLanguage(selected);
@@ -333,7 +376,6 @@ public class StartScreenCtrl implements Initializable {
                     String toLang = selected;
                     mainCtrl.changeLanguage(toLang);
                 }
-                currentLang = selected;
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -341,6 +383,7 @@ public class StartScreenCtrl implements Initializable {
         setProgress();
         languageSelect.setVisible(false);
     }
+
     @FXML
     public void showLangOptions() {
         languageSelect.show();
@@ -398,7 +441,6 @@ public class StartScreenCtrl implements Initializable {
     }
 
 
-
     public void addEvent(Event event) {
         if (events == null) {
             events = new ArrayList<>();
@@ -416,6 +458,7 @@ public class StartScreenCtrl implements Initializable {
         );
         visiblePause.play();
     }
+
     public void setNoEventsError(boolean b) {
         myEventsNotFoundError.setVisible(b);
         noConnectionError.setVisible(b);

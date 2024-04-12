@@ -15,15 +15,13 @@
  */
 package client.scenes;
 
-import client.utils.AdminWindows;
-import client.utils.EventPropGrouper;
-import client.utils.ServerUtils;
-import client.utils.SetLanguage;
+import client.utils.*;
 import commons.*;
 import commons.Currency;
 import commons.dto.DebtDTO;
 import commons.dto.ExpenseDTO;
 import commons.dto.ParticipantDTO;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -32,16 +30,17 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class MainCtrl {
-    private final String css = this.getClass().getResource("/general.css").toExternalForm();
 
-    protected String language = "en";
-    protected String currentLang = "en";
-    protected List<String> languages;
+public class MainCtrl {
+
+    public String language = "en";
+
+    public List<String> languages;
 
 
     private SetLanguage setLanguage;
@@ -189,24 +188,48 @@ public class MainCtrl {
     }
 
     private void setLanguage() {
-        languages = new ArrayList<>();
         //TODO we should add the available languages perhaps to a file
-        languages.addAll(List.of("en", "nl", "is", "zh", "es"));
+        //languages = new ArrayList<>();
+        //languages.addAll(List.of("en", "nl", "is", "zh", "es"));
+
         this.setLanguage = new SetLanguage(startScreenCtrl, splittyOverviewCtrl,
                 addExpenseCtrl, adminLoginCtrl, adminOverviewCtrl, createEventCtrl,
                 settingCtrl, statisticsCtrl, serverCtrl, invitationCtrl, manageParticipantsCtrl,
                 editParticipantCtrl, addParticipantCtrl, editExpenseCtrl, editEventCrtl);
-        startScreenCtrl.setLanguageSelect();
-        splittyOverviewCtrl.setLanguageSelect();
-        startScreenCtrl.changeLanguage();
+        setLanguage.setServerUtilsIO(serverUtils, new ClientFileIOutilActual());
+        this.languages = setLanguage.getLanguages();
+
+        if (!languages.contains(this.language)) {
+            this.language = "en";
+        }
+
+        resetLanguage();
 
     }
 
-    public void changeLanguage(String toLang) {
+    public void addLang(String newLang) {
+        setLanguage.addLang(newLang);
+    }
+
+    public synchronized void resetLanguage() {
+        Platform.runLater(() -> {
+            try {
+                startScreenCtrl.setLanguageSelect();
+                splittyOverviewCtrl.setLanguageSelect();
+                startScreenCtrl.changeLanguage();
+
+            } catch (NullPointerException e) {
+                //nobody knows....but it works
+            }
+        });
+    }
+
+    public synchronized void changeLanguage(String toLang) {
         this.language = toLang;
         setLanguage.changeTo(toLang);
         splittyOverviewCtrl.setLanguageSelect();
         startScreenCtrl.setLanguageSelect();
+
     }
 
     public String translate(String query) {
@@ -218,7 +241,6 @@ public class MainCtrl {
         try {
             Event event = serverUtils.getEventById(id);
             splittyOverviewCtrl.initializeAll(event);
-            splittyOverview.getStylesheets().add(css);
             splittyOverviewCtrl.setEventCode(id);
             primaryStage.setTitle("Event overview");
             primaryStage.setScene(splittyOverview);
@@ -235,8 +257,12 @@ public class MainCtrl {
 
     public Image getFlag() {
         return setLanguage.getFlag(this.language);
-
     }
+
+    public boolean addFlag(File image) {
+        return setLanguage.addFlag(image, this.language);
+    }
+
 
     public List<Event> getMyEvents() {
         if (settingCtrl != null) {

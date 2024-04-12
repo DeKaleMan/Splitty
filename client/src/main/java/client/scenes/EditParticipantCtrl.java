@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -175,34 +176,52 @@ public class EditParticipantCtrl implements Initializable {
             cancel();
         }
     }
-
     public void setCancelButton(String txt) {
-        this.cancelButton.setText(txt);
+        Platform.runLater(() -> {
+            this.cancelButton.setText(txt);
+        });
     }
 
     public void setApplyChangesButton(String txt){
-        this.applyChangesButton.setText(txt);
+        Platform.runLater(() -> {
+            this.applyChangesButton.setText(txt);
+        });
     }
+
     public void setName(String txt){
-        this.name.setText(txt);
+        Platform.runLater(() -> {
+            this.name.setText(txt);
+        });
     }
 
     public void setInvalidEmailLabel(String txt){
-        this.invalidEmailLabel.setText(txt);
+        Platform.runLater(() -> {
+            this.invalidEmailLabel.setText(txt);
+        });
     }
 
     public void setInvalidIbanLabel(String txt){
-        this.invalidIbanLabel.setText(txt);
+        Platform.runLater(() -> {
+            this.invalidIbanLabel.setText(txt);
+        });
     }
 
     public void setInvalidBicLabel(String txt){
-        this.invalidBicLabel.setText(txt);
+        Platform.runLater(() -> {
+            this.invalidBicLabel.setText(txt);
+        });
     }
 
     public void setUnknownError(String txt){
-        this.unknownError.setText(txt);
+        Platform.runLater(() -> {
+            this.unknownError.setText(txt);
+        });
     }
+
     public void setAccountHolder(String txt){
-        this.accountHolder.setText(txt);
+        Platform.runLater(() -> {
+            this.accountHolder.setText(txt);
+        });
     }
+
 }
