@@ -78,7 +78,7 @@ public class Event {
         this.date = date;
     }
 
-    public void setOwner(String host) {
+    public void setHost(String host) {
         this.host = host;
     }
 

@@ -54,11 +54,4 @@ public class ParticipantId implements Serializable {
         return Objects.hash(getUuid(), getEvent());
     }
 
-    @Override
-    public String toString() {
-        return "ParticipantId{" +
-                "uuid='" + uuid + '\'' +
-                ", event=" + event +
-                '}';
-    }
 }
