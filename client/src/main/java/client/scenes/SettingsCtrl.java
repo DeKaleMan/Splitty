@@ -213,10 +213,8 @@ public class SettingsCtrl {
                 this.latch = new CountDownLatch(1);
                 mainCtrl.changeLanguage(newLang);
                 langTextfield.setText("");
-
                 // Wait for the changeLanguage method to complete
                 //latch.await();
-
                 new Thread(() -> {
                     try {
                         progressBar.setVisible(true);
@@ -224,7 +222,6 @@ public class SettingsCtrl {
                         Platform.runLater(() -> {
                             confirmlangBox.setVisible(true);
                             progressBar.setVisible(false);
-
                         });
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
