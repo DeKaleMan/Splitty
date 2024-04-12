@@ -1,9 +1,6 @@
 package server.api;
 
-import commons.Event;
-import commons.Expense;
-import commons.ExpenseId;
-import commons.Participant;
+import commons.*;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,10 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import server.database.ExpenseRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 public class TestExpenseRepository implements ExpenseRepository {
@@ -38,6 +32,17 @@ public class TestExpenseRepository implements ExpenseRepository {
             .stream()
             .filter(x -> x.getEvent().equals(event) && x.getPayer().equals(payer))
             .toList();
+    }
+
+    @Override
+    public Double findTotalAmountByTag(int eventId, String tagName) {
+        List<Tag> tags = expenses.stream().
+                filter(expense -> expense.getEvent().id == eventId)
+                .map(Expense::getTag).toList();
+        Tag t = tags.stream().filter(tag -> tag.getName().equals(tagName)).toList().getFirst();
+        return expenses.stream().filter(expense -> expense.getTag().equals(t))
+                .mapToDouble(Expense::getTotalExpense)
+                .sum();
     }
 
 

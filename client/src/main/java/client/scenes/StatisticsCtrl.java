@@ -5,6 +5,7 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Currency;
 import commons.Participant;
+import commons.Tag;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -20,19 +21,23 @@ import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class StatisticsCtrl {
     @FXML
     private PieChart pieChart;
-    private double food = 0;
-    private double drinks = 0;
-    private double transport = 0;
-    private double other = 0;
-    private double[] stat;
+
+    private List<Tag> tagList;
+    private double total;
+    ObservableList<Participant> listViewData;
+    private int eventId;
+
+    private MainCtrl mainCtrl;
+    private ServerUtils serverUtils;
+    private Config config;
 
     @FXML
     private Button back;
-
     @FXML
     private Label titleLabel;
     @FXML
@@ -42,24 +47,13 @@ public class StatisticsCtrl {
     @FXML
     private Label totalCostText;
     @FXML
-    private Label errorLabel;
+    private Label currencyErrorLabel;
     @FXML
     private ListView<Participant> shareListView;
     @FXML
     private Label shareOfExpensesLabel;
-
-    private double total;
-
-    ObservableList<Participant> listViewData;
-
-    private int eventCode;
-
-    private MainCtrl mainCtrl;
-    private ServerUtils serverUtils;
-    private Config config;
-
     @FXML
-    Label hoverLabel;
+    private Label hoverLabel;
 
     @Inject
     public StatisticsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
@@ -72,7 +66,7 @@ public class StatisticsCtrl {
     private void setListViewUp() {
         shareListView.setVisible(!(total < 0.001));
         shareOfExpensesLabel.setVisible(!(total < 0.001));
-
+        setPieChart();
         shareListView.setCellFactory(new Callback<ListView<Participant>, ListCell<Participant>>() {
             @Override
             public ListCell<Participant> call(ListView<Participant> participantListView) {
@@ -85,7 +79,7 @@ public class StatisticsCtrl {
                         } else {
                             double amount = 0.0;
                             try {
-                                amount = serverUtils.getExpenseByUuid(eventCode,
+                                amount = serverUtils.getExpenseByUuid(eventId,
                                         participant.getUuid())
                                     .stream()
                                     .mapToDouble(
@@ -114,16 +108,26 @@ public class StatisticsCtrl {
      * initialize the chart with the current values for food, drinks, transport and other
      */
     public void setPieChart() {
+        pieChart.setLegendVisible(false);
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        String foodName = mainCtrl.translate("Food");
-        String drinkName = mainCtrl.translate("Drinks");
-        String transportName = mainCtrl.translate("Transport");
-        String otherName = mainCtrl.translate("Other");
-        if (this.food != 0.0) data.add(new PieChart.Data(foodName, food));
-        if (this.drinks != 0.0) data.add(new PieChart.Data(drinkName, drinks));
-        if (this.transport != 0.0) data.add(new PieChart.Data(transportName, transport));
-        if (this.other != 0.0) data.add(new PieChart.Data(otherName, other));
-
+        this.tagList = serverUtils.getTagsByEvent(eventId);
+        for (Tag t : tagList) {
+            double d = serverUtils.getSumByTag(eventId, t.getName());
+            if (d < 0.001) {
+                continue;
+            }
+            data.add(new PieChart.Data(t.getName(), d));
+        }
+        pieChart.setData(data);
+        for (PieChart.Data d : data) {
+            List<Tag> tags = tagList.stream()
+                    .filter(tag -> tag.getName().equals(d.getName()))
+                    .toList();
+            if (tags.isEmpty()) {
+                continue;
+            }
+            d.getNode().setStyle("-fx-pie-color: " + tags.getFirst().getColour() + ";");
+        }
         data.forEach(d -> d.nameProperty().bind(Bindings.concat(
                     d.getName(),
                     ": ",
@@ -132,9 +136,6 @@ public class StatisticsCtrl {
                 )
             )
         );
-
-        pieChart.setData(data);
-
         pieChart.getData().forEach(d -> {
             Tooltip.install(d.getNode(), new Tooltip(
                 mainCtrl.getFormattedDoubleString(100.0 * d.pieValueProperty().getValue() / total)
@@ -143,59 +144,20 @@ public class StatisticsCtrl {
     }
 
     //these all set the things for the diagram, theoretically they could all
-    // be done in one method but I wasn't sure how we were going to implement this
+    // be done in one method, but I wasn't sure how we were going to implement this
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
 
     public void setEventCode(int eventCode) {
-        this.eventCode = eventCode;
+        this.eventId = eventCode;
     }
 
     public void fetchStat() {
-        this.stat = serverUtils.getStatisticsByEventID(eventCode);
-        setFood();
-        setDrinks();
-        setTransport();
-        setOther();
+        setPieChart();
         setTotalCost(total);
     }
 
-    public void setFood() {
-        try {
-            this.food = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
-                new Date(), stat[0]);
-        } catch (RuntimeException e) {
-            displayError();
-        }
-    }
-
-    public void setDrinks() {
-        try {
-            this.drinks = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
-                new Date(), stat[1]);
-        } catch (RuntimeException e) {
-            displayError();
-        }
-    }
-
-    public void setTransport() {
-        try {
-            this.transport = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
-                config.getCurrency(), new Date(), stat[2]);
-        } catch (RuntimeException e) {
-            displayError();
-        }
-    }
-
-    public void setOther() {
-        try {
-            this.other = mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
-                config.getCurrency(), new Date(), stat[3]);
-        } catch (RuntimeException e) {
-            displayError();
-        }
-    }
 
     public void setTotalCost(double totalCost) {
         try {
@@ -209,7 +171,7 @@ public class StatisticsCtrl {
 
     @FXML
     public void goBack() {
-        mainCtrl.showSplittyOverview(eventCode);
+        mainCtrl.showSplittyOverview(eventId);
     }
 
     @FXML
@@ -220,16 +182,16 @@ public class StatisticsCtrl {
     }
 
     private void displayError() {
-        errorLabel.setVisible(true);
+        currencyErrorLabel.setVisible(true);
         PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-        visiblePause.setOnFinished(event1 -> errorLabel.setVisible(false));
+        visiblePause.setOnFinished(event1 -> currencyErrorLabel.setVisible(false));
         visiblePause.play();
     }
 
     public void refresh() {
         listViewData.clear();
-        listViewData.addAll(serverUtils.getParticipants(eventCode));
-        total = serverUtils.getTotalCostEvent(eventCode);
+        listViewData.addAll(serverUtils.getParticipants(eventId));
+        total = serverUtils.getTotalCostEvent(eventId);
         try {
             total = mainCtrl.getAmountInDifferentCurrency(Currency.EUR, config.getCurrency(),
                 new Date(), total);
@@ -264,7 +226,7 @@ public class StatisticsCtrl {
 
     public void showHoverLabel(){
         hoverLabel.setVisible(true);
-        PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(8));
         visiblePause.setOnFinished(
             event1 -> hoverLabel.setVisible(false)
         );

@@ -2,10 +2,7 @@ package client.scenes;
 
 import client.MyFXML;
 import client.MyModule;
-import client.utils.AdminWindows;
-import client.utils.Config;
-import client.utils.EventPropGrouper;
-import client.utils.ServerUtils;
+import client.utils.*;
 import com.google.inject.Injector;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,10 +16,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import javax.inject.Inject;
 
 import static com.google.inject.Guice.createInjector;
-
-import javax.inject.Inject;
 
 
 public class ServerCtrl {
@@ -122,15 +118,16 @@ public class ServerCtrl {
         // group these in the EventPropGrouper
         var eventPropGrouper = new EventPropGrouper(addExpense, addParticipant, editParticipant,
                 statistics, debts,editEvent, editExpense, manageParticipants);
-
+        var addTag = fxml.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
+        var manageTags = fxml.load(ManageTagsCtrl.class, "client", "scenes", "ManageTags.fxml");
+        var tagsGrouper = new TagsGrouper(addTag, manageTags);
         var adminLogin = fxml.load(AdminLoginCtrl.class, "client", "scenes", "AdminLogin.fxml");
         var adminOverview = fxml.load(AdminOverviewCtrl.class, "client", "scenes", "AdminOverview.fxml");
         var adminWindows = new AdminWindows(adminLogin, adminOverview);
         var mainCtrl = injector.getInstance(MainCtrl.class);
         mainCtrl.initialize(new Stage(), invitation,splittyOverview,
                 startScreen, contactDetails, eventPropGrouper, userEventList,
-                createEvent, adminWindows, settings, server);
-
+                createEvent, adminWindows, settings, server, tagsGrouper);
     }
 
     public void back() {

@@ -97,6 +97,12 @@ public class MainCtrl {
     private Scene server;
     private ServerCtrl serverCtrl;
 
+    private Scene manageTags;
+    private ManageTagsCtrl manageTagsCtrl;
+
+    private Scene addTag;
+    private AddTagCtrl addTagCtrl;
+
 
     // probably not the best place to put that here but works for now
     // maybe in the future isolate it into an eventctrl?
@@ -124,7 +130,8 @@ public class MainCtrl {
                            Pair<CreateEventCtrl, Parent> createEvent,
                            AdminWindows adminWindows,
                            Pair<SettingsCtrl, Parent> settings,
-                           Pair<ServerCtrl, Parent> server) {
+                           Pair<ServerCtrl, Parent> server,
+                           TagsGrouper tagsGrouper) {
         this.primaryStage = primaryStage;
         this.invitationCtrl = invitation.getKey();
         this.invitation = new Scene(invitation.getValue());
@@ -162,11 +169,12 @@ public class MainCtrl {
         this.editExpenseCtrl = eventPropGrouper.editExpense().getKey();
         this.serverCtrl = server.getKey();
         this.server = new Scene(server.getValue());
-
+        this.manageTagsCtrl = tagsGrouper.manageTag().getKey();
+        this.manageTags = new Scene(tagsGrouper.manageTag().getValue());
+        this.addTagCtrl = tagsGrouper.addTag().getKey();
+        this.addTag = new Scene(tagsGrouper.addTag().getValue());
         settingCtrl.initializeConfig();
         serverUtils = new ServerUtils();
-        ServerUtils.serverDomain = settingCtrl.getConnection();
-        ServerUtils.resetServer();
         setupConnection();
         setLanguage();
         showStartScreen();
@@ -298,12 +306,10 @@ public class MainCtrl {
         return participant;
     }
 
-
-    public void showAddExpense(String title, int eventCode) {
+    public void showAddExpense(int eventCode) {
         try {
             primaryStage.setTitle("Add expense");
             addExpenseCtrl.refresh(eventCode);
-//            addExpenseCtrl.setTitle(title);
             primaryStage.setScene(addExpense);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -595,10 +601,41 @@ public class MainCtrl {
         this.editParticipantCtrl.setHost(false);
     }
 
-    public Expense addExpense(String description, Type type, Date date, Double amountDouble,
+
+    public void showManageTags(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        primaryStage.setScene(manageTags);
+        primaryStage.setTitle("Manage Tags");
+        manageTagsCtrl.refreshList(eventId, addExpense, expense, splittyOverview);
+    }
+    public void showAddTag(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        addTagCtrl.setFields(eventId, addExpense, expense, splittyOverview);
+        primaryStage.setScene(addTag);
+        primaryStage.setTitle("Add Tag");
+
+    }
+    public void showAddTag(Tag tag, int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
+        if (!getConnection()) {
+            showStartScreen();
+            return;
+        }
+        addTagCtrl.setFields(tag, eventId, addExpense, expense, splittyOverview);
+        primaryStage.setScene(addTag);
+        primaryStage.setTitle("Edit Tag");
+    }
+
+    public Expense addExpense(String description, Tag tag, Date date, Double amountDouble,
                               Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble, payer.getUuid(),isSharedExpense);
+                new ExpenseDTO(eventCode, description, tag.getName(), tag.getColour() ,
+                        date, amountDouble, payer.getUuid(),isSharedExpense);
         Expense expense = serverUtils.addExpense(exp);
         if(isSharedExpense) addSharedExpense(amountDouble, expense, payer,owing, eventCode);
         else addGivingMoneyToSomeone(amountDouble, expense, payer, owing.getFirst(), eventCode);
@@ -644,11 +681,11 @@ public class MainCtrl {
                         payer.getUuid()));
     }
 
-    public void editExpense(int expenseId, String description, Type type, Date date, Double amountDouble,
+    public void editExpense(int expenseId, String description, Tag tag, Date date, Double amountDouble,
                             Participant payer, int eventCode, boolean isSharedExpense, List<Participant> owing) {
         ExpenseDTO
                 exp =
-                new ExpenseDTO(eventCode, description, type, date, amountDouble,
+                new ExpenseDTO(eventCode, description, tag.getName(), tag.getColour(), date, amountDouble,
                         payer.getUuid(),isSharedExpense);
         Expense editedExpense = serverUtils.updateExpense(expenseId, exp);
         if(isSharedExpense) editSharedExpense(editedExpense, payer, amountDouble, eventCode, owing);
@@ -712,12 +749,19 @@ public class MainCtrl {
                         newPayer.getUuid()));
     }
 
+
     public void setConfirmationEditParticipant() {
         manageParticipantsCtrl.setParticipantEditedConfirmation();
     }
 
     public void setConfirmationAddParticipant() {
         manageParticipantsCtrl.setParticipantAddedConfirmation();
+    }
+    public void setConfirmationAddedTag() {
+        manageTagsCtrl.setAddedTagConfirmation();
+    }
+    public void setConfirmationEditedTag() {
+        manageTagsCtrl.setEditedTagConfirmation();
     }
 
     public void stopLongPolling() {
@@ -752,5 +796,6 @@ public class MainCtrl {
             checkConnection();
         }
     }
+
 }
 

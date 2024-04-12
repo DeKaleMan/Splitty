@@ -2,10 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
+import commons.*;
 import commons.Currency;
-import commons.Expense;
-import commons.Participant;
-import commons.Type;
 import javafx.animation.PauseTransition;
 
 import javafx.beans.value.ChangeListener;
@@ -24,6 +22,7 @@ import java.util.*;
 
 
 public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
+
     @FXML
     protected ComboBox<Participant> personComboBox;
     @FXML
@@ -47,7 +46,9 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     protected TextField amount;
 
     @FXML
-    protected ComboBox<Type> category;
+    protected ComboBox<Tag> category;
+    @FXML
+    public Button addTagButton;
 
     @FXML
     protected Label sceneTypeText;
@@ -101,45 +102,47 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         super(serverUtils, mainCtrl, config);
     }
 
+    public Expense getExpense() {
+        Date date = getDate();
+        boolean error;
+        error = date == null;
+        Tag tag = getTag();
+        Participant payer = personComboBox.getValue();
+        if (payer == null) {
+            payerError.setVisible(true);
+            error = true;
+        }
+        Double amountDouble = getAmountDouble(date);
+        if (amountDouble == null) {
+            expenseLoading.setVisible(false);
+            error = true;
+        }
+        Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
+        if(!isSharedExpense && receiver == null) {
+            //TODO handle invalid receiver
+            expenseLoading.setVisible(false);
+            error = true;
+        }
+        String description = whatFor.getText();
+        if (error) {
+            expenseLoading.setVisible(false);
+            return null;
+        }
+        List<Participant> participants = new ArrayList<>();
+        if(isSharedExpense) participants.addAll(owing);
+        else participants.add(receiver);
+        return mainCtrl.addExpense(description, tag, date, amountDouble, payer,
+                eventId, isSharedExpense, participants);
+    }
 
     @FXML
     public void addExpense() {
         expenseLoading.setVisible(true);
         new Thread(() -> {
-            Date date = getDate();
-            if(date == null) {
-                expenseLoading.setVisible(false);
-                return;
-            }
-            Type type = getType();
-            Participant payer = personComboBox.getValue();
-            if (payer == null) {
-                payerError.setVisible(true);
-                expenseLoading.setVisible(false);
-                return;
-            }
-
-            Double amountDouble = getAmountDouble(date);
-            if (amountDouble == null) {
-                expenseLoading.setVisible(false);
-                return;
-            }
-            
-            Participant receiver = receiverListView.getSelectionModel().getSelectedItem();
-            if(!isSharedExpense && receiver == null) {
-                //TODO handle invalid receiver
-                expenseLoading.setVisible(false);
-                return;
-            }
-            String description = whatFor.getText();
             try {
                 //add to database
-                List<Participant> participants = new ArrayList<>();
-                if(isSharedExpense) participants.addAll(owing);
-                else participants.add(receiver);
-                Expense e = mainCtrl.addExpense(description, type, date, amountDouble, payer,
-                    eventCode, isSharedExpense, participants);
-                serverUtils.generatePaymentsForEvent(eventCode);
+                Expense e = getExpense();
+                serverUtils.generatePaymentsForEvent(eventId);
                 mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
                 mainCtrl.showUndoInOverview();
                 expenseLoading.setVisible(false);
@@ -153,7 +156,6 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
             }
         }).start();
     }
-
 
     void setSplitListUp() {
         splitList.setItems(rest);
@@ -191,7 +193,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
 
     public void refresh(int eventCode){
-        this.eventCode = eventCode;
+        this.eventId = eventCode;
         splitList.setVisible(false);
         ObservableList<Participant> list = FXCollections.observableArrayList();
         List<Participant> allparticipants;
@@ -210,10 +212,19 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
         selectSome.setSelected(false);
         dateSelect.setValue(null);
         whatFor.setText("");
-        category.setValue(null);
+        tagRefresh();
         currencyComboBox.setValue(Currency.EUR);
         personComboBox.setValue(null);
         amount.setText("");
+    }
+
+    private void tagRefresh() {
+        setTagsUp();
+        category.setValue(null);
+    }
+
+    public void showManageTags() {
+        mainCtrl.showManageTags(eventId, true, null, false);
     }
 
 }

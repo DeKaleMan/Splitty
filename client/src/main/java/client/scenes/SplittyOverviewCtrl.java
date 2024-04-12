@@ -2,11 +2,8 @@ package client.scenes;
 
 import client.utils.Config;
 import client.utils.ServerUtils;
-import commons.*;
 import commons.Currency;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import commons.dto.ParticipantDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -21,7 +18,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -32,7 +32,7 @@ import java.net.URL;
 import java.util.*;
 
 public class SplittyOverviewCtrl implements Initializable {
-    //We need to store the eventCode right here
+
     private int eventId;
     boolean translating = false;
     private final ServerUtils serverUtils;
@@ -106,7 +106,8 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label inviteCode;
     @FXML
     private Button myDetails;
-
+    @FXML
+    public Button manageTagsButton;
 
     @FXML
     private ListView<Participant> participantListView;
@@ -250,7 +251,7 @@ public class SplittyOverviewCtrl implements Initializable {
 
     @FXML
     public void showAddExpense() {
-        mainCtrl.showAddExpense(titleLabel.getText(), eventId);
+        mainCtrl.showAddExpense(eventId);
     }
 
     @FXML
@@ -283,6 +284,7 @@ public class SplittyOverviewCtrl implements Initializable {
     private void viewDebts() {
         mainCtrl.viewDeptsPerEvent(eventId);
     }
+
 
     @FXML
     public void editExpense() {
@@ -406,8 +408,16 @@ public class SplittyOverviewCtrl implements Initializable {
                             if (expense == null || b) setGraphic(null);
                             else {
                                 GridPane grid = new GridPane();
+                                Color bgColor = getBgColor(expense.getTag());
+                                String  textColor = getTextColor(bgColor);
+                                if (isSelected()) {
+                                    setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+                                    textColor = "#FFFFFF";
+                                } else {
+                                    setBackground(new Background(new BackgroundFill(bgColor, null, null)));
+                                }
                                 Date date = expense.getDate();
-                                Label dateLabel = getDateLabel(date);
+                                Label dateLabel = getDateLabel(date, textColor);
                                 List<Participant> involved =
                                     serverUtils.getDebtByExpense(expense.getEvent().getId(),
                                             expense.getExpenseId()).stream()
@@ -418,28 +428,39 @@ public class SplittyOverviewCtrl implements Initializable {
                                         mainCtrl.getAmountInDifferentCurrency(Currency.EUR,
                                             config.getCurrency(), date,
                                             totalExpense);
-                                }catch (RuntimeException e){
+                                } catch (RuntimeException e){
                                     grid.add(new Text(e.getMessage()),0,0);
                                     setGraphic(grid);
                                     return;
                                 }
-                                Text mainInfo = getMainInfo(expense, totalExpense,
-                                        involved);
+                                Label mainInfo = getMainInfo(expense, totalExpense,
+                                        involved, textColor);
                                 grid.add(dateLabel, 0, 0);
                                 grid.add(mainInfo, 1, 0);
-                                grid.add(new Text(involved.stream().map(x -> x.getName())
-                                    .toList().toString()), 1, 1);
+                                Label list = new Label(involved.stream().map(x -> x.getName())
+                                        .toList().toString());
+                                list.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
+                                grid.add(list, 1, 1);
                                 setGraphic(grid);
-                            }
-                        }
-                    };
-                }
+                            }}};}
             };
         return cellFactory;
     }
 
-    private Text getMainInfo(Expense expense, double totalExpense, List<Participant> involved) {
-        Text mainInfo = new Text();
+    private Color getBgColor(Tag tag) {
+        if (tag.getColour() == null || tag.getColour().isEmpty()) {
+            return Color.WHITE;
+        }
+        return Color.web(tag.getColour());
+    }
+    private String  getTextColor(Color color) {
+        if (color.getBrightness() > 0.5) {
+            return "#000000";
+        }
+        return "#FFFFFF";
+    }
+    private Label getMainInfo(Expense expense, double totalExpense, List<Participant> involved, String textColor) {
+        Label mainInfo = new Label();
         if (expense.isSharedExpense()) {
             String paid =  " " + mainCtrl.translate("paid") + " ";
             String forT =  " " + mainCtrl.translate("for") + " " ;
@@ -447,7 +468,7 @@ public class SplittyOverviewCtrl implements Initializable {
                 + paid
                 + mainCtrl.getFormattedDoubleString(totalExpense)
                 + java.util.Currency.getInstance(config.getCurrency().toString()).getSymbol()
-                + "\n" + forT +  mainCtrl.translate(expense.getType().toString()));
+                + "\n" + forT +  expense.getTag().getName());
         } else {
             String gave = " " + mainCtrl.translate("gave") + " " ;
             String to = " " + mainCtrl.translate("to") + " " ;
@@ -462,15 +483,16 @@ public class SplittyOverviewCtrl implements Initializable {
                     .map(x -> x.getName())
                     .findFirst().get());
         }
+        mainInfo.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
         return mainInfo;
     }
 
-    private static Label getDateLabel(Date date) {
+    private static Label getDateLabel(Date date, String  textColor) {
         Label dateLabel = new Label(
             date.getDate() + "." + (date.getMonth() < 9 ? "0" : "")
                 + (date.getMonth() + 1) + "."
                 + (date.getYear() + 1900));
-        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: black");
+        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + textColor + ";");
         dateLabel.setPrefWidth(70);
         return dateLabel;
     }
@@ -751,7 +773,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void undoEdit(Expense expense, List<Debt> debts) {
-        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getType(),
+        mainCtrl.editExpense(expense.getExpenseId(),expense.getDescription(), expense.getTag(),
             expense.getDate(),expense.getTotalExpense(),
             expense.getPayer(), expense.getEvent().getId(),
             expense.isSharedExpense(),
@@ -763,7 +785,7 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void undoDelete(Expense expense, List<Debt> debts) {
-        mainCtrl.addExpense(expense.getDescription(), expense.getType(),
+        mainCtrl.addExpense(expense.getDescription(), expense.getTag(),
                 expense.getDate(),expense.getTotalExpense(),
                 serverUtils.getParticipant(expense.getPayer().getUuid(),
                     expense.getPayer().getEvent().getId()), expense.getEvent().getId(),
@@ -792,6 +814,10 @@ public class SplittyOverviewCtrl implements Initializable {
 
     public void setUndo(String t){
         this.undo.setText(t);
+    }
+
+    public void viewManageTags() {
+        mainCtrl.showManageTags(eventId, false, null, true);
     }
 }
 

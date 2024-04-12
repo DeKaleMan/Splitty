@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
+   <children>
+      <Label fx:id="title" layoutX="272.0" layoutY="66.0" prefWidth="94.0" text="Edit Tag">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Text fx:id="name" layoutX="184.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="60.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="184.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Colour" wrappingWidth="60.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+
+      <TextField fx:id="nameField" layoutX="249.0" layoutY="148.0" promptText="Tag Name" />
+      <ColorPicker fx:id="colorPicker" layoutX="251.0" layoutY="219.0" prefHeight="25.0" prefWidth="155.0" />
+
+
+      <Label fx:id="duplicateName" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="A tag with this name already exists*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="invalidName" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Name is invalid*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="invalidColour" layoutX="401.0" layoutY="223.0" prefHeight="17.0" prefWidth="185.0" text="Colour is invalid*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="longNameError" layoutX="398.0" layoutY="145.0" prefHeight="32.0" prefWidth="194.0" text="Tag name cannot be longer than 20 characters*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font></Label>
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="34.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
+      <Button fx:id="applyChangesButton" layoutX="493.0" layoutY="358.0" mnemonicParsing="false" onAction="#applyChanges" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Apply changes" textFill="white" />
+
+      <Label fx:id="otherTagLabel" layoutX="220.0" layoutY="173.0" opacity="0.59" text="You cannot edit the name of the 'Other' tag" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font>
+      </Label>
+
+   </children>
+</AnchorPane>

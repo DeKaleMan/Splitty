@@ -3,7 +3,7 @@ package client.scenes;
 import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Event;
-import commons.EventDTO;
+import commons.dto.EventDTO;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
 import javafx.application.Platform;
@@ -137,6 +137,7 @@ public class CreateEventCtrl {
         ParticipantDTO participantDTO = null;
         participantDTO = addHost(eventCreated.getId(), eventCreated.getInviteCode());
         serverUtils.createParticipant(participantDTO);
+        serverUtils.setTags(eventCreated.getId());
         mainCtrl.showSplittyOverview(eventCreated.getId());
         mainCtrl.addEvent(eventCreated);
         mainCtrl.setConfirmationEventCreated();

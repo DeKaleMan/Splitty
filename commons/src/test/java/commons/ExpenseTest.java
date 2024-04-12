@@ -12,16 +12,17 @@ public class ExpenseTest {
     Event event = new Event("test",new Date(10, 10, 2005),"owner","desc");
     Participant participant = new Participant("test", 10.0,"IBAN","BIC","accountHolder","","email",event);
     Date date = new Date(1,1,1);
+    Tag foodTag = new Tag(event, "food", "Random Colour");
     Expense e1 = new Expense(event
             , "food1"
-            , Type.Food
+            , foodTag
             , date
             , 150.00
             , participant
             ,true);
     Expense e2 = new Expense(event
             , "food1"
-            , Type.Food
+            , foodTag
             , date
             , 150.00
             , participant,
@@ -59,7 +60,7 @@ public class ExpenseTest {
 
     @Test
     void getType() {
-        assertEquals(Type.Food, e1.getType());
+        assertEquals(foodTag, e1.getTag());
     }
 
 

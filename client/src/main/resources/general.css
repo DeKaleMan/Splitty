@@ -148,11 +148,18 @@ Text {
 #involvingMe{
     -fx-background-color: #4CAF50;
 }
+
+#colorPicker {
+    -fx-text-fill: black;
+}
+
 .chart-pie-label {
     -fx-text-fill: white;
 }
 .chart-legend{
    -fx-background-color: #4CAF50;
 }
+
+/* error messages
 
 

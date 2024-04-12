@@ -1,5 +1,6 @@
 package server.api;
 import commons.*;
+import commons.dto.EventDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

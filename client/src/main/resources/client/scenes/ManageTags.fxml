@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageTagsCtrl">
+    <children>
+        <Label fx:id="titleLabel" layoutX="102.0" layoutY="27.0" prefHeight="53.0" prefWidth="368.0" text="Manage Tags" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="36.0" />
+            </font>
+        </Label>
+        <ListView fx:id="tagListView" layoutX="271.0" layoutY="115.0" onKeyPressed="#onKeyPressed" onMouseClicked="#editOnClick" prefHeight="255.0" prefWidth="246.0" />
+        <Label fx:id="tagsLabel" layoutX="368.0" layoutY="80.0" prefHeight="35.0" prefWidth="52.0" text="Tags">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+        <VBox alignment="CENTER" layoutX="14.0" layoutY="185.0" prefHeight="115.0" prefWidth="258.0" spacing="20">
+            <children>
+                <Button fx:id="editButton" mnemonicParsing="false" onAction="#editTag" text="Edit Tag" wrapText="true" />
+
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#addTag" text="Add Tag" wrapText="true" />
+
+                <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeTag" style="-fx-background-color: #c50000;" text="Remove Tag" textFill="white" wrapText="true" />
+            </children>
+        </VBox>
+        <Label fx:id="noTagSelectedError" alignment="CENTER" layoutX="86.0" layoutY="314.0" text="No tag selected*" textFill="RED" visible="false">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font>
+        </Label>
+        <Label fx:id="unknownError" alignment="CENTER" layoutX="83.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false">
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+        <Label fx:id="tagAddedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully added*" textFill="#3700ff" visible="false">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font></Label>
+        <Label fx:id="tagEditedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully edited*" textFill="#3700ff" visible="false">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font></Label>
+        <Label fx:id="tagDeletedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully deleted*" textFill="#3700ff" visible="false">
+            <font>
+                <Font name="System Italic" size="11.0" />
+            </font></Label>
+      <Label fx:id="otherSelectedError" layoutX="86.0" layoutY="314.0" text="Cannot remove Other tag*" textFill="RED" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font>
+      </Label>
+
+    </children>
+</AnchorPane>

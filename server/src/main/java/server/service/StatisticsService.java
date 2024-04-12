@@ -1,59 +1,47 @@
 package server.service;
 
 import commons.Event;
-import commons.Expense;
+import commons.Tag;
+import commons.TagId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
+import server.database.TagRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StatisticsService {
-    private ExpenseRepository exRep;
-    private EventRepository eventRep;
+    private final ExpenseRepository exRep;
+    private final EventRepository eventRep;
+    private final TagRepository tagRep;
     @Autowired
     public StatisticsService(ExpenseRepository expenseRepository,
-                                EventRepository eventRepository){
+                             EventRepository eventRepository,
+                             TagRepository tagRepository){
         exRep = expenseRepository;
         eventRep = eventRepository;
+        this.tagRep = tagRepository;
     }
 
-    public double[] getPaymentsOfEvent(int eventID){
+    public Double getSumByTag(int eventID, String  tagName){
         Optional<Event> optionalEvent = eventRep.findById(eventID);
         if(optionalEvent.isEmpty()){
             return null;
         }
-        List<Expense> expenses = exRep.findByEvent(optionalEvent.get());
-        double[] stat = new double[4];
-        //order = food, drinks, travel, other
-        for (Expense expense : expenses) {
-            switch (expense.getType()) {
-                case Food:
-                    stat[0]+=expense.getTotalExpense();
-                    break;
-                case Drinks:
-                    stat[1]+=expense.getTotalExpense();
-                    break;
-                case Travel:
-                    stat[2]+=expense.getTotalExpense();
-                    break;
-                case Other:
-                    stat[3]+=expense.getTotalExpense();
-                    break;
-                default:
-                    // Handle unexpected expense types here, if needed
-                    break;
-            }
+        Tag t = tagRep.findTagByTagId(new TagId(tagName, optionalEvent.get()));
+        if (t == null) {
+            return null;
         }
-
-        return stat;
+        Double d =  exRep.findTotalAmountByTag(eventID, tagName);
+        if (d == null) {
+            d = 0.0;
+        }
+        return d;
     }
 
     public Double getTotalCost(int eventID){
-
         return (exRep.getTotalCostByEvent(eventID));
     }
 }

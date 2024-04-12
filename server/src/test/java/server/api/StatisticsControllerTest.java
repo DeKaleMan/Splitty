@@ -3,7 +3,7 @@ package server.api;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Type;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +17,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class StatisticsControllerTest {
@@ -33,11 +34,14 @@ public class StatisticsControllerTest {
     Participant p2 = new Participant("test", 10.0,"IBAN","BIC","email1","","uuid2",event1);
 
     Participant p3 = new Participant("test", 10.0,"IBAN","BIC","email3","","uuid3",event2);
+    Tag t1 = new Tag(event1, "Food", "#2a8000");
+    Tag t2 = new Tag(event1, "Travel", "#3700ff");
+    Tag t3 = new Tag(event2, "Entrance Fees", "#c50000");
 
-    Expense expense1 = new Expense(event1, "description", Type.Other, new Date(), 15.69, p1, true);
-    Expense expense2 =  new Expense(event1, "description", Type.Drinks, new Date(), 69.69, p2, true);
-    Expense expense3 =  new Expense(event2, "description", Type.Food, new Date(), 25.0, p3, true);
-    Expense expense4 =  new Expense(event2, "description", Type.Travel, new Date(), 50.0, p3, true);
+    Expense expense1 = new Expense(event1, "description", t1, new Date(), 15.69, p1, true);
+    Expense expense2 =  new Expense(event1, "description",t1, new Date(), 69.69, p2, true);
+    Expense expense3 =  new Expense(event2, "description", t2, new Date(), 25.0, p3, true);
+    Expense expense4 =  new Expense(event2, "description", t2, new Date(), 50.0, p3, true);
 
     @BeforeEach
     void setup() {
@@ -59,17 +63,16 @@ public class StatisticsControllerTest {
     }
 
     @Test
-    public void getPaymentsOfEvents(){
-        //order = food, drinks, travel, other
-        double[] expected = {0, 69.69, 0, 15.69};
-        when(service.getPaymentsOfEvent(anyInt())).thenReturn(expected);
-        ResponseEntity<double[]> res = sut.getPaymentsOfEvent(event1.id);
-        assertArrayEquals(expected,res.getBody());
+    public void getSumByTagTest(){
+        Double expected = 15.69;
+        when(service.getSumByTag(anyInt(), anyString())).thenReturn(expected);
+        ResponseEntity<Double> res = sut.getPaymentsOfEvent(event1.id, "Food");
+        assertEquals(expected,res.getBody());
     }
     @Test
     public void invalidEventStats(){
-        when(service.getPaymentsOfEvent(anyInt())).thenReturn(null);
-        ResponseEntity<double[]> res = sut.getPaymentsOfEvent(1000024);
+        when(service.getSumByTag(anyInt(), anyString())).thenReturn(null);
+        ResponseEntity<Double> res = sut.getPaymentsOfEvent(1000024, "2324225252");
         assertEquals(HttpStatus.NOT_FOUND, res.getStatusCode());
     }
 
