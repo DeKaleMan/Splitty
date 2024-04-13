@@ -172,13 +172,17 @@ public class SettingsCtrl {
         if (noConnection) {
             mainCtrl.showServerStartup(true);
         } else {
-            back();
+            cancel();
             mainCtrl.setConfirmationSettings();
         }
 
     }
 
-    public void back() {
+    public void cancel() {
+        if (!mainCtrl.getConnection()) {
+            noConnectionError();
+            return;
+        }
         succes.setVisible(false);
         mainCtrl.showStartScreen();
     }
@@ -349,7 +353,7 @@ public class SettingsCtrl {
     @FXML
     public void onKeyPressed (KeyEvent press){
         if (press.getCode() == KeyCode.ESCAPE) {
-            back();
+            cancel();
         }
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         if (k.match(press)) {
