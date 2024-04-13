@@ -669,13 +669,8 @@ public class SplittyOverviewCtrl implements Initializable {
             }
         }
         KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
-        if(ctrlZ.match(press)){
+        if (ctrlZ.match(press)){
             undo();
-        }
-        if (press.getCode() == KeyCode.ENTER) {
-            if (expensesTabPane.getSelectionModel().getSelectedItem() != null) {
-                editExpense();
-            }
         }
     }
 

@@ -218,6 +218,11 @@ public class ManageTagsCtrl implements Initializable {
                 editTag();
             }
         }
+        KeyCodeCombination k2 = new KeyCodeCombination(KeyCode.N,
+                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k2.match(press)) {
+            addTag();
+        }
     }
     @FXML
     public void editOnClick(MouseEvent mouseEvent) {

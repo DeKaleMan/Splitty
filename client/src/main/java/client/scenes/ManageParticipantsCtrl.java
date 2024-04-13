@@ -196,6 +196,11 @@ public class ManageParticipantsCtrl implements Initializable {
                 editParticipant();
             }
         }
+        KeyCodeCombination k2 = new KeyCodeCombination(KeyCode.N,
+                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k2.match(press)) {
+            addParticipant();
+        }
     }
 
     public void editParticipant() {
