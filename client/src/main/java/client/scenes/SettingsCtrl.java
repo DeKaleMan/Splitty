@@ -1,8 +1,8 @@
 package client.scenes;
 
 import client.utils.Config;
-import client.utils.ServerUtils;
 import commons.Currency;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,6 +14,7 @@ import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -21,7 +22,6 @@ import java.util.concurrent.CountDownLatch;
 
 
 public class SettingsCtrl {
-    private ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Config config;
 
@@ -58,6 +58,10 @@ public class SettingsCtrl {
     @FXML
     private Label settingsText;
     @FXML
+    public Label incorrectCurrencyError;
+    @FXML
+    public Label connectionErrorLabel;
+    @FXML
     private ProgressBar progressBar;
     @FXML
     private TextField nameField;
@@ -82,7 +86,6 @@ public class SettingsCtrl {
         this.mainCtrl = mainCtrl;
         this.config = config;
         this.mail = mail;
-        this.serverUtils = serverUtils;
     }
 
     public void initialize() {
@@ -147,17 +150,17 @@ public class SettingsCtrl {
         String iban = ibanField.getText();
         String bic = bicField.getText();
         String emailToken = getToken.getText();
-        boolean abort = false;
         if (email == null || email.isEmpty()) {
             email = null;
         }
         if (currency == null || (!currency.equals("EUR") &&
                 !currency.equals("CHF") && !currency.equals("USD"))) {
-            abort = true;
-            // set error message
-        }
-        if (abort) {
+            incorrectCurrencyError.setVisible(true);
+            PauseTransition pause = new PauseTransition(Duration.seconds(4));
+            pause.setOnFinished(event1 -> incorrectCurrencyError.setVisible(false));
+            pause.play();
             return;
+
         }
         config.setEmailToken(emailToken);
         config.setEmail(email);
@@ -222,7 +225,10 @@ public class SettingsCtrl {
     @FXML
     public void addLang() {
         //TODO check if it is a language or not to make it imaginary?
-
+        if (!mainCtrl.getConnection()) {
+            noConnectionError();
+            return;
+        }
         this.newLang = langTextfield.getText();
         if (newLang != null && !newLang.isBlank()) {
             progressBar.setVisible(true);
@@ -240,10 +246,8 @@ public class SettingsCtrl {
                 this.latch = new CountDownLatch(1);
                 mainCtrl.changeLanguage(newLang);
                 langTextfield.setText("");
-
                 // Wait for the changeLanguage method to complete
                 //latch.await();
-
                 new Thread(() -> {
                     try {
                         progressBar.setVisible(true);
@@ -251,7 +255,6 @@ public class SettingsCtrl {
                         Platform.runLater(() -> {
                             confirmlangBox.setVisible(true);
                             progressBar.setVisible(false);
-
                         });
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
@@ -273,12 +276,7 @@ public class SettingsCtrl {
 
 
     public void getJSONFile() {
-        String jsonString = serverUtils.getLanguageJSON(newLang);
-        jsonString = jsonString.replace(",", ",\n");
-        jsonString.replace("not a valid language", "failed to retrieve language");
-
-
-        addedLang.setText(jsonString);
+        mainCtrl.getJSONFile(addedLang, newLang);
         progressBar.setVisible(false);
     }
 
@@ -306,17 +304,20 @@ public class SettingsCtrl {
     }
 
     @FXML
-    public void confirmLang () {
+    public void confirmLang() {
+        if (!mainCtrl.getConnection()) {
+            noConnectionError();
+            return;
+        }
         progressBar.setVisible(true);
         confirmlangBox.setVisible(false);
         String lang = addedLang.getText();
         String stringForJson = lang.replace("\n", "");
-        serverUtils.setNewLang(stringForJson, newLang);
+        mainCtrl.setNewLang(stringForJson, newLang);
         if (this.flag != null) {
             mainCtrl.addFlag(flag);
         }
         this.flag = null;
-//        mainCtrl.addFlag(flag);
         mainCtrl.changeLanguage(newLang);
         this.progressBar.setVisible(false);
         this.uploadFlag.setStyle("-fx-background-color: #91a691;");
@@ -339,6 +340,12 @@ public class SettingsCtrl {
         return config.getLanguage().toString();
     }
 
+    private void noConnectionError() {
+        connectionErrorLabel.setVisible(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(4));
+        pause.setOnFinished(event1 -> connectionErrorLabel.setVisible(false));
+        pause.play();
+    }
     @FXML
     public void onKeyPressed (KeyEvent press){
         if (press.getCode() == KeyCode.ESCAPE) {
@@ -356,7 +363,6 @@ public class SettingsCtrl {
 
     public void setCancelButton (String txt){
         Platform.runLater(() -> {
-
             this.cancelButton.setText(txt);
         });
     }

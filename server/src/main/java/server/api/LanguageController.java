@@ -48,19 +48,15 @@ public class LanguageController {
         if (serverIoUtil.fileExists(newfile)) {
             // Read JSON file
             try{
-                //ObjectMapper objectMapper = new ObjectMapper();
-                //HashMap<String, String> object = objectMapper.readValue(newfile, HashMap.class);
                 HashMap<String, String> object = serverIoUtil.readJson(newfile);
                 String translation = object.get(query);
-                if (translation != null || translation.isEmpty()) {
+                if (translation != null && !translation.isEmpty()) {
                     return ResponseEntity.ok(translation);
                 }
             }catch (Exception e){
                 System.out.println(e);
             }
             // Check if translation exists in JSON
-
-
         }
         String translation = translator.translateWithAPI(query, sourceLang, targetLang);
         if (translation.equals(HttpStatus.FORBIDDEN.toString())) {

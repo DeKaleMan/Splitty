@@ -87,7 +87,6 @@ public class ServerCtrl {
                 noConnection = false;
                 connectLoading.setVisible(false);
             } catch (RuntimeException e) {
-                System.out.println("Could not connect");
                 notConnectedError.setVisible(true);
                 noConnection = true;
                 connectLoading.setVisible(false);

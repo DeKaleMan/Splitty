@@ -16,16 +16,16 @@
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
 
       <Button fx:id="saveButton" layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" />
-      <VBox layoutX="346.0" layoutY="200.0" prefHeight="155.0" prefWidth="232.0" spacing="5.0">
+      <VBox layoutX="346.0" layoutY="172.0" prefHeight="183.0" prefWidth="232.0" spacing="5.0">
          <children>
             <Label fx:id="addLangText" text="Add language">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="langInstructions" text="Enter the languagecode and an image for the flag of the language you want to add" wrapText="true" />
+            <Label fx:id="langInstructions" prefHeight="72.0" prefWidth="232.0" text="Enter the languagecode and an image for the flag of the language you want to add" wrapText="true" />
             <TextField fx:id="langTextfield" promptText="Languagecode e.g. &quot;en&quot; for English" />
-            <Button fx:id="uploadFlag" mnemonicParsing="false" onAction="#setFlag" text="Upload flag" style="-fx-background-color: #a69191;" />
+            <Button fx:id="uploadFlag" mnemonicParsing="false" onAction="#setFlag" style="-fx-background-color: #a69191;" text="Upload flag" />
             <ProgressBar fx:id="progressBar" prefHeight="52.0" prefWidth="232.0" visible="false" />
             <Button fx:id="addLanguage" mnemonicParsing="false" onAction="#addLang" text="Add language" />
          </children>
@@ -114,5 +114,15 @@
       </Label>
       <Button fx:id="sendEmail" layoutX="346.0" layoutY="167.0" mnemonicParsing="false" onAction="#sendDefaultEmail" prefHeight="26.0" prefWidth="90.0" text="default email" />
       <Label fx:id="succes" layoutX="444.0" layoutY="167.0" prefHeight="26.0" prefWidth="128.0" text="Email succesfully send!" visible="false" />
+      <Label fx:id="connectionErrorLabel" layoutX="346.0" layoutY="365.0" text="Connection error*" textFill="RED" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font>
+      </Label>
+      <Label fx:id="incorrectCurrencyError" layoutX="243.0" layoutY="137.0" text="Incorrect currecny*" textFill="RED" visible="false">
+         <font>
+            <Font name="System Italic" size="11.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
