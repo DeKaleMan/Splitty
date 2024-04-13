@@ -146,12 +146,12 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void setImages() {
-//        ImageView edit = new ImageView(new Image("editevent.png"));
+//        ImageView edit = new ImageView(new Image("editIcon.png"));
 //        edit.setFitWidth(15);
 //        edit.setFitHeight(15); // this looked very bad for me if we
 //        cannot fix this we should just delete
 //        editEvent.setGraphic(edit);
-        ImageView tag = new ImageView(new Image("tag.png"));
+        ImageView tag = new ImageView(new Image("tagIcon.png"));
         tag.setFitWidth(15);
         tag.setFitHeight(15);
         manageTagsButton.setGraphic(tag);
@@ -159,6 +159,10 @@ public class SplittyOverviewCtrl implements Initializable {
         plus.setFitWidth(10);
         plus.setFitHeight(10);
         addExpenseButton.setGraphic(plus);
+        ImageView trash = new ImageView(new Image("trashIcon.png"));
+        trash.setFitWidth(14);
+        trash.setFitHeight(14);
+        deleteExpenseButton.setGraphic(trash);
     }
 
     @FXML

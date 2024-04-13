@@ -109,10 +109,14 @@ public class AdminOverviewCtrl {
         importIcon.setFitWidth(15);
         importIcon.setFitHeight(15);
         importEventButton.setGraphic(importIcon);
-        ImageView refresh = new ImageView(new Image("Refresh_icon.png"));
+        ImageView refresh = new ImageView(new Image("refreshIcon.jpg"));
         refresh.setFitWidth(15);
         refresh.setFitHeight(15);
         refreshButton.setGraphic(refresh);
+        ImageView trash = new ImageView(new Image("trashIcon.png"));
+        trash.setFitWidth(14);
+        trash.setFitHeight(14);
+        deleteEventButton.setGraphic(trash);
     }
 
     @FXML

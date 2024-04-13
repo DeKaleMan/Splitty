@@ -120,7 +120,7 @@ public class StartScreenCtrl implements Initializable {
         settings.setFitWidth(15);
         settings.setFitHeight(15);
         settingsButton.setGraphic(settings);
-        ImageView admin = new ImageView(new Image("admin-removebg-preview.png"));
+        ImageView admin = new ImageView(new Image("adminIcon.png"));
         admin.setFitWidth(15);
         admin.setFitHeight(15);
         adminLogin.setGraphic(admin);

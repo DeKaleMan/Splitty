@@ -84,10 +84,14 @@ public class ManageParticipantsCtrl implements Initializable {
         plus.setFitWidth(15);
         plus.setFitHeight(15);
         addButton.setGraphic(plus);
-        ImageView edit = new ImageView(new Image("editevent.png"));
+        ImageView edit = new ImageView(new Image("editIcon.png"));
         edit.setFitWidth(15);
         edit.setFitHeight(15);
         editButton.setGraphic(edit);
+        ImageView trash = new ImageView(new Image("trashIcon.png"));
+        trash.setFitWidth(14);
+        trash.setFitHeight(14);
+        removeButton.setGraphic(trash);
     }
 
     @Inject
