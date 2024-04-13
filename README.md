@@ -22,4 +22,4 @@ Shortcuts
 In general: ESC mean to go back or to cancel. Enter on a selected item means to view or edit it. Double clicking also works.
 In the startscreen: 'Ctrl Shft N' to create a new event.
 In the settings: 'Ctrl s' to save settings
-In admin overview: Clicking outside of the import text area makes it disappear again.
+
