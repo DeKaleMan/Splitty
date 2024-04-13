@@ -60,14 +60,6 @@ public class EventDTO {
         this.description = description;
     }
 
-    public Date getLastActivity() {
-        return lastActivity;
-    }
-
-    public void updateActivityDate() {
-        lastActivity = new Date();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

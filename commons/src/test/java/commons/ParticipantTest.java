@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class ParticipantTest {
     Participant p1;
@@ -25,10 +27,10 @@ public class ParticipantTest {
                 , new Date(2005, 10, 10)
                 , ""
                 , "The part is at .....");
-        e2 = new Event("Swimming pool event"
+        e2 = spy(new Event("Swimming pool event"
                 , new Date(2005, 10, 10)
                 , ""
-                , "The swimming pool is open from....");
+                , "The swimming pool is open from...."));
 
         p1 = new Participant("John", 0.0, "NLABNA2049250232522", "ABNANL02",
                 "john.smith@gmail.com", "John Smith", UUID.randomUUID().toString(), e1);
@@ -66,9 +68,9 @@ public class ParticipantTest {
 
     @Test
     public void testLatestActivity() {
-        Date date = new Date();
         p3.updateLastActivity();
-        assertEquals(date, p3.getEvent().getLastActivity());
+
+        verify(e2).updateActivityDate();
     }
     @Test
     public void getterSetterTest() {
@@ -94,6 +96,31 @@ public class ParticipantTest {
         assertTrue(temp.isGhost());
         assertEquals(p1, temp);
         assertEquals(p1.getId(), temp.getId());
+    }
+
+    @Test
+    void testInactive(){
+        assertFalse(p1.isInactive());
+    }
+
+    @Test
+    void testSetInactive(){
+        p1.setInactive(true);
+        assertTrue(p1.isInactive());
+    }
+
+    @Test
+    void testToString(){
+        String id = p1.getId().toString();
+        assertEquals("Participant{name='John'," +
+            " balance=0.0," +
+            " iBan='NLABNA2049250232522'," +
+            " bIC='ABNANL02'," +
+            " email='john.smith@gmail.com'," +
+            " accountHolder='John Smith'," +
+            " isGhost=false," +
+            " id=" + id +
+            "}", p1.toString());
     }
 
 }
