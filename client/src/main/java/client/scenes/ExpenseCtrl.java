@@ -185,7 +185,7 @@ public abstract class ExpenseCtrl {
                 if (empty || tag == null) {
                     setText(null);
                 } else {
-                    setText(tag.getName());
+                    setText(mainCtrl.translate(tag.getName()));
                 }
             }
         });

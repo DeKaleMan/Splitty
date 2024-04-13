@@ -751,6 +751,7 @@ public class SplittyOverviewCtrl implements Initializable {
         //languageSelect.setValue(flag);
         Image flag = mainCtrl.getFlag();
         setFlag(flag);
+        fetchExpenses();
         translating = false;
     }
     

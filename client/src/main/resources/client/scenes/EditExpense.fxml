@@ -7,7 +7,7 @@
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditExpenseCtrl">
     <children>
-        <VBox layoutX="335.0" layoutY="84.0" prefHeight="232.0" prefWidth="244.0" spacing="5.0">
+        <VBox layoutX="336.0" layoutY="104.0" prefHeight="232.0" prefWidth="244.0" spacing="5.0">
             <children>
                 <Label fx:id="description" text="Description" />
                 <TextArea fx:id="whatFor" prefHeight="82.0" prefWidth="200.0" promptText="What is the expense about...." />
@@ -20,18 +20,26 @@
                 <HBox id="receiverHBox" fx:id="receiverHBox">
                     <children>
                         <Label text="Who received money?" wrapText="true" />
-                        <ListView id="receiverListView" fx:id="receiverListView" prefHeight="96.0" prefWidth="191.0" />
+                        <ListView id="receiverListView" fx:id="receiverListView" prefHeight="96.0" prefWidth="191.0" style="-fx-text-fill: black" />
                     </children>
                 </HBox>
             </children>
         </VBox>
-        <Label fx:id="sceneTypeText" layoutX="376.0" layoutY="31.0" text="Edit Expense" AnchorPane.rightAnchor="20">
+        <Label fx:id="sceneTypeText" layoutX="387.0" layoutY="19.0" text="Edit Expense" AnchorPane.rightAnchor="70.0">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <VBox layoutX="139.0" layoutY="84.0" prefHeight="285.0" prefWidth="173.0" spacing="2.0">
+        <VBox layoutX="139.0" layoutY="46.0" prefHeight="323.0" prefWidth="173.0" spacing="2.0">
             <children>
+                <RadioButton fx:id="sharedExpense" layoutX="154.0" layoutY="40.0" mnemonicParsing="false" text="Shared expense">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="expenseTypeToggles" />
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
+                <Button fx:id="addTagButton" layoutX="434.0" layoutY="337.0" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
+
                 <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" />
                 <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" />
                 <HBox>
@@ -55,12 +63,12 @@
                 <ListView fx:id="splitList" onKeyPressed="#onKeyPressed" prefHeight="131.0" prefWidth="122.0" />
             </children>
         </VBox>
-        <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="84.0" prefHeight="200.0" prefWidth="122.0" spacing="10.0">
+        <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="84.0" prefHeight="200.0" prefWidth="122.0" spacing="29.0">
             <children>
-                <Label fx:id="whoPaid" text="Who paid?" />
-                <Label fx:id="howMuch" prefHeight="53.0" prefWidth="63.0" text="How much?" />
-                <Label fx:id="when" prefHeight="23.0" prefWidth="37.0" text="When?" />
-                <Label fx:id="howToSplit" prefHeight="45.0" prefWidth="71.0" text="How to Split?" />
+                <Label fx:id="whoPaid" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Who paid?" textAlignment="RIGHT" wrapText="true" />
+                <Label fx:id="howMuch" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="How much?" />
+                <Label fx:id="when" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="When?" />
+                <Label fx:id="howToSplit" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="How to Split?" />
             </children>
             <padding>
                 <Insets top="5.0" />
@@ -69,7 +77,7 @@
 
 
         <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-        <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Edit" textFill="white" AnchorPane.rightAnchor="40.0" />
+        <Button fx:id="commit" layoutX="521.0" layoutY="360.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Edit" textFill="white" AnchorPane.rightAnchor="42.0" />
         <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false">
             <font>
                 <Font size="10.0" />
@@ -80,7 +88,7 @@
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
-        <Button fx:id="addTagButton" layoutX="434.0" layoutY="337.0" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
+
 
     </children>
 </AnchorPane>

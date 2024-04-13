@@ -7,7 +7,7 @@
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
-      <VBox layoutX="335.0" layoutY="84.0" prefHeight="232.0" prefWidth="244.0" spacing="5.0">
+      <VBox layoutX="336.0" layoutY="111.0" prefHeight="232.0" prefWidth="244.0" spacing="5.0">
          <children>
             <Label fx:id="description" text="Description" />
             <TextArea fx:id="whatFor" prefHeight="82.0" prefWidth="200.0" promptText="What is the expense about...." />
@@ -25,13 +25,19 @@
             </HBox>
          </children>
       </VBox>
-      <Label fx:id="sceneTypeText" layoutX="376.0" layoutY="31.0" text="Add Expense" AnchorPane.rightAnchor="20">
+      <Label fx:id="sceneTypeText" layoutX="396.0" layoutY="31.0" text="Add Expense" AnchorPane.rightAnchor="58.0">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <VBox layoutX="139.0" layoutY="84.0" prefHeight="285.0" prefWidth="173.0" spacing="2.0">
+      <VBox layoutX="139.0" layoutY="47.0" prefHeight="322.0" prefWidth="173.0" spacing="2.0">
          <children>
+            <RadioButton fx:id="sharedExpense" mnemonicParsing="false" text="Shared expense">
+               <toggleGroup>
+                  <ToggleGroup fx:id="expenseTypeToggles" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="givingMoneyToSomeone" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
             <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" />
              <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" />
             <HBox>
@@ -57,10 +63,10 @@
       </VBox>
       <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="84.0" prefHeight="200.0" prefWidth="122.0" spacing="10.0">
          <children>
-            <Label fx:id="whoPaid" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="146.0" text="Who paid?" />
-            <Label fx:id="howMuch" alignment="CENTER_RIGHT" prefHeight="53.0" prefWidth="153.0" text="How much?" />
-            <Label fx:id="when" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="117.0" text="When?" />
-            <Label fx:id="howToSplit" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="177.0" text="How to Split?" />
+            <Label fx:id="whoPaid" alignment="CENTER_RIGHT" prefHeight="17.0"  text="Who paid?" />
+            <Label fx:id="howMuch" alignment="CENTER_RIGHT" prefHeight="53.0"  text="How much?" />
+            <Label fx:id="when" alignment="CENTER_RIGHT" prefHeight="23.0"  text="When?" />
+            <Label fx:id="howToSplit" alignment="CENTER_RIGHT" prefHeight="45.0" text="How to Split?" />
          </children>
          <padding>
             <Insets top="5.0" />
@@ -69,17 +75,11 @@
 
 
       <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-      <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#addExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" AnchorPane.rightAnchor="39.0" />
+      <Button fx:id="commit" layoutX="523.0" layoutY="349.0" mnemonicParsing="false" onAction="#addExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" AnchorPane.rightAnchor="39.0" />
       <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when adding expense*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
          </font></Label>
-      <RadioButton fx:id="sharedExpense" layoutX="154.0" layoutY="40.0" mnemonicParsing="false" text="Shared expense">
-         <toggleGroup>
-            <ToggleGroup fx:id="expenseTypeToggles" />
-         </toggleGroup>
-      </RadioButton>
-      <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
       <ProgressIndicator fx:id="expenseLoading" layoutX="568.0" layoutY="338.0" prefHeight="23.0" prefWidth="22.0" visible="false" />
       <Button fx:id="addTagButton" layoutX="434.0" layoutY="337.0" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
 
