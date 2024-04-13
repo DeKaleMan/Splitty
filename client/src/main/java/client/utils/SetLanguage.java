@@ -162,9 +162,7 @@ public class SetLanguage {
     public void setAdminLogin(String lang) {
         adminLoginCtrl.setSignIn(translate("Sign in", "en", lang));
         adminLoginCtrl.setInstruction(translate("Log into your server instance", "en", lang));
-        adminLoginCtrl.setPasswordInstructionLink(translate("Don't know how to get a password?", "en", lang));
         adminLoginCtrl.setSignInButton(translate("Sign in", "en", lang));
-        adminLoginCtrl.setUrlField(translate("Server Url e.g. 'localhost:8080'", "en", lang));
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
         adminLoginCtrl.setBack(translate("Back", "en", lang));
         adminLoginCtrl.setPasswordInstructionsText(translate(
@@ -177,7 +175,7 @@ public class SetLanguage {
         adminOverviewCtrl.setImportEventButtonText(translate("Import event", "en", lang));
         adminOverviewCtrl.setExportEventButtonText(translate("Export event", "en", lang));
         adminOverviewCtrl.setDeleteEventButtonText(translate("Delete event", "en", lang));
-        adminOverviewCtrl.setServerTagText(translate("Server: Localhost:8080", "en", lang));
+        adminOverviewCtrl.setServerTagText(translate("Server", "en", lang));
         adminOverviewCtrl.setViewEventButtonText(translate("View Event", "en", lang));
         adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
