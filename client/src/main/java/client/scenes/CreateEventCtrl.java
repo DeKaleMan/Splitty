@@ -116,18 +116,17 @@ public class CreateEventCtrl {
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            if (checkDate(datePicker.getEditor().getText()))
-            date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            if (checkDate(datePicker.getEditor().getText())) {
+                date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            }
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
             dateEmptyError.setVisible(true);
             error = true;
-            return;
         } catch (Exception e) {
             dateEmptyError.setVisible(false);
             dateIncorrectError.setVisible(true);
             error = true;
-            return;
         }
         if (error) {
             return;
@@ -241,6 +240,6 @@ public class CreateEventCtrl {
                 return true;
             }
         }
-        return false;
+        throw new RuntimeException();
     }
 }

@@ -209,14 +209,10 @@ public class ManageTagsCtrl implements Initializable {
         }
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
         if (k.match(press)) {
-            if (tagListView.getSelectionModel().getSelectedItem() != null) {
-                removeTag();
-            }
+            removeTag();
         }
         if (press.getCode() == KeyCode.ENTER) {
-            if (tagListView.getSelectionModel().getSelectedItem() != null) {
-                editTag();
-            }
+            editTag();
         }
         KeyCodeCombination k2 = new KeyCodeCombination(KeyCode.N,
                 KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);

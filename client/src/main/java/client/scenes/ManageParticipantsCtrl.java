@@ -187,14 +187,10 @@ public class ManageParticipantsCtrl implements Initializable {
         }
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
         if (k.match(press)) {
-            if (participantsList.getSelectionModel().getSelectedItem() != null) {
-                removeParticipant();
-            }
+            removeParticipant();
         }
         if (press.getCode() == KeyCode.ENTER) {
-            if (participantsList.getSelectionModel().getSelectedItem() != null) {
-                editParticipant();
-            }
+            editParticipant();
         }
         KeyCodeCombination k2 = new KeyCodeCombination(KeyCode.N,
                 KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
