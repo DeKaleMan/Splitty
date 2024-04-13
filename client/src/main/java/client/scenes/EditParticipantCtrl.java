@@ -4,6 +4,7 @@ import client.utils.Config;
 import client.utils.ServerUtils;
 import commons.Participant;
 import commons.dto.ParticipantDTO;
+import jakarta.transaction.Transactional;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -104,6 +105,7 @@ public class EditParticipantCtrl implements Initializable {
         bicField.setText(editedParticipant.getBIC());
         accountHolderField.setText(editedParticipant.getAccountHolder());
     }
+    @Transactional
     public void editParticipant() {
         boolean error = false;
         String name = nameField.getText();

@@ -6,7 +6,6 @@ import commons.Currency;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

@@ -14,6 +14,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.util.Callback;
@@ -225,6 +229,14 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     private void tagRefresh() {
         setTagsUp();
         category.setValue(null);
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            addExpense();
+        }
     }
 
     public void showManageTags() {
