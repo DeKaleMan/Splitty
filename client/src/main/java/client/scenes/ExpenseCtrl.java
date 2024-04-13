@@ -308,7 +308,7 @@ public abstract class ExpenseCtrl {
                 amountError.setText("Amount cannot be negative or zero*");
                 return null;
             }
-            if(currencyComboBox.getValue() == null){
+            if (currencyComboBox.getValue() == null){
                 System.out.println("Select currency");
                 return null;
             }
@@ -337,8 +337,9 @@ public abstract class ExpenseCtrl {
     protected Date getDate() {
         Date date;
         //link these to participants and then add the expense
-        if (dateSelect.getValue() == null) {
+        if (dateSelect.getValue() == null || checkDate(dateSelect.getEditor().getText())) {
             dateSelect.setPromptText("invalid Date");
+            dateInvalidError.setVisible(true);
             return null;
         }
 
@@ -502,5 +503,13 @@ public abstract class ExpenseCtrl {
 
     public void resetDateErrors() {
         dateInvalidError.setVisible(false);
+    }
+    public boolean checkDate(String s) {
+        for (char c : s.toCharArray()) {
+            if (Character.isLetter(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

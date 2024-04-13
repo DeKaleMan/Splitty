@@ -301,7 +301,6 @@ public class SettingsCtrl {
         } catch (RuntimeException e) {
             getToken.setText("password does not match the email");
             System.out.println("could not make a Mailer");
-            e.printStackTrace();
         } catch (Exception e) {
             emailField.setText("something wrong with email");
         }

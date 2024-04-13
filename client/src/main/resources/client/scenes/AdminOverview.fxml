@@ -25,7 +25,7 @@
 
          <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Log Out" textFill="white" />
 
-         <Label fx:id="noEventSelectedError" layoutX="472.0" layoutY="216.0" text="No event selected*" textFill="RED" visible="false">
+         <Label fx:id="noEventSelectedError" layoutX="472.0" layoutY="216.0" text="No event selected*" textFill="RED" visible="false" styleClass="errorLabel">
             <font>
                <Font size="10.0" />
             </font>

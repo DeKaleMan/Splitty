@@ -32,17 +32,17 @@
         </Label>
         <VBox layoutX="139.0" layoutY="84.0" prefHeight="285.0" prefWidth="173.0" spacing="2.0">
             <children>
-                <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" />
-                <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" />
+                <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" styleClass="errorLabel"/>
+                <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" styleClass="errorLabel"/>
                 <HBox>
                     <children>
                         <TextField fx:id="amount" onKeyPressed="#resetAmountErrors" prefHeight="25.0" prefWidth="185.0" />
                         <ComboBox fx:id="currencyComboBox" prefWidth="150.0" />
                     </children>
                 </HBox>
-                <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" textFill="RED" visible="false" />
-                <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" />
-                <Label fx:id="dateInvalidError" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
+                <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" textFill="RED" visible="false" styleClass="errorLabel" />
+                <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" styleClass="errorLabel"/>
+                <Label fx:id="dateInvalidError" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" styleClass="errorLabel"/>
                 <HBox alignment="CENTER" prefHeight="31.0" prefWidth="173.0">
                     <children>
                         <RadioButton fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Select All" HBox.hgrow="ALWAYS">
@@ -70,7 +70,7 @@
 
         <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
         <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Edit" textFill="white" />
-        <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false">
+        <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false" styleClass="errorLabel">
             <font>
                 <Font size="10.0" />
             </font></Label>

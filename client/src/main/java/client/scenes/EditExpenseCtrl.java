@@ -106,7 +106,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
 
     @FXML
     @Transactional
-    public void editExpense() {
+    public boolean editExpense() {
         boolean error;
         Date date = getDate();
         error = date == null;
@@ -127,7 +127,7 @@ public class EditExpenseCtrl extends ExpenseCtrl {
             error = true;
         }
         if (error) {
-            return;
+            return false;
         }
         String description = whatFor.getText();
 
@@ -142,11 +142,13 @@ public class EditExpenseCtrl extends ExpenseCtrl {
                 oldPayer, eventId, isSharedExpense, participants);
             mainCtrl.showUndoInOverview();
             back();
+            return true;
         } catch (Exception e) {
             commitExpenseError.setVisible(true);
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
             visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
             visiblePause.play();
+            return false;
         }
     }
 

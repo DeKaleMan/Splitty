@@ -31,7 +31,7 @@
                <VBox.margin>
                   <Insets left="100.0" right="100.0" />
                </VBox.margin></TextField>
-            <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
+            <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" styleClass="errorLabel" />
             <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" visible="false" />
          </children>
       </VBox>

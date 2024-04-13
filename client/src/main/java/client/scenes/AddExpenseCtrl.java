@@ -104,7 +104,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     public Expense getExpense() {
         Date date = getDate();
-        boolean error;
+        boolean error = false;
         error = date == null;
         Tag tag = getTag();
         Participant payer = personComboBox.getValue();
@@ -137,24 +137,24 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @FXML
     public void addExpense() {
-        expenseLoading.setVisible(true);
-        new Thread(() -> {
-            try {
-                //add to database
-                Expense e = getExpense();
-                serverUtils.generatePaymentsForEvent(eventId);
-                mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
-                mainCtrl.showUndoInOverview();
-                expenseLoading.setVisible(false);
-                back();
-            } catch (Exception e) {
-                commitExpenseError.setVisible(true);
-                expenseLoading.setVisible(false);
-                PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-                visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
-                visiblePause.play();
+        try {
+            //add to database
+            Expense e = getExpense();
+            if (e == null) {
+                return;
             }
-        }).start();
+            serverUtils.generatePaymentsForEvent(eventId);
+            mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
+            mainCtrl.showUndoInOverview();
+            expenseLoading.setVisible(false);
+            back();
+        } catch (Exception e) {
+            commitExpenseError.setVisible(true);
+            expenseLoading.setVisible(false);
+            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+            visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
+            visiblePause.play();
+        }
     }
 
     void setSplitListUp() {

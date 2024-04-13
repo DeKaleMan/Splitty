@@ -44,19 +44,19 @@
          </font>
       </Text>
 
-      <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false">
+      <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>

@@ -33,9 +33,9 @@
                     </font></Label>
 
                 <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#resetErrors" onMouseClicked="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
-                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" />
-                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" />
-            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" />
+                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" styleClass="errorLabel" />
+                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" styleClass="errorLabel"/>
+            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" styleClass="errorLabel" />
             </children>
          <padding>
             <Insets right="5.0" />
@@ -63,12 +63,12 @@
         <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="275.0" layoutY="15.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
         <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" visible="false" />
         <ProgressIndicator fx:id="progress" layoutX="237.0" layoutY="12.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
-        <Label fx:id="settingsSavedLabel" layoutX="243.0" layoutY="358.0" text="Settings saved succesfully*" textFill="#3700ff" visible="false">
+        <Label fx:id="settingsSavedLabel" layoutX="243.0" layoutY="358.0" text="Settings saved succesfully*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
             <font>
                 <Font name="System Italic" size="10.0" />
             </font>
         </Label>
-      <Label fx:id="noConnectionError" layoutX="205.0" layoutY="332.0" prefHeight="53.0" prefWidth="159.0" text="Go to settings to check your connection to the server and try to refresh or change the server*" textFill="RED" visible="false" wrapText="true">
+      <Label fx:id="noConnectionError" layoutX="205.0" layoutY="332.0" prefHeight="53.0" prefWidth="159.0" text="Go to settings to check your connection to the server and try to refresh or change the server*" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>

@@ -18,7 +18,7 @@
               </Label>
 
               <TextField fx:id="titleField" onKeyPressed="#resetTitleFieldError" prefHeight="25.0" prefWidth="181.0" promptText="required" />
-              <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" />
+              <Label fx:id="titleError" prefHeight="17.0" prefWidth="248.0" text="Event Name is required*" textFill="RED" visible="false" styleClass="errorLabel"/>
 
 
             <Label fx:id="dateText" text="Date">
@@ -26,8 +26,8 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-              <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" />
-              <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" />
+              <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" styleClass="errorLabel"/>
+              <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" styleClass="errorLabel"/>
               <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" />
          </children>
       </VBox>
@@ -44,9 +44,7 @@
       </VBox>
       <HBox alignment="CENTER" layoutX="176.0" layoutY="311.0" prefHeight="30.0" prefWidth="248.0">
          <children>
-
-
-                                <Button fx:id="createButton" mnemonicParsing="false" onAction="#createEvent" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Create Event" textFill="white">
+             <Button fx:id="createButton" mnemonicParsing="false" onAction="#createEvent" prefHeight="11.0" prefWidth="133.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Create Event" textFill="white">
                <font>
                   <Font size="14.0" />
                </font>
