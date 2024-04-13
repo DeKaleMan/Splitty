@@ -308,6 +308,11 @@ public class AdminOverviewCtrl {
                 deleteEvent();
             }
         }
+        if (press.getCode() == KeyCode.ENTER) {
+            if (eventList.getSelectionModel().getSelectedItem() != null) {
+                viewEvent();
+            }
+        }
     }
     @FXML
     public void handleMouseClick(MouseEvent mouseEvent) {

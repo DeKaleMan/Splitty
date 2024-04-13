@@ -672,7 +672,11 @@ public class SplittyOverviewCtrl implements Initializable {
         if(ctrlZ.match(press)){
             undo();
         }
-
+        if (press.getCode() == KeyCode.ENTER) {
+            if (expensesTabPane.getSelectionModel().getSelectedItem() != null) {
+                editExpense();
+            }
+        }
     }
 
     public void setAdmin(Boolean admin) {

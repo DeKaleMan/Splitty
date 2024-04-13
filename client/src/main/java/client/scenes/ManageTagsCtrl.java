@@ -213,6 +213,11 @@ public class ManageTagsCtrl implements Initializable {
                 removeTag();
             }
         }
+        if (press.getCode() == KeyCode.ENTER) {
+            if (tagListView.getSelectionModel().getSelectedItem() != null) {
+                editTag();
+            }
+        }
     }
     @FXML
     public void editOnClick(MouseEvent mouseEvent) {

@@ -191,6 +191,11 @@ public class ManageParticipantsCtrl implements Initializable {
                 removeParticipant();
             }
         }
+        if (press.getCode() == KeyCode.ENTER) {
+            if (participantsList.getSelectionModel().getSelectedItem() != null) {
+                editParticipant();
+            }
+        }
     }
 
     public void editParticipant() {
