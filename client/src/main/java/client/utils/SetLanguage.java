@@ -223,6 +223,7 @@ public class SetLanguage {
         settingsCtrl.setLanguage(translate("Language", "en", lang));
         settingsCtrl.setSaveButton(translate("Save", "en", lang));
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
+        settingsCtrl.setNameText(translate("Name", "en", lang));
         settingsCtrl.setLangInstructions(translate("Enter the languagecode or " +
                 "the name of your imaginary language" +
                 "and an image for the flag of the language you want to add", "en", lang));
@@ -248,8 +249,8 @@ public class SetLanguage {
         invitationCtrl.setInviteCodeText(translate("Invite Code:", "en", lang));
         invitationCtrl.setSendEmailInvitesText(translate("Send email invites:", "en", lang));
         invitationCtrl.setInviteCodeInstructions(translate("Invite people by passing " +
-                "the invite code:", "en", lang));
-        invitationCtrl.setEmailArea(translate("Add your emails to send an invite to", "en", lang));
+                "the invite code", "en", lang));
+        invitationCtrl.setEmailArea(translate("Add your emails to send an invite ", "en", lang));
         invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
         System.out.println("invitation translated");
     }
