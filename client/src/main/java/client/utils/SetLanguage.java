@@ -110,6 +110,8 @@ public class SetLanguage {
         startScreenCtrl.setCodeNotFoundError(translate("Event code not found", "en", lang));
         startScreenCtrl.setInvalidCodeError(translate("Event code is a number", "en", lang));
         startScreenCtrl.setSettingsSavedLabel(translate("Settings saved succesfully*", "en", lang));
+        startScreenCtrl.setCreateEventTextField(translate("Event name", "en", lang));
+        startScreenCtrl.setJoinEventTextField(translate("Invite code", "en", lang));
         startScreenCtrl.setAlreadyParticipantError(translate("You already participate in this event",
                 "en", lang));
         startScreenCtrl.setNoConnectionError(translate("Go to settings to check your connection to " +
@@ -137,6 +139,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setmyDetails(translate("My details", "en", lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
         splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
+        splittyOverviewCtrl.setInvolvingMe(translate("Involving me", "en",lang));
 
         System.out.println("event overview translated");
     }

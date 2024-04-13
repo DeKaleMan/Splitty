@@ -86,7 +86,7 @@ public class SetLanguageTest {
         verify(startScreenCtrl).setJoinEventText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(17)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSplittyOverview() {
@@ -96,7 +96,7 @@ public class SetLanguageTest {
         verify(splittyOverviewCtrl).setmyDetails("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(16)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(17)).translate(anyString(), anyString(), anyString());
 
     }
     @Test

@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import commons.*;
 import commons.Currency;
 import commons.dto.PaymentDTO;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +40,8 @@ public class DebtCtrl implements Initializable {
     private ListView<Payment> paymentInstructionListView;
     @FXML
     private Label titlelabel;
+    @FXML
+    private Button back;
 
     @FXML
     private Button undo;
@@ -76,7 +79,7 @@ public class DebtCtrl implements Initializable {
                             super.updateItem(payment, b);
 
                             if (payment == null || b) {
-                                setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
+                                setStyle("-fx-background-color: #6A6E71; -fx-padding: 0; -fx-border-radius: 0");
                                 setGraphic(null);
                             } else {
                                 GridPane headerGrid = getGrid(payment);
@@ -88,7 +91,8 @@ public class DebtCtrl implements Initializable {
                                 pane.setGraphic(headerGrid);
                                 pane.getStyleClass().add("paymentInstruction");
                                 pane.setExpanded(false);
-                                setStyle("-fx-background-color: #f4f4f4; -fx-padding: 0");
+                                setStyle("-fx-background-color: #6A6E71; -fx-padding: 0; -fx-border-radius: 0");
+
                                 setGraphic(pane);
                             }
                         }
@@ -217,12 +221,16 @@ public class DebtCtrl implements Initializable {
             serverUtils.getPaymentsOfEvent(eventCode).stream().filter(x -> !x.isPaid()).toList());
         undone = new Stack<>();
         changed = new ArrayList<>();
+        setTitlelabel(serverUtils.getEventById(eventCode).getName());
+        setBackButtonText();
     }
 
     public void setTitlelabel(String title) {
         titlelabel.setText((title));
     }
-
+    public void setBackButtonText(){
+        this.back.setText(mainCtrl.translate("Back"));
+    }
 
     /**
      * removes a Payment from the list and adds it to changed
