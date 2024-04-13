@@ -6,6 +6,8 @@ This repository contains the template for the OOPP project. Please extend this R
 
 
 // hidden features (i dont think we have any) //
+**Ghost Participants**
+We will briefly explain how the participant system works. When a user creates an event they are automatically the host. They can invite others through email and themselves with an invite code. Other users may join the event and can use all the functionality like creating expenses, settling debts and managing tags. There is ane thing only the host can do, which is creating/deleting/editing ghost participants. Ghost participants are participants created by the host, there are no users linked through the app to ghost participants. The idea is that if a user creates an event and wants to add a person without the app, they can simply add them as a ghost participant and fill in the details themselves. For every other functionality ghost participants work the same as other users. 
 
 // where we have implemented long polling // 
 
