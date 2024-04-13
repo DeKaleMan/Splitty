@@ -330,6 +330,16 @@ public class StartScreenCtrl implements Initializable {
         });
 
     }
+    public void setJoinEventTextField(String text) {
+        Platform.runLater(() -> {
+            this.joinEventTextField.setPromptText(text);
+        });
+    }
+    public void setCreateEventTextField(String text) {
+        Platform.runLater(() -> {
+            this.createEventTextField.setPromptText(text);
+        });
+    }
 
 
     public void setLanguageSelect() {

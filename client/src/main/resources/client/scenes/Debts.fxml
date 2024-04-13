@@ -8,11 +8,13 @@
 
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css,/openDebtsStyleSheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DebtCtrl">
    <children>
-      <Label fx:id="titlelabel" alignment="CENTER" contentDisplay="CENTER" layoutX="275.0" layoutY="14.0" text="Title">
+      <Label fx:id="titlelabel" alignment="CENTER" contentDisplay="CENTER" layoutX="179.0" layoutY="9.0" prefHeight="35.0" prefWidth="241.0" text="Title" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
+<!--      <ListView id="paymentInstructionListView" fx:id="paymentInstructionListView" layoutX="92.0" layoutY="49.0" prefHeight="317.0" prefWidth="415.0" />-->
+      <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <ListView id="paymentInstructionListView" fx:id="paymentInstructionListView" layoutX="150.0" layoutY="49.0" onKeyPressed="#onKeyPressed" prefHeight="317.0" prefWidth="299.0" />
 <!--      <ListView id="paymentInstructionListView" fx:id="paymentInstructionListView" layoutX="92.0" layoutY="49.0" prefHeight="317.0" prefWidth="415.0" />-->
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />

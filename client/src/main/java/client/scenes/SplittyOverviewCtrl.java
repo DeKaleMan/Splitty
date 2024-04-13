@@ -551,6 +551,11 @@ public class SplittyOverviewCtrl implements Initializable {
             this.paidByMe.setText(text);
         });
     }
+    public void setInvolvingMe(String text) {
+        Platform.runLater(() -> {
+            this.involvingMe.setText(text);
+        });
+    }
 
     public void setDeleteExpenseButton(String text) {
         Platform.runLater(() -> {

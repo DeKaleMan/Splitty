@@ -111,7 +111,10 @@ ListView {
 Label {
     -fx-text-fill: white; /* White text color */
 }
-Text {
+RadioButton {
+    -fx-text-fill: white; /* White text color */
+}
+.Text {
     -fx-text-fill: white; /* White text color */
 }
 

@@ -28,11 +28,13 @@ public class AdminLoginCtrl {
     }
 
     @FXML
-    private Text signIn;
+    private Label signIn;
     @FXML
     private Button back;
     @FXML
-    private Text instruction;
+    private Label instruction;
+    @FXML
+    private Text passwordInstructionLink;
 
     @FXML
     private Button signInButton;
