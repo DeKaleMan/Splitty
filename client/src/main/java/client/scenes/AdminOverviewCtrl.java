@@ -302,6 +302,12 @@ public class AdminOverviewCtrl {
         if (press.getCode() == KeyCode.ESCAPE) {
             logOut();
         }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            if (eventList.getSelectionModel().getSelectedItem() != null) {
+                deleteEvent();
+            }
+        }
     }
     @FXML
     public void handleMouseClick(MouseEvent mouseEvent) {

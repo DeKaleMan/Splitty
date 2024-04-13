@@ -662,6 +662,12 @@ public class SplittyOverviewCtrl implements Initializable {
         if (k.match(press)) {
             showAddExpense();
         }
+        KeyCodeCombination k2 = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+        if (k2.match(press)) {
+            if (expensesTabPane.getSelectionModel().getSelectedItem() != null) {
+                deleteExpense();
+            }
+        }
         KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN);
         if(ctrlZ.match(press)){
             undo();

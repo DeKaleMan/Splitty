@@ -9,9 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -208,6 +206,12 @@ public class ManageTagsCtrl implements Initializable {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             back();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            if (tagListView.getSelectionModel().getSelectedItem() != null) {
+                removeTag();
+            }
         }
     }
     @FXML

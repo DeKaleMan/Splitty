@@ -9,9 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -186,6 +184,12 @@ public class ManageParticipantsCtrl implements Initializable {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             backEventOverview();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            if (participantsList.getSelectionModel().getSelectedItem() != null) {
+                removeParticipant();
+            }
         }
     }
 
