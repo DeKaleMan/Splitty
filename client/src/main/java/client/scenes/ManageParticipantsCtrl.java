@@ -7,6 +7,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -56,6 +58,7 @@ public class ManageParticipantsCtrl implements Initializable {
     public Label participantDeletedConfirmation;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        setImages();
         mainCtrl.setButtonRedProperty(removeButton);
         //for now this is hardcoded but this should eventually be passed on
         this.list = new ArrayList<>();
@@ -75,6 +78,18 @@ public class ManageParticipantsCtrl implements Initializable {
             }
         });
     }
+
+    private void setImages() {
+        ImageView plus = new ImageView(new Image("plusicon.png"));
+        plus.setFitWidth(15);
+        plus.setFitHeight(15);
+        addButton.setGraphic(plus);
+        ImageView edit = new ImageView(new Image("editevent.png"));
+        edit.setFitWidth(15);
+        edit.setFitHeight(15);
+        editButton.setGraphic(edit);
+    }
+
     @Inject
     public ManageParticipantsCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;

@@ -132,6 +132,8 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void initializeAll(Event event) {
+        setImages();
+
         if (admin || event.getHost().equals(config.getId())) {
             hostOptionsButton.setVisible(true);
         } else {
@@ -141,6 +143,22 @@ public class SplittyOverviewCtrl implements Initializable {
         this.eventId = event.getId();
         fetchParticipants();
         fetchExpenses();
+    }
+
+    private void setImages() {
+//        ImageView edit = new ImageView(new Image("editevent.png"));
+//        edit.setFitWidth(15);
+//        edit.setFitHeight(15); // this looked very bad for me if we
+//        cannot fix this we should just delete
+//        editEvent.setGraphic(edit);
+        ImageView tag = new ImageView(new Image("tag.png"));
+        tag.setFitWidth(15);
+        tag.setFitHeight(15);
+        manageTagsButton.setGraphic(tag);
+        ImageView plus = new ImageView(new Image("plusicon.png"));
+        plus.setFitWidth(10);
+        plus.setFitHeight(10);
+        addExpenseButton.setGraphic(plus);
     }
 
     @FXML

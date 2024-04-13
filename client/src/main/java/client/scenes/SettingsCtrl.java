@@ -6,15 +6,17 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import org.simplejavamail.api.email.Email;
-import org.simplejavamail.api.mailer.Mailer;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -91,6 +93,10 @@ public class SettingsCtrl {
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
         mainCtrl.setButtonGreenProperty(saveButton);
+        ImageView save = new ImageView(new Image("save_icon-removebg-preview.png"));
+        save.setFitWidth(15);
+        save.setFitHeight(15);
+        saveButton.setGraphic(save);
     }
 
     public void setLabelEmailToken(String txt) {

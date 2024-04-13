@@ -9,6 +9,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
@@ -68,6 +70,10 @@ public class EditParticipantCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ImageView save = new ImageView(new Image("save_icon-removebg-preview.png"));
+        save.setFitWidth(15);
+        save.setFitHeight(15);
+        applyChangesButton.setGraphic(save);
         mainCtrl.setButtonRedProperty(cancelButton);
         mainCtrl.setButtonGreenProperty(applyChangesButton);
     }
