@@ -6,6 +6,7 @@ import commons.*;
 import commons.Currency;
 import javafx.animation.PauseTransition;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -137,24 +138,27 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @FXML
     public void addExpense() {
-        try {
-            //add to database
-            Expense e = getExpense();
-            if (e == null) {
-                return;
+        Platform.runLater(() -> {
+            try {
+                //add to database
+                Expense e = getExpense();
+                if (e == null) {
+                    return;
+                }
+                serverUtils.generatePaymentsForEvent(eventId);
+                mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
+                mainCtrl.showUndoInOverview();
+                expenseLoading.setVisible(false);
+                back();
+            } catch (Exception e) {
+                commitExpenseError.setVisible(true);
+                expenseLoading.setVisible(false);
+                PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
+                visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
+                visiblePause.play();
             }
-            serverUtils.generatePaymentsForEvent(eventId);
-            mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
-            mainCtrl.showUndoInOverview();
-            expenseLoading.setVisible(false);
-            back();
-        } catch (Exception e) {
-            commitExpenseError.setVisible(true);
-            expenseLoading.setVisible(false);
-            PauseTransition visiblePause = new PauseTransition(Duration.seconds(3));
-            visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
-            visiblePause.play();
-        }
+        });
+
     }
 
     void setSplitListUp() {
