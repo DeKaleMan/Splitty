@@ -176,7 +176,6 @@ public class AdminOverviewCtrl {
 
                 System.out.println("Event exported to JSON file successfully.");
             } catch (IOException e) {
-                e.printStackTrace();
                 System.out.println("Error occurred while exporting event to JSON file.");
             }
         }

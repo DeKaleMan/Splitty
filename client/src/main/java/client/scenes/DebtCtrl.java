@@ -269,7 +269,6 @@ public class DebtCtrl implements Initializable {
     @FXML
     public void sendMessage(Payment payment) {
         try {
-            System.out.println("Test if this works !!!!");
             String host = "smtp.gmail.com";
             int port = 587;
             String fromEmail = config.getEmail();
