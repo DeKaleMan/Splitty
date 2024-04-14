@@ -76,7 +76,7 @@ public class TagService {
         return toDelete;
     }
 
-    private void setExpensesWithTag(Tag toDelete, Event event, Tag newTag) {
+    public void setExpensesWithTag(Tag toDelete, Event event, Tag newTag) {
         List<Expense> expenses = expenseRepository.findByEvent(event);
         expenses = expenses.stream().filter(expense -> expense.getTag().equals(toDelete)).toList();
         for (Expense expense : expenses) {

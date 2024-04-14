@@ -82,9 +82,9 @@
         </Pane>
         <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="139.0" prefHeight="227.0" prefWidth="114.0" spacing="10.0">
             <children>
-                <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" wrapText="true" />
-                <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" wrapText="true" />
-                <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />
+                <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
+                <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
+<!--                <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />-->
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="manageTagsButton" mnemonicParsing="false" onAction="#viewManageTags" text="Manage Tags" />
             </children>

@@ -96,7 +96,7 @@ public class SetLanguageTest {
         verify(splittyOverviewCtrl).setmyDetails("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(17)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
 
     }
     @Test
@@ -193,7 +193,7 @@ public class SetLanguageTest {
         verify(manageParticipantsCtrl).setBackButton("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(8)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

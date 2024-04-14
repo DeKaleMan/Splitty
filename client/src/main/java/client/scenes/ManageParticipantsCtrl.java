@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -55,6 +56,9 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     public Label participantDeletedConfirmation;
     @FXML
+    public Button editEventButton;
+
+    @FXML
     public void initialize(URL location, ResourceBundle resources) {
         setImages();
         mainCtrl.setButtonRedProperty(removeButton);
@@ -90,6 +94,10 @@ public class ManageParticipantsCtrl implements Initializable {
         trash.setFitWidth(14);
         trash.setFitHeight(14);
         removeButton.setGraphic(trash);
+        ImageView editEvent = new ImageView(new Image("editIcon.png"));
+        editEvent.setFitWidth(15);
+        editEvent.setFitHeight(15);
+        editEventButton.setGraphic(editEvent);
     }
 
     @Inject
@@ -304,4 +312,15 @@ public class ManageParticipantsCtrl implements Initializable {
             this.back.setText(txt);
         });
     }
+
+    public void editEvent(ActionEvent actionEvent) {
+        mainCtrl.showEditEvent(eventId);
+    }
+
+    public void setEditEvent(String translate) {
+        Platform.runLater(() -> {
+            this.editButton.setText(translate);
+        });
+    }
+
 }

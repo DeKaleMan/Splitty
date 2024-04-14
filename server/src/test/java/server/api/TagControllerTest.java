@@ -1,99 +1,149 @@
 package server.api;
 
-import commons.Event;
 import commons.Tag;
-import commons.TagId;
 import commons.dto.TagDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import server.api.TagController;
 import server.service.TagService;
 
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class TagControllerTest {
-    TagController sut;
-    private TestTagRepository tagRepo;
-    private TestEventRepository eventRepo;
-    private TestExpenseRepository expenseRepo;
 
-    Event e1 = new Event("test1",new Date(10, 10, 2005),"owner","desc");
-    Event e2 = new Event("test2",new Date(15, 10, 2015),"owner","desc");
-    TagDTO t1 = new TagDTO(1, "Food", "2a8000");
-    TagDTO t2 = new TagDTO(1, "Travel", "3700ff");
-    TagDTO t3 = new TagDTO(2, "Entrance Fees", "c50000");
+    @Mock
+    private TagService tagService;
+
+    private TagController tagController;
+
     @BeforeEach
-    public void setup() {
-        tagRepo = new TestTagRepository();
-        eventRepo = new TestEventRepository();
-        expenseRepo = new TestExpenseRepository();
-        TagService service = new TagService(tagRepo, eventRepo, expenseRepo);
-        sut = new TagController(service);
-        e1.setId(1);
-        e2.setId(2);
-        eventRepo.save(e1);
-        eventRepo.save(e2);
-    }
-    @Test
-    public void postTestInvalid() {
-        t1.setName(null);
-        ResponseEntity<Tag> response = sut.saveTag(t1);
-        assertEquals(0,tagRepo.methods.size());
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-    @Test
-    public void postTestInvalidEvent() {
-        t1.setEventId(-1);
-        ResponseEntity<Tag> response = sut.saveTag(t1);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        tagController = new TagController(tagService);
     }
 
     @Test
-    public void postTestValid() {
-        ResponseEntity<Tag> response = sut.saveTag(t1);
-        assertEquals("save", tagRepo.methods.getLast());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1, tagRepo.tags.size());
-        Tag tag = new Tag(e1, t1.getName(), t1.getColour());
-        assertEquals(tag, tagRepo.findTagByTagId(new TagId(t1.getName(), e1)));
-    }
-    @Test
-    public void putTestValid() {
-        ResponseEntity<Tag> response = sut.saveTag(t2);
-        assertEquals("save", eventRepo.methods.getLast());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        TagDTO temp = new TagDTO(t2.getEventId(), "New Name", "New Colour");
-        ResponseEntity<Tag> response2 = sut.updateTag(t2.getName(), t2.getEventId(), temp);
-        assertEquals(HttpStatus.OK, response2.getStatusCode());
-        assertEquals("delete", tagRepo.methods.getLast());
-        assertEquals(response2.getBody(), tagRepo.findTagByTagId(new TagId("New Name", e1)));
-        assertEquals("find tag by id", tagRepo.methods.getLast());
-    }
-    @Test
-    public void putTestInvalid() {
-        sut.saveTag(t1);
-        sut.saveTag(t2);
-        sut.saveTag(t3);
-        t3.setEventId(e1.getId());
-        TagDTO temp = new TagDTO(t3.getEventId(), "Food", "Random Colour");
-        ResponseEntity<Tag> response = sut.updateTag(t3.getName(), t3.getEventId(), temp);
-        assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
-        assertEquals(t3.getName(),tagRepo.findTagByTagId(new TagId(t3.getName(), e2)).getName());
-    }
-    @Test
-    public void deleteTestValid() {
-        sut.saveTag(t1);
-        sut.saveTag(t2);
-        sut.saveTag(t3);
-        assertEquals(3,tagRepo.tags.size());
-        sut.deleteTag(t1.getName(), t1.getEventId());
-        assertEquals(2,tagRepo.tags.size());
-        ResponseEntity<Tag> deleted = sut.deleteTag(t2.getName(), t2.getEventId());
-        Tag temp = new Tag(eventRepo.findEventById(t2.getEventId()), t2.getName(), t2.getColour());
-        assertEquals(deleted.getBody(),temp);
+    void getByEventIdTagsExist() {
+        List<Tag> tags = Arrays.asList(new Tag(), new Tag());
+        when(tagService.getTagsByEventId(1)).thenReturn(tags);
+        ResponseEntity<List<Tag>> response = tagController.getByEventId(1);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(2, response.getBody().size());
     }
 
+    @Test
+    void getByEventIdNoTags() {
+        when(tagService.getTagsByEventId(1)).thenReturn(null);
+        ResponseEntity<List<Tag>> response = tagController.getByEventId(1);
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
+    @Test
+    void saveTagValidTag() {
+        TagDTO tagDTO = new TagDTO(1, "Food", "#FF0000");
+        Tag tag = new Tag();
+        when(tagService.saveTag(tagDTO)).thenReturn(tag);
+        ResponseEntity<Tag> response = tagController.saveTag(tagDTO);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    void saveTagInvalidTag() {
+        TagDTO tagDTO = new TagDTO();
+
+
+        when(tagService.saveTag(tagDTO)).thenReturn(null);
+        ResponseEntity<Tag> response = tagController.saveTag(tagDTO);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void deleteTagFail() {
+        ResponseEntity<Tag> response = tagController.deleteTag("Other", 1);
+
+
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void deleteTagOk() {
+        Tag tag = new Tag();
+
+        when(tagService.deleteTag("Food", 1)).thenReturn(tag);
+
+        ResponseEntity<Tag> response = tagController.deleteTag("Food", 1);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    void deleteTagNotFound() {
+        when(tagService.deleteTag("Food", 1)).thenReturn(null);
+        ResponseEntity<Tag> response = tagController.deleteTag("Food", 1);
+        assertEquals(404, response.getStatusCodeValue());
+
+
+    }
+
+    @Test
+    void updateTagValid() {
+        TagDTO tagDTO = new TagDTO(1, "Food", "#FF0000");
+        Tag updatedTag = new Tag();
+
+        when(tagService.updateTag(tagDTO, "Food", 1)).thenReturn(updatedTag);
+        ResponseEntity<Tag> response = tagController.updateTag("Food", 1, tagDTO);
+
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    void updateTagFail() {
+        TagDTO tagDTO = new TagDTO(1, "Food", "#FF0000");
+        when(tagService.updateTag(tagDTO, "Food", 1)).thenReturn(null);
+        ResponseEntity<Tag> response = tagController.updateTag("Food", 1, tagDTO);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void setupTagsSuccess() {
+        List<Tag> tags = Arrays.asList(new Tag(), new Tag());
+        when(tagService.setUpTags(1)).thenReturn(tags);
+        ResponseEntity<List<Tag>> response = tagController.setupTags(1);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(2, response.getBody().size());
+    }
+
+    @Test
+    void setupTagsFailed() {
+        when(tagService.setUpTags(1)).thenReturn(null);
+        ResponseEntity<List<Tag>> response = tagController.setupTags(1);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void getOtherTagFound() {
+        Tag tag = new Tag();
+
+        when(tagService.getOtherTag(1)).thenReturn(tag);
+
+        ResponseEntity<Tag> response = tagController.getOtherTag(1);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    void getOtherTagNotFound() {
+        when(tagService.getOtherTag(1)).thenReturn(null);
+
+        ResponseEntity<Tag> response = tagController.getOtherTag(1);
+
+
+        assertEquals(400, response.getStatusCodeValue());
+    }
 }
