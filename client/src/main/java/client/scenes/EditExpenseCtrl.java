@@ -13,6 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -25,7 +27,8 @@ import java.util.Date;
 import java.util.List;
 
 public class EditExpenseCtrl extends ExpenseCtrl {
-    public Button addTagButton;
+    @FXML
+    protected Button addTagButton;
     @FXML
     protected ComboBox<Participant> personComboBox;
     @FXML
@@ -101,6 +104,13 @@ public class EditExpenseCtrl extends ExpenseCtrl {
     @Inject
     public EditExpenseCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Config config) {
         super(serverUtils, mainCtrl, config);
+    }
+
+    public void setImages() {
+        ImageView tag = new ImageView(new Image("tagIcon.png"));
+        tag.setFitWidth(15);
+        tag.setFitHeight(15);
+        addTagButton.setGraphic(tag);
     }
 
     @FXML
@@ -187,7 +197,8 @@ public class EditExpenseCtrl extends ExpenseCtrl {
         });
     }
 
-    public void refresh(Expense expense){
+    public void refresh(Expense expense) {
+        setImages();
         this.eventId = expense.getEvent().getId();
         isSharedExpense = expense.isSharedExpense();
         ObservableList<Participant> list = FXCollections.observableArrayList();

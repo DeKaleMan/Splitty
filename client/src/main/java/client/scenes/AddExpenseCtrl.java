@@ -53,7 +53,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     @FXML
     protected ComboBox<Tag> category;
     @FXML
-    public Button addTagButton;
+    protected Button addTagButton;
 
     @FXML
     protected Label sceneTypeText;

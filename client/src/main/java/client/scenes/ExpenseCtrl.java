@@ -13,18 +13,21 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.*;
-import javafx.scene.input.*;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
-
 import java.net.URL;
 import java.time.LocalDate;
-
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public abstract class ExpenseCtrl {
     protected final ServerUtils serverUtils;
@@ -73,6 +76,8 @@ public abstract class ExpenseCtrl {
     @FXML
     protected Label expenseTypetext;
 
+    @FXML
+    protected Button addTagButton;
     @FXML
     protected Button commit;
     @FXML
@@ -127,7 +132,16 @@ public abstract class ExpenseCtrl {
         setTogglesUp();
         setCategoriesUp();
         setCurrencyUp();
+        setImages();
     }
+
+    private void setImages() {
+        ImageView tag = new ImageView(new Image("tagIcon.png"));
+        tag.setFitWidth(15);
+        tag.setFitHeight(15);
+        addTagButton.setGraphic(tag);
+    }
+
 
     public void setTagsUp() {
         this.category.getItems().clear();

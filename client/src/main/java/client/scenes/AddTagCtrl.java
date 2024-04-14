@@ -89,7 +89,7 @@ public class AddTagCtrl implements Initializable {
         }
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         if (k.match(press)) {
-            addTag();
+            applyChanges();
         }
     }
 
