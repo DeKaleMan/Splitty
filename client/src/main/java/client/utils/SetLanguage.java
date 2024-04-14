@@ -188,6 +188,7 @@ public class SetLanguage {
         adminOverviewCtrl.setViewEventButtonText(translate("View Event", "en", lang));
         adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
+        adminOverviewCtrl.setNoEventSelectedError(translate("No event selected*", "en", lang));
         System.out.println("admin overview translated");
     }
 

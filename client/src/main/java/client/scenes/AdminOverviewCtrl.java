@@ -271,6 +271,12 @@ public class AdminOverviewCtrl {
             sortByText.setText(txt);
         });
     }
+    @FXML
+    public void setNoEventSelectedError(String txt) {
+        Platform.runLater(() -> {
+            noEventSelectedError.setText(txt);
+        });
+    }
     public void setLogOutButtonText(String txt) {
         logOutButton.setText(txt);
     }
