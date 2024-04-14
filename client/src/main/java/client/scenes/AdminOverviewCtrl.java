@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Config;
 import client.utils.EventDump;
 import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ public class AdminOverviewCtrl {
 
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
+    private Config config;
 
     ObservableList<String> sortList = FXCollections.observableArrayList("Title", "Creation date", "Last activity");
 
@@ -62,9 +64,10 @@ public class AdminOverviewCtrl {
     private Button logOutButton;
 
     @Inject
-    public AdminOverviewCtrl(MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public AdminOverviewCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, Config config) {
         this.mainCtrl = mainCtrl;
         this.serverUtils = serverUtils;
+        this.config = config;
     }
 
     @FXML
@@ -299,5 +302,13 @@ public class AdminOverviewCtrl {
         ObservableList<Event> events = FXCollections.observableArrayList(serverUtils.getAllEvents());
         eventList.setItems(events);
         updateEventSorting();
+    }
+
+    public void resetServerTag() {
+        // Needed so it will keep translation
+        String currentTag = serverTag.getText();
+        String[] parts = currentTag.split(":");
+        String translatedServerText = parts[0];
+        serverTag.setText(translatedServerText + ": " + config.getConnection());
     }
 }

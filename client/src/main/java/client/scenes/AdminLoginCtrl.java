@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.AdminServerUtils;
+import client.utils.Config;
 import com.google.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import javafx.application.Platform;
@@ -9,21 +10,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 public class AdminLoginCtrl {
 
     private MainCtrl mainCtrl;
     private AdminServerUtils adminServerUtils;
+    private Config config;
 
     @Inject
-    public AdminLoginCtrl(MainCtrl mainCtrl, AdminServerUtils adminServerUtils) {
+    public AdminLoginCtrl(MainCtrl mainCtrl, AdminServerUtils adminServerUtils, Config config) {
         this.mainCtrl = mainCtrl;
         this.adminServerUtils = adminServerUtils;
+        this.config = config;
     }
 
     @FXML
@@ -32,15 +33,10 @@ public class AdminLoginCtrl {
     private Button back;
     @FXML
     private Text instruction;
-    @FXML
-    private Text passwordInstructionLink;
 
     @FXML
     private Button signInButton;
 
-
-    @FXML
-    private TextField urlField;
     @FXML
     public Label serverNotFoundError;
     @FXML
@@ -52,12 +48,8 @@ public class AdminLoginCtrl {
 
     @FXML
     public void adminSignIn(ActionEvent actionEvent) {
-        String serverUrl = urlField.getText();
+        String serverUrl = config.getConnection();
         String password = passwordField.getText();
-        if (serverUrl == null || serverUrl.isEmpty()) {
-            serverNotFoundError.setVisible(true);
-            return;
-        }
         Response response;
         try {
             response = adminServerUtils.validatePassword(password, serverUrl);
@@ -75,14 +67,9 @@ public class AdminLoginCtrl {
 
     }
     public void reset(){
-        this.urlField.setText(null);
         this.passwordField.setText(null);
         this.incorrectPasswordError.setVisible(false);
         this.serverNotFoundError.setVisible(false);
-    }
-    @FXML
-    public void showPasswordInstructions(MouseEvent mouseEvent) {
-        passwordInstructionsText.setVisible(true);
     }
 
     public void setSignIn(String txt) {
@@ -97,21 +84,9 @@ public class AdminLoginCtrl {
         });
     }
 
-    public void setPasswordInstructionLink(String txt) {
-        Platform.runLater(() -> {
-            this.passwordInstructionLink.setText(txt);
-        });
-    }
-
     public void setSignInButton(String txt) {
         Platform.runLater(() -> {
             this.signInButton.setText(txt);
-        });
-    }
-
-    public void setUrlField(String txt) {
-        Platform.runLater(() -> {
-            this.urlField.setPromptText(txt);
         });
     }
 
