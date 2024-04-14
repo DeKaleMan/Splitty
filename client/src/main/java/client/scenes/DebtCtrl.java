@@ -2,6 +2,7 @@ package client.scenes;
 
 
 import client.utils.Config;
+import client.utils.Mail;
 import client.utils.ServerUtils;
 
 import commons.*;
@@ -40,7 +41,7 @@ public class DebtCtrl implements Initializable {
 
     private String eventName;
 
-    private Mail mail;
+    private final Mail mail;
 
     @FXML
     private ListView<Payment> paymentInstructionListView;
@@ -61,13 +62,10 @@ public class DebtCtrl implements Initializable {
     private int eventCode;
 
     @Inject
-    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
+    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config, Mail mail) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
-    }
-
-    public void injectMail(Mail mail){
         this.mail = mail;
     }
 

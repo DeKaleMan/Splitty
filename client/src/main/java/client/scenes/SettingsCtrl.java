@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.Config;
+import client.utils.Mail;
 import commons.Currency;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;

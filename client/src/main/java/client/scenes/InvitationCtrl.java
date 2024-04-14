@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.Config;
+import client.utils.Mail;
 import client.utils.ServerUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,8 +22,7 @@ public class InvitationCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-
-    private final SettingsCtrl settingsCtrl;
+    private final Mail mail;
 
     private final Config config;
     private String inviteCode;
@@ -64,11 +64,11 @@ public class InvitationCtrl {
     private Button defaultButton;
 
     @Inject
-    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config, SettingsCtrl settingsCtrl) {
+    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config, Mail mail) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
-        this.settingsCtrl = settingsCtrl;
+        this.mail = mail;
         inviteCode = "testInviteCode";
     }
 
@@ -132,7 +132,7 @@ public class InvitationCtrl {
         Email email = getherDataForEmail(emailadress);
         Mailer mailInfo = getSenderInfo();
         try{
-            Mail.mailSending(email, mailInfo);
+            mail.mailSending(email, mailInfo);
             System.out.println("Invitation succesfully sent to: " + emailadress);
         } catch (Exception e){
             System.out.println("did not work");
@@ -238,7 +238,7 @@ public class InvitationCtrl {
         }
         emailTo = emailT;
 
-        Email email = Mail.makeEmail(fromEmail, emailTo, emailSubject, emailBody);
+        Email email = mail.makeEmail(fromEmail, emailTo, emailSubject, emailBody);
 
         System.out.println("gethering information for making an email.");
 
@@ -252,7 +252,7 @@ public class InvitationCtrl {
         int port = 587;
         String usernameEmail = config.getEmail();
         String passwordToken = config.getEmailToken();
-        Mailer mailer = Mail.getSenderInfo(host, port, usernameEmail, passwordToken);
+        Mailer mailer = mail.getSenderInfo(host, port, usernameEmail, passwordToken);
         return mailer;
     }
 
@@ -285,13 +285,5 @@ public class InvitationCtrl {
         boolean isValid = matcher.matches();
         return isValid;
     }
-
-    public void checkDefault(){
-        settingsCtrl.sendDefaultEmail();
-        emailArea.setText("configure email has been send to \n" +
-                "yourself");
-    }
-
-
 
 }
