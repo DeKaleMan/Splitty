@@ -59,7 +59,7 @@ public class EditEventCrtl {
         this.nameChange.setText("");
     }
     public void back(){
-        mainCtrl.showSplittyOverview(mainCtrl.getCurrentEventCode());
+        mainCtrl.showParticipantManager(mainCtrl.getCurrentEventCode());
     }
     @FXML
     public void changeValues() {
@@ -88,7 +88,7 @@ public class EditEventCrtl {
 
     public void succesFullyChangeName(){
         succesFullyChanged.setVisible(true);
-        mainCtrl.showSplittyOverview(eventId);
+        mainCtrl.showParticipantManager(eventId);
     }
 
     public void setEventNameText(String txt){
@@ -134,6 +134,12 @@ public class EditEventCrtl {
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         if (k.match(press)) {
             changeValues();
+        }
+    }
+
+    public void handleKeyPress(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            submitButton.requestFocus();
         }
     }
 }

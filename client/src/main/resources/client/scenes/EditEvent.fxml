@@ -27,7 +27,7 @@
                </font>
             </Label>
 
-            <TextField fx:id="nameChange" prefHeight="25.0" prefWidth="181.0" promptText="required">
+            <TextField fx:id="nameChange" onKeyPressed="#handleKeyPress" prefHeight="25.0" prefWidth="181.0" promptText="required">
                <VBox.margin>
                   <Insets left="100.0" right="100.0" />
                </VBox.margin></TextField>
