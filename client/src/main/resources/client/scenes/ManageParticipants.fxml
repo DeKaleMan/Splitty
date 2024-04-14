@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageParticipantsCtrl">
+<AnchorPane fx:id="background" onKeyPressed="#onKeyPressed"  prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ManageParticipantsCtrl">
    <children>
       <Label fx:id="titleLabel" layoutX="102.0" layoutY="27.0" prefHeight="53.0" prefWidth="368.0" text="Title" textAlignment="CENTER">
       <font>
@@ -27,25 +27,25 @@
             <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeParticipant" style="-fx-background-color: #c50000;" text="Remove Participant" textFill="white" wrapText="true" />
          </children>
       </VBox>
-      <Label fx:id="noParticipantSelectedError" alignment="CENTER" layoutX="86.0" layoutY="314.0" text="No participant selected*" textFill="RED" visible="false">
+      <Label fx:id="noParticipantSelectedError" alignment="CENTER" layoutX="86.0" layoutY="314.0" text="No participant selected*" textFill="RED" visible="false" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
-      <Label fx:id="unknownError" alignment="CENTER" layoutX="83.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false">
+      <Label fx:id="unknownError" alignment="CENTER" layoutX="83.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false" styleClass="errorLabel">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label fx:id="participantAddedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully added*" textFill="#3700ff" visible="false">
+      <Label fx:id="participantAddedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully added*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="participantEditedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully edited*" textFill="#3700ff" visible="false">
+      <Label fx:id="participantEditedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully edited*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>
-      <Label fx:id="participantDeletedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully deleted*" textFill="#3700ff" visible="false">
+      <Label fx:id="participantDeletedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Participant successfully deleted*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>

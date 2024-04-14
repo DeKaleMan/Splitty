@@ -23,7 +23,7 @@
       </Text>
 
       <TextField fx:id="nameField" layoutX="249.0" layoutY="148.0" promptText="Tag Name" />
-      <ColorPicker fx:id="colorPicker" layoutX="251.0" layoutY="219.0" prefHeight="25.0" prefWidth="155.0" />
+      <ColorPicker fx:id="colorPicker" layoutX="251.0" layoutY="219.0" prefHeight="25.0" prefWidth="155.0" styleClass="color-picker"/>
 
 
       <Label fx:id="duplicateName" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="A tag with this name already exists*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">

@@ -33,8 +33,8 @@
             <ListView fx:id="shareListView" prefHeight="102.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <Label fx:id="currencyErrorLabel" layoutX="399.0" layoutY="140.0" text="Failed to convert currency" textFill="RED" visible="false" />
-      <Label fx:id="hoverLabel" layoutX="14.0" layoutY="64.0" prefHeight="63.0" prefWidth="82.0" text="Hover over a category to see the percentage" textFill="#3700ff" visible="false" wrapText="true">
+      <Label fx:id="currencyErrorLabel" layoutX="399.0" layoutY="140.0" text="Failed to convert currency" textFill="RED" visible="false" styleClass="errorLabel"/>
+      <Label fx:id="hoverLabel" layoutX="14.0" layoutY="64.0" prefHeight="63.0" prefWidth="82.0" text="Hover over a category to see the percentage" textFill="#3700ff" visible="false" wrapText="true" styleClass="confirmationLabel">
          <font>
             <Font size="10.0" />
          </font>

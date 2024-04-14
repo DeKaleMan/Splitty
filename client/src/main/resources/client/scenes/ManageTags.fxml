@@ -17,7 +17,7 @@
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+        <Button fx:id="back" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" onAction="#back" text="Back" />
         <VBox alignment="CENTER" layoutX="14.0" layoutY="185.0" prefHeight="115.0" prefWidth="258.0" spacing="20">
             <children>
                 <Button fx:id="editButton" mnemonicParsing="false" onAction="#editTag" text="Edit Tag" wrapText="true" />
@@ -27,29 +27,29 @@
                 <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeTag" style="-fx-background-color: #c50000;" text="Remove Tag" textFill="white" wrapText="true" />
             </children>
         </VBox>
-        <Label fx:id="noTagSelectedError" alignment="CENTER" layoutX="86.0" layoutY="314.0" text="No tag selected*" textFill="RED" visible="false">
+        <Label fx:id="noTagSelectedError" alignment="CENTER" layoutX="86.0" layoutY="314.0" text="No tag selected*" textFill="RED" visible="false" styleClass="errorLabel">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font>
         </Label>
-        <Label fx:id="unknownError" alignment="CENTER" layoutX="83.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false">
+        <Label fx:id="unknownError" alignment="CENTER" layoutX="83.0" layoutY="314.0" prefHeight="16.0" prefWidth="120.0" text="Something went wrong*" textFill="RED" visible="false" styleClass="errorLabel">
             <font>
                 <Font size="11.0" />
             </font>
         </Label>
-        <Label fx:id="tagAddedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully added*" textFill="#3700ff" visible="false">
+        <Label fx:id="tagAddedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully added*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
-        <Label fx:id="tagEditedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully edited*" textFill="#3700ff" visible="false">
+        <Label fx:id="tagEditedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully edited*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
-        <Label fx:id="tagDeletedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully deleted*" textFill="#3700ff" visible="false">
+        <Label fx:id="tagDeletedConfirmation" alignment="CENTER" layoutX="70.0" layoutY="306.0" text="Tag successfully deleted*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
-      <Label fx:id="otherSelectedError" layoutX="86.0" layoutY="314.0" text="Cannot remove Other tag*" textFill="RED" visible="false">
+      <Label fx:id="otherSelectedError" layoutX="86.0" layoutY="314.0" text="Cannot remove Other tag*" textFill="RED" visible="false" styleClass="errorLabel">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>

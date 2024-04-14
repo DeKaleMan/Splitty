@@ -9,14 +9,14 @@
 }
 
 Pane {
-    /* Background color */
-    /* -fx-background-color: #5117A9; */
-    /* Text color */
-    /* -fx-text-fill: white; */
-    /*-fx-background-color: #ffffff; !* White *!*/
-    /*-fx-border-color: #ccc; !* Light Gray *!*/
+    /* Background color
+    /* -fx-background-color: #5117A9;
+    /* Text color
+    /* -fx-text-fill: white;
+    /*-fx-background-color: #ffffff;
+    /*-fx-border-color: #ccc;
     -fx-border-width: 1px;
-    -fx-padding: 10px;
+    -fx-padding: 10px; */
 }
 
 Button {
@@ -39,6 +39,9 @@ Button {
 Button:hover{
     -fx-background-color: #1AAE9E; /* Darker turquoise on hover */
 }
+Button:focused{
+    -fx-background-color: #1AAE9E; /* Darker turquoise on hover */
+}
 
 #titleLabel {
     /* Text color */
@@ -48,6 +51,16 @@ Button:hover{
     /*-fx-text-fill: #333;*/
     -fx-padding: 5px;
     /*-fx-background-color: #f0f0f0; !* Light Gray *!*/
+}
+.errorLabel {
+    -fx-text-fill: #a20000;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+}
+.confirmationLabel {
+    -fx-text-fill: #3700ff;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
 }
 
 .headerLabel {
@@ -68,7 +81,7 @@ ListView {
     -fx-text-fill: #333;
 }
 
-.date-picker .label {
+.date-picker .label .color-picker .color-picker-label{
     /* Your styling for the labels */
     -fx-font-size: 14px;
     -fx-text-fill: black;
@@ -77,35 +90,11 @@ ListView {
 
 .blueBox {
     -fx-background-color: #2F4F4F ; /* Blue background for VBox */
-
     -fx-border-radius: 20px; /* Rounded corners */
     -fx-background-radius: 20px;
     -fx-spacing: 10px; /* Added spacing between child nodes */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0); /* Soft shadow effect */
 }
-
-
-/*#titleLabel {*/
-/*    -fx-font-size: 24px; !* Larger font size for title *!*/
-/*    -fx-font-weight: bold; !* Bold font weight *!*/
-/*    -fx-text-fill: white; !* White text color *!*/
-/*    -fx-padding: 10px 20px; !* Adjusted padding *!*/
-/*    -fx-background-color: #1FC8C0; !* Turquoise background color *!*/
-/*    -fx-border-radius: 20px; !* Rounded corners *!*/
-/*    -fx-background-radius: 20px;*/
-/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
-/*}*/
-
-/*Button {*/
-/*    -fx-background-color: #1FC8C0; !* Turquoise button color *!*/
-/*    -fx-text-fill: white; !* White text color *!*/
-/*    -fx-font-size: 14px; !* Moderate font size *!*/
-/*    -fx-border-radius: 20px; !* Rounded corners *!*/
-/*    -fx-background-radius: 20px;*/
-/*    -fx-border-color: transparent; !* No border *!*/
-/*    -fx-border-width: 0; !* No border *!*/
-/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 2, 2); !* Subtle shadow effect *!*/
-/*}*/
 
 
 Label {
@@ -147,10 +136,6 @@ Text {
 }
 #involvingMe{
     -fx-background-color: #4CAF50;
-}
-
-#colorPicker {
-    -fx-text-fill: black;
 }
 
 .chart-pie-label {

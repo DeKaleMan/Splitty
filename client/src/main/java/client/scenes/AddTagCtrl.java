@@ -6,22 +6,29 @@ import commons.Tag;
 import commons.dto.TagDTO;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AddTagCtrl {
+public class AddTagCtrl implements Initializable {
     private ServerUtils serverUtils;
     private MainCtrl mainCtrl;
     private int eventId;
@@ -65,6 +72,13 @@ public class AddTagCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        ImageView save = new ImageView(new Image("save_icon-removebg-preview.png"));
+        save.setFitWidth(15);
+        save.setFitHeight(15);
+        applyChangesButton.setGraphic(save);
+    }
     public void cancel() {
         mainCtrl.showManageTags(eventId, addExpense, expense, splittyOverview);
     }
@@ -72,6 +86,10 @@ public class AddTagCtrl {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             cancel();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            applyChanges();
         }
     }
 
@@ -217,5 +235,6 @@ public class AddTagCtrl {
     public void setTitleText(String text) {
         title.setText(text);
     }
+
 
 }

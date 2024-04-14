@@ -10,6 +10,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
@@ -114,17 +116,17 @@ public class CreateEventCtrl {
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            if (checkDate(dateString)) {
+                date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            }
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
             dateEmptyError.setVisible(true);
             error = true;
-            return;
         } catch (Exception e) {
             dateEmptyError.setVisible(false);
             dateIncorrectError.setVisible(true);
             error = true;
-            return;
         }
         if (error) {
             return;
@@ -147,6 +149,10 @@ public class CreateEventCtrl {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             cancel();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            createEvent();
         }
     }
 
@@ -227,5 +233,13 @@ public class CreateEventCtrl {
             //this.nameField.setPromptText(txt);
             this.titleField.setPromptText(txt);
         });
+    }
+    public boolean checkDate(String s) {
+        for (char c : s.toCharArray()) {
+            if (Character.isLetter(c)) {
+                throw new RuntimeException();
+            }
+        }
+        return true;
     }
 }
