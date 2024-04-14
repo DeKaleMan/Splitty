@@ -221,13 +221,13 @@ public class SetLanguage {
         settingsCtrl.setLanguage(translate("Language", "en", lang));
         settingsCtrl.setSaveButton(translate("Save", "en", lang));
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
-        settingsCtrl.setLangInstructions(translate("Enter the languagecode or " +
+        settingsCtrl.setLangInstructions(translate("Enter the language code or " +
                 "the name of your imaginary language" +
                 "and an image for the flag of the language you want to add", "en", lang));
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         settingsCtrl.setLabelEmailToken(translate("Email password token", "en", lang));
-        settingsCtrl.setSendEmail(translate("default button", "en", lang));
-        settingsCtrl.setSucces(translate("Email succesfully send!", "en", lang));
+        settingsCtrl.setSendEmail(translate("Default email", "en", lang));
+        settingsCtrl.setSucces(translate("Email successfully sent!", "en", lang));
         settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
         System.out.println("settings translated");
     }
