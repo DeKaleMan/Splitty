@@ -80,7 +80,12 @@ public class SettingsCtrl {
     private Button sendEmail;
     @FXML
     private Label succes;
-
+    @FXML
+    private Label invalidEmailLabel;
+    @FXML
+    private Label invalidIbanLabel;
+    @FXML
+    private Label invalidBICLabel;
 
     private String newLang;
 
@@ -162,15 +167,35 @@ public class SettingsCtrl {
      * incorrect everything will be saved by writing it to the config file.
      */
     public void saveSettings() {
+        boolean error = false;
+
         String email = emailField.getText();
         String currency = currencyField.getText();
         String name = nameField.getText();
         String iban = ibanField.getText();
         String bic = bicField.getText();
         String emailToken = getToken.getText();
-        if (email == null || email.isEmpty()) {
-            email = null;
+
+        // email validation
+        if(email != null && !email.isEmpty() && (!email.contains("@") || !email.contains("."))){
+            showErrorBriefly(invalidEmailLabel);
+            error = true;
         }
+        // iban validation
+        if (iban != null && !iban.isEmpty() && (iban.length() < 15 || iban.length() > 34)){
+            showErrorBriefly(invalidIbanLabel);
+            error = true;
+        }
+        // bic validation
+        if(bic != null && !bic.isEmpty() && (bic.length() < 8 || bic.length() > 11)){
+            showErrorBriefly(invalidBICLabel);
+            error = true;
+        }
+        if (error) {
+            return;
+        }
+
+
         if (currency == null || (!currency.equals("EUR") &&
                 !currency.equals("CHF") && !currency.equals("USD"))) {
             incorrectCurrencyError.setVisible(true);
@@ -194,6 +219,13 @@ public class SettingsCtrl {
             mainCtrl.setConfirmationSettings();
         }
 
+    }
+
+    public void showErrorBriefly(Label errorLabel) {
+        errorLabel.setVisible(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> errorLabel.setVisible(false));
+        pause.play();
     }
 
     public void cancel() {

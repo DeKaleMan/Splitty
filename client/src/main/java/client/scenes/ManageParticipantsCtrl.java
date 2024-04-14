@@ -309,4 +309,10 @@ public class ManageParticipantsCtrl implements Initializable {
     public void editEvent(ActionEvent actionEvent) {
         mainCtrl.showEditEvent(eventId);
     }
+
+    public void setEditEvent(String translate) {
+        Platform.runLater(() -> {
+            this.editButton.setText(translate);
+        });
+    }
 }
