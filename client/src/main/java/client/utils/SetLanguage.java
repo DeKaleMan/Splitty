@@ -4,6 +4,9 @@ import client.scenes.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.image.Image;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
 
 import javax.inject.Inject;
@@ -354,8 +357,17 @@ public class SetLanguage {
 
     public Image getFlag(String lang) {
         Image image = null;
+        String folder;
         try {
-            String path = io.getFlagFolder() + File.separator + lang + "Flag.png";
+            if (getLanguages().contains(lang) || lang.equals("default")){
+                ResourceLoader resourceLoader = new DefaultResourceLoader();
+                folder = resourceLoader.getResource("/flags").getURI().getPath();
+            }
+            else{
+                folder = io.getFlagFolder();
+            }
+
+            String path = folder +  File.separator + lang + "Flag.png";
             File file = new File(path);
             if(!io.fileExists(file)){
                 throw new RuntimeException();
