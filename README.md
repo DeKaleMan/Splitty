@@ -1,17 +1,22 @@
-# OOPP Template Project
+# OOPP Project team 31
 
-This repository contains the template for the OOPP project. Please extend this README.md with instructions on how to run your project.
+## How to run the project
+You can run the project using gradle see below to find the command for your setup:
+1. Linux and Windows powershell: ./gradlew run (client) and ./gradlew bootRun (server)
+2. Windows command line: ./gradlew.bat run (client) and ./gradlew.bat bootRun (server)
+3. To build the project use ./gradlew build (Linux/powershell) and ./gradlew.bat build (windows command line)
 
-// how to run the project instructions // 
+## Important side notes
+1. DO NOT delete the language files on the server side
+2. We know that there is an enormous warning wall when entering some scenes, we have tried to fix it for 3 weeks but the only thing that we can conclude after research on the internet is that we are either stupid or that is it a JavaFX bug. It does not affect the way the app works so please ignore them.
+3. If you want to run multiple clients in the same project, run one from your terminal using the gradlew command, and run one client from intellij. This way 2 config files will be created because intellij and the terminal use a different location to generate the clientData folder that we generate.
 
-
-// hidden features (i dont think we have any) //
-**Ghost Participants**
+## **Ghost Participants**
 We will briefly explain how the participant system works. When a user creates an event they are automatically the host. They can invite others through email and themselves with an invite code. Other users may join the event and can use all the functionality like creating expenses, settling debts and managing tags. There is ane thing only the host can do, which is creating/deleting/editing ghost participants. Ghost participants are participants created by the host, there are no users linked through the app to ghost participants. The idea is that if a user creates an event and wants to add a person without the app, they can simply add them as a ghost participant and fill in the details themselves. For every other functionality ghost participants work the same as other users. 
 
 // where we have implemented long polling // 
 
-**The HCI features**
+## **The HCI features**
 Upon selected or when hovering over a button or item in a list the item or button will change colour so the user knows what they have selected. 
 Anything related to colour such as the red and green buttons, or the tags have appropriate text fill. When the background colour is darker the text is white, and the other way around. 
 We added icons at various places so the user finds certain features faster such as settings, admin and statistics.
