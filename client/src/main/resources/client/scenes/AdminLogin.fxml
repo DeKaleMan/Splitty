@@ -19,17 +19,8 @@
                   <Font size="15.0" />
                </font>
             </Text>
-            <TextField fx:id="urlField" onKeyPressed="#resetServerErrors" prefHeight="40.0" prefWidth="202.0" promptText="Server Url e.g. localhost:8080" />
             <PasswordField fx:id="passwordField" onKeyPressed="#resetPasswordError" prefHeight="40.0" prefWidth="200.0" promptText="Password" />
             <Button fx:id="signInButton" mnemonicParsing="false" onAction="#adminSignIn" prefHeight="25.0" prefWidth="130.0" text="Sign in" />
-            <Text fx:id="passwordInstructionLink" fill="#0000ee" onMouseClicked="#showPasswordInstructions" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="confirmationLabel" text="Don't know how to get a password?">
-               <font>
-                  <Font size="11.0" />
-               </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Text>
             <Label fx:id="passwordInstructionsText" alignment="TOP_LEFT" prefHeight="58.0" prefWidth="184.0" text="You can find your password in the console of your server instance" textAlignment="CENTER" wrapText="true">
                <VBox.margin>
                   <Insets top="20.0" />

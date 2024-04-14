@@ -348,6 +348,7 @@ public class MainCtrl {
             return;
         }
         adminOverviewCtrl.refreshEvents();
+        adminOverviewCtrl.resetServerTag();
         primaryStage.setTitle("Admin management overview");
         primaryStage.setScene(adminOverview);
     }
