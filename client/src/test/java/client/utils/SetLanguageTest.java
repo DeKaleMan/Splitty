@@ -86,7 +86,7 @@ public class SetLanguageTest {
         verify(startScreenCtrl).setJoinEventText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(17)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSplittyOverview() {
@@ -96,7 +96,7 @@ public class SetLanguageTest {
         verify(splittyOverviewCtrl).setmyDetails("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(16)).translate(anyString(), anyString(), anyString());
 
     }
     @Test
@@ -107,17 +107,17 @@ public class SetLanguageTest {
         verify(addExpenseCtrl).setSharedExpense("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(14)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(16)).translate(anyString(), anyString(), anyString());
     }
     @Test
-    public void testSetAdminLoging() {
+    public void testSetAdminLogin() {
         when(serverUtils.translate(anyString(), anyString(), anyString())).thenReturn("TranslatedText");
         setLanguage.setAdminLogin("en");
         verify(adminLoginCtrl).setBack("TranslatedText");
         verify(adminLoginCtrl).setPasswordField("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(6)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(8)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSetAdminOverview() {
@@ -127,7 +127,7 @@ public class SetLanguageTest {
         verify(adminOverviewCtrl).setImportEventButtonText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(8)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class SetLanguageTest {
         verify(createEventCtrl).setDateText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(7)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class SetLanguageTest {
         verify(settingsCtrl).setAddLanguage("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(13)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -182,7 +182,7 @@ public class SetLanguageTest {
         verify(invitationCtrl).setInviteCodeText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(8)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -226,7 +226,7 @@ public class SetLanguageTest {
         verify(editExpenseCtrl).setWhoPaid("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(14)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(16)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

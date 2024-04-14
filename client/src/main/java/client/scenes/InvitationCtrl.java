@@ -70,13 +70,24 @@ public class InvitationCtrl {
         inviteCode = "testInviteCode";
     }
 
+//    public void setDefaultButton(String txt){
+//        Platform.runLater(() -> {
+//            defaultButton.setText(txt);
+//        });
+//    }
+
+//    public void setDefaultLabel(String txt) {
+//        Platform.runLater(() -> {
+//            defaultLabel.setText(txt);
+//        });
+//    }
     public void setNoEmailCredentials(String txt){
-        noEmailCredentials.setText(txt);
+        Platform.runLater(()->{
+            noEmailCredentials.setText(txt);
+
+        });
     }
 
-    public void setNoEmail(String txt){
-        noEmail.setText(txt);
-    }
 
     public void initialize() {
         mainCtrl.setButtonGreenProperty(sendInvites);
@@ -208,6 +219,16 @@ public class InvitationCtrl {
     public void setEmailArea(String txt) {
         Platform.runLater(() -> {
             this.emailArea.setPromptText(txt);
+        });
+    }
+    public void setNoEmail(String txt) {
+        Platform.runLater(() -> {
+            this.noEmail.setText(txt);
+        });
+    }
+    public void setErrorNoValidEmail(String txt) {
+        Platform.runLater(() -> {
+            this.errorNoValidEmail.setText(txt);
         });
     }
 

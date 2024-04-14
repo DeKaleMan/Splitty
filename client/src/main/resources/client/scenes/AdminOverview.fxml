@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -7,23 +8,28 @@
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminOverviewCtrl">
    <children>
       <AnchorPane onMouseClicked="#abortImportMouse">
-         <Text fx:id="adminManagementOverviewText" layoutX="69.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin management overview">
+         <Label fx:id="adminManagementOverviewText" alignment="CENTER" layoutX="9.0" layoutY="14.0" prefHeight="51.0" prefWidth="582.0" text="Admin management overview">
             <font>
                <Font size="35.0" />
             </font>
-         </Text>
+         </Label>
          <ListView fx:id="eventList" layoutX="170.0" layoutY="106.0" onKeyPressed="#onKeyPressed" onMouseClicked="#handleMouseClick" prefHeight="270.0" prefWidth="260.0" />
-         <Button fx:id="importEventButton" layoutX="58.0" layoutY="106.0" mnemonicParsing="false" onAction="#importEvent" prefHeight="25.0" prefWidth="101.0" text="Import event" />
-         <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" prefHeight="25.0" prefWidth="90.0" text="Export event" />
-         <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Delete event" textFill="white" />
-         <Text fx:id="serverTag" layoutX="20.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server: Localhost:8080" wrappingWidth="150.0">
-            <font>
-               <Font size="14.0" />
-            </font>
-         </Text>
-         <Button fx:id="viewEventButton" layoutX="441.0" layoutY="106.0" mnemonicParsing="false" onAction="#viewEvent" prefHeight="25.0" prefWidth="90.0" text="View Event" />
+          <VBox alignment="TOP_RIGHT" layoutX="42.0" layoutY="106.0" prefHeight="161.0" prefWidth="129.0" spacing="5.0">
+              <Button fx:id="importEventButton" layoutX="58.0" layoutY="106.0" mnemonicParsing="false" onAction="#importEvent" text="Import event" wrapText="true" />
+              <Button fx:id="exportEventButton" layoutX="441.0" layoutY="145.0" mnemonicParsing="false" onAction="#exportEvent" text="Export event" wrapText="true" />
+              <Button fx:id="deleteEventButton" layoutX="441.0" layoutY="184.0" mnemonicParsing="false" onAction="#deleteEvent" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Delete event" textFill="white" wrapText="true" />
+            <padding>
+               <Insets right="5.0" />
+            </padding>
+          </VBox>
 
-         <Button fx:id="logOutButton" layoutX="20.0" layoutY="357.0" mnemonicParsing="false" onAction="#logOut" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Log Out" textFill="white" />
+          <VBox layoutX="430.0" layoutY="106.0" spacing="5.0">
+              <Button fx:id="viewEventButton" layoutX="441.0" layoutY="106.0" mnemonicParsing="false" onAction="#viewEvent" text="View Event" wrapText="true" />
+            <Button mnemonicParsing="false" onAction="#refreshEvents" prefHeight="25.0" prefWidth="101.0" text="Refresh events" wrapText="true" />
+            <padding>
+               <Insets top="5.0" />
+            </padding>
+          </VBox>
 
          <Label fx:id="noEventSelectedError" layoutX="472.0" layoutY="216.0" text="No event selected*" textFill="RED" visible="false" styleClass="errorLabel">
             <font>
@@ -32,14 +38,21 @@
          </Label>
           <HBox alignment="CENTER_RIGHT" layoutX="170.0" layoutY="69.0" prefHeight="25.0" prefWidth="260.0" spacing="15.0">
               <children>
-                  <Text fx:id="sortByText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort by:">
+                  <Label fx:id="sortByText" text="Sort by:">
                       <font>
                           <Font size="14.0" />
                       </font>
-                  </Text>
+                  </Label>
                   <ComboBox fx:id="sortComboBox" onAction="#updateEventSorting" prefHeight="25.0" prefWidth="116.0" />
               </children>
           </HBox>
+           <Label fx:id="serverTag" layoutX="42.0" layoutY="73.0" text="Server: Localhost:8080">
+           <font>
+               <Font size="14.0" />
+           </font>
+           </Label>
+
+           <Button fx:id="logOutButton" layoutX="534.0" layoutY="353.0" mnemonicParsing="false" onAction="#logOut" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Log Out" textFill="white" />
          <Button fx:id="refreshButton" layoutX="58.0" layoutY="145.0" mnemonicParsing="false" onAction="#refreshEvents" prefHeight="25.0" prefWidth="101.0" text="Refresh events" />
       </AnchorPane>
        <AnchorPane fx:id="jsonImportPane" visible="false">

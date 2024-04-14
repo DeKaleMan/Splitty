@@ -150,30 +150,30 @@ public abstract class ExpenseCtrl {
     }
 
     protected void setCurrencyUp() {
-        currencyComboBox.setItems(FXCollections.observableArrayList(Currency.EUR,Currency.CHF,Currency.USD));
+        currencyComboBox.setItems(FXCollections.observableArrayList(Currency.EUR, Currency.CHF, Currency.USD));
         currencyComboBox.setCellFactory(new Callback<ListView<Currency>, ListCell<Currency>>() {
             @Override
             public ListCell<Currency> call(ListView<Currency> currencyListView) {
-                return new ListCell<>(){
+                return new ListCell<>() {
                     @Override
                     protected void updateItem(Currency currency, boolean b) {
                         super.updateItem(currency, b);
-                        if(currency == null || b){
+                        if (currency == null || b) {
                             setText(null);
-                        }else{
+                        } else {
                             setText(currency.toString());
                         }
                     }
                 };
             }
         });
-        currencyComboBox.setButtonCell(new ListCell<>(){
+        currencyComboBox.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Currency currency, boolean b) {
                 super.updateItem(currency, b);
-                if(currency == null || b){
+                if (currency == null || b) {
                     setText("Select currency");
-                }else{
+                } else {
                     setText(currency.toString());
                 }
             }
@@ -197,17 +197,17 @@ public abstract class ExpenseCtrl {
                 if (empty || tag == null) {
                     setText(null);
                 } else {
-                    setText(tag.getName());
+                    setText(mainCtrl.translate(tag.getName()));
                 }
             }
         });
-        category.setButtonCell(new ListCell<Tag>(){
+        category.setButtonCell(new ListCell<Tag>() {
             @Override
             protected void updateItem(Tag tag, boolean b) {
                 super.updateItem(tag, b);
-                if(tag == null || b){
+                if (tag == null || b) {
                     setText("Select category");
-                }else{
+                } else {
                     setText("" + tag.getName());
                 }
             }
@@ -224,13 +224,13 @@ public abstract class ExpenseCtrl {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue,
                                 Boolean oldValue, Boolean newValue) {
-                if(newValue){
+                if (newValue) {
                     isSharedExpense = true;
                     selectAll.setVisible(true);
                     selectSome.setVisible(true);
                     howToSplit.setVisible(true);
                     receiverHBox.setVisible(false);
-                    if(selectSome.isSelected()) splitList.setVisible(true);
+                    if (selectSome.isSelected()) splitList.setVisible(true);
                 }
             }
         });
@@ -239,7 +239,7 @@ public abstract class ExpenseCtrl {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue,
                                 Boolean oldValue, Boolean newValue) {
-                if(newValue){
+                if (newValue) {
                     isSharedExpense = false;
                     selectAll.setVisible(false);
                     selectSome.setVisible(false);
@@ -287,22 +287,22 @@ public abstract class ExpenseCtrl {
     private void setReceiverListUp() {
         receiverListView.setItems(rest);
         receiverListView.setCellFactory(
-            new Callback<ListView<Participant>, ListCell<Participant>>() {
-                @Override
-                public ListCell<Participant> call(ListView<Participant> participantListView) {
-                    return new ListCell<>(){
-                        @Override
-                        protected void updateItem(Participant participant, boolean b) {
-                            super.updateItem(participant, b);
-                            if(participant == null || b){
-                                setText(null);
-                            }else{
-                                setText(participant.getName());
+                new Callback<ListView<Participant>, ListCell<Participant>>() {
+                    @Override
+                    public ListCell<Participant> call(ListView<Participant> participantListView) {
+                        return new ListCell<>() {
+                            @Override
+                            protected void updateItem(Participant participant, boolean b) {
+                                super.updateItem(participant, b);
+                                if (participant == null || b) {
+                                    setText(null);
+                                } else {
+                                    setText(participant.getName());
+                                }
                             }
-                        }
-                    };
-                }
-            });
+                        };
+                    }
+                });
     }
 
     protected Double getAmountDouble(Date date) {
@@ -313,24 +313,24 @@ public abstract class ExpenseCtrl {
                 amountError.setVisible(true);
                 return null;
             }
-            String amountText = amount.getText().replace(',','.');
+            String amountText = amount.getText().replace(',', '.');
             amountDouble = Double.parseDouble(amountText);
             if (amountDouble <= 0.0) {
                 amountError.setVisible(true);
                 amountError.setText("Amount cannot be negative or zero*");
                 return null;
             }
-            if (currencyComboBox.getValue() == null){
+            if (currencyComboBox.getValue() == null) {
                 System.out.println("Select currency");
                 return null;
             }
             amountDouble = mainCtrl.getAmountInDifferentCurrency(currencyComboBox.getValue(),
-                Currency.EUR,date,amountDouble);
+                    Currency.EUR, date, amountDouble);
         } catch (NumberFormatException e) {
             amountError.setVisible(true);
             amountError.setText("Not a number, format e.g 13.99");
             return null;
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             amountError.setVisible(true);
             amountError.setText(e.getMessage());
             return null;
@@ -412,7 +412,6 @@ public abstract class ExpenseCtrl {
     }
 
 
-
     public void setSceneTypeText(String text) {
         Platform.runLater(() -> {
             this.sceneTypeText.setText(text);
@@ -473,6 +472,12 @@ public abstract class ExpenseCtrl {
         });
     }
 
+    public void setSelectSome(String text) {
+        Platform.runLater(() -> {
+            this.selectSome.setText(text);
+        });
+    }
+
     public void setSelectWhoPaid(String text) {
         Platform.runLater(() -> {
             this.personComboBox.setPromptText(text);
@@ -493,15 +498,21 @@ public abstract class ExpenseCtrl {
     }
 
 
-    public void setSharedExpense(String txt){
+    public void setSharedExpense(String txt) {
         Platform.runLater(() -> {
             this.sharedExpense.setText(txt);
         });
     }
 
-    public void setGivingMoneyToSomeone(String txt){
+    public void setGivingMoneyToSomeone(String txt) {
         Platform.runLater(() -> {
             this.givingMoneyToSomeone.setText(txt);
+        });
+    }
+
+    public void setCommitExpenseError(String txt) {
+        Platform.runLater(() -> {
+            this.commitExpenseError.setText(txt);
         });
     }
 

@@ -16,12 +16,12 @@
         </Label>
         <Button fx:id="backButton" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.leftAnchor="10" />
 
-        <Pane layoutX="347.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
+        <Pane layoutX="350.0" layoutY="84.0" prefHeight="309.0" prefWidth="240.0" AnchorPane.rightAnchor="15.0">
             <children>
-                <ListView fx:id="participantListView" layoutX="46.0" layoutY="51.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="148.0" />
-                <HBox alignment="CENTER" layoutX="-16.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" spacing="10.0">
+                <ListView fx:id="participantListView" layoutX="20.0" layoutY="49.0" onKeyPressed="#onKeyPressed" prefHeight="200.0" prefWidth="200.0" />
+                <HBox alignment="CENTER" layoutX="-24.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" spacing="10.0">
                     <children>
-                        <Label fx:id="participants" styleClass="headerLabel" text="Participants">
+                        <Label fx:id="participants" text="Participants">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -41,18 +41,18 @@
                 </Label>
             </children>
         </Pane>
-        <Pane layoutX="14.0" layoutY="84.0" prefHeight="309.0" prefWidth="239.0">
+        <Pane layoutX="15.0" layoutY="84.0" prefHeight="309.0" prefWidth="240.0" AnchorPane.leftAnchor="15.0">
             <children>
-                <AnchorPane layoutX="5.0" layoutY="21.0" prefHeight="235.0" prefWidth="200.0">
+                <AnchorPane layoutX="1.0" layoutY="14.0" prefHeight="235.0" prefWidth="240.0">
                     <children>
-                        <TabPane fx:id="expensesTabPane" layoutX="10.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="expensesTabPane" layoutX="21.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
                                 <Tab fx:id="allExpenses" text="All" />
                                 <Tab fx:id="paidByMe" text="Paid by me" />
                                 <Tab fx:id="involvingMe" text="Including me" />
                             </tabs>
                         </TabPane>
-                        <HBox alignment="CENTER" layoutX="-9.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
+                        <HBox alignment="CENTER" layoutX="1.0" layoutY="-3.0" prefHeight="35.0" prefWidth="239.0" spacing="10.0">
                             <children>
                                 <Label fx:id="expenses" styleClass="label" text="Expenses">
                                     <font>
@@ -64,18 +64,23 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-                <HBox alignment="CENTER" layoutX="-2.0" layoutY="256.0" prefHeight="44.0" prefWidth="245.0" spacing="5.0">
+                <HBox alignment="CENTER" layoutX="-1.0" layoutY="249.0" prefHeight="26.0" prefWidth="245.0" spacing="5.0">
                     <children>
                         <Button fx:id="editExpenseButton" mnemonicParsing="false" onAction="#editExpense" text="Edit" />
                         <Button fx:id="deleteExpenseButton" mnemonicParsing="false" onAction="#deleteExpense" style="-fx-background-color: #c50000;" text="Delete" />
-                  <Button fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" visible="false" />
+                      </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="-1.0" layoutY="283.0" prefHeight="25.0" prefWidth="245.0" spacing="5.0">
+                    <children>
+                        <Button fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" visible="false" />
                     </children>
+
                 </HBox>
 
 
             </children>
         </Pane>
-        <VBox alignment="TOP_CENTER" layoutX="238.0" layoutY="157.0" prefHeight="227.0" prefWidth="124.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="139.0" prefHeight="227.0" prefWidth="114.0" spacing="10.0">
             <children>
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
                 <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
@@ -101,7 +106,7 @@
                 <Button fx:id="sendInvites" mnemonicParsing="false" onAction="#sendInvitesOnClick" text="Send invites" />
             </children>
         </HBox>
-        <HBox alignment="CENTER" layoutX="200.0" layoutY="62.0" prefHeight="26.0" prefWidth="200.0" spacing="5.0">
+        <HBox alignment="CENTER" layoutX="200.0" layoutY="60.0" prefHeight="26.0" prefWidth="200.0" spacing="5.0">
             <children>
                 <Label prefHeight="36.0" prefWidth="36.0" text="Code:">
                     <font>

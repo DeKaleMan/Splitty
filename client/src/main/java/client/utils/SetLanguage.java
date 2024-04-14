@@ -73,6 +73,7 @@ public class SetLanguage {
     public void changeTo(String lang) {
 
         new Thread(() -> {
+            startScreenCtrl.setProgress(true);
             System.out.println("Translate to: " + lang + "::\n");
             setMainScreen(lang);
             setSpittyoverview(lang);
@@ -91,6 +92,7 @@ public class SetLanguage {
             setEditEvent(lang);
             System.out.println("\nFINISHED\n");
             settingsCtrl.setLatch();
+            startScreenCtrl.setProgress(false);
         }).start();
 
     }
@@ -110,6 +112,8 @@ public class SetLanguage {
         startScreenCtrl.setCodeNotFoundError(translate("Event code not found", "en", lang));
         startScreenCtrl.setInvalidCodeError(translate("Event code is a number", "en", lang));
         startScreenCtrl.setSettingsSavedLabel(translate("Settings saved succesfully*", "en", lang));
+        startScreenCtrl.setCreateEventTextField(translate("Event name", "en", lang));
+        startScreenCtrl.setJoinEventTextField(translate("Invite code", "en", lang));
         startScreenCtrl.setAlreadyParticipantError(translate("You already participate in this event",
                 "en", lang));
         startScreenCtrl.setNoConnectionError(translate("Go to settings to check your connection to " +
@@ -136,6 +140,7 @@ public class SetLanguage {
         splittyOverviewCtrl.setmyDetails(translate("My details", "en", lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
         splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
+        splittyOverviewCtrl.setInvolvingMe(translate("Involving me", "en",lang));
 
         System.out.println("event overview translated");
     }
@@ -155,6 +160,8 @@ public class SetLanguage {
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
         addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
         addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        addExpenseCtrl.setSelectSome(translate("Select some", "en", lang));
+        editExpenseCtrl.setCommitExpenseError(translate("Unexpected error when editing expense*", "en", lang));
         System.out.println("addExpense translated");
     }
 
@@ -164,6 +171,8 @@ public class SetLanguage {
         adminLoginCtrl.setSignInButton(translate("Sign in", "en", lang));
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
         adminLoginCtrl.setBack(translate("Back", "en", lang));
+        adminLoginCtrl.setServerNotFoundError(translate("Server not found*", "en", lang));
+        adminLoginCtrl.setIncorrectPasswordError(translate("Incorrect password*", "en", lang));
         adminLoginCtrl.setPasswordInstructionsText(translate(
                 "You can find your password in the console of your server instance", "en", lang));
         System.out.println("admin login translated");
@@ -178,6 +187,7 @@ public class SetLanguage {
         adminOverviewCtrl.setViewEventButtonText(translate("View Event", "en", lang));
         adminOverviewCtrl.setSortByText(translate("Sort by:", "en", lang));
         adminOverviewCtrl.setLogOutButtonText(translate("Log Out", "en", lang));
+        adminOverviewCtrl.setNoEventSelectedError(translate("No event selected*", "en", lang));
         System.out.println("admin overview translated");
     }
 
@@ -186,10 +196,12 @@ public class SetLanguage {
         createEventCtrl.setDateText(translate("Date", "en", lang));
         createEventCtrl.setEventDescriptionText(translate("Event description", "en", lang));
         createEventCtrl.setEventDescriptionArea(translate("What is the event about...", "en", lang));
-        //createEventCtrl.setNameText(translate("Name", "en", lang));
+//        createEventCtrl.setNameText(translate("Name", "en", lang));
         createEventCtrl.setCreateButton(translate("Create event", "en", lang));
         createEventCtrl.setCancelButton(translate("Cancel", "en", lang));
         createEventCtrl.setRequired(translate("required", "en", lang));
+        createEventCtrl.setDateEmptyError(translate("Date required*", "en", lang));
+        createEventCtrl.setDateIncorrectError(translate("Invalid date, e.g 31-12-2023*", "en", lang));
         System.out.println("setCreateEvent translated");
     }
 
@@ -220,6 +232,7 @@ public class SetLanguage {
         settingsCtrl.setLanguage(translate("Language", "en", lang));
         settingsCtrl.setSaveButton(translate("Save", "en", lang));
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
+        settingsCtrl.setNameText(translate("Name", "en", lang));
         settingsCtrl.setLangInstructions(translate("Enter the language code or " +
                 "the name of your imaginary language" +
                 "and an image for the flag of the language you want to add", "en", lang));
@@ -228,6 +241,7 @@ public class SetLanguage {
         settingsCtrl.setSendEmail(translate("Default email", "en", lang));
         settingsCtrl.setSucces(translate("Email successfully sent!", "en", lang));
         settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
+        settingsCtrl.setConfirmButton(translate("Confirm", "en", lang));
         System.out.println("settings translated");
     }
 
@@ -248,11 +262,12 @@ public class SetLanguage {
         invitationCtrl.setInviteCodeText(translate("Invite Code:", "en", lang));
         invitationCtrl.setSendEmailInvitesText(translate("Send email invites:", "en", lang));
         invitationCtrl.setInviteCodeInstructions(translate("Invite people by passing " +
-                "the invite code:", "en", lang));
-        invitationCtrl.setEmailArea(translate("Add your emails to send an invite to", "en", lang));
+                "the invite code", "en", lang));
+        invitationCtrl.setEmailArea(translate("Add your emails to send an invite ", "en", lang));
         invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
         invitationCtrl.setNoEmailCredentials(translate("Specify your email credentials to send invites.", "en", lang));
         invitationCtrl.setNoEmail(translate("Please fill in an email address", "en", lang));
+        invitationCtrl.setErrorNoValidEmail(translate("This is not an valid email*", "en", lang));
         System.out.println("invitation translated");
     }
 
@@ -313,6 +328,8 @@ public class SetLanguage {
         editExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
         editExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
         editExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        editExpenseCtrl.setSelectSome(translate("Select some", "en", lang));
+        editExpenseCtrl.setCommitExpenseError(translate("Unexpected error when editing expense*", "en", lang));
         System.out.println("EditExpense translated");
     }
 

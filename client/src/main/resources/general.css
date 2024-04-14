@@ -72,7 +72,7 @@ Button:focused{
     -fx-text-fill: white;
 }
 
-ListView {
+.list-cell .radio-button  {
     /* Background color */
     /* -fx-background-color: #2E1C8A; */
     /*-fx-background-color: #ffffff; !* White *!*/
@@ -100,7 +100,10 @@ ListView {
 Label {
     -fx-text-fill: white; /* White text color */
 }
-Text {
+RadioButton {
+    -fx-text-fill: white; /* White text color */
+}
+.Text {
     -fx-text-fill: white; /* White text color */
 }
 

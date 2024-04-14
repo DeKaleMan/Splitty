@@ -28,11 +28,13 @@ public class AdminLoginCtrl {
     }
 
     @FXML
-    private Text signIn;
+    private Label signIn;
     @FXML
     private Button back;
     @FXML
-    private Text instruction;
+    private Label instruction;
+    @FXML
+    private Text passwordInstructionLink;
 
     @FXML
     private Button signInButton;
@@ -45,6 +47,11 @@ public class AdminLoginCtrl {
     public Label incorrectPasswordError;
     @FXML
     private Label passwordInstructionsText;
+
+    @FXML
+    public void showPasswordInstructions(){
+        this.passwordInstructionsText.setVisible(true);
+    }
 
     @FXML
     public void adminSignIn(ActionEvent actionEvent) {
@@ -99,6 +106,16 @@ public class AdminLoginCtrl {
     public void setPasswordInstructionsText(String txt) {
         Platform.runLater(() -> {
             this.passwordInstructionsText.setText(txt);
+        });
+    }
+    public void setServerNotFoundError(String txt) {
+        Platform.runLater(() -> {
+            this.serverNotFoundError.setText(txt);
+        });
+    }
+    public void setIncorrectPasswordError(String txt) {
+        Platform.runLater(() -> {
+            this.incorrectPasswordError.setText(txt);
         });
     }
 

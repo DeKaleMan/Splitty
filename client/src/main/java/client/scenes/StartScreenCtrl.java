@@ -341,6 +341,18 @@ public class StartScreenCtrl implements Initializable {
 
     }
 
+    public void setJoinEventTextField(String text) {
+        Platform.runLater(() -> {
+            this.joinEventTextField.setPromptText(text);
+        });
+    }
+
+    public void setCreateEventTextField(String text) {
+        Platform.runLater(() -> {
+            this.createEventTextField.setPromptText(text);
+        });
+    }
+
 
     public void setLanguageSelect() {
         translating = true;
@@ -351,7 +363,7 @@ public class StartScreenCtrl implements Initializable {
         if (mainCtrl.language == null) {
             mainCtrl.language = "en";
         }
-        if(!mainCtrl.languages.contains(mainCtrl.language)){
+        if (!mainCtrl.languages.contains(mainCtrl.language)) {
             mainCtrl.language = "en";
             config.setLanguage("en");
             config.write();
@@ -367,10 +379,11 @@ public class StartScreenCtrl implements Initializable {
 //        }
         translating = false;
     }
+
     private boolean starting = true;
+
     @FXML
     public void changeLanguage() {
-        setProgress();
         if (translating) return;
         try {
             if (languageSelect.getSelectionModel().getSelectedItem() != null) {
@@ -381,6 +394,7 @@ public class StartScreenCtrl implements Initializable {
                 starting = false;
                 //Language toLang = Language.valueOf(selected);
                 if (mainCtrl.languages.contains(selected)) {
+                    progress.setVisible(true);
                     config.setLanguage(selected);
                     config.write();
                     String toLang = selected;
@@ -390,7 +404,6 @@ public class StartScreenCtrl implements Initializable {
         } catch (Exception e) {
             System.out.println(e);
         }
-        setProgress();
         languageSelect.setVisible(false);
     }
 
@@ -409,12 +422,8 @@ public class StartScreenCtrl implements Initializable {
         });
     }
 
-    public void setProgress() {
-        if (this.progress.isVisible()) {
-            this.progress.setVisible(false);
-        } else {
-            this.progress.setVisible(false);
-        }
+    public void setProgress(boolean state) {
+        this.progress.setVisible(state);
     }
 
     public void showSettings() {

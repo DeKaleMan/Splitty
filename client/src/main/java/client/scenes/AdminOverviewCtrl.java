@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -50,7 +49,7 @@ public class AdminOverviewCtrl {
     private Button deleteEventButton;
 
     @FXML
-    private Text sortByText;
+    private Label sortByText;
 
     @FXML
     private ComboBox<String> sortComboBox;
@@ -60,9 +59,9 @@ public class AdminOverviewCtrl {
     @FXML
     public AnchorPane jsonImportPane;
     @FXML
-    private Text adminManagementOverviewText;
+    private Label adminManagementOverviewText;
     @FXML
-    private Text serverTag;
+    private Label serverTag;
     @FXML
     private Button logOutButton;
 
@@ -293,6 +292,12 @@ public class AdminOverviewCtrl {
     public void setSortByText(String txt) {
         Platform.runLater(() -> {
             sortByText.setText(txt);
+        });
+    }
+    @FXML
+    public void setNoEventSelectedError(String txt) {
+        Platform.runLater(() -> {
+            noEventSelectedError.setText(txt);
         });
     }
     public void setLogOutButtonText(String txt) {

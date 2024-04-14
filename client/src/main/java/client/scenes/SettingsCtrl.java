@@ -33,9 +33,13 @@ public class SettingsCtrl {
 
     private File flag;
     @FXML
-    public Button cancelButton;
+    private Button cancelButton;
     @FXML
-    public Button saveButton;
+    private Button confirmButton;
+    @FXML
+    private Label nameText;
+    @FXML
+    private Button saveButton;
     @FXML
     private TextField emailField;
     @FXML
@@ -106,15 +110,21 @@ public class SettingsCtrl {
     }
 
     public void setLabelEmailToken(String txt) {
-        labelEmailToken.setText(txt);
+        Platform.runLater(() -> {
+            labelEmailToken.setText(txt);
+        });
     }
 
     public void setSucces(String txt) {
-        succes.setText(txt);
+        Platform.runLater(() -> {
+            succes.setText(txt);
+        });
     }
 
     public void setSendEmail(String txt) {
-        sendEmail.setText(txt);
+        Platform.runLater(() -> {
+            sendEmail.setText(txt);
+        });
     }
 
     /**
@@ -285,6 +295,7 @@ public class SettingsCtrl {
             if (mainCtrl.languages.contains(newLang)) {
                 langTextfield.setPromptText("This language already exists");
                 langTextfield.setText("");
+                this.progressBar.setVisible(false);
                 return;
             }
             try {
@@ -295,8 +306,7 @@ public class SettingsCtrl {
                 this.latch = new CountDownLatch(1);
                 mainCtrl.changeLanguage(newLang);
                 langTextfield.setText("");
-                // Wait for the changeLanguage method to complete
-                //latch.await();
+
                 new Thread(() -> {
                     try {
                         progressBar.setVisible(true);
@@ -308,7 +318,6 @@ public class SettingsCtrl {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-
                     getJSONFile();
                 }).start();
 
@@ -482,7 +491,16 @@ public class SettingsCtrl {
             this.uploadFlag.setText(txt);
         });
     }
-
+    public void setNameText(String txt) {
+        Platform.runLater(() -> {
+            this.nameText.setText(txt);
+        });
+    }
+    public void setConfirmButton(String txt) {
+        Platform.runLater(() -> {
+            this.confirmButton.setText(txt);
+        });
+    }
 
     private String toStringBodyy(String fromEmail, String passwordToken){
         String s = "This email is from Splitty. We would like to tell " +

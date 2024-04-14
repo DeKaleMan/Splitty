@@ -13,7 +13,7 @@
         <AnchorPane layoutX="44.0" layoutY="89.0" prefHeight="132.0" prefWidth="266.0">
             <children>
                 <Button fx:id="create" contentDisplay="RIGHT" layoutX="35.0" layoutY="82.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="25.0" prefWidth="84.0" text="Create" />
-                <Label fx:id="createEventText" layoutX="14.0" layoutY="13.0" text="Create New Event">
+                <Label fx:id="createEventText" layoutY="14.0" text="Create New Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
@@ -27,7 +27,7 @@
         <AnchorPane layoutX="44.0" layoutY="221.0" prefHeight="132.0" prefWidth="228.0">
             <children>
                 <Button fx:id="join" contentDisplay="RIGHT" layoutX="33.0" layoutY="88.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="25.0" prefWidth="84.0" text="Join" wrapText="true" />
-                <Label fx:id="joinEventText" layoutX="14.0" layoutY="14.0" text="Join Event">
+                <Label fx:id="joinEventText" layoutY="14.0" text="Join Event">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
@@ -62,8 +62,8 @@
         </Pane>
         <ImageView fx:id="flag" fitHeight="25.0" fitWidth="50.0" layoutX="275.0" layoutY="15.0" onMouseClicked="#showLangOptions" pickOnBounds="true" />
         <ComboBox fx:id="languageSelect" layoutX="275.0" layoutY="14.0" onAction="#changeLanguage" prefHeight="25.0" prefWidth="50.0" promptText="en" visible="false" />
-        <ProgressIndicator fx:id="progress" layoutX="237.0" layoutY="12.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
-        <Label fx:id="settingsSavedLabel" layoutX="243.0" layoutY="358.0" text="Settings saved succesfully*" textFill="#3700ff" visible="false" styleClass="confirmationLabel">
+        <ProgressIndicator fx:id="progress" layoutX="333.0" layoutY="14.0" prefHeight="25.0" prefWidth="32.0" visible="false" />
+        <Label fx:id="settingsSavedLabel" layoutX="243.0" layoutY="358.0" text="Settings saved succesfully*" textFill="#3700ff" visible="false">
             <font>
                 <Font name="System Italic" size="10.0" />
             </font>
