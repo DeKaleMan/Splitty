@@ -26,7 +26,6 @@ import java.util.Comparator;
 
 public class AdminOverviewCtrl {
 
-
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
     private Config config;
