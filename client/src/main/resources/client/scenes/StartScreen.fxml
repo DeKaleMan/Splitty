@@ -17,7 +17,7 @@
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
-                <TextField fx:id="createEventTextField" onKeyPressed="#processKeyPressedCreateEvent" layoutX="35.0" layoutY="49.0" promptText="Event name" />
+                <TextField fx:id="createEventTextField" layoutX="35.0" layoutY="49.0" onKeyPressed="#processKeyPressedCreateEvent" promptText="Event name" />
             </children>
          <padding>
             <Insets left="5.0" right="5.0" />
@@ -33,9 +33,9 @@
                     </font></Label>
 
                 <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#processKeyPressJoinEvent" onMouseClicked="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
-                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" styleClass="errorLabel" />
-                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" styleClass="errorLabel"/>
-            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" styleClass="errorLabel" />
+                <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" styleClass="errorLabel" text="Event code is a number" textFill="RED" visible="false" />
+                <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" styleClass="errorLabel" text="Event code not found" textFill="RED" visible="false" />
+            <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" styleClass="errorLabel" text="You already participate in this event" textFill="RED" visible="false" />
             </children>
          <padding>
             <Insets right="5.0" />
@@ -68,7 +68,7 @@
                 <Font name="System Italic" size="10.0" />
             </font>
         </Label>
-      <Label fx:id="noConnectionError" layoutX="205.0" layoutY="332.0" prefHeight="53.0" prefWidth="159.0" text="Go to settings to check your connection to the server and try to refresh or change the server*" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
+      <Label fx:id="noConnectionError" layoutX="205.0" layoutY="332.0" prefWidth="159.0" styleClass="errorLabel" text="Go to settings to check your connection to the server and try to refresh or change the server*" textFill="RED" visible="false" wrapText="true" AnchorPane.bottomAnchor="20.0">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
