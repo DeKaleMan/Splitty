@@ -7,8 +7,6 @@
 <AnchorPane fx:id="background" onKeyPressed="#onKeyPressed" prefHeight="400.0" prefWidth="600.0" stylesheets="/general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsCtrl">
    <children>
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-
-      <Button fx:id="saveButton" layoutX="491.0" layoutY="26.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" AnchorPane.rightAnchor="14.0" />
       <VBox layoutX="346.0" layoutY="106.0" prefHeight="290.0" prefWidth="244.0" spacing="2.0">
 
          <children>
@@ -125,6 +123,8 @@
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
+
+      <Button fx:id="saveButton" layoutX="500.0" layoutY="360.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" AnchorPane.rightAnchor="14.666666666666629" />
       <Label fx:id="invalidIbanLabel" layoutX="257.0" layoutY="244.0" styleClass="errorLabel" text="invalid IBAN*" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
