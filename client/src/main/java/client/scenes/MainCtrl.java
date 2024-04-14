@@ -896,14 +896,6 @@ public class MainCtrl {
         this.addExpenseCtrl = addExpenseCtrl;
     }
 
-    public void setContactDetails(Scene contactDetails) {
-        this.contactDetails = contactDetails;
-    }
-
-    public void setContactDetailsCtrl(ContactDetailsCtrl contactDetailsCtrl) {
-        this.contactDetailsCtrl = contactDetailsCtrl;
-    }
-
     public void setAdminLogin(Scene adminLogin) {
         this.adminLogin = adminLogin;
     }

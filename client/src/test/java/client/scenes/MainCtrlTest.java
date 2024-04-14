@@ -17,17 +17,16 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import client.utils.SetLanguage;
-import commons.Event;
+import commons.*;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -79,15 +78,15 @@ public class MainCtrlTest {
     }
 
     @Test
-    void testGetStage(){
+    void testGetStage() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
 
-        assertSame(stage,sut.getPrimaryStage());
+        assertSame(stage, sut.getPrimaryStage());
     }
 
     @Test
-    void showServerStartup(){
+    void showServerStartup() {
         ServerCtrl serverCtrl = mock(ServerCtrl.class);
         sut.setServerCtrl(serverCtrl);
         Stage stage = mock(Stage.class);
@@ -103,7 +102,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void addLang(){
+    void addLang() {
         SetLanguage setLanguage = mock(SetLanguage.class);
         sut.setSetLanguage(setLanguage);
 
@@ -113,7 +112,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void changeLanguage(){
+    void changeLanguage() {
         SetLanguage setLanguage = mock(SetLanguage.class);
         SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
         StartScreenCtrl startScreenCtrl = mock(StartScreenCtrl.class);
@@ -131,25 +130,26 @@ public class MainCtrlTest {
     }
 
     @Test
-    void translateEN(){
+    void translateEN() {
         sut.setLanguage("en");
         String query = "English sentence";
         assertEquals(query, sut.translate(query));
     }
 
     @Test
-    void translateNotEN(){
+    void translateNotEN() {
         sut.setLanguage("other");
         SetLanguage setLanguage = mock(SetLanguage.class);
         sut.setSetLanguage(setLanguage);
         String query = "English sentence";
-        when(setLanguage.translate(anyString(),anyString(),anyString())).thenReturn("translation");
+        when(setLanguage.translate(anyString(), anyString(), anyString())).thenReturn(
+            "translation");
         assertEquals("translation", sut.translate(query));
-        verify(setLanguage).translate(query,"en", "other");
+        verify(setLanguage).translate(query, "en", "other");
     }
 
     @Test
-    void showSplittyOverview(){
+    void showSplittyOverview() {
         ServerUtils serverUtils = mock(ServerUtils.class);
         sut.setServerUtils(serverUtils);
         Event event = mock(Event.class);
@@ -170,7 +170,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showSplittyOverviewException(){
+    void showSplittyOverviewException() {
         ServerUtils serverUtils = mock(ServerUtils.class);
         sut.setServerUtils(serverUtils);
         when(serverUtils.getEventById(anyInt())).thenThrow(RuntimeException.class);
@@ -181,7 +181,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void setAdmin(){
+    void setAdmin() {
         SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
         sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
 
@@ -191,7 +191,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void getFlag(){
+    void getFlag() {
         sut.setLanguage("lang");
         SetLanguage setLanguage = mock(SetLanguage.class);
         sut.setSetLanguage(setLanguage);
@@ -202,7 +202,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void addFlag(){
+    void addFlag() {
         sut.setLanguage("lang");
         SetLanguage setLanguage = mock(SetLanguage.class);
         sut.setSetLanguage(setLanguage);
@@ -210,18 +210,18 @@ public class MainCtrlTest {
 
         sut.addFlag(image);
 
-        verify(setLanguage).addFlag(image,"lang");
+        verify(setLanguage).addFlag(image, "lang");
     }
 
     @Test
-    void getMyEventsNull(){
+    void getMyEventsNull() {
         sut.setSettingCtrl(null);
 
         assertNull(sut.getMyEvents());
     }
 
     @Test
-    void getMyEvents(){
+    void getMyEvents() {
         SettingsCtrl settingsCtrl = mock(SettingsCtrl.class);
         sut.setSettingCtrl(settingsCtrl);
         when(settingsCtrl.getId()).thenReturn("id");
@@ -231,14 +231,14 @@ public class MainCtrlTest {
         e1.id = 1;
         Event e2 = new Event();
         e2.id = 2;
-        List<Event> expected = List.of(e1,e2);
+        List<Event> expected = List.of(e1, e2);
         when(serverUtils.getEventsByParticipant("id")).thenReturn(expected);
 
         assertEquals(expected, sut.getMyEvents());
     }
 
     @Test
-    void showAddExpense(){
+    void showAddExpense() {
         Stage stage = mock(Stage.class);
         AddExpenseCtrl addExpenseCtrl = mock(AddExpenseCtrl.class);
         Scene addExpense = mock(Scene.class);
@@ -254,7 +254,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showAddExpenseException(){
+    void showAddExpenseException() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         doThrow(RuntimeException.class).when(stage).setTitle(anyString());
@@ -265,7 +265,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showInvitationNoConnection(){
+    void showInvitationNoConnection() {
         doReturn(false).when(sut).getConnection();
         doNothing().when(sut).showStartScreen();
 
@@ -275,7 +275,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showInvitation(){
+    void showInvitation() {
         doReturn(true).when(sut).getConnection();
         InvitationCtrl invitationCtrl = mock(InvitationCtrl.class);
         sut.setInvitationCtrl(invitationCtrl);
@@ -303,7 +303,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showAdminLoginNoConnection(){
+    void showAdminLoginNoConnection() {
         doReturn(false).when(sut).getConnection();
         doNothing().when(sut).showStartScreen();
 
@@ -313,7 +313,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showAdminLogin(){
+    void showAdminLogin() {
         doReturn(true).when(sut).getConnection();
 
         AdminLoginCtrl adminLoginCtrl = mock(AdminLoginCtrl.class);
@@ -331,7 +331,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showAdminOverviewNoConnection(){
+    void showAdminOverviewNoConnection() {
         doReturn(false).when(sut).getConnection();
         doNothing().when(sut).showStartScreen();
 
@@ -341,7 +341,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showAdminOverview(){
+    void showAdminOverview() {
         doReturn(true).when(sut).getConnection();
 
         AdminOverviewCtrl adminOverviewCtrl = mock(AdminOverviewCtrl.class);
@@ -360,7 +360,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showUserEventList(){
+    void showUserEventList() {
         UserEventListCtrl userEventListCtrl = mock(UserEventListCtrl.class);
         sut.setUserEventListCtrl(userEventListCtrl);
         Scene scene = mock(Scene.class);
@@ -377,7 +377,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showUserEventListException(){
+    void showUserEventListException() {
         UserEventListCtrl userEventListCtrl = mock(UserEventListCtrl.class);
         sut.setUserEventListCtrl(userEventListCtrl);
         doThrow(RuntimeException.class).when(userEventListCtrl).initialize();
@@ -388,7 +388,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showCreateEvent(){
+    void showCreateEvent() {
         doReturn(true).when(sut).getConnection();
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
@@ -406,8 +406,8 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showCreateEventNoConnection(){
-        doReturn(false ).when(sut).getConnection();
+    void showCreateEventNoConnection() {
+        doReturn(false).when(sut).getConnection();
         doNothing().when(sut).showStartScreen();
 
         sut.showCreateEvent("name");
@@ -416,7 +416,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showParticipantManager(){
+    void showParticipantManager() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         ManageParticipantsCtrl manageParticipantsCtrl = mock(ManageParticipantsCtrl.class);
@@ -432,7 +432,17 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showStatistics(){
+    void showParticipantManagerException() {
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        doThrow(RuntimeException.class).when(stage).setTitle(anyString());
+
+        sut.showParticipantManager(1);
+
+    }
+
+    @Test
+    void showStatistics() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         StatisticsCtrl statisticsCtrl = mock(StatisticsCtrl.class);
@@ -453,18 +463,18 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showStatisticsException(){
+    void showStatisticsException() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         doThrow(RuntimeException.class).when(stage).setTitle(anyString());
         doNothing().when(sut).checkConnection();
-        sut.showStatistics("title",1);
+        sut.showStatistics("title", 1);
 
         verify(sut).checkConnection();
     }
 
     @Test
-    void getCurrentEventCode(){
+    void getCurrentEventCode() {
         SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
         sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
         when(splittyOverviewCtrl.getCurrentEventId()).thenReturn(1);
@@ -473,14 +483,14 @@ public class MainCtrlTest {
     }
 
     @Test
-    void getCurrentEventCodeNull(){
+    void getCurrentEventCodeNull() {
         sut.setSplittyOverviewCtrl(null);
 
         assertThrows(RuntimeException.class, () -> sut.getCurrentEventCode());
     }
 
     @Test
-    void viewDebtsPerEvent(){
+    void viewDebtsPerEvent() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         DebtCtrl debtCtrl = mock(DebtCtrl.class);
@@ -496,7 +506,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void viewDebtsPerEventException(){
+    void viewDebtsPerEventException() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         doThrow(RuntimeException.class).when(stage).setTitle(anyString());
@@ -507,7 +517,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showSettings(){
+    void showSettings() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         SettingsCtrl settingsCtrl = mock(SettingsCtrl.class);
@@ -523,7 +533,7 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showEditEvent(){
+    void showEditEvent() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         EditEventCrtl editEventCrtl = mock(EditEventCrtl.class);
@@ -541,12 +551,401 @@ public class MainCtrlTest {
     }
 
     @Test
-    void showEditEventException(){
+    void showEditEventException() {
         Stage stage = mock(Stage.class);
         sut.setPrimaryStage(stage);
         doThrow(RuntimeException.class).when(stage).setTitle(anyString());
         doNothing().when(sut).checkConnection();
         sut.showEditEvent(1);
+
+        verify(sut).checkConnection();
+    }
+
+    @Test
+    void setConfirmationSettings() {
+        StartScreenCtrl startScreenCtrl = mock(StartScreenCtrl.class);
+        sut.setStartScreenCtrl(startScreenCtrl);
+
+        sut.setConfirmationSettings();
+        verify(startScreenCtrl).setSettingsSavedLabel();
+    }
+
+    @Test
+    void setConfirmationJoinedEvent() {
+        SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
+        sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
+        sut.setConfirmationJoinedEvent();
+
+        verify(splittyOverviewCtrl).setJoinedEventLabel();
+    }
+
+    @Test
+    void setConfirmationEventCreated() {
+        SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
+        sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
+
+        sut.setConfirmationEventCreated();
+
+        verify(splittyOverviewCtrl).setEventCreatedLabel();
+    }
+
+    @Test
+    void addEvent() {
+        StartScreenCtrl startScreenCtrl = mock(StartScreenCtrl.class);
+        sut.setStartScreenCtrl(startScreenCtrl);
+
+        Event e = new Event();
+        sut.addEvent(e);
+        verify(startScreenCtrl).addEvent(e);
+    }
+
+    @Test
+    void showEditExpense() {
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        EditExpenseCtrl editExpenseCtrl = mock(EditExpenseCtrl.class);
+        sut.setEditExpenseCtrl(editExpenseCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setEditExpense(scene);
+
+        Expense e = new Expense();
+        sut.showEditExpense(e);
+    }
+
+    @Test
+    void showEditExpenseException() {
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        doThrow(RuntimeException.class).when(stage).setTitle(anyString());
+        doNothing().when(sut).checkConnection();
+        sut.showEditExpense(new Expense());
+
+        verify(sut).checkConnection();
+    }
+
+    @Test
+    void getConnection() {
+        ServerUtils serverUtils = mock(ServerUtils.class);
+        sut.setServerUtils(serverUtils);
+
+        assertTrue(sut.getConnection());
+        verify(serverUtils).getAllEvents();
+    }
+
+    @Test
+    void getConnectionException() {
+        ServerUtils serverUtils = mock(ServerUtils.class);
+        sut.setServerUtils(serverUtils);
+        doThrow(RuntimeException.class).when(serverUtils).getAllEvents();
+
+        assertFalse(sut.getConnection());
+    }
+
+    @Test
+    void closeStage() {
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+
+        sut.closeStage();
+
+        verify(stage).close();
+    }
+
+    @Test
+    void getAmountInDifferentCurrencySameCurrency() {
+        double amount = 10.0;
+
+        assertEquals(amount,
+            sut.getAmountInDifferentCurrency(Currency.EUR, Currency.EUR, new Date(), amount),
+            0.001);
+    }
+
+    @Test
+    void getAmountInDifferentCurrencyNull() {
+        ServerUtils serverUtils = mock(ServerUtils.class);
+        sut.setServerUtils(serverUtils);
+        when(serverUtils.getConversion(any(), any(), anyString())).thenReturn(null);
+
+        assertThrows(RuntimeException.class, () -> {
+            sut.getAmountInDifferentCurrency(Currency.EUR, Currency.USD, new Date(), 10.0);
+        });
+    }
+
+    @Test
+    void getAmountInDifferentCurrency() {
+        ServerUtils serverUtils = mock(ServerUtils.class);
+        sut.setServerUtils(serverUtils);
+        when(serverUtils.getConversion(any(), any(), anyString())).thenReturn(new Conversion(
+            "", "", 10.0, ""
+        ));
+
+        assertEquals(100.0, sut.getAmountInDifferentCurrency(Currency.EUR, Currency.USD,
+            new Date(), 10.0), 0.001);
+    }
+
+    @Test
+    void getFormattedDoubleString() {
+        assertEquals("1.10", sut.getFormattedDoubleString(1.10320));
+    }
+
+    @Test
+    void showAddParticipantNoConnection() {
+        doReturn(false).when(sut).getConnection();
+        doNothing().when(sut).showStartScreen();
+
+        sut.showAddParticipant(1);
+
+        verify(sut).showStartScreen();
+    }
+
+    @Test
+    void showAddParticipant() {
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        AddParticipantCtrl addParticipantCtrl = mock(AddParticipantCtrl.class);
+        sut.setAddParticipantCtrl(addParticipantCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setAddParticipant(scene);
+
+        sut.showAddParticipant(1);
+
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Add participant");
+        verify(addParticipantCtrl).setEventId(1);
+    }
+
+    @Test
+    void showEditParticipant1NoConnection() {
+        doReturn(false).when(sut).getConnection();
+        doNothing().when(sut).showStartScreen();
+
+        sut.showEditParticipant(1, "uuid");
+
+        verify(sut).showStartScreen();
+    }
+
+    @Test
+    void showEditParticipant1() {
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        EditParticipantCtrl editParticipantCtrl = mock(EditParticipantCtrl.class);
+        sut.setEditParticipantCtrl(editParticipantCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setEditParticipant(scene);
+
+        sut.showEditParticipant(1, "uuid");
+
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Edit participant");
+        verify(editParticipantCtrl).setEventId(1);
+        verify(editParticipantCtrl).autoFillWithMyData("uuid");
+        verify(editParticipantCtrl).setHost(true);
+    }
+
+    @Test
+    void showEditParticipant2NoConnection() {
+        doReturn(false).when(sut).getConnection();
+        doNothing().when(sut).showStartScreen();
+
+        sut.showEditParticipant(1);
+
+        verify(sut).showStartScreen();
+    }
+
+    @Test
+    void showEditParticipant2() {
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        EditParticipantCtrl editParticipantCtrl = mock(EditParticipantCtrl.class);
+        sut.setEditParticipantCtrl(editParticipantCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setEditParticipant(scene);
+
+        sut.showEditParticipant(1);
+
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Edit participant");
+        verify(editParticipantCtrl).setEventId(1);
+        verify(editParticipantCtrl).autoFillWithMyData();
+        verify(editParticipantCtrl).setHost(false);
+    }
+
+    @Test
+    void showManageTags() {
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        ManageTagsCtrl manageTagsCtrl = mock(ManageTagsCtrl.class);
+        sut.setManageTagsCtrl(manageTagsCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setManageTags(scene);
+        Expense e = new Expense();
+
+        sut.showManageTags(1, true, e, false);
+
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Manage Tags");
+        verify(manageTagsCtrl).refreshList(1, true, e, false);
+    }
+
+    @Test
+    void showManageTagsException() {
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        doThrow(RuntimeException.class).when(stage).setScene(any());
+        doNothing().when(sut).checkConnection();
+        Expense e = new Expense();
+
+        sut.showManageTags(1, true, e, false);
+
+        verify(sut).checkConnection();
+    }
+
+    @Test
+    void showAddTag1NoConnection() {
+        doReturn(false).when(sut).getConnection();
+        doNothing().when(sut).showStartScreen();
+
+        sut.showAddTag(1, true, new Expense(), true);
+
+        verify(sut).showStartScreen();
+    }
+
+    @Test
+    void showAddTag1() {
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        AddTagCtrl addTagCtrl = mock(AddTagCtrl.class);
+        sut.setAddTagCtrl(addTagCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setAddTag(scene);
+        Expense e = new Expense();
+
+        sut.showAddTag(1, true, e, false);
+
+        verify(addTagCtrl).setFields(1, true, e, false);
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Add Tag");
+    }
+
+    @Test
+    void showAddTag2NoConnection() {
+        doReturn(false).when(sut).getConnection();
+        doNothing().when(sut).showStartScreen();
+
+        sut.showAddTag(new Tag(), 1, true, new Expense(), true);
+
+        verify(sut).showStartScreen();
+    }
+
+    @Test
+    void showAddTag2() {
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        AddTagCtrl addTagCtrl = mock(AddTagCtrl.class);
+        sut.setAddTagCtrl(addTagCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setAddTag(scene);
+        Expense e = new Expense();
+        Tag t = new Tag();
+
+        sut.showAddTag(t, 1, true, e, false);
+
+        verify(addTagCtrl).setFields(t, 1, true, e, false);
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Edit Tag");
+    }
+
+    @Test
+    void setConfirmationEditParticipant(){
+        ManageParticipantsCtrl manageParticipantsCtrl = mock(ManageParticipantsCtrl.class);
+        sut.setManageParticipantsCtrl(manageParticipantsCtrl);
+
+        sut.setConfirmationEditParticipant();
+        verify(manageParticipantsCtrl).setParticipantEditedConfirmation();
+    }
+
+    @Test
+    void setConfirmationAddParticipant(){
+        ManageParticipantsCtrl manageParticipantsCtrl = mock(ManageParticipantsCtrl.class);
+        sut.setManageParticipantsCtrl(manageParticipantsCtrl);
+
+        sut.setConfirmationAddParticipant();
+        verify(manageParticipantsCtrl).setParticipantAddedConfirmation();
+    }
+
+    @Test
+    void setConfirmationAddedTag(){
+        ManageTagsCtrl manageTagsCtrl = mock(ManageTagsCtrl.class);
+        sut.setManageTagsCtrl(manageTagsCtrl);
+
+        sut.setConfirmationAddedTag();
+        verify(manageTagsCtrl).setAddedTagConfirmation();
+    }
+
+    @Test
+    void setConfirmationEditedTag(){
+        ManageTagsCtrl manageTagsCtrl = mock(ManageTagsCtrl.class);
+        sut.setManageTagsCtrl(manageTagsCtrl);
+
+        sut.setConfirmationEditedTag();
+        verify(manageTagsCtrl).setEditedTagConfirmation();
+    }
+
+    @Test
+    void stopLongPolling(){
+        SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
+        sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
+
+        sut.stopLongPolling();
+        verify(splittyOverviewCtrl).stopUpdates();
+    }
+
+    @Test
+    void showUndoInOverview(){
+        SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
+        sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
+
+        sut.showUndoInOverview();
+        verify(splittyOverviewCtrl).showUndo();
+    }
+
+    @Test
+    void updateOverviewUndoStacks(){
+        SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
+        sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
+        Expense e = new Expense();
+        List<Debt> debts = new ArrayList<>();
+        String method = "method";
+
+        sut.updateOverviewUndoStacks(e,debts,method);
+
+        verify(splittyOverviewCtrl).pushUndoStacks(e,debts,method);
+    }
+
+    @Test
+    void setNewLang(){
+        ServerUtils serverUtils = mock(ServerUtils.class);
+        sut.setServerUtils(serverUtils);
+
+        sut.setNewLang("for", "new");
+
+        verify(serverUtils).setNewLang("for", "new");
+    }
+
+    @Test
+    void setNewLangException(){
+        ServerUtils serverUtils = mock(ServerUtils.class);
+        sut.setServerUtils(serverUtils);
+        doThrow(RuntimeException.class).when(serverUtils).setNewLang(anyString(), anyString());
+        doNothing().when(sut).checkConnection();
+
+        sut.setNewLang("for", "new");
 
         verify(sut).checkConnection();
     }
