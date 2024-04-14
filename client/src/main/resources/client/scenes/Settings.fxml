@@ -130,5 +130,5 @@
          </font>
       </Label>
    </children>
-      <Label fx:id="invalidBICLabel" visible="false" layoutX="256.0" layoutY="295.0" prefHeight="16.0" prefWidth="64.0" styleClass="errorLabel" text="invalid BIC*" textFill="RED">
+   <Label fx:id="invalidBICLabel" visible="false" layoutX="256.0" layoutY="295.0" prefHeight="16.0" prefWidth="64.0" styleClass="errorLabel" text="invalid BIC*" textFill="RED"> </Label>
 </AnchorPane>
