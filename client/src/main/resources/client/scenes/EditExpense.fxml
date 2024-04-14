@@ -82,12 +82,6 @@
             <font>
                 <Font size="10.0" />
             </font></Label>
-        <RadioButton fx:id="sharedExpense" layoutX="154.0" layoutY="40.0" mnemonicParsing="false" text="Shared expense">
-            <toggleGroup>
-                <ToggleGroup fx:id="expenseTypeToggles" />
-            </toggleGroup>
-        </RadioButton>
-        <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
 
 
     </children>

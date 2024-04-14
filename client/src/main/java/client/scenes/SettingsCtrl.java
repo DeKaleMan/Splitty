@@ -440,7 +440,6 @@ public class SettingsCtrl {
         });
     }
 
-
     private String toStringBodyy(String fromEmail, String passwordToken){
         String s = "This email is from splitty. We would like to tell " +
                 "you that your email and credentials are set up correctly." +

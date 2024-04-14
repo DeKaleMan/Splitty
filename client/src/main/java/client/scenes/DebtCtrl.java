@@ -7,6 +7,7 @@ import client.utils.ServerUtils;
 import commons.*;
 import commons.Currency;
 import commons.dto.PaymentDTO;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
