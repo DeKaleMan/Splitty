@@ -190,10 +190,22 @@ public class MainCtrl {
         ServerUtils.resetServer();
     }
 
+    public void setSettingCtrl(SettingsCtrl settingCtrl) {
+        this.settingCtrl = settingCtrl;
+    }
+
     public void showServerStartup(boolean connectionDown) {
         primaryStage.setScene(server);
         primaryStage.setTitle("Server");
         serverCtrl.setFields(connectionDown);
+    }
+
+    public void setServer(Scene server) {
+        this.server = server;
+    }
+
+    public void setServerCtrl(ServerCtrl serverCtrl) {
+        this.serverCtrl = serverCtrl;
     }
 
     private void setLanguage() {
@@ -215,6 +227,8 @@ public class MainCtrl {
         resetLanguage();
 
     }
+
+
 
     public void addLang(String newLang) {
         setLanguage.addLang(newLang);
@@ -239,6 +253,14 @@ public class MainCtrl {
         splittyOverviewCtrl.setLanguageSelect();
         startScreenCtrl.setLanguageSelect();
 
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public String translate(String query) {
@@ -467,7 +489,7 @@ public class MainCtrl {
             editEventCrtl.reset();
             primaryStage.setScene(editEvent);
         } catch (RuntimeException e) {
-            checkConnection();;
+            checkConnection();
         }
 
     }
@@ -834,5 +856,156 @@ public class MainCtrl {
         }
     }
 
+    public void setStartScreen(Scene startScreen) {
+        this.startScreen = startScreen;
+    }
+
+    public void setStartScreenCtrl(StartScreenCtrl startScreenCtrl) {
+        this.startScreenCtrl = startScreenCtrl;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public void setSetLanguage(SetLanguage setLanguage) {
+        this.setLanguage = setLanguage;
+    }
+
+    public void setInvitation(Scene invitation) {
+        this.invitation = invitation;
+    }
+
+    public void setInvitationCtrl(InvitationCtrl invitationCtrl) {
+        this.invitationCtrl = invitationCtrl;
+    }
+
+    public void setSplittyOverview(Scene splittyOverview) {
+        this.splittyOverview = splittyOverview;
+    }
+
+    public void setSplittyOverviewCtrl(SplittyOverviewCtrl splittyOverviewCtrl) {
+        this.splittyOverviewCtrl = splittyOverviewCtrl;
+    }
+
+    public void setAddExpense(Scene addExpense) {
+        this.addExpense = addExpense;
+    }
+
+    public void setAddExpenseCtrl(AddExpenseCtrl addExpenseCtrl) {
+        this.addExpenseCtrl = addExpenseCtrl;
+    }
+
+    public void setAdminLogin(Scene adminLogin) {
+        this.adminLogin = adminLogin;
+    }
+
+    public void setAdminLoginCtrl(AdminLoginCtrl adminLoginCtrl) {
+        this.adminLoginCtrl = adminLoginCtrl;
+    }
+
+    public void setAdminOverview(Scene adminOverview) {
+        this.adminOverview = adminOverview;
+    }
+
+    public void setAdminOverviewCtrl(AdminOverviewCtrl adminOverviewCtrl) {
+        this.adminOverviewCtrl = adminOverviewCtrl;
+    }
+
+    public void setManageParticipants(Scene manageParticipants) {
+        this.manageParticipants = manageParticipants;
+    }
+
+    public void setManageParticipantsCtrl(ManageParticipantsCtrl manageParticipantsCtrl) {
+        this.manageParticipantsCtrl = manageParticipantsCtrl;
+    }
+
+    public void setAddParticipant(Scene addParticipant) {
+        this.addParticipant = addParticipant;
+    }
+
+    public void setAddParticipantCtrl(AddParticipantCtrl addParticipantCtrl) {
+        this.addParticipantCtrl = addParticipantCtrl;
+    }
+
+    public void setEditParticipant(Scene editParticipant) {
+        this.editParticipant = editParticipant;
+    }
+
+    public void setEditParticipantCtrl(EditParticipantCtrl editParticipantCtrl) {
+        this.editParticipantCtrl = editParticipantCtrl;
+    }
+
+    public void setStatistics(Scene statistics) {
+        this.statistics = statistics;
+    }
+
+    public void setStatisticsCtrl(StatisticsCtrl statisticsCtrl) {
+        this.statisticsCtrl = statisticsCtrl;
+    }
+
+    public void setDebts(Scene debts) {
+        this.debts = debts;
+    }
+
+    public void setDebtCtrl(DebtCtrl debtCtrl) {
+        this.debtCtrl = debtCtrl;
+    }
+
+    public void setUserEventList(Scene userEventList) {
+        this.userEventList = userEventList;
+    }
+
+    public void setUserEventListCtrl(UserEventListCtrl userEventListCtrl) {
+        this.userEventListCtrl = userEventListCtrl;
+    }
+
+    public void setCreateEvent(Scene createEvent) {
+        this.createEvent = createEvent;
+    }
+
+    public void setEditEvent(Scene editEvent) {
+        this.editEvent = editEvent;
+    }
+
+    public void setEditEventCrtl(EditEventCrtl editEventCrtl) {
+        this.editEventCrtl = editEventCrtl;
+    }
+
+    public void setCreateEventCtrl(CreateEventCtrl createEventCtrl) {
+        this.createEventCtrl = createEventCtrl;
+    }
+
+    public void setEditExpense(Scene editExpense) {
+        this.editExpense = editExpense;
+    }
+
+    public void setEditExpenseCtrl(EditExpenseCtrl editExpenseCtrl) {
+        this.editExpenseCtrl = editExpenseCtrl;
+    }
+
+    public void setServerUtils(ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
+
+    public void setSettings(Scene settings) {
+        this.settings = settings;
+    }
+
+    public void setManageTags(Scene manageTags) {
+        this.manageTags = manageTags;
+    }
+
+    public void setManageTagsCtrl(ManageTagsCtrl manageTagsCtrl) {
+        this.manageTagsCtrl = manageTagsCtrl;
+    }
+
+    public void setAddTag(Scene addTag) {
+        this.addTag = addTag;
+    }
+
+    public void setAddTagCtrl(AddTagCtrl addTagCtrl) {
+        this.addTagCtrl = addTagCtrl;
+    }
 }
 
