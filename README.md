@@ -19,7 +19,5 @@ The entire app is filled with error messages which could pop up and inform the u
 Regarding expenses, undoing changes is possible for as far as the user made changes during their visit to the event. 
 
 Shortcuts
-In general: ESC mean to go back or to cancel. Enter on a selected item means to view or edit it. Double clicking also works.
-In the startscreen: 'Ctrl Shft N' to create a new event.
-In the settings: 'Ctrl s' to save settings
+In general: ESC mean to go back or to cancel. In listviews you can press enter or dubble click to view or edit the selected item, this does not work for the expense tab however. Ctrl S is to save changes or add or create a participant/tag/event. Ctrl Shft N is creating a new tag/event/tag/participant in the approprate scenes. In listviews you can also delete tags/participants or events for the admin when pressing Ctrl delete.
 
