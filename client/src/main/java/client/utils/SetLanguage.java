@@ -5,7 +5,6 @@ import client.scenes.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.image.Image;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.FileSystemResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 
 
