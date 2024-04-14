@@ -324,6 +324,7 @@ public class SplittyOverviewCtrl implements Initializable {
             visiblePause.setOnFinished(
                     event -> noExpenseError.setVisible(false)
             );
+            visiblePause.play();
             return;
         }
         mainCtrl.showEditExpense(toEdit);
@@ -538,6 +539,12 @@ public class SplittyOverviewCtrl implements Initializable {
         });
     }
 
+    public void setNoExpenseError(String text) {
+        Platform.runLater(() -> {
+            this.noExpenseError.setText(text);
+        });
+    }
+
     public void setParticipants(String text) {
         Platform.runLater(() -> {
             this.participants.setText(text);
@@ -612,6 +619,24 @@ public class SplittyOverviewCtrl implements Initializable {
     public void setLeaveButton(String text) {
         Platform.runLater(() -> {
             this.leaveButton.setText(text);
+        });
+    }
+
+    public void setManageTagsButton(String text) {
+        Platform.runLater(() -> {
+            this.manageTagsButton.setText(text);
+        });
+    }
+
+    public void setJoinedEventLabel(String text) {
+        Platform.runLater(() -> {
+            this.joinedEventLabel.setText(text);
+        });
+    }
+
+    public void setEventCreatedLabel(String text) {
+        Platform.runLater(() -> {
+            this.eventCreatedLabel.setText(text);
         });
     }
 
