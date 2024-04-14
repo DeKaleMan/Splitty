@@ -334,10 +334,10 @@ public class DebtCtrl implements Initializable {
     }
 
     public String makeBody(Payment payment) {
-            String nameEmailReceiver = payment.getPayer().getName();
-            String nameEvent = payment.getPayer().getEvent().getName();
-            String nameEmailSender = payment.getPayee().getName();
-            double balance = payment.getPayee().getBalance();
+        String nameEmailReceiver = payment.getPayer().getName();
+        String nameEvent = payment.getPayer().getEvent().getName();
+        String nameEmailSender = payment.getPayee().getName();
+        double balance = payment.getPayee().getBalance();
         String s = "Dear " + nameEmailReceiver + "\n\n" +
             "We would like to remind you that you still have an open debt in Splitty event " +
             nameEvent +
