@@ -32,6 +32,8 @@ public class SettingsCtrl {
     @FXML
     private Button cancelButton;
     @FXML
+    private Button confirmButton;
+    @FXML
     private Label nameText;
     @FXML
     private Button saveButton;
@@ -96,15 +98,21 @@ public class SettingsCtrl {
     }
 
     public void setLabelEmailToken(String txt) {
-        labelEmailToken.setText(txt);
+        Platform.runLater(() -> {
+            labelEmailToken.setText(txt);
+        });
     }
 
     public void setSucces(String txt) {
-        succes.setText(txt);
+        Platform.runLater(() -> {
+            succes.setText(txt);
+        });
     }
 
     public void setSendEmail(String txt) {
-        sendEmail.setText(txt);
+        Platform.runLater(() -> {
+            sendEmail.setText(txt);
+        });
     }
 
     /**
@@ -238,6 +246,7 @@ public class SettingsCtrl {
             if (mainCtrl.languages.contains(newLang)) {
                 langTextfield.setPromptText("This language already exists");
                 langTextfield.setText("");
+                this.progressBar.setVisible(false);
                 return;
             }
             try {
@@ -437,6 +446,11 @@ public class SettingsCtrl {
     public void setNameText(String txt) {
         Platform.runLater(() -> {
             this.nameText.setText(txt);
+        });
+    }
+    public void setConfirmButton(String txt) {
+        Platform.runLater(() -> {
+            this.confirmButton.setText(txt);
         });
     }
 

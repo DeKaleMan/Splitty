@@ -30,7 +30,7 @@
                </font>
             </Label>
             <TextField fx:id="getToken" prefHeight="26.0" prefWidth="232.0" />
-            <Button fx:id="sendEmail" mnemonicParsing="false" onAction="#sendDefaultEmail" prefHeight="26.0" prefWidth="90.0" text="default email" />
+            <Button fx:id="sendEmail" mnemonicParsing="false" onAction="#sendDefaultEmail" text="default email" />
          </children>
       </VBox>
       <VBox layoutX="55.0" layoutY="54.0" prefHeight="324.0" prefWidth="188.0">
@@ -102,7 +102,7 @@
                <TextArea fx:id="addedLang" layoutY="14.0" />
             </content>
          </ScrollPane>
-         <Button mnemonicParsing="false" onAction="#confirmLang" text="Confirm" />
+         <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmLang" text="Confirm" style="-fx-background-color: #1AAE9E" />
       </VBox>
       <Label layoutX="346.0" layoutY="107.0" prefHeight="0.0" prefWidth="188.0">
          <font>

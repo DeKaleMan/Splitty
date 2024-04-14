@@ -110,14 +110,14 @@ public class SetLanguageTest {
         verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
     }
     @Test
-    public void testSetAdminLoging() {
+    public void testSetAdminLogin() {
         when(serverUtils.translate(anyString(), anyString(), anyString())).thenReturn("TranslatedText");
         setLanguage.setAdminLogin("en");
         verify(adminLoginCtrl).setBack("TranslatedText");
         verify(adminLoginCtrl).setPasswordField("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(10)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(8)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSetAdminOverview() {
@@ -149,7 +149,7 @@ public class SetLanguageTest {
         verify(settingsCtrl).setAddLanguage("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(13)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

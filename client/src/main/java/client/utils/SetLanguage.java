@@ -233,9 +233,10 @@ public class SetLanguage {
                 "and an image for the flag of the language you want to add", "en", lang));
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         settingsCtrl.setLabelEmailToken(translate("Email password token", "en", lang));
-        settingsCtrl.setSendEmail(translate("default button", "en", lang));
-        settingsCtrl.setSucces(translate("Email succesfully send!", "en", lang));
+        settingsCtrl.setSendEmail(translate("default email", "en", lang));
+        settingsCtrl.setSucces(translate("Email succesfully sent!", "en", lang));
         settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
+        settingsCtrl.setConfirmButton(translate("Confirm", "en", lang));
         System.out.println("settings translated");
     }
 
