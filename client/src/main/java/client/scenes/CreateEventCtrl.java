@@ -117,7 +117,7 @@ public class CreateEventCtrl {
                 throw new IllegalArgumentException();
             }
 //            if (checkDate(datePicker.getEditor().getText())) {
-                date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 //            }
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
