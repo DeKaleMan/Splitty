@@ -1,4 +1,4 @@
-package client.scenes;
+package client.utils;
 
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
@@ -8,7 +8,7 @@ import org.simplejavamail.mailer.MailerBuilder;
 
 public class Mail {
 
-    public static Email makeEmail(String fromEmail, String toEmail, String subject, String body){
+    public Email makeEmail(String fromEmail, String toEmail, String subject, String body){
         Email email = EmailBuilder.startingBlank()
                 .from(fromEmail)
                 .to(toEmail)
@@ -20,7 +20,7 @@ public class Mail {
         return email;
     }
 
-    public static Mailer getSenderInfo(String host, int port, String userEmail, String passwordToken){
+    public Mailer getSenderInfo(String host, int port, String userEmail, String passwordToken){
         Mailer mailerInfo = MailerBuilder
                 .withSMTPServerHost(host)
                 .withSMTPServerPort(port)
@@ -31,7 +31,7 @@ public class Mail {
         return mailerInfo;
     }
 
-    public static void mailSending(Email email, Mailer mailerInfo){
+    public void mailSending(Email email, Mailer mailerInfo){
         mailerInfo.sendMail(email);
         System.out.println("an Email has been succesfully send");
     }

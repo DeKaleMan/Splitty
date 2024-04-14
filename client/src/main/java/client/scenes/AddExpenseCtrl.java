@@ -6,6 +6,7 @@ import commons.*;
 import commons.Currency;
 import javafx.animation.PauseTransition;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,6 +14,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.util.Callback;
@@ -48,7 +53,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     @FXML
     protected ComboBox<Tag> category;
     @FXML
-    public Button addTagButton;
+    protected Button addTagButton;
 
     @FXML
     protected Label sceneTypeText;
@@ -104,7 +109,7 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     public Expense getExpense() {
         Date date = getDate();
-        boolean error;
+        boolean error = false;
         error = date == null;
         Tag tag = getTag();
         Participant payer = personComboBox.getValue();
@@ -137,11 +142,13 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
 
     @FXML
     public void addExpense() {
-        expenseLoading.setVisible(true);
-        new Thread(() -> {
+        Platform.runLater(() -> {
             try {
                 //add to database
                 Expense e = getExpense();
+                if (e == null) {
+                    return;
+                }
                 serverUtils.generatePaymentsForEvent(eventId);
                 mainCtrl.updateOverviewUndoStacks(e, new ArrayList<>(), "add");
                 mainCtrl.showUndoInOverview();
@@ -154,7 +161,8 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
                 visiblePause.setOnFinished(event1 -> commitExpenseError.setVisible(false));
                 visiblePause.play();
             }
-        }).start();
+        });
+
     }
 
     void setSplitListUp() {
@@ -221,6 +229,14 @@ public class AddExpenseCtrl extends ExpenseCtrl implements Initializable {
     private void tagRefresh() {
         setTagsUp();
         category.setValue(null);
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent press) {
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            addExpense();
+        }
     }
 
     public void showManageTags() {

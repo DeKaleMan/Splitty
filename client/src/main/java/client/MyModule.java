@@ -17,6 +17,7 @@ package client;
 
 import client.scenes.*;
 import client.utils.Config;
+import client.utils.Mail;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -45,5 +46,6 @@ public class MyModule implements Module {
         binder.bind(EditEventCrtl.class).in(Scopes.SINGLETON);
         binder.bind(EditExpenseCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(Mail.class).in(Scopes.SINGLETON);
     }
 }

@@ -1,20 +1,23 @@
 package client.scenes;
 
 import client.utils.Config;
+import client.utils.Mail;
 import commons.Currency;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import org.simplejavamail.api.email.Email;
-import org.simplejavamail.api.mailer.Mailer;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.Mailer;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -95,6 +98,10 @@ public class SettingsCtrl {
     public void initialize() {
         mainCtrl.setButtonRedProperty(cancelButton);
         mainCtrl.setButtonGreenProperty(saveButton);
+        ImageView save = new ImageView(new Image("save_icon-removebg-preview.png"));
+        save.setFitWidth(15);
+        save.setFitHeight(15);
+        saveButton.setGraphic(save);
     }
 
     public void setLabelEmailToken(String txt) {
@@ -145,9 +152,20 @@ public class SettingsCtrl {
         } else {
             getToken.setText("");
         }
+        sendEmailVisibility();
         currencyField.setText(config.getCurrency().toString());
         languageText.setText(config.getLanguage());
     }
+
+    private void sendEmailVisibility() {
+        if(config.getEmail() == null || config.getEmail().isEmpty()
+            || config.getEmailToken() == null || config.getEmailToken().isEmpty()){
+            sendEmail.setVisible(false);
+        }else{
+            sendEmail.setVisible(true);
+        }
+    }
+
 
     /**
      * The method correlated to the save settings button. Every field is retrieved and if nothing is
@@ -182,13 +200,17 @@ public class SettingsCtrl {
         if (noConnection) {
             mainCtrl.showServerStartup(true);
         } else {
-            back();
+            cancel();
             mainCtrl.setConfirmationSettings();
         }
 
     }
 
-    public void back() {
+    public void cancel() {
+        if (!mainCtrl.getConnection()) {
+            noConnectionError();
+            return;
+        }
         succes.setVisible(false);
         mainCtrl.showStartScreen();
     }
@@ -295,18 +317,17 @@ public class SettingsCtrl {
             String toEmail = config.getEmail();
             String passwordToken = config.getEmailToken();
             String host = "smtp.gmail.com";
-            String emailSubject = "configuration email splitty";
+            String emailSubject = "Configuration email Splitty";
             String emailBody = toStringBodyy(fromEmail, passwordToken);
             int port = 587;
             Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
             Email email = mail.makeEmail(fromEmail, toEmail, emailSubject, emailBody);
             mail.mailSending(email, mailer);
-            System.out.println("email has been send correctly");
+            System.out.println("email has been sent correctly");
             succes.setVisible(true);
         } catch (RuntimeException e) {
             getToken.setText("password does not match the email");
             System.out.println("could not make a Mailer");
-            e.printStackTrace();
         } catch (Exception e) {
             emailField.setText("something wrong with email");
         }
@@ -358,7 +379,7 @@ public class SettingsCtrl {
     @FXML
     public void onKeyPressed (KeyEvent press){
         if (press.getCode() == KeyCode.ESCAPE) {
-            back();
+            cancel();
         }
         KeyCodeCombination k = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         if (k.match(press)) {
@@ -455,17 +476,17 @@ public class SettingsCtrl {
     }
 
     private String toStringBodyy(String fromEmail, String passwordToken){
-        String s = "This email is from splitty. We would like to tell " +
+        String s = "This email is from Splitty. We would like to tell " +
                 "you that your email and credentials are set up correctly." +
                 "\n \n" +
-                "Your credetials are:\n" +
+                "Your credentials are:\n" +
                 "email: " + fromEmail + "\n" +
                 "password token: " + passwordToken +
                 "\n \n" +
                 "From now on you can this email to send invites or " +
-                "send payment invitations." +
+                "send payment reminders." +
                 "\n \n" +
-                "sincerly, Team Splitty";
+                "Sincerely, Team Splitty";
 
         return s;
     }

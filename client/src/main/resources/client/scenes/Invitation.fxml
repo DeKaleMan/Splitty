@@ -31,8 +31,7 @@
 <!--      <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="55.0" layoutY="110.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />-->
       <Label fx:id="inviteCodeInstructions" alignment="TOP_CENTER" layoutX="53.0" layoutY="107.0" prefHeight="55.0" prefWidth="215.0" text="Invite people by passing the invite code:" wrapText="true" />
       <Label fx:id="noEmail" layoutX="320.0" layoutY="19.0" prefHeight="35.0" prefWidth="200.0" text="please fill in an email address" visible="false" />
-      <Button fx:id="defaultButton" layoutX="83.0" layoutY="342.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="122.0" text="Button" />
-      <Label fx:id="defaultLabel" layoutX="71.0" layoutY="283.0" prefHeight="62.0" prefWidth="148.0" text="not sure if your email is configured? Use this button" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="noEmailCredentials" layoutX="346.0" layoutY="182.0" prefHeight="62.0" prefWidth="148.0" text="Specify your email credentials to send invites." textAlignment="CENTER" textFill="#c50000" visible="false" wrapText="true" />
       <Label fx:id="errorNoValidEmail" layoutX="320.0" layoutY="45.0" prefHeight="27.0" prefWidth="200.0" text="This is not an valid email" visible="false">
          <font>
             <Font size="14.0" />

@@ -11,6 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -25,7 +27,6 @@ import java.util.Comparator;
 
 public class AdminOverviewCtrl {
 
-
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
     private Config config;
@@ -37,6 +38,8 @@ public class AdminOverviewCtrl {
 
     @FXML
     private Button viewEventButton;
+    @FXML
+    public Button refreshButton;
 
     @FXML
     private Button exportEventButton;
@@ -71,6 +74,7 @@ public class AdminOverviewCtrl {
 
     @FXML
     public void initialize() {
+        setImage();
         // set buttons
         mainCtrl.setButtonRedProperty(deleteEventButton);
         mainCtrl.setButtonRedProperty(logOutButton);
@@ -95,6 +99,25 @@ public class AdminOverviewCtrl {
             }
         });
         refreshEvents();
+    }
+
+    private void setImage() {
+        ImageView export = new ImageView(new Image("exportIcon.png"));
+        export.setFitWidth(15);
+        export.setFitHeight(15);
+        exportEventButton.setGraphic(export);
+        ImageView importIcon = new ImageView(new Image("importIcon.png"));
+        importIcon.setFitWidth(15);
+        importIcon.setFitHeight(15);
+        importEventButton.setGraphic(importIcon);
+        ImageView refresh = new ImageView(new Image("refreshIcon.jpg"));
+        refresh.setFitWidth(15);
+        refresh.setFitHeight(15);
+        refreshButton.setGraphic(refresh);
+        ImageView trash = new ImageView(new Image("trashIcon.png"));
+        trash.setFitWidth(14);
+        trash.setFitHeight(14);
+        deleteEventButton.setGraphic(trash);
     }
 
     @FXML
@@ -285,6 +308,17 @@ public class AdminOverviewCtrl {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             logOut();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            if (eventList.getSelectionModel().getSelectedItem() != null) {
+                deleteEvent();
+            }
+        }
+        if (press.getCode() == KeyCode.ENTER) {
+            if (eventList.getSelectionModel().getSelectedItem() != null) {
+                viewEvent();
+            }
         }
     }
     @FXML

@@ -234,13 +234,13 @@ public class SetLanguage {
         settingsCtrl.setSaveButton(translate("Save", "en", lang));
         settingsCtrl.setCancelButton(translate("Cancel", "en", lang));
         settingsCtrl.setNameText(translate("Name", "en", lang));
-        settingsCtrl.setLangInstructions(translate("Enter the languagecode or " +
+        settingsCtrl.setLangInstructions(translate("Enter the language code or " +
                 "the name of your imaginary language" +
                 "and an image for the flag of the language you want to add", "en", lang));
         settingsCtrl.setChangServerButton(translate("Change server", "en", lang));
         settingsCtrl.setLabelEmailToken(translate("Email password token", "en", lang));
-        settingsCtrl.setSendEmail(translate("default email", "en", lang));
-        settingsCtrl.setSucces(translate("Email succesfully sent!", "en", lang));
+        settingsCtrl.setSendEmail(translate("Default email", "en", lang));
+        settingsCtrl.setSucces(translate("Email successfully sent!", "en", lang));
         settingsCtrl.setUploadFlag(translate("Upload flag", "en", lang));
         settingsCtrl.setConfirmButton(translate("Confirm", "en", lang));
         System.out.println("settings translated");
@@ -266,8 +266,7 @@ public class SetLanguage {
                 "the invite code", "en", lang));
         invitationCtrl.setEmailArea(translate("Add your emails to send an invite ", "en", lang));
         invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
-        invitationCtrl.setDefaultButton(translate("check email works", "en", lang));
-        invitationCtrl.setDefaultLabel(translate("not sure if your email is configured? Use this button", "en", lang));
+        invitationCtrl.setNoEmailCredentials(translate("Specify your email credentials to send invites.", "en", lang));
         invitationCtrl.setNoEmail(translate("Please fill in an email address", "en", lang));
         invitationCtrl.setErrorNoValidEmail(translate("This is not an valid email*", "en", lang));
         System.out.println("invitation translated");

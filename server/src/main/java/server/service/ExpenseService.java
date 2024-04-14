@@ -2,6 +2,7 @@ package server.service;
 
 import commons.*;
 import commons.dto.ExpenseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
@@ -18,6 +19,7 @@ public class ExpenseService {
 
     private final ParticipantRepository participantRepo;
 
+    @Autowired
     public ExpenseService(ExpenseRepository expenseRepo, EventRepository eventRepo,
                              ParticipantRepository participantRepo) {
         this.expenseRepo = expenseRepo;

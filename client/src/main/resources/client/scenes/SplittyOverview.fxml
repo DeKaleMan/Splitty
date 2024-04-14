@@ -29,12 +29,12 @@
                         <Button fx:id="hostOptionsButton" mnemonicParsing="false" onAction="#showParticipantManager" text="Host options" wrapText="true" />
                     </children>
                 </HBox>
-                <Label fx:id="eventCreatedLabel" layoutX="120.0" layoutY="288.0" text="Event created successfully*" textFill="#3700ff" visible="false">
+                <Label fx:id="eventCreatedLabel" layoutX="120.0" layoutY="288.0" styleClass="confirmationLabel" text="Event created successfully*" textFill="#3700ff" visible="false">
                     <font>
                         <Font size="10.0" />
                     </font>
                 </Label>
-                <Label fx:id="joinedEventLabel" layoutX="112.0" layoutY="280.0" text="Event joined successfully#" textFill="#3700ff" visible="false">
+                <Label fx:id="joinedEventLabel" layoutX="112.0" layoutY="280.0" styleClass="confirmationLabel" text="Event joined successfully#" textFill="#3700ff" visible="false">
                     <font>
                         <Font size="10.0" />
                     </font>
@@ -80,7 +80,7 @@
 
             </children>
         </Pane>
-        <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="139.0" prefHeight="200.0" prefWidth="114.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="139.0" prefHeight="227.0" prefWidth="114.0" spacing="10.0">
             <children>
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" wrapText="true" />
                 <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" wrapText="true" />
@@ -89,12 +89,12 @@
                 <Button fx:id="manageTagsButton" mnemonicParsing="false" onAction="#viewManageTags" text="Manage Tags" />
             </children>
         </VBox>
-        <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" text="No expense selected*" textFill="RED" visible="false">
+        <Label fx:id="noExpenseError" layoutX="188.0" layoutY="360.0" styleClass="errorLabel" text="No expense selected*" textFill="RED" visible="false">
             <font>
                 <Font size="10.0" />
             </font>
         </Label>
-        <Label fx:id="expenseNotDeletedError" layoutX="188.0" layoutY="360.0" text="Expense could not be deleted*" textFill="RED" visible="false">
+        <Label fx:id="expenseNotDeletedError" layoutX="188.0" layoutY="360.0" styleClass="errorLabel" text="Expense could not be deleted*" textFill="RED" visible="false">
             <font>
                 <Font size="10.0" />
             </font>

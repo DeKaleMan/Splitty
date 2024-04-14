@@ -322,6 +322,7 @@ public class MainCtrl {
             showStartScreen();
             return;
         }
+        invitationCtrl.refresh();
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
         Event event = serverUtils.getEventById(eventID);
@@ -447,7 +448,6 @@ public class MainCtrl {
             primaryStage.setScene(debts);
             debtCtrl.refresh(eventCode);
         } catch (RuntimeException e) {
-            e.printStackTrace();
             checkConnection();
         }
     }
@@ -460,11 +460,16 @@ public class MainCtrl {
 
 
     public void showEditEvent(int eventID) {
-        primaryStage.setTitle("EditEvent");
-        editEventCrtl.setEventId(eventID);
-        editEventCrtl.setOldEventName();
-        editEventCrtl.reset();
-        primaryStage.setScene(editEvent);
+        try {
+            primaryStage.setTitle("EditEvent");
+            editEventCrtl.setEventId(eventID);
+            editEventCrtl.setOldEventName();
+            editEventCrtl.reset();
+            primaryStage.setScene(editEvent);
+        } catch (RuntimeException e) {
+            checkConnection();;
+        }
+
     }
 
     public void setConfirmationSettings() {
@@ -511,11 +516,14 @@ public class MainCtrl {
             editExpenseCtrl.refresh(expense);
             primaryStage.setScene(editExpense);
         } catch (RuntimeException e) {
-            e.printStackTrace();
             checkConnection();
         }
     }
 
+    /**
+     * checks connection
+     * @return true if there is a connection, false if there is no connection
+     */
     public boolean getConnection() {
         try {
             serverUtils.getAllEvents();
@@ -525,6 +533,11 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * checks if there still is a connection to the server, if there isn't go back to start screen
+     * and set the tag so the user knows there is no connection, if that was not the problem
+     * show that something went wrong so the user may need to restart the program
+     */
     public void checkConnection() {
         if (!getConnection()) {
             startScreenCtrl.setNoEventsError(true);
@@ -532,13 +545,16 @@ public class MainCtrl {
         } else {
             //something went wrong...
             Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Something went wrong");
-            error.setContentText("We are sorry for the inconvenience but something went wrong, " +
-                    "you can try to restart the server and app");
+            error.setTitle(translate("Something went wrong"));
+            error.setContentText(translate("We are sorry for the inconvenience but something went wrong, " +
+                    "you can try to restart the server and app"));
             error.showAndWait();
         }
     }
 
+    /**
+     * used for the reconnect button
+     */
     public void closeStage() {
         primaryStage.close();
     }
@@ -605,14 +621,23 @@ public class MainCtrl {
 
 
     public void showManageTags(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
-        if (!getConnection()) {
-            showStartScreen();
-            return;
+        try {
+            primaryStage.setScene(manageTags);
+            primaryStage.setTitle("Manage Tags");
+            manageTagsCtrl.refreshList(eventId, addExpense, expense, splittyOverview);
+        } catch (RuntimeException e) {
+            checkConnection();
         }
-        primaryStage.setScene(manageTags);
-        primaryStage.setTitle("Manage Tags");
-        manageTagsCtrl.refreshList(eventId, addExpense, expense, splittyOverview);
     }
+
+    /**
+     * this is for showing the add tag page
+     * @param eventId the event currently in
+     * @param addExpense this is a boolean to remember from what page the user came, since there are 3 different ways
+     *      *            to get to add/edit tag
+     * @param expense if a user came to the add tag page via editExpense, the expense must persist, could be null
+     * @param splittyOverview boolean to check if the user came from the splittyOverview
+     */
     public void showAddTag(int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
         if (!getConnection()) {
             showStartScreen();
@@ -623,6 +648,16 @@ public class MainCtrl {
         primaryStage.setTitle("Add Tag");
 
     }
+
+    /**
+     * this one is for editing a tag, it shows the same scene but with the field of the tag
+     * @param tag the tag to be edited
+     * @param eventId the event currently in
+     * @param addExpense this is a boolean to remember from what page the user came, since there are 3 different ways
+     *                   to get to add/edit tag
+     * @param expense if a user came to the add tag page via editExpense, the expense must persist, could be null
+     * @param splittyOverview boolean to check if the user came from the splittyOverview
+     */
     public void showAddTag(Tag tag, int eventId, boolean addExpense, Expense expense, boolean splittyOverview) {
         if (!getConnection()) {
             showStartScreen();

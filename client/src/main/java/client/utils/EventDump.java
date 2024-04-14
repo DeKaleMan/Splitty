@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
-import commons.dto.DebtDTO;
-import commons.dto.EventDTO;
-import commons.dto.ExpenseDTO;
-import commons.dto.ParticipantDTO;
+import commons.dto.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -18,6 +15,7 @@ public class EventDump implements Serializable {
     private List<ExpenseDTO> expenseDTOList;
     private List<ParticipantDTO> participantDTOList;
     private List<DebtDTO> debtDTOList;
+    private List<TagDTO> tagDTOList;
     private Queue<Integer> oldExpenseIds = new LinkedList<>();
     private HashMap<Integer, Integer> oldExpenseIdToNewExpenseId = new HashMap<>();
 
@@ -29,6 +27,7 @@ public class EventDump implements Serializable {
         expenseDTOList = new ArrayList<>();
         participantDTOList = new ArrayList<>();
         debtDTOList = new ArrayList<>();
+        tagDTOList = new ArrayList<>();
         initializeDtoFields(eventId);
     }
 
@@ -57,10 +56,19 @@ public class EventDump implements Serializable {
             debtDTOList.add(new DebtDTO(debt.getBalance(), 0,
                     debt.getExpense().getExpenseId(), debt.getParticipant().getUuid()));
         });
+
+        serverUtils.getTagsByEvent(eventId).forEach(tag -> {
+            tagDTOList.add(new TagDTO(0, tag.getName(), tag.getColour()));
+        });
     }
 
     public void importEvent() {
         Event newAddedEvent = serverUtils.addEvent(eventDTO);
+
+        tagDTOList.forEach(tagDTO -> {
+            tagDTO.setEventId(newAddedEvent.getId());
+            serverUtils.addTag(tagDTO);
+        });
 
         participantDTOList.forEach(participantDTO -> {
             participantDTO.setEventId(newAddedEvent.getId());
@@ -124,6 +132,14 @@ public class EventDump implements Serializable {
 
     public void setDebtDTOList(List<DebtDTO> debtDTOList) {
         this.debtDTOList = debtDTOList;
+    }
+
+    public List<TagDTO> getTagDTOList() {
+        return tagDTOList;
+    }
+
+    public void setTagDTOList(List<TagDTO> tagDTOList) {
+        this.tagDTOList = tagDTOList;
     }
 
     public Queue<Integer> getOldExpenseIds() {
