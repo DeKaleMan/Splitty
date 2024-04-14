@@ -21,6 +21,7 @@ import client.utils.EventPropGrouper;
 import client.utils.TagsGrouper;
 import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage){
+        Platform.setImplicitExit(true);
         var server = FXML.load(ServerCtrl.class, "client", "scenes", "Server.fxml");
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
         try {
