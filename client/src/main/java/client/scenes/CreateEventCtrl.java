@@ -204,11 +204,11 @@ public class CreateEventCtrl {
         });
     }
 
-    public void setNameText(String txt){
-        Platform.runLater(() -> {
-            this.nameText.setText(txt);
-        });
-    }
+//    public void setNameText(String txt){
+//        Platform.runLater(() -> {
+//            this.nameText.setText(txt);
+//        });
+//    }
 
     public void setCreateButton(String txt){
         Platform.runLater(() -> {
@@ -226,6 +226,18 @@ public class CreateEventCtrl {
         Platform.runLater(() -> {
             //this.nameField.setPromptText(txt);
             this.titleField.setPromptText(txt);
+        });
+    }
+    public void setDateEmptyError(String txt){
+        Platform.runLater(() -> {
+            //this.nameField.setPromptText(txt);
+            this.dateEmptyError.setText(txt);
+        });
+    }
+    public void setDateIncorrectError(String txt){
+        Platform.runLater(() -> {
+            //this.nameField.setPromptText(txt);
+            this.dateIncorrectError.setText(txt);
         });
     }
 }

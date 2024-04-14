@@ -17,6 +17,7 @@
                         <ComboBox fx:id="category" accessibleRole="CHECK_MENU_ITEM" prefHeight="25.0" prefWidth="155.0" promptText="Select category" />
                     </children>
                 </HBox>
+                <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
                 <HBox id="receiverHBox" fx:id="receiverHBox">
                     <children>
                         <Label text="Who received money?" wrapText="true" />
@@ -30,7 +31,7 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <VBox layoutX="139.0" layoutY="46.0" prefHeight="323.0" prefWidth="173.0" spacing="2.0">
+        <VBox layoutX="139.0" layoutY="46.0" prefHeight="346.0" prefWidth="173.0" spacing="2.0">
             <children>
                 <RadioButton fx:id="sharedExpense" layoutX="154.0" layoutY="40.0" mnemonicParsing="false" text="Shared expense">
                     <toggleGroup>
@@ -38,7 +39,6 @@
                     </toggleGroup>
                 </RadioButton>
                 <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
-                <Button fx:id="addTagButton" layoutX="434.0" layoutY="337.0" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
 
                 <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" />
                 <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" />
@@ -78,7 +78,7 @@
 
         <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
         <Button fx:id="commit" layoutX="521.0" layoutY="360.0" mnemonicParsing="false" onAction="#editExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Edit" textFill="white" AnchorPane.rightAnchor="42.0" />
-        <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false">
+        <Label fx:id="commitExpenseError" layoutX="318.0" layoutY="365.0" text="Unexpected error when editing expense*" textFill="RED" visible="false" AnchorPane.rightAnchor="102.0">
             <font>
                 <Font size="10.0" />
             </font></Label>
@@ -86,4 +86,3 @@
 
     </children>
 </AnchorPane>
-
