@@ -360,12 +360,194 @@ public class MainCtrlTest {
     }
 
     @Test
+    void showUserEventList(){
+        UserEventListCtrl userEventListCtrl = mock(UserEventListCtrl.class);
+        sut.setUserEventListCtrl(userEventListCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setUserEventList(scene);
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+
+        sut.showUserEventList();
+
+        verify(userEventListCtrl).initialize();
+        verify(stage).setScene(scene);
+        verify(userEventListCtrl).reset();
+        verify(stage).setTitle("Event List");
+    }
+
+    @Test
+    void showUserEventListException(){
+        UserEventListCtrl userEventListCtrl = mock(UserEventListCtrl.class);
+        sut.setUserEventListCtrl(userEventListCtrl);
+        doThrow(RuntimeException.class).when(userEventListCtrl).initialize();
+        doNothing().when(sut).checkConnection();
+        sut.showUserEventList();
+
+        verify(sut).checkConnection();
+    }
+
+    @Test
+    void showCreateEvent(){
+        doReturn(true).when(sut).getConnection();
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        CreateEventCtrl createEventCtrl = mock(CreateEventCtrl.class);
+        sut.setCreateEventCtrl(createEventCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setCreateEvent(scene);
+
+        sut.showCreateEvent("name");
+
+        verify(stage).setTitle("Create Event");
+        verify(stage).setScene(scene);
+        verify(createEventCtrl).resetValues();
+        verify(createEventCtrl).setTitle("name");
+    }
+
+    @Test
     void showCreateEventNoConnection(){
-        doReturn(false).when(sut).getConnection();
+        doReturn(false ).when(sut).getConnection();
         doNothing().when(sut).showStartScreen();
 
         sut.showCreateEvent("name");
 
         verify(sut).showStartScreen();
+    }
+
+    @Test
+    void showParticipantManager(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        ManageParticipantsCtrl manageParticipantsCtrl = mock(ManageParticipantsCtrl.class);
+        sut.setManageParticipantsCtrl(manageParticipantsCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setManageParticipants(scene);
+
+        sut.showParticipantManager(1);
+
+        verify(stage).setTitle("ManageParticipants");
+        verify(stage).setScene(scene);
+        verify(manageParticipantsCtrl).setupParticipants(1);
+    }
+
+    @Test
+    void showStatistics(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        StatisticsCtrl statisticsCtrl = mock(StatisticsCtrl.class);
+        sut.setStatisticsCtrl(statisticsCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setStatistics(scene);
+
+        sut.showStatistics("title", 1);
+
+        verify(stage).setTitle("Statistics");
+        verify(stage).setScene(scene);
+        verify(statisticsCtrl).setTitle("title");
+        verify(statisticsCtrl).setEventCode(1);
+        verify(statisticsCtrl).refresh();
+        verify(statisticsCtrl).fetchStat();
+        verify(statisticsCtrl).setPieChart();
+        verify(statisticsCtrl).showHoverLabel();
+    }
+
+    @Test
+    void showStatisticsException(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        doThrow(RuntimeException.class).when(stage).setTitle(anyString());
+        doNothing().when(sut).checkConnection();
+        sut.showStatistics("title",1);
+
+        verify(sut).checkConnection();
+    }
+
+    @Test
+    void getCurrentEventCode(){
+        SplittyOverviewCtrl splittyOverviewCtrl = mock(SplittyOverviewCtrl.class);
+        sut.setSplittyOverviewCtrl(splittyOverviewCtrl);
+        when(splittyOverviewCtrl.getCurrentEventId()).thenReturn(1);
+
+        assertEquals(1, sut.getCurrentEventCode());
+    }
+
+    @Test
+    void getCurrentEventCodeNull(){
+        sut.setSplittyOverviewCtrl(null);
+
+        assertThrows(RuntimeException.class, () -> sut.getCurrentEventCode());
+    }
+
+    @Test
+    void viewDebtsPerEvent(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        DebtCtrl debtCtrl = mock(DebtCtrl.class);
+        sut.setDebtCtrl(debtCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setDebts(scene);
+
+        sut.viewDeptsPerEvent(1);
+
+        verify(stage).setTitle("Debts per event");
+        verify(stage).setScene(scene);
+        verify(debtCtrl).refresh(1);
+    }
+
+    @Test
+    void viewDebtsPerEventException(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        doThrow(RuntimeException.class).when(stage).setTitle(anyString());
+        doNothing().when(sut).checkConnection();
+        sut.viewDeptsPerEvent(1);
+
+        verify(sut).checkConnection();
+    }
+
+    @Test
+    void showSettings(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        SettingsCtrl settingsCtrl = mock(SettingsCtrl.class);
+        sut.setSettingCtrl(settingsCtrl);
+        Scene scene = mock(Scene.class);
+        sut.setSettings(scene);
+
+        sut.showSettings(true);
+
+        verify(stage).setScene(scene);
+        verify(stage).setTitle("Settings");
+        verify(settingsCtrl).initializeFields(true);
+    }
+
+    @Test
+    void showEditEvent(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        EditEventCrtl editEventCrtl = mock(EditEventCrtl.class);
+        sut.setEditEventCrtl(editEventCrtl);
+        Scene scene = mock(Scene.class);
+        sut.setEditEvent(scene);
+
+        sut.showEditEvent(1);
+
+        verify(stage).setTitle("EditEvent");
+        verify(editEventCrtl).setEventId(1);
+        verify(editEventCrtl).setOldEventName();
+        verify(editEventCrtl).reset();
+        verify(stage).setScene(scene);
+    }
+
+    @Test
+    void showEditEventException(){
+        Stage stage = mock(Stage.class);
+        sut.setPrimaryStage(stage);
+        doThrow(RuntimeException.class).when(stage).setTitle(anyString());
+        doNothing().when(sut).checkConnection();
+        sut.showEditEvent(1);
+
+        verify(sut).checkConnection();
     }
 }

@@ -489,7 +489,7 @@ public class MainCtrl {
             editEventCrtl.reset();
             primaryStage.setScene(editEvent);
         } catch (RuntimeException e) {
-            checkConnection();;
+            checkConnection();
         }
 
     }
