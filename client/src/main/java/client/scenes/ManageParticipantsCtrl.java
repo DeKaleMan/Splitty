@@ -7,9 +7,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -56,6 +56,7 @@ public class ManageParticipantsCtrl implements Initializable {
     public Label participantDeletedConfirmation;
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        setImages();
         mainCtrl.setButtonRedProperty(removeButton);
         //for now this is hardcoded but this should eventually be passed on
         this.list = new ArrayList<>();
@@ -75,6 +76,22 @@ public class ManageParticipantsCtrl implements Initializable {
             }
         });
     }
+
+    private void setImages() {
+        ImageView plus = new ImageView(new Image("plusicon.png"));
+        plus.setFitWidth(15);
+        plus.setFitHeight(15);
+        addButton.setGraphic(plus);
+        ImageView edit = new ImageView(new Image("editIcon.png"));
+        edit.setFitWidth(15);
+        edit.setFitHeight(15);
+        editButton.setGraphic(edit);
+        ImageView trash = new ImageView(new Image("trashIcon.png"));
+        trash.setFitWidth(14);
+        trash.setFitHeight(14);
+        removeButton.setGraphic(trash);
+    }
+
     @Inject
     public ManageParticipantsCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.serverUtils = server;
@@ -167,6 +184,18 @@ public class ManageParticipantsCtrl implements Initializable {
     public void onKeyPressed(KeyEvent press) {
         if (press.getCode() == KeyCode.ESCAPE) {
             backEventOverview();
+        }
+        KeyCodeCombination k = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+        if (k.match(press)) {
+            removeParticipant();
+        }
+        if (press.getCode() == KeyCode.ENTER) {
+            editParticipant();
+        }
+        KeyCodeCombination k2 = new KeyCodeCombination(KeyCode.N,
+                KeyCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        if (k2.match(press)) {
+            addParticipant();
         }
     }
 

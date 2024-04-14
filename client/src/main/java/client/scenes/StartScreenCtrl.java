@@ -19,10 +19,11 @@ import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import javafx.application.Platform;
 
 
 public class StartScreenCtrl implements Initializable {
@@ -94,10 +95,8 @@ public class StartScreenCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ImageView settings = new ImageView(new Image("Settings-icon.png"));
-        settings.setFitWidth(15);
-        settings.setFitHeight(15);
-        settingsButton.setGraphic(settings);
+        setImages();
+
         // Load the image
         Image image = new Image("Logo_.png"); // Path relative to your resources folder
         // Set the image to the ImageView
@@ -114,6 +113,17 @@ public class StartScreenCtrl implements Initializable {
                 }
             }
         });
+    }
+
+    private void setImages() {
+        ImageView settings = new ImageView(new Image("Settings-icon.png"));
+        settings.setFitWidth(15);
+        settings.setFitHeight(15);
+        settingsButton.setGraphic(settings);
+        ImageView admin = new ImageView(new Image("adminIcon.png"));
+        admin.setFitWidth(15);
+        admin.setFitHeight(15);
+        adminLogin.setGraphic(admin);
     }
 
     public void fetchList() {

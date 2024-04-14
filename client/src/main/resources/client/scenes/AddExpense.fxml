@@ -33,16 +33,16 @@
       <VBox layoutX="139.0" layoutY="84.0" prefHeight="285.0" prefWidth="173.0" spacing="2.0">
          <children>
             <ComboBox fx:id="personComboBox" onAction="#resetPayerErrors" prefHeight="25.0" prefWidth="173.0" promptText="Select who paid" />
-             <Label fx:id="payerError" text="Payer is required*" textFill="RED" visible="false" />
+             <Label fx:id="payerError" styleClass="errorLabel" text="Payer is required*" textFill="RED" visible="false" />
             <HBox>
                <children>
                   <TextField fx:id="amount" onKeyPressed="#resetAmountErrors" prefHeight="25.0" prefWidth="185.0" />
                   <ComboBox fx:id="currencyComboBox" prefWidth="150.0" />
                </children>
             </HBox>
-            <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" text="Amount cannot be negative or zero*" textFill="RED" visible="false" />
-            <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" />
-             <Label fx:id="dateInvalidError" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
+            <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" styleClass="errorLabel" text="Amount cannot be negative or zero*" textFill="RED" visible="false" />
+            <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" styleClass="errorLabel" />
+             <Label fx:id="dateInvalidError" styleClass="errorLabel" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
             <HBox alignment="CENTER" prefHeight="31.0" prefWidth="173.0">
                <children>
                   <RadioButton fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Select All" HBox.hgrow="ALWAYS">
@@ -69,19 +69,27 @@
 
 
       <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
-      <Button fx:id="commit" layoutX="523.0" layoutY="336.0" mnemonicParsing="false" onAction="#addExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" AnchorPane.rightAnchor="39.0" />
-      <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" text="Unexpected error when adding expense*" textFill="RED" visible="false">
+      <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" styleClass="errorLabel" text="Unexpected error when adding expense*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
          </font></Label>
-      <RadioButton fx:id="sharedExpense" layoutX="154.0" layoutY="40.0" mnemonicParsing="false" text="Shared expense">
-         <toggleGroup>
-            <ToggleGroup fx:id="expenseTypeToggles" />
-         </toggleGroup>
-      </RadioButton>
-      <RadioButton fx:id="givingMoneyToSomeone" layoutX="263.0" layoutY="40.0" mnemonicParsing="false" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
       <ProgressIndicator fx:id="expenseLoading" layoutX="568.0" layoutY="338.0" prefHeight="23.0" prefWidth="22.0" visible="false" />
-      <Button fx:id="addTagButton" layoutX="434.0" layoutY="337.0" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
+      <HBox alignment="TOP_CENTER" layoutX="379.0" layoutY="343.0" prefHeight="37.0" prefWidth="221.0" spacing="15.0">
+         <children>
+            <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
+            <Button fx:id="commit" mnemonicParsing="false" onAction="#addExpense" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" />
+         </children>
+      </HBox>
+      <HBox alignment="TOP_RIGHT" layoutX="75.0" layoutY="36.0" prefHeight="25.0" prefWidth="349.0" spacing="10">
+         <children>
+            <RadioButton fx:id="sharedExpense" mnemonicParsing="false" text="Shared expense">
+               <toggleGroup>
+                  <ToggleGroup fx:id="expenseTypeToggles" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="givingMoneyToSomeone" mnemonicParsing="false" prefHeight="17.0" prefWidth="164.0" text="Giving money to someone" toggleGroup="$expenseTypeToggles" />
+         </children>
+      </HBox>
 
 
    </children>
