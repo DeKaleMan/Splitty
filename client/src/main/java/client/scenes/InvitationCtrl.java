@@ -276,7 +276,7 @@ public class InvitationCtrl {
                 + "Event: " + eventName + "\n" +
                 "Server: " + server + "\n" +
                 "InviteCode: " + inviteCode + "\n\n" +
-                "You can join the event easily with the inviteCode. \n \n" +
+                "You can join the event easily with the invite code. \n \n" +
                 "By joining the event you never have to worry that you pay to much for " +
                 "any occasion, and make sure that you can fully enjoy the moment with you friends \n \n" +
                 "Sincerely, \n" +

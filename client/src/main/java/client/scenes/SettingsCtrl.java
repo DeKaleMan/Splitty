@@ -457,7 +457,7 @@ public class SettingsCtrl {
                 "password token: " + passwordToken +
                 "\n \n" +
                 "From now on you can this email to send invites or " +
-                "send payment invitations." +
+                "send payment reminders." +
                 "\n \n" +
                 "Sincerely, Team Splitty";
 

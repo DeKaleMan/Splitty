@@ -121,7 +121,7 @@ public class DebtCtrl implements Initializable {
             emailInfo.add(
                 new Text(mainCtrl.translate("Specify email credentials to send reminders.") + "\n"),
                 0, 0);
-        } else if (payment.getPayee().getEmail() == null || payment.getPayee().getEmail().isEmpty())
+        } else if (payment.getPayer().getEmail() == null || payment.getPayer().getEmail().isEmpty())
             emailInfo.add(
                 new Text(mainCtrl.translate("No email specified for this participant.") + "\n"), 0,
                 0);
@@ -345,7 +345,7 @@ public class DebtCtrl implements Initializable {
             + nameEmailSender + " " + balance + java.util.Currency.getInstance("EUR").getSymbol() +
             ". \n \n" +
             "If you would like to leave the event, you first have to pay back all your debts. \n\n" +
-            "sincerely, Team Splitty";
+            "Sincerely, Team Splitty";
 
 
 
