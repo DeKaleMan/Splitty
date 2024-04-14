@@ -114,7 +114,7 @@
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
-      <Label fx:id="incorrectCurrencyError" layoutX="243.0" layoutY="137.0" styleClass="errorLabel" text="Incorrect currecny*" textFill="RED" visible="false">
+      <Label fx:id="incorrectCurrencyError" layoutX="243.0" layoutY="137.0" styleClass="errorLabel" text="Incorrect currency*" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>

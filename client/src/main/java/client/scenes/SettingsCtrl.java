@@ -167,8 +167,6 @@ public class SettingsCtrl {
      * incorrect everything will be saved by writing it to the config file.
      */
     public void saveSettings() {
-        boolean error = false;
-
         String email = emailField.getText();
         String currency = currencyField.getText();
         String name = nameField.getText();
@@ -179,19 +177,16 @@ public class SettingsCtrl {
         // email validation
         if(email != null && !email.isEmpty() && (!email.contains("@") || !email.contains("."))){
             showErrorBriefly(invalidEmailLabel);
-            error = true;
+            return;
         }
         // iban validation
         if (iban != null && !iban.isEmpty() && (iban.length() < 15 || iban.length() > 34)){
             showErrorBriefly(invalidIbanLabel);
-            error = true;
+            return;
         }
         // bic validation
         if(bic != null && !bic.isEmpty() && (bic.length() < 8 || bic.length() > 11)){
             showErrorBriefly(invalidBICLabel);
-            error = true;
-        }
-        if (error) {
             return;
         }
 

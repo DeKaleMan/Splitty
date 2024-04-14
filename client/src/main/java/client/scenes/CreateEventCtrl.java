@@ -116,9 +116,9 @@ public class CreateEventCtrl {
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-//            if (checkDate(datePicker.getEditor().getText())) {
+            if (checkDate(datePicker.getEditor().getText())) {
                 date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-//            }
+            }
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
             dateEmptyError.setVisible(true);
