@@ -116,9 +116,9 @@ public class CreateEventCtrl {
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            if (checkDate(dateString)) {
-                date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-            }
+//            if (checkDate(datePicker.getEditor().getText())) {
+            date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+//            }
         } catch (IllegalArgumentException e) {
             dateIncorrectError.setVisible(false);
             dateEmptyError.setVisible(true);
@@ -156,8 +156,11 @@ public class CreateEventCtrl {
         }
     }
 
-    public void resetTitleFieldError() {
+    public void handleEventNameKeyPress(KeyEvent keyEvent) {
         titleError.setVisible(false);
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            datePicker.requestFocus();
+        }
     }
 
     public void resetDateFieldError() {
@@ -184,6 +187,10 @@ public class CreateEventCtrl {
         eventDescriptionArea.setText(null);
         resetDateFieldError();
         resetTitleFieldError();
+    }
+
+    private void resetTitleFieldError() {
+        titleError.setVisible(false);
     }
 
     public void setEventNameText(String txt){
@@ -237,9 +244,18 @@ public class CreateEventCtrl {
     public boolean checkDate(String s) {
         for (char c : s.toCharArray()) {
             if (Character.isLetter(c)) {
-                throw new RuntimeException();
+                return true;
             }
         }
-        return true;
+        throw new RuntimeException();
     }
+
+    public void handleDatePickerKeyPress(KeyEvent keyEvent) {
+        resetDateFieldError();
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            eventDescriptionArea.requestFocus();
+        }
+    }
+
+
 }

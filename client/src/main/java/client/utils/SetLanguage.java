@@ -132,7 +132,6 @@ public class SetLanguage {
         splittyOverviewCtrl.setSendInvites(translate("Send invites", "en", lang));
         splittyOverviewCtrl.setAllExpenses(translate("All", "en", lang));
         splittyOverviewCtrl.setEditExpense(translate("Edit expense", "en", lang));
-        splittyOverviewCtrl.setEditEvent(translate("Edit event", "en", lang));
         splittyOverviewCtrl.setLeaveButton(translate("Leave", "en", lang));
         splittyOverviewCtrl.setmyDetails(translate("My details", "en", lang));
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
@@ -196,7 +195,7 @@ public class SetLanguage {
 
     public void setEditEvent(String lang) {
         editEventCrtl.setEventNameText(translate("New event name", "en", lang));
-        editEventCrtl.setCreateButton(translate("Confirm event name", "en", lang));
+        editEventCrtl.setCreateButton(translate("Confirm changes", "en", lang));
         editEventCrtl.setCancelButton(translate("Cancel", "en", lang));
         editEventCrtl.setTitleError(translate("New event name required", "en", lang));
         editEventCrtl.setSuccesFullyChanged(translate("Successfully changed the name", "en", lang));
@@ -258,6 +257,7 @@ public class SetLanguage {
     }
 
     public void setManageParticipants(String lang) {
+        manageParticipantsCtrl.setEditEvent(translate("Edit event", "en", lang));
         manageParticipantsCtrl.setAddButton(translate("Add participants", "en", lang));
         manageParticipantsCtrl.setBackButton(translate("Back", "en", lang));
         manageParticipantsCtrl.setRemoveButton(translate("Remove participants", "en", lang));
