@@ -49,6 +49,11 @@ public class AdminLoginCtrl {
     private Label passwordInstructionsText;
 
     @FXML
+    public void showPasswordInstructions(){
+        this.passwordInstructionsText.setVisible(true);
+    }
+
+    @FXML
     public void adminSignIn(ActionEvent actionEvent) {
         String serverUrl = config.getConnection();
         String password = passwordField.getText();
