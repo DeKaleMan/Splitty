@@ -59,9 +59,7 @@ public class InvitationCtrl {
     @FXML
     private Label errorNoValidEmail;
     @FXML
-    private Label defaultLabel;
-    @FXML
-    private Button defaultButton;
+    private Label noEmailCredentials;
 
     @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Config config, Mail mail) {
@@ -72,12 +70,8 @@ public class InvitationCtrl {
         inviteCode = "testInviteCode";
     }
 
-    public void setDefaultButton(String txt){
-        defaultButton.setText(txt);
-    }
-
-    public void setDefaultLabel(String txt){
-        defaultLabel.setText(txt);
+    public void setNoEmailCredentials(String txt){
+        noEmailCredentials.setText(txt);
     }
 
     public void setNoEmail(String txt){
@@ -129,7 +123,7 @@ public class InvitationCtrl {
      * @param emailadress String email to send the invitation to
      */
     private void sendEmailInvitation(String emailadress){
-        Email email = getherDataForEmail(emailadress);
+        Email email = gatherDataForEmail(emailadress);
         Mailer mailInfo = getSenderInfo();
         try{
             mail.mailSending(email, mailInfo);
@@ -217,9 +211,9 @@ public class InvitationCtrl {
         });
     }
 
-    public Email getherDataForEmail(String emailT){
+    public Email gatherDataForEmail(String emailT){
         String emailTo = "";
-        String emailSubject = "Good new, you are invited!";
+        String emailSubject = "Hi! You are invited!";
         String emailBody = emailBody();
         String fromEmail = config.getEmail();
         boolean isValid = isValidEmail(emailT);
@@ -240,12 +234,27 @@ public class InvitationCtrl {
 
         Email email = mail.makeEmail(fromEmail, emailTo, emailSubject, emailBody);
 
-        System.out.println("gethering information for making an email.");
+        System.out.println("gathering information for making an email.");
 
         return email;
 //        String serverConnection = ServerUtils.server;
 
     }
+
+    public void refresh(){
+        if(config.getEmail() == null || config.getEmail().isEmpty()
+            || config.getEmailToken() == null || config.getEmailToken().isEmpty()){
+            noEmailCredentials.setVisible(true);
+            sendInvites.setVisible(false);
+            emailArea.setVisible(false);
+        }else{
+            noEmailCredentials.setVisible(false);
+            sendInvites.setVisible(true);
+            emailArea.setVisible(true);
+        }
+        emailArea.setText("");
+    }
+
 
     public Mailer getSenderInfo(){
         String host = "smtp.gmail.com";
@@ -258,11 +267,10 @@ public class InvitationCtrl {
 
 
     public String emailBody(){
-        String name = config.getName();
         String eventName = titleEvent;
         String server = serverURL;
         String res = "Dear reader,\n \n" + "Your friend "
-                + name + " would like to invite you to the "
+                +"would like to invite you to the "
                 + eventName + " event. " + "He is thrilled to welcome " +
                 "you to the event. Here are the details:\n \n"
                 + "Event: " + eventName + "\n" +
@@ -271,7 +279,7 @@ public class InvitationCtrl {
                 "You can join the event easily with the inviteCode. \n \n" +
                 "By joining the event you never have to worry that you pay to much for " +
                 "any occasion, and make sure that you can fully enjoy the moment with you friends \n \n" +
-                "sincerly, \n" +
+                "Sincerely, \n" +
                 "Team Splitty";
         return res;
     }

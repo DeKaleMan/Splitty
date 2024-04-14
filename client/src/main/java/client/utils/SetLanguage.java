@@ -252,8 +252,7 @@ public class SetLanguage {
                 "the invite code:", "en", lang));
         invitationCtrl.setEmailArea(translate("Add your emails to send an invite to", "en", lang));
         invitationCtrl.setSendInvites(translate("Send invites", "en", lang));
-        invitationCtrl.setDefaultButton(translate("check email works", "en", lang));
-        invitationCtrl.setDefaultLabel(translate("not sure if your email is configured? Use this button", "en", lang));
+        invitationCtrl.setNoEmailCredentials(translate("Specify your email credentials to send invites.", "en", lang));
         invitationCtrl.setNoEmail(translate("Please fill in an email address", "en", lang));
         System.out.println("invitation translated");
     }
