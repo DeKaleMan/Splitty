@@ -322,6 +322,7 @@ public class MainCtrl {
             showStartScreen();
             return;
         }
+        invitationCtrl.refresh();
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
         Event event = serverUtils.getEventById(eventID);

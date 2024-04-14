@@ -182,7 +182,7 @@ public class SetLanguageTest {
         verify(invitationCtrl).setInviteCodeText("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(9)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(8)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

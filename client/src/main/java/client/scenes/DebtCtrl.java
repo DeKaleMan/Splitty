@@ -2,6 +2,7 @@ package client.scenes;
 
 
 import client.utils.Config;
+import client.utils.Mail;
 import client.utils.ServerUtils;
 
 import commons.*;
@@ -40,7 +41,7 @@ public class DebtCtrl implements Initializable {
 
     private String eventName;
 
-    private Mail mail;
+    private final Mail mail;
 
     @FXML
     private ListView<Payment> paymentInstructionListView;
@@ -61,13 +62,10 @@ public class DebtCtrl implements Initializable {
     private int eventCode;
 
     @Inject
-    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config) {
+    public DebtCtrl(ServerUtils server, MainCtrl mainCtrl, Config config, Mail mail) {
         this.serverUtils = server;
         this.mainCtrl = mainCtrl;
         this.config = config;
-    }
-
-    public void injectMail(Mail mail){
         this.mail = mail;
     }
 
@@ -118,8 +116,15 @@ public class DebtCtrl implements Initializable {
     private VBox generateInfo(Payment payment) {
         VBox info = new VBox();
         GridPane emailInfo = new GridPane();
-        if (payment.getPayee().getEmail() == null)
-            emailInfo.add(new Text(mainCtrl.translate("No email specified for this participant.") + "\n"), 0, 0);
+        if (config.getEmail() == null || config.getEmail().isEmpty()
+            || config.getEmailToken() == null || config.getEmailToken().isEmpty()) {
+            emailInfo.add(
+                new Text(mainCtrl.translate("Specify email credentials to send reminders.") + "\n"),
+                0, 0);
+        } else if (payment.getPayer().getEmail() == null || payment.getPayer().getEmail().isEmpty())
+            emailInfo.add(
+                new Text(mainCtrl.translate("No email specified for this participant.") + "\n"), 0,
+                0);
         else {
             Button sendMessage = new Button(mainCtrl.translate("Send reminder"));
             sendMessage.setOnAction(new EventHandler<ActionEvent>() {
@@ -134,7 +139,9 @@ public class DebtCtrl implements Initializable {
         }
         info.getChildren().add(emailInfo);
         if (payment.getPayee().getIBan() != null && payment.getPayee().getBIC() != null &&
-            payment.getPayee().getAccountHolder() != null) {
+            payment.getPayee().getAccountHolder() != null &&
+            !payment.getPayee().getIBan().isEmpty() && !payment.getPayee().getBIC().isEmpty() &&
+            !payment.getPayee().getAccountHolder().isEmpty()) {
             info.getChildren().add(new Text(mainCtrl.translate("Banking info available") +
                 "\n\t" + mainCtrl.translate("Account Holder:") + " " + payment.getPayee().getAccountHolder() +
                 "\n\t" + mainCtrl.translate("IBAN:") + " " + payment.getPayee().getIBan() +
@@ -261,7 +268,8 @@ public class DebtCtrl implements Initializable {
             String fromEmail = config.getEmail();
             String passwordToken = config.getEmailToken();
 
-            if (fromEmail == null || fromEmail.isEmpty() || passwordToken == null || passwordToken.isEmpty()){
+            if (fromEmail == null || fromEmail.isEmpty()
+                || passwordToken == null || passwordToken.isEmpty()){
                 labelWrong.setVisible(true);
                 return;
             }
@@ -274,8 +282,8 @@ public class DebtCtrl implements Initializable {
                 return;
             }
 
-            String toEmail = payment.getPayee().getEmail();
-            String subject = "reminder to pay";
+            String toEmail = payment.getPayer().getEmail();
+            String subject = "Reminder to pay";
             String body = makeBody(payment);
             Email email = mail.makeEmail(fromEmail, toEmail, subject, body);
 
@@ -301,22 +309,7 @@ public class DebtCtrl implements Initializable {
             return false;
         }
 
-        try {
-            String host = "smtp.gmail.com";
-            int port = 587;
-            Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
-
-            // Attempt to authenticate by sending a test email
-            Email testEmail = mail.makeEmail(fromEmail, fromEmail, "Test Subject", "Test Body");
-            mailer.sendMail(testEmail);
-
-            // If no exception is thrown during the sendMail operation, authentication is successful
-            return true;
-        } catch (Exception e) {
-            // Authentication failed
-            e.printStackTrace();
-            return false;
-        }
+        return true;
     }
 
     @FXML
@@ -340,16 +333,20 @@ public class DebtCtrl implements Initializable {
         }
     }
 
-    public String makeBody(Payment payment){
-        String nameEmailReveiver = payment.getPayee().getName();
-        String nameEvent =payment.getPayer().getEvent().getName();
-        String nameEmailSender = payment.getPayer().getName();
+    public String makeBody(Payment payment) {
+        String nameEmailReceiver = payment.getPayer().getName();
+        String nameEvent = payment.getPayer().getEvent().getName();
+        String nameEmailSender = payment.getPayee().getName();
         double balance = payment.getPayee().getBalance();
-        String s = "Dear " + nameEmailReveiver + "\n\n" +
-                "We would like to remind you that you still have an open debt in splitty event " + nameEvent +
-                ". You owe " + nameEmailSender + " " + balance + ". \n \n" +
-                "If you would like to leave the event, you first have to pay back all your debts. \n\n" +
-                "sincerly, Team splitty";
+        String s = "Dear " + nameEmailReceiver + "\n\n" +
+            "We would like to remind you that you still have an open debt in Splitty event " +
+            nameEvent +
+            ". You owe "
+            + nameEmailSender + " " + balance + java.util.Currency.getInstance("EUR").getSymbol() +
+            ". \n \n" +
+            "If you would like to leave the event, you first have to pay back all your debts. \n\n" +
+            "Sincerely, Team Splitty";
+
 
 
         return s;

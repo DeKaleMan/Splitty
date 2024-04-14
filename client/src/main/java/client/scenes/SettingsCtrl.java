@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.Config;
+import client.utils.Mail;
 import commons.Currency;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -141,9 +142,20 @@ public class SettingsCtrl {
         } else {
             getToken.setText("");
         }
+        sendEmailVisibility();
         currencyField.setText(config.getCurrency().toString());
         languageText.setText(config.getLanguage());
     }
+
+    private void sendEmailVisibility() {
+        if(config.getEmail() == null || config.getEmail().isEmpty()
+            || config.getEmailToken() == null || config.getEmailToken().isEmpty()){
+            sendEmail.setVisible(false);
+        }else{
+            sendEmail.setVisible(true);
+        }
+    }
+
 
     /**
      * The method correlated to the save settings button. Every field is retrieved and if nothing is
@@ -296,13 +308,13 @@ public class SettingsCtrl {
             String toEmail = config.getEmail();
             String passwordToken = config.getEmailToken();
             String host = "smtp.gmail.com";
-            String emailSubject = "configuration email splitty";
+            String emailSubject = "Configuration email Splitty";
             String emailBody = toStringBodyy(fromEmail, passwordToken);
             int port = 587;
             Mailer mailer = mail.getSenderInfo(host, port, fromEmail, passwordToken);
             Email email = mail.makeEmail(fromEmail, toEmail, emailSubject, emailBody);
             mail.mailSending(email, mailer);
-            System.out.println("email has been send correctly");
+            System.out.println("email has been sent correctly");
             succes.setVisible(true);
         } catch (RuntimeException e) {
             getToken.setText("password does not match the email");
@@ -446,17 +458,17 @@ public class SettingsCtrl {
 
 
     private String toStringBodyy(String fromEmail, String passwordToken){
-        String s = "This email is from splitty. We would like to tell " +
+        String s = "This email is from Splitty. We would like to tell " +
                 "you that your email and credentials are set up correctly." +
                 "\n \n" +
-                "Your credetials are:\n" +
+                "Your credentials are:\n" +
                 "email: " + fromEmail + "\n" +
                 "password token: " + passwordToken +
                 "\n \n" +
                 "From now on you can this email to send invites or " +
-                "send payment invitations." +
+                "send payment reminders." +
                 "\n \n" +
-                "sincerly, Team Splitty";
+                "Sincerely, Team Splitty";
 
         return s;
     }

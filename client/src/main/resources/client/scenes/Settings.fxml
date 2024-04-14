@@ -8,8 +8,7 @@
    <children>
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
 
-      <Button fx:id="saveButton" layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" />
-      <VBox layoutX="346.0" layoutY="172.0" prefHeight="183.0" prefWidth="232.0" spacing="5.0">
+      <VBox layoutX="346.0" layoutY="185.0" prefHeight="183.0" prefWidth="232.0" spacing="5.0">
          <children>
             <Label fx:id="addLangText" text="Add language">
                <font>
@@ -100,14 +99,15 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Button fx:id="sendEmail" layoutX="489.0" layoutY="159.0" mnemonicParsing="false" onAction="#sendDefaultEmail" prefHeight="26.0" prefWidth="90.0" text="default email" />
-      <Label fx:id="succes" layoutX="444.0" layoutY="167.0" prefHeight="26.0" prefWidth="128.0" text="Email succesfully send!" visible="false" styleClass="confirmationLabel"/>
-      <Label fx:id="connectionErrorLabel" layoutX="346.0" layoutY="365.0" text="Connection error*" textFill="RED" visible="false" styleClass="errorLabel">
+      <Button fx:id="saveButton" layoutX="500.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveSettings" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Save settings" textFill="white" />
+      <Button fx:id="sendEmail" layoutX="489.0" layoutY="165.0" mnemonicParsing="false" onAction="#sendDefaultEmail" prefHeight="26.0" prefWidth="90.0" text="Default email" />
+      <Label fx:id="succes" layoutX="346.0" layoutY="161.0" prefHeight="26.0" prefWidth="128.0" styleClass="confirmationLabel" text="Email succesfully sent!" visible="false" />
+      <Label fx:id="connectionErrorLabel" layoutX="346.0" layoutY="370.0" styleClass="errorLabel" text="Connection error*" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
       </Label>
-      <Label fx:id="incorrectCurrencyError" layoutX="243.0" layoutY="137.0" text="Incorrect currecny*" textFill="RED" visible="false" styleClass="errorLabel">
+      <Label fx:id="incorrectCurrencyError" layoutX="243.0" layoutY="137.0" styleClass="errorLabel" text="Incorrect currency*" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font>
