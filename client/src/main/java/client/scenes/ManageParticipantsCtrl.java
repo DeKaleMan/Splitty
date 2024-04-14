@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -303,5 +304,9 @@ public class ManageParticipantsCtrl implements Initializable {
         Platform.runLater(() -> {
             this.back.setText(txt);
         });
+    }
+
+    public void editEvent(ActionEvent actionEvent) {
+        mainCtrl.showEditEvent(eventId);
     }
 }
