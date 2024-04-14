@@ -244,7 +244,7 @@ public class SetLanguageTest {
     public void testGetFlagForExistingLanguage() {
         // When
         when(io.getFlagFolder()).thenReturn("flagFolder");
-        when(io.fileExists(new File("flagFolder" + File.separator + "enFlag.png"))).thenReturn(true);
+        when(io.fileExists(new File("flagFolder" + File.separator + "flags/enFlag.png"))).thenReturn(true);
         //Image image = setLanguage.getFlag("en");
         // Then
 //        assertEquals(new Image("fileFolder" + File.separator + "enFlag.png"), image);
