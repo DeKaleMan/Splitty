@@ -26,9 +26,9 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-              <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="322.0" promptText="dd-mm-yyyy" styleClass="errorLabel"/>
+              <DatePicker fx:id="datePicker" onAction="#resetDateFieldError" prefHeight="26.0" prefWidth="322.0" promptText="dd/mm/yyyy" />
               <Label fx:id="dateEmptyError" prefHeight="17.0" prefWidth="248.0" text="Date is required*" textFill="RED" visible="false" styleClass="errorLabel"/>
-              <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" />
+              <Label fx:id="dateIncorrectError" prefHeight="17.0" prefWidth="248.0" text="Invalid date, e.g 31-12-2023" textFill="RED" visible="false" styleClass="errorLabel"/>
          </children>
       </VBox>
       <VBox alignment="TOP_CENTER" layoutX="321.0" layoutY="66.0" prefHeight="200.0" prefWidth="265.0" spacing="5.0">

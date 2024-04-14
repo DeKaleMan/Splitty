@@ -116,7 +116,7 @@ public class CreateEventCtrl {
             if (dateString == null || dateString.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            if (checkDate(datePicker.getEditor().getText())) {
+            if (checkDate(dateString)) {
                 date = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             }
         } catch (IllegalArgumentException e) {
@@ -237,9 +237,9 @@ public class CreateEventCtrl {
     public boolean checkDate(String s) {
         for (char c : s.toCharArray()) {
             if (Character.isLetter(c)) {
-                return true;
+                throw new RuntimeException();
             }
         }
-        throw new RuntimeException();
+        return true;
     }
 }
