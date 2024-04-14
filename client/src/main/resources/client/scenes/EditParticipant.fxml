@@ -11,16 +11,16 @@
                 <Font name="System Bold" size="22.0" />
             </font>
         </Label>
-        <Text fx:id="name" layoutX="99.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="RIGHT" wrappingWidth="141.0">
+        <Label fx:id="name" layoutX="187.0" layoutY="99.0" text="Name" textAlignment="RIGHT">
             <font>
                 <Font size="20.0" />
             </font>
-        </Text>
-        <Text layoutX="189.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" wrappingWidth="50.13677978515625">
+        </Label>
+        <Label layoutX="190.0" layoutY="146.0" text="Email">
             <font>
                 <Font size="20.0" />
             </font>
-        </Text>
+        </Label>
 
         <TextField fx:id="nameField" layoutX="248.0" layoutY="101.0" />
         <TextField fx:id="emailField" layoutX="248.0" layoutY="148.0" />
@@ -28,35 +28,35 @@
         <TextField fx:id="bicField" layoutX="248.0" layoutY="234.0" />
         <TextField fx:id="accountHolderField" layoutX="248.0" layoutY="274.0" />
 
-        <Text layoutX="188.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN" wrappingWidth="50.13677978515625">
+        <Label layoutX="191.0" layoutY="190.0" text="IBAN">
             <font>
                 <Font size="20.0" />
             </font>
-        </Text>
-        <Text layoutX="197.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIC" wrappingWidth="32.4224853515625">
+        </Label>
+        <Label layoutX="199.0" layoutY="232.0" text="BIC">
             <font>
                 <Font size="20.0" />
             </font>
-        </Text>
-        <Text layoutX="14.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder" textAlignment="RIGHT" wrappingWidth="225.57142857142856">
+        </Label>
+        <Label layoutX="102.0" layoutY="272.0" text="Account Holder" textAlignment="RIGHT">
             <font>
                 <Font size="20.0" />
             </font>
-        </Text>
+        </Label>
 
-        <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
+        <Label fx:id="invalidEmailLabel" layoutX="402.0" layoutY="152.0" prefHeight="17.0" prefWidth="185.0" styleClass="errorLabel" text="Please enter a valid email address*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
-        <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
+        <Label fx:id="invalidIbanLabel" layoutX="402.0" layoutY="195.0" prefHeight="37.0" prefWidth="185.0" styleClass="errorLabel" text="Please enter a valid IBAN (between 15-34 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
-        <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" styleClass="errorLabel">
+        <Label fx:id="invalidBicLabel" layoutX="402.0" layoutY="238.0" prefHeight="37.0" prefWidth="185.0" styleClass="errorLabel" text="Please enter a valid BIC* (between 8-11 characters)*" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true">
             <font>
                 <Font name="System Italic" size="11.0" />
             </font></Label>
-        <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false" styleClass="errorLabel">
+        <Label fx:id="unknownError" layoutX="305.0" layoutY="362.0" prefHeight="17.0" prefWidth="164.0" styleClass="errorLabel" text="An unexpected error happened*" textAlignment="CENTER" textFill="RED" visible="false">
          <font>
             <Font name="System Italic" size="11.0" />
          </font></Label>

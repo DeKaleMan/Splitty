@@ -19,7 +19,6 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="urlField" onKeyPressed="#resetServerErrors" prefHeight="40.0" prefWidth="202.0" promptText="Server Url e.g. localhost:8080" />
             <PasswordField fx:id="passwordField" onKeyPressed="#resetPasswordError" prefHeight="40.0" prefWidth="200.0" promptText="Password" />
             <Button fx:id="signInButton" mnemonicParsing="false" onAction="#adminSignIn" prefHeight="25.0" prefWidth="130.0" text="Sign in" />
             <Text fx:id="passwordInstructionLink" fill="#52cbf2" onMouseClicked="#showPasswordInstructions" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't know how to get a password?">
@@ -37,7 +36,7 @@
          </children>
       </VBox>
       <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Label fx:id="serverNotFoundError" layoutX="438.0" layoutY="165.0"  text="Server not found*" textFill="RED" visible="false">
+      <Label fx:id="serverNotFoundError" layoutX="438.0" layoutY="165.0" text="Server not found*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
          </font>

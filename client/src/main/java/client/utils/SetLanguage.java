@@ -141,6 +141,10 @@ public class SetLanguage {
         splittyOverviewCtrl.setHostOptionsButton(translate("Host options", "en",lang));
         splittyOverviewCtrl.setUndo(translate("Undo", "en",lang));
         splittyOverviewCtrl.setInvolvingMe(translate("Involving me", "en",lang));
+        splittyOverviewCtrl.setManageTagsButton(translate("Manage Tags", "en",lang));
+        splittyOverviewCtrl.setNoExpenseError(translate("No expense selected*", "en", lang));
+        splittyOverviewCtrl.setJoinedEventLabel(translate("Event joined succesfully*", "en", lang));
+        splittyOverviewCtrl.setEventCreatedLabel(translate("Event created succesfully*", "en", lang));
 
         System.out.println("event overview translated");
     }
@@ -283,6 +287,8 @@ public class SetLanguage {
         manageParticipantsCtrl.setParticipantAddedConfirmation(translate("Participant successfully added*",
                 "en", lang));
         manageParticipantsCtrl.setParticipantDeletedConfirmation(translate("Participant successfully deleted*",
+                "en", lang));
+        manageParticipantsCtrl.setParticipantEditedConfirmation(translate("Participant successfully edited*",
                 "en", lang));
         System.out.println("participant manager translated");
     }
