@@ -14,7 +14,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -27,9 +26,9 @@ public class AddParticipantCtrl implements Initializable {
 
     private final MainCtrl mainCtrl;
     @FXML
-    private Text name;
+    private Label name;
     @FXML
-    private Text accountHolder;
+    private Label accountHolder;
     @FXML
     private Label title;
     @FXML

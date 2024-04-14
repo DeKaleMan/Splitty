@@ -846,7 +846,9 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     public void setUndo(String t){
-        this.undo.setText(t);
+        Platform.runLater(() -> {
+            this.undo.setText(t);
+        });
     }
 
     public void viewManageTags() {

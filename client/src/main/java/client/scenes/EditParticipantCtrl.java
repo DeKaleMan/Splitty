@@ -14,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class EditParticipantCtrl implements Initializable {
     private boolean host = false;
     private Participant editedParticipant;
     @FXML
-    private Text name;
+    private Label name;
     @FXML
     private Button cancelButton;
     @FXML
@@ -45,7 +44,7 @@ public class EditParticipantCtrl implements Initializable {
     @FXML
     private Label unknownError;
     @FXML
-    private Text accountHolder;
+    private Label accountHolder;
     @FXML
     private Label title;
 
