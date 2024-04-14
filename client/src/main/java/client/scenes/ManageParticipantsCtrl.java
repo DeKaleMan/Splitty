@@ -322,4 +322,5 @@ public class ManageParticipantsCtrl implements Initializable {
             this.editButton.setText(translate);
         });
     }
+
 }
