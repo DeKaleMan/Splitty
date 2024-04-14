@@ -90,6 +90,7 @@ public class ManageParticipantsCtrl implements Initializable {
         edit.setFitWidth(15);
         edit.setFitHeight(15);
         editButton.setGraphic(edit);
+        editEventButton.setGraphic(edit);
         ImageView trash = new ImageView(new Image("trashIcon.png"));
         trash.setFitWidth(14);
         trash.setFitHeight(14);

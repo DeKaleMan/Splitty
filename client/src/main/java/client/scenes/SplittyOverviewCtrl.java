@@ -63,8 +63,6 @@ public class SplittyOverviewCtrl implements Initializable {
     public Label noExpenseError;
     @FXML
     public Label expenseNotDeletedError;
-    @FXML
-    private Button editEvent;
 
     @FXML
     private Label eventCreatedLabel;
@@ -146,11 +144,6 @@ public class SplittyOverviewCtrl implements Initializable {
     }
 
     private void setImages() {
-//        ImageView edit = new ImageView(new Image("editIcon.png"));
-//        edit.setFitWidth(15);
-//        edit.setFitHeight(15); // this looked very bad for me if we
-//        cannot fix this we should just delete
-//        editEvent.setGraphic(edit);
         ImageView tag = new ImageView(new Image("tagIcon.png"));
         tag.setFitWidth(15);
         tag.setFitHeight(15);
@@ -394,7 +387,7 @@ public class SplittyOverviewCtrl implements Initializable {
         try {
             expenses = serverUtils.getExpense(eventId);
         } catch (BadRequestException e) {
-            System.out.println(e);
+            // nothing happens just an empty list
         }
         allExpensesList = new ListView<>();
         allExpensesList.getItems().addAll(expenses);
@@ -604,11 +597,6 @@ public class SplittyOverviewCtrl implements Initializable {
         });
     }
 
-    public void setEditEvent(String text) {
-        Platform.runLater(() -> {
-            this.editEvent.setText(text);
-        });
-    }
 
     public void setEditExpense(String text) {
         Platform.runLater(() -> {
