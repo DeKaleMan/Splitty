@@ -195,7 +195,7 @@ public class SetLanguage {
 
     public void setEditEvent(String lang) {
         editEventCrtl.setEventNameText(translate("New event name", "en", lang));
-        editEventCrtl.setCreateButton(translate("Confirm event name", "en", lang));
+        editEventCrtl.setCreateButton(translate("Confirm changes", "en", lang));
         editEventCrtl.setCancelButton(translate("Cancel", "en", lang));
         editEventCrtl.setTitleError(translate("New event name required", "en", lang));
         editEventCrtl.setSuccesFullyChanged(translate("Successfully changed the name", "en", lang));

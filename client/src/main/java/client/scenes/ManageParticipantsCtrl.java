@@ -56,6 +56,9 @@ public class ManageParticipantsCtrl implements Initializable {
     @FXML
     public Label participantDeletedConfirmation;
     @FXML
+    public Button editEventButton;
+
+    @FXML
     public void initialize(URL location, ResourceBundle resources) {
         setImages();
         mainCtrl.setButtonRedProperty(removeButton);
@@ -91,6 +94,10 @@ public class ManageParticipantsCtrl implements Initializable {
         trash.setFitWidth(14);
         trash.setFitHeight(14);
         removeButton.setGraphic(trash);
+        ImageView editEvent = new ImageView(new Image("editIcon.png"));
+        editEvent.setFitWidth(15);
+        editEvent.setFitHeight(15);
+        editEventButton.setGraphic(editEvent);
     }
 
     @Inject
