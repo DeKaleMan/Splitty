@@ -88,6 +88,7 @@ public class EditEventCrtl {
 
     public void succesFullyChangeName(){
         succesFullyChanged.setVisible(true);
+        mainCtrl.showSplittyOverview(eventId);
     }
 
     public void setEventNameText(String txt){

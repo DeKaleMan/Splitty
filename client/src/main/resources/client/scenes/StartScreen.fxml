@@ -17,7 +17,7 @@
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
-                <TextField fx:id="createEventTextField" layoutX="35.0" layoutY="49.0" promptText="Event name" />
+                <TextField fx:id="createEventTextField" onKeyPressed="#processKeyPressedCreateEvent" layoutX="35.0" layoutY="49.0" promptText="Event name" />
             </children>
          <padding>
             <Insets left="5.0" right="5.0" />
@@ -32,7 +32,7 @@
                         <Font name="System Bold" size="24.0" />
                     </font></Label>
 
-                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#resetErrors" onMouseClicked="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
+                <TextField fx:id="joinEventTextField" layoutX="33.0" layoutY="54.0" onKeyPressed="#processKeyPressJoinEvent" onMouseClicked="#resetErrors" prefHeight="25.0" prefWidth="149.0" promptText="Invite code" />
                 <Label fx:id="invalidCodeError" layoutX="33.0" layoutY="118.0" prefHeight="17.0" prefWidth="149.0" text="Event code is a number" textFill="RED" visible="false" styleClass="errorLabel" />
                 <Label fx:id="codeNotFoundError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="149.0" text="Event code not found" textFill="RED" visible="false" styleClass="errorLabel"/>
             <Label fx:id="alreadyParticipantError" layoutX="33.0" layoutY="113.0" prefHeight="17.0" prefWidth="228.0" text="You already participate in this event" textFill="RED" visible="false" styleClass="errorLabel" />
