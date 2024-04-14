@@ -70,16 +70,17 @@ public class InvitationCtrl {
         inviteCode = "testInviteCode";
     }
 
-    public void setDefaultButton(String txt){
-        Platform.runLater(() -> {
-            defaultButton.setText(txt);
-        });
-    }
+//    public void setDefaultButton(String txt){
+//        Platform.runLater(() -> {
+//            defaultButton.setText(txt);
+//        });
+//    }
 
-    public void setDefaultLabel(String txt){
-        Platform.runLater(() -> {
-            defaultLabel.setText(txt);
-        });
+//    public void setDefaultLabel(String txt) {
+//        Platform.runLater(() -> {
+//            defaultLabel.setText(txt);
+//        });
+//    }
     public void setNoEmailCredentials(String txt){
         Platform.runLater(()->{
             noEmailCredentials.setText(txt);

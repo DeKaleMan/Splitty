@@ -47,7 +47,7 @@
                </children>
             </HBox>
             <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" text="Amount cannot be negative or zero*" textFill="RED" visible="false" />
-            <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" styleClass="errorLabel"/>
+            <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" styleClass="errorLabel" />
              <Label fx:id="dateInvalidError" styleClass="errorLabel" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
             <VBox alignment="CENTER" prefHeight="31.0" prefWidth="173.0">
                <children>
@@ -63,9 +63,9 @@
       </VBox>
       <VBox alignment="TOP_RIGHT" layoutX="-1.0" layoutY="84.0" prefHeight="200.0" prefWidth="122.0" spacing="10.0">
          <children>
-            <Label fx:id="whoPaid" alignment="CENTER_RIGHT" prefHeight="17.0"  text="Who paid?" />
-            <Label fx:id="howMuch" alignment="CENTER_RIGHT" prefHeight="53.0"  text="How much?" />
-            <Label fx:id="when" alignment="CENTER_RIGHT" prefHeight="23.0"  text="When?" />
+            <Label fx:id="whoPaid" alignment="CENTER_RIGHT" prefHeight="17.0" text="Who paid?" />
+            <Label fx:id="howMuch" alignment="CENTER_RIGHT" prefHeight="53.0" text="How much?" />
+            <Label fx:id="when" alignment="CENTER_RIGHT" prefHeight="23.0" text="When?" />
             <Label fx:id="howToSplit" alignment="CENTER_RIGHT" prefHeight="45.0" text="How to Split?" />
          </children>
          <padding>
@@ -76,12 +76,12 @@
 
       <Button fx:id="cancel" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #c50000; -fx-background-radius: 6" text="Cancel" textFill="white" />
 <!--      <Button fx:id="commit" layoutX="523.0" layoutY="349.0" mnemonicParsing="false" onAction="#addExpense" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" AnchorPane.rightAnchor="39.0" />-->
-      <Label fx:id="commitExpenseError" styleClass="errorLabel" layoutX="417.0" layoutY="365.0" text="Unexpected error when adding expense*" textFill="RED" visible="false">
+      <Label fx:id="commitExpenseError" layoutX="417.0" layoutY="365.0" styleClass="errorLabel" text="Unexpected error when adding expense*" textFill="RED" visible="false">
          <font>
             <Font size="10.0" />
          </font></Label>
       <ProgressIndicator fx:id="expenseLoading" layoutX="568.0" layoutY="338.0" prefHeight="23.0" prefWidth="22.0" visible="false" />
-      <HBox alignment="TOP_CENTER" layoutX="379.0" layoutY="343.0" prefHeight="37.0" prefWidth="221.0" spacing="15.0">
+      <HBox alignment="TOP_RIGHT" layoutX="323.0" layoutY="343.0" prefHeight="37.0" prefWidth="256.0" spacing="15.0">
          <children>
             <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#showManageTags" text="Manage tags" />
             <Button fx:id="commit" mnemonicParsing="false" onAction="#addExpense" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: #2a8000; -fx-background-radius: 6" text="Add" textFill="white" />
