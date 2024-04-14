@@ -484,4 +484,17 @@ public class StartScreenCtrl implements Initializable {
     }
 
 
+    public void processKeyPressJoinEvent(KeyEvent keyEvent) {
+        resetErrors();
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            joinEvent();
+        }
+    }
+
+    public void processKeyPressedCreateEvent(KeyEvent keyEvent) {
+
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            createEvent();
+        }
+    }
 }

@@ -156,8 +156,11 @@ public class CreateEventCtrl {
         }
     }
 
-    public void resetTitleFieldError() {
+    public void handleEventNameKeyPress(KeyEvent keyEvent) {
         titleError.setVisible(false);
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            datePicker.requestFocus();
+        }
     }
 
     public void resetDateFieldError() {
@@ -184,6 +187,10 @@ public class CreateEventCtrl {
         eventDescriptionArea.setText(null);
         resetDateFieldError();
         resetTitleFieldError();
+    }
+
+    private void resetTitleFieldError() {
+        titleError.setVisible(false);
     }
 
     public void setEventNameText(String txt){
@@ -242,4 +249,13 @@ public class CreateEventCtrl {
         }
         throw new RuntimeException();
     }
+
+    public void handleDatePickerKeyPress(KeyEvent keyEvent) {
+        resetDateFieldError();
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            eventDescriptionArea.requestFocus();
+        }
+    }
+
+
 }
