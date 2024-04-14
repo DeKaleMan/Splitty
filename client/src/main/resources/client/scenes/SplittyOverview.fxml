@@ -79,7 +79,7 @@
             <children>
                 <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#showStatistics" text="Statistics" />
                 <Button fx:id="myDetails" mnemonicParsing="false" onAction="#editMyDetails" text="My details" />
-                <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />
+<!--                <Button fx:id="editEvent" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" textAlignment="CENTER" wrapText="true" />-->
                 <Button fx:id="settleDebtsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewDebts" text="Settle Debts" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                 <Button fx:id="manageTagsButton" mnemonicParsing="false" onAction="#viewManageTags" text="Manage Tags" />
             </children>
