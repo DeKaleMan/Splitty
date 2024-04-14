@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.api.testmocks.HttpResponseTest;
 import server.api.testmocks.ServerIOUtilsTest;
+import server.service.CurrencyExchangeService;
 import server.util.ConversionResponse;
 import server.util.OkConversionResponse;
 
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CurrencyExchangeTest {
 
     private CurrencyExchange currencyExchange;
+    private CurrencyExchangeService currencyExchangeService;
     private ServerIOUtilsTest ioTest;
     private HttpResponseTest httpResponseTest;
     private List<Conversion> conversionCacheList = new ArrayList<>(List.of(
@@ -29,7 +31,8 @@ class CurrencyExchangeTest {
     void initialize() {
         ioTest = new ServerIOUtilsTest();
         httpResponseTest = new HttpResponseTest();
-        currencyExchange = new CurrencyExchange(ioTest, httpResponseTest);
+        currencyExchangeService = new CurrencyExchangeService(ioTest, httpResponseTest);
+        currencyExchange = new CurrencyExchange(currencyExchangeService);
     }
 
     @Test
