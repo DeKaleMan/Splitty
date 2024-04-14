@@ -103,6 +103,16 @@ public class AdminLoginCtrl {
             this.passwordInstructionsText.setText(txt);
         });
     }
+    public void setServerNotFoundError(String txt) {
+        Platform.runLater(() -> {
+            this.serverNotFoundError.setText(txt);
+        });
+    }
+    public void setIncorrectPasswordError(String txt) {
+        Platform.runLater(() -> {
+            this.incorrectPasswordError.setText(txt);
+        });
+    }
 
     public void setBack(String txt){
         Platform.runLater(() -> {

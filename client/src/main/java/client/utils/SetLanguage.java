@@ -159,6 +159,7 @@ public class SetLanguage {
         addExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
         addExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
         addExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        addExpenseCtrl.setSelectSome(translate("Select some", "en", lang));
         System.out.println("addExpense translated");
     }
 
@@ -168,6 +169,8 @@ public class SetLanguage {
         adminLoginCtrl.setSignInButton(translate("Sign in", "en", lang));
         adminLoginCtrl.setPasswordField(translate("Password", "en", lang));
         adminLoginCtrl.setBack(translate("Back", "en", lang));
+        adminLoginCtrl.setServerNotFoundError(translate("Server not found*", "en", lang));
+        adminLoginCtrl.setIncorrectPasswordError(translate("Incorrect password*", "en", lang));
         adminLoginCtrl.setPasswordInstructionsText(translate(
                 "You can find your password in the console of your server instance", "en", lang));
         System.out.println("admin login translated");
@@ -318,6 +321,7 @@ public class SetLanguage {
         editExpenseCtrl.setExpenseTypeBox(translate("Select category", "en", lang));
         editExpenseCtrl.setGivingMoneyToSomeone(translate("Giving money to someone", "en", lang));
         editExpenseCtrl.setSharedExpense(translate("Shared expense", "en", lang));
+        editExpenseCtrl.setSelectSome(translate("Select some", "en", lang));
         System.out.println("EditExpense translated");
     }
 

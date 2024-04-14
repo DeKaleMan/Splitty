@@ -107,7 +107,7 @@ public class SetLanguageTest {
         verify(addExpenseCtrl).setSharedExpense("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(14)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSetAdminLoging() {
@@ -117,7 +117,7 @@ public class SetLanguageTest {
         verify(adminLoginCtrl).setPasswordField("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(6)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(10)).translate(anyString(), anyString(), anyString());
     }
     @Test
     public void testSetAdminOverview() {
@@ -226,7 +226,7 @@ public class SetLanguageTest {
         verify(editExpenseCtrl).setWhoPaid("TranslatedText");
         // Verify other text setting methods
         // Verify translation service called for each text
-        verify(serverUtils, times(14)).translate(anyString(), anyString(), anyString());
+        verify(serverUtils, times(15)).translate(anyString(), anyString(), anyString());
     }
 
     @Test

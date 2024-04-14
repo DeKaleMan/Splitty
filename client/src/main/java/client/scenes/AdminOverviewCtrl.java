@@ -47,7 +47,7 @@ public class AdminOverviewCtrl {
     private Button deleteEventButton;
 
     @FXML
-    private Text sortByText;
+    private Label sortByText;
 
     @FXML
     private ComboBox<String> sortComboBox;
@@ -57,9 +57,9 @@ public class AdminOverviewCtrl {
     @FXML
     public AnchorPane jsonImportPane;
     @FXML
-    private Text adminManagementOverviewText;
+    private Label adminManagementOverviewText;
     @FXML
-    private Text serverTag;
+    private Label serverTag;
     @FXML
     private Button logOutButton;
 

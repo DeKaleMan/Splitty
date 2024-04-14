@@ -49,7 +49,7 @@
             <Label fx:id="amountError" layoutX="139.0" layoutY="155.0" text="Amount cannot be negative or zero*" textFill="RED" visible="false" />
             <DatePicker fx:id="dateSelect" onAction="#resetDateErrors" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="150.0" promptText="mm/dd/yyyy" />
              <Label fx:id="dateInvalidError" text="Invalid date, e.g 01/31/2023" textFill="RED" visible="false" />
-            <HBox alignment="CENTER" prefHeight="31.0" prefWidth="173.0">
+            <VBox alignment="CENTER" prefHeight="31.0" prefWidth="173.0">
                <children>
                   <RadioButton fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Select All" HBox.hgrow="ALWAYS">
                      <toggleGroup>
@@ -57,7 +57,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <RadioButton fx:id="selectSome" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Select Some" toggleGroup="$selectionToggles" HBox.hgrow="ALWAYS" />
-               </children></HBox>
+               </children></VBox>
             <ListView fx:id="splitList" onKeyPressed="#onKeyPressed" prefHeight="131.0" prefWidth="122.0" />
          </children>
       </VBox>

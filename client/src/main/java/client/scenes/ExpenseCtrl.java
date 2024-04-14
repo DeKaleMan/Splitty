@@ -459,6 +459,11 @@ public abstract class ExpenseCtrl {
             this.selectAll.setText(text);
         });
     }
+    public void setSelectSome(String text) {
+        Platform.runLater(() -> {
+            this.selectSome.setText(text);
+        });
+    }
 
     public void setSelectWhoPaid(String text) {
         Platform.runLater(() -> {
