@@ -405,7 +405,10 @@ public class SplittyOverviewCtrl implements Initializable {
                         @Override
                         protected void updateItem(Expense expense, boolean b) {
                             super.updateItem(expense, b);
-                            if (expense == null || b) setGraphic(null);
+                            if (expense == null || b) {
+                                setGraphic(null);
+                                setBackground(Background.EMPTY);
+                            }
                             else {
                                 GridPane grid = new GridPane();
                                 Color bgColor = getBgColor(expense.getTag());
